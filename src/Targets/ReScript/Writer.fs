@@ -895,7 +895,9 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         OverrideFunc.combine overrideFunc orf
 
   let knownTypes =
-    let dummy = c.MapName(fun _ -> ExportDefaultUnnamedClass)
+    let dummy =
+      // remove `extends` and `implements` clauses since it's not needed for the `Types` module
+      { c with implements = [] }.MapName(fun _ -> ExportDefaultUnnamedClass)
     Statement.getKnownTypes ctx [Class dummy] |> Set.union additionalKnownTypes
 
   let isAnonymous, isExportDefaultClass =
@@ -1812,6 +1814,7 @@ let setTyperOptions (ctx: IContext<Options>) =
   ctx.options.replaceNewableFunction <- false
   ctx.options.replaceRankNFunction <- true
   ctx.options.addAllParentMembersToClass <- true
+  ctx.options.noExtendsInTyprm <- true
 
 let emitTypes (types: text list) : text list =
   [

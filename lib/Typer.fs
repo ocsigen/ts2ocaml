@@ -43,6 +43,11 @@ type TyperOptions =
   /// ```
   abstract replaceNewableFunction: bool with get,set
 
+  /// Ignores all `T extends U` while typechecking.
+  ///
+  /// Good for targets which don't support constrained type parameters.
+  abstract noExtendsInTyprm: bool with get,set
+
 type [<RequireQualifiedAccess>] Definition =
   | TypeAlias of TypeAlias
   | Class of Class
@@ -339,6 +344,12 @@ module Type =
   let mapInIntersection mapping ctx (i: IntersectionType) : IntersectionType =
     { types = i.types |> List.map (mapping ctx) }
 
+  let mapInErased mapping ctx (e: ErasedType) : ErasedType =
+    match e with
+    | IndexedAccess (t1, t2) -> IndexedAccess (mapping ctx t1, mapping ctx t2)
+    | TypeQuery i -> TypeQuery i
+    | Keyof t -> Keyof (mapping ctx t)
+
   let rec mapIdent f = function
     | Intrinsic -> Intrinsic | PolymorphicThis -> PolymorphicThis
     | Ident i -> Ident (f i)
@@ -376,45 +387,61 @@ module Type =
       Erased (e, loc, origText)
     | UnknownType msg -> UnknownType msg
 
-  let rec substTypeVar (subst: Map<string, Type>) _ctx = function
-    | TypeVar v ->
-      match subst |> Map.tryFind v with
-      | Some t -> t
-      | None -> TypeVar v
-    | Union u -> Union (mapInUnion (substTypeVar subst) _ctx u)
-    | Intersection i -> Intersection (mapInIntersection (substTypeVar subst) _ctx i)
-    | Tuple ts -> Tuple (ts |> mapInTupleType (substTypeVar subst) _ctx)
-    | AnonymousInterface c -> AnonymousInterface (mapInClass (substTypeVar subst) _ctx c)
-    | Func (f, typrms, loc) ->
-      Func (substTypeVarInFunction subst _ctx f, List.map (substTypeVarInTypeParam subst _ctx) typrms, loc)
-    | NewableFunc (f, typrms, loc) ->
-      NewableFunc (substTypeVarInFunction subst _ctx f, List.map (substTypeVarInTypeParam subst _ctx) typrms, loc)
+  let rec mapTypeVar (f: 'Context -> string -> Type) ctx = function
+    | TypeVar v -> f ctx v
+    | Union u -> Union (mapInUnion (mapTypeVar f) ctx u)
+    | Intersection i -> Intersection (mapInIntersection (mapTypeVar f) ctx i)
+    | Tuple ts -> Tuple (ts |> mapInTupleType (mapTypeVar f) ctx)
+    | AnonymousInterface c -> AnonymousInterface (mapInClass (mapTypeVar f) ctx c)
+    | Func (fn, typrms, loc) ->
+      Func (mapInFuncType (mapTypeVar f) ctx fn, List.map (mapInTypeParam (mapTypeVar f) ctx) typrms, loc)
+    | NewableFunc (fn, typrms, loc) ->
+      NewableFunc (mapInFuncType (mapTypeVar f) ctx fn, List.map (mapInTypeParam (mapTypeVar f) ctx) typrms, loc)
     | App (t, ts, loc) ->
       let t =
         match t with
-        | AAnonymousInterface i -> AAnonymousInterface (mapInClass (substTypeVar subst) _ctx i)
+        | AAnonymousInterface i -> AAnonymousInterface (mapInClass (mapTypeVar f) ctx i)
         | _ -> t
-      App (t, ts |> List.map (substTypeVar subst _ctx), loc)
+      App (t, ts |> List.map (mapTypeVar f ctx), loc)
     | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
     | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
     | Erased (e, loc, origText) ->
-      let e' =
-        match e with
-        | IndexedAccess (t1, t2) -> IndexedAccess (substTypeVar subst _ctx t1, substTypeVar subst _ctx t2)
-        | TypeQuery i -> TypeQuery i
-        | Keyof t -> Keyof (substTypeVar subst _ctx t)
-      Erased (e', loc, origText)
+      Erased (mapInErased (mapTypeVar f) ctx e, loc, origText)
     | UnknownType msgo -> UnknownType msgo
 
-  and substTypeVarInTypeParam subst _ctx (tp: TypeParam) =
-    { tp with
-        extends = Option.map (substTypeVar subst _ctx) tp.extends
-        defaultType = Option.map (substTypeVar subst _ctx) tp.defaultType }
+  let substTypeVar (subst: Map<string, Type>) _ctx =
+    mapTypeVar (fun _ v ->
+      match subst |> Map.tryFind v with
+      | Some t -> t
+      | None -> TypeVar v
+    ) _ctx
 
-  and substTypeVarInFunction subst _ctx f =
-    { f with
-        returnType = substTypeVar subst _ctx f.returnType;
-        args = List.map (mapInArg (substTypeVar subst) _ctx) f.args }
+  let private mapTypeParamInClassImpl f mtp ctx (c: Class<'a>) =
+    { c with
+        implements = c.implements |> List.map (mtp f ctx)
+        members = c.members |> List.map (mapInMember (mtp f) ctx)
+        typeParams = c.typeParams |> List.map (f ctx) }
+
+  let rec mapTypeParam (f: 'Context -> TypeParam -> TypeParam) ctx = function
+    | Intrinsic -> Intrinsic | PolymorphicThis -> PolymorphicThis
+    | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l | TypeVar v -> TypeVar v | UnknownType m -> UnknownType m
+    | Union u -> Union (mapInUnion (mapTypeParam f) ctx u)
+    | Intersection i -> Intersection (mapInIntersection (mapTypeParam f) ctx i)
+    | Tuple ts -> Tuple (ts |> mapInTupleType (mapTypeParam f) ctx)
+    | AnonymousInterface c -> AnonymousInterface (mapTypeParamInClassImpl f mapTypeParam ctx c)
+    | Func (fn, typrms, loc) ->
+      Func (mapInFuncType (mapTypeParam f) ctx fn, typrms |> List.map (f ctx), loc)
+    | NewableFunc (fn, typrms, loc) ->
+      NewableFunc (mapInFuncType (mapTypeParam f) ctx fn, typrms |> List.map (f ctx), loc)
+    | App (lhs, ts, loc) ->
+      let lhs =
+        match lhs with
+        | AIdent _ | APrim _ -> lhs
+        | AAnonymousInterface c -> AAnonymousInterface (mapTypeParamInClassImpl f mapTypeParam ctx c)
+      App (lhs, ts |> List.map (mapTypeParam f ctx), loc)
+    | Erased (e, loc, orig) -> Erased (mapInErased (mapTypeParam f) ctx e, loc, orig)
+
+  let mapTypeParamInClass f ctx c = mapTypeParamInClassImpl f mapTypeParam ctx c
 
   type TypeFinder<'State, 'Result> =
     'State -> Type -> Type list option  * 'State * 'Result seq
@@ -1652,6 +1679,25 @@ let inferEnumCaseValue (stmts: Statement list) : Statement list =
     | s -> s
   stmts |> List.map go
 
+let removeExtendsInTyprm =
+  let remove _ (tp: TypeParam) = { tp with extends = None }
+  let rec goStmt ctx = function
+    | Class c -> Type.mapTypeParamInClass remove ctx c |> Class |> Some
+    | TypeAlias a ->
+      TypeAlias {
+        a with
+          target = a.target |> Type.mapTypeParam remove ctx
+          typeParams = a.typeParams |> List.map (remove ctx)
+      } |> Some
+    | Function f ->
+      Function {
+        f with
+          typ = f.typ |> Type.mapInFuncType (Type.mapTypeParam remove) ctx
+          typeParams = f.typeParams |> List.map (remove ctx)
+      } |> Some
+    | _ -> None
+  Statement.mapTypeWith goStmt (Type.mapTypeParam remove) (fun _ -> id) id ()
+
 let rec mergeStatements (stmts: Statement list) =
   let mutable result : Choice<Statement, Class ref, Namespace ref, AmbientModule ref, Global ref> list = []
 
@@ -1839,73 +1885,71 @@ type private MemberType =
   | Method of string * int | Callable of int | Newable of int | Indexer of int | Constructor of int
 
 let addParentMembersToClass (ctx: TyperContext<#TyperOptions, _>) (stmts: Statement list) : Statement list =
-  if not ctx.options.addAllParentMembersToClass then stmts
-  else
-    let m = new MutableMap<Location, Class>()
-    let processing = new MutableSet<Location>()
-    let rec addMembers (c: Class) =
-      match m.TryGetValue(c.loc) with
-      | true, c -> c
-      | false, _ when processing.Contains(c.loc) -> c
-      | false, _ ->
-        processing.Add(c.loc) |> ignore
-        // we remove any parent type which is a super type of some other parent type
-        let implements =
-          c.implements
-          |> List.filter (fun t -> c.implements |> List.forall (fun t' -> Type.isSuperClass ctx t t' |> not))
-        let getMemberType m =
-          match m with
-          | Field (fl, _) | Getter fl -> MemberType.Getter (fl.name |> String.normalize) |> Some
-          | Setter fl -> MemberType.Setter (fl.name |> String.normalize) |> Some
-          | Method (name, ft, _) -> MemberType.Method (name |> String.normalize, ft.args.Length) |> Some
-          | Callable (ft, _) -> MemberType.Callable (ft.args.Length) |> Some
-          | Newable (ft, _) -> MemberType.Newable (ft.args.Length) |> Some
-          | Indexer (ft, _) -> MemberType.Indexer (ft.args.Length) |> Some
-          | Constructor ft -> MemberType.Constructor (ft.args.Length) |> Some
-          | SymbolIndexer _ | UnknownMember _ -> None
-        // if a parent member has the same arity as the member in a child,
-        // we should only keep the one from the child.
-        let memberTypes : Set<MemberType> =
-          c.members |> List.choose (snd >> getMemberType) |> Set.ofList
-        let parentMembers : (MemberAttribute * Member) list =
-          let (|Dummy|) _ = []
-          let rec collector : _ -> _ list = function
-            | (Ident ({ loc = loc } & i) & Dummy ts) | App (AIdent i, ts, loc) ->
-              let collect = function
-                | Definition.TypeAlias a ->
-                  if List.isEmpty ts then collector a.target
-                  else
-                    let bindings = Type.createBindings i.name loc a.typeParams ts
-                    collector a.target |> List.map (Type.mapInMember (Type.substTypeVar bindings) ())
-                // we ignore `implements` clauses i.e. interfaces inherited by a class.
-                | Definition.Class c' when c.isInterface || not c'.isInterface ->
-                  if List.isEmpty ts then (addMembers c').members
-                  else
-                    let members = (addMembers c').members
-                    let bindings = Type.createBindings i.name loc c'.typeParams ts
-                    members |> List.map (Type.mapInMember (Type.substTypeVar bindings) ())
-                | _ -> []
-              Ident.collectDefinition ctx i collect |> List.distinct
-            | Intersection i -> i.types |> List.collect collector |> List.distinct
-            | _ -> []
-          implements
-          |> List.collect collector
-          |> List.filter (fun (_, m) ->
-            match getMemberType m with
-            | None -> false
-            | Some mt -> memberTypes |> Set.contains mt |> not)
-          |> List.distinct
-        let c = { c with members = c.members @ parentMembers }
-        m[c.loc] <- c
-        c
-    let rec go stmts =
-      stmts |> List.map (function
-        | Class c when c.isInterface -> Class (addMembers c)
-        | Namespace m -> Namespace { m with statements = go m.statements }
-        | AmbientModule m -> AmbientModule { m with statements = go m.statements }
-        | Global m -> Global { m with statements = go m.statements }
-        | x -> x)
-    go stmts
+  let m = new MutableMap<Location, Class>()
+  let processing = new MutableSet<Location>()
+  let rec addMembers (c: Class) =
+    match m.TryGetValue(c.loc) with
+    | true, c -> c
+    | false, _ when processing.Contains(c.loc) -> c
+    | false, _ ->
+      processing.Add(c.loc) |> ignore
+      // we remove any parent type which is a super type of some other parent type
+      let implements =
+        c.implements
+        |> List.filter (fun t -> c.implements |> List.forall (fun t' -> Type.isSuperClass ctx t t' |> not))
+      let getMemberType m =
+        match m with
+        | Field (fl, _) | Getter fl -> MemberType.Getter (fl.name |> String.normalize) |> Some
+        | Setter fl -> MemberType.Setter (fl.name |> String.normalize) |> Some
+        | Method (name, ft, _) -> MemberType.Method (name |> String.normalize, ft.args.Length) |> Some
+        | Callable (ft, _) -> MemberType.Callable (ft.args.Length) |> Some
+        | Newable (ft, _) -> MemberType.Newable (ft.args.Length) |> Some
+        | Indexer (ft, _) -> MemberType.Indexer (ft.args.Length) |> Some
+        | Constructor ft -> MemberType.Constructor (ft.args.Length) |> Some
+        | SymbolIndexer _ | UnknownMember _ -> None
+      // if a parent member has the same arity as the member in a child,
+      // we should only keep the one from the child.
+      let memberTypes : Set<MemberType> =
+        c.members |> List.choose (snd >> getMemberType) |> Set.ofList
+      let parentMembers : (MemberAttribute * Member) list =
+        let (|Dummy|) _ = []
+        let rec collector : _ -> _ list = function
+          | (Ident ({ loc = loc } & i) & Dummy ts) | App (AIdent i, ts, loc) ->
+            let collect = function
+              | Definition.TypeAlias a ->
+                if List.isEmpty ts then collector a.target
+                else
+                  let bindings = Type.createBindings i.name loc a.typeParams ts
+                  collector a.target |> List.map (Type.mapInMember (Type.substTypeVar bindings) ())
+              // we ignore `implements` clauses i.e. interfaces inherited by a class.
+              | Definition.Class c' when c.isInterface || not c'.isInterface ->
+                if List.isEmpty ts then (addMembers c').members
+                else
+                  let members = (addMembers c').members
+                  let bindings = Type.createBindings i.name loc c'.typeParams ts
+                  members |> List.map (Type.mapInMember (Type.substTypeVar bindings) ())
+              | _ -> []
+            Ident.collectDefinition ctx i collect |> List.distinct
+          | Intersection i -> i.types |> List.collect collector |> List.distinct
+          | _ -> []
+        implements
+        |> List.collect collector
+        |> List.filter (fun (_, m) ->
+          match getMemberType m with
+          | None -> false
+          | Some mt -> memberTypes |> Set.contains mt |> not)
+        |> List.distinct
+      let c = { c with members = c.members @ parentMembers }
+      m[c.loc] <- c
+      c
+  let rec go stmts =
+    stmts |> List.map (function
+      | Class c when c.isInterface -> Class (addMembers c)
+      | Namespace m -> Namespace { m with statements = go m.statements }
+      | AmbientModule m -> AmbientModule { m with statements = go m.statements }
+      | Global m -> Global { m with statements = go m.statements }
+      | x -> x)
+  go stmts
 
 let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statement list) : Statement list =
   let opts = ctx.options
@@ -2069,10 +2113,7 @@ let replaceAliasToFunction (ctx: #IContext<#TyperOptions>) stmts =
         }
       | _ -> TypeAlias ta
     | x -> x
-  if ctx.options.replaceAliasToFunction then
-    List.map go stmts
-  else
-    stmts
+  List.map go stmts
 
 let replaceFunctions (ctx: #IContext<#TyperOptions>) (stmts: Statement list) =
   let rec goType (ctx: #IContext<#TyperOptions>) = function
@@ -2089,10 +2130,7 @@ let replaceFunctions (ctx: #IContext<#TyperOptions>) (stmts: Statement list) =
     | NewableFunc (f, typrms, loc) ->
       let f = Type.mapInFuncType goType ctx f
       let typrms = typrms |> List.map (Type.mapInTypeParam goType ctx)
-      if ctx.options.replaceRankNFunction || ctx.options.replaceNewableFunction then
-        Type.createFunctionInterface [{| ty = f; typrms = typrms; loc = loc; isNewable = true; comments = [] |}]
-      else
-        NewableFunc (f, typrms, loc)
+      Type.createFunctionInterface [{| ty = f; typrms = typrms; loc = loc; isNewable = true; comments = [] |}]
     | TypeVar v -> TypeVar v
     | Union u -> Union (u |> Type.mapInUnion goType ctx)
     | Intersection i -> Intersection (i |> Type.mapInIntersection goType ctx)
@@ -2336,7 +2374,16 @@ let runAll (srcs: SourceFile list) (baseCtx: IContext<#TyperOptions>) =
   let inline withSourceFileContext ctx f (src: SourceFile) =
     f (ctx |> TyperContext.ofSourceFileRoot src.fileName) src
 
-  let result = srcs |> List.map (mapStatements (inferEnumCaseValue >> mergeStatements))
+  let inline onFlag b f = if b then f else id
+
+  let result =
+    srcs |> List.map (
+      mapStatements (
+        inferEnumCaseValue
+        >> onFlag baseCtx.options.noExtendsInTyprm removeExtendsInTyprm
+        >> mergeStatements
+      )
+    )
 
   // build a context
   let ctx = createRootContextForTyper result baseCtx
@@ -2347,18 +2394,19 @@ let runAll (srcs: SourceFile list) (baseCtx: IContext<#TyperOptions>) =
         src |> mapStatements (fun stmts ->
           stmts
           // add members inherited from parent classes/interfaces to interfaces
-          |> addParentMembersToClass ctx
+          |> onFlag ctx.options.addAllParentMembersToClass (addParentMembersToClass ctx)
           |> Statement.resolveErasedTypes ctx
           // add common inheritances which tends not to be defined by `extends` or `implements`
-          |> introduceAdditionalInheritance ctx
+          |> onFlag (ctx.options.inheritArraylike || ctx.options.inheritIterable || ctx.options.inheritPromiselike)
+                    (introduceAdditionalInheritance ctx)
           // add default constructors to class if not explicitly defined
           |> addDefaultConstructorToClass ctx
           // group statements with pattern
           |> detectPatterns
           // replace alias to function type with a function interface
-          |> replaceAliasToFunction ctx
+          |> onFlag ctx.options.replaceAliasToFunction (replaceAliasToFunction ctx)
           // replace N-rank and/or newable function type with an interface
-          |> replaceFunctions ctx
+          |> onFlag (ctx.options.replaceRankNFunction || ctx.options.replaceNewableFunction) (replaceFunctions ctx)
         )))
 
   // rebuild the context because resolveErasedTypes may introduce additional anonymous interfaces

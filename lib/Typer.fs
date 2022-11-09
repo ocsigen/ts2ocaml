@@ -764,9 +764,26 @@ module Type =
   let isSubClass ctx (sub: Type) (super: Type) =
     Set.isProperSuperset (getAllInheritancesAndSelf ctx super) (getAllInheritancesAndSelf ctx sub)
 
-  let getKnownTypes (ctx: TyperContext<_, _>) t =
-    findTypes (fun state -> function
-      | Ident { fullName = fns } -> None, state, List.map KnownType.Ident fns
+  let knownTypeFinder ctx : TypeFinder<_, _> =
+    fun state -> function
+      | Ident ({ fullName = fns } & i) & Dummy ts
+      | App (AIdent ({ fullName = fns } & i), ts, _) ->
+        let next =
+          Ident.getDefinitionsWithFullName ctx i
+          |> List.collect (fun x ->
+            match x.definition with
+            | Definition.TypeAlias { typeParams = typrms } | Definition.Class { typeParams = typrms } ->
+              assignTypeParams i.name i.loc typrms ts
+                (fun _ ty -> Some ty)
+                (fun tv ->
+                  match tv.defaultType with
+                  | Some ty -> Some ty
+                  | None -> None)
+            | _ -> [])
+          |> List.choose id
+          |> List.append ts
+          |> List.distinct
+        Some next, state, List.map KnownType.Ident fns
       | AnonymousInterface a ->
         let info =
           ctx |> TyperContext.bindCurrentSourceInfo (fun info -> info.anonymousInterfacesMap |> Map.tryFind a)
@@ -775,7 +792,9 @@ module Type =
         | None -> []
         | Some info -> [KnownType.AnonymousInterface (a, info)]
       | _ -> None, state, []
-    ) () t |> Set.ofSeq
+
+  let getKnownTypes (ctx: TyperContext<_, _>) t =
+    findTypes (knownTypeFinder ctx) () t |> Set.ofSeq
 
   let rec resolveErasedTypeImpl typeQueries ctx = function
     | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
@@ -1202,19 +1221,7 @@ module Statement =
     ) () stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
   let getKnownTypes (ctx: TyperContext<_, _>) stmts =
-    let (|Dummy|) _ = []
-    findTypesInStatements (fun state -> function
-      | Ident { fullName = fns } ->
-        None, state, List.map KnownType.Ident fns
-      | AnonymousInterface a ->
-        let info =
-          ctx |> TyperContext.bindCurrentSourceInfo (fun info -> info.anonymousInterfacesMap |> Map.tryFind a)
-        None, state,
-        match info with
-        | None -> []
-        | Some info -> [KnownType.AnonymousInterface (a, info)]
-      | _ -> None, state, []
-    ) () stmts |> Set.ofSeq
+    findTypesInStatements (knownTypeFinder ctx) () stmts |> Set.ofSeq
 
   let rec mapTypeWith overrideFunc mapping ctxOfChildNamespace ctxOfRoot ctx stmts =
     let mapVariable (v: Variable) = { v with typ = mapping ctx v.typ }

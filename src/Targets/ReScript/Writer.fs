@@ -894,12 +894,6 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         selfTy,
         OverrideFunc.combine overrideFunc orf
 
-  let knownTypes =
-    let dummy =
-      // remove `extends` and `implements` clauses since it's not needed for the `Types` module
-      { c with implements = [] }.MapName(fun _ -> ExportDefaultUnnamedClass)
-    Statement.getKnownTypes ctx [Class dummy] |> Set.union additionalKnownTypes
-
   let isAnonymous, isExportDefaultClass =
     match kind with
     | ClassKind.AnonymousInterface _ -> true, false
@@ -917,17 +911,36 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
     let typrms = List.map (fun (tp: TypeParam) -> tprintf "'%s" tp.name) c.typeParams
     let selfTyText = Type.appOpt (str "t") typrms
     let currentNamespace = innerCtx |> Context.getFullName []
+    let inheritingTypes = c.implements |> List.map (getAllInheritancesAndSelf innerCtx) |> Set.unionMany
+
+    let knownTypes =
+      Set.unionMany [
+        // We only need the type arguments of the inherited types
+        yield!
+          inheritingTypes
+          |> Set.toList
+          |> List.collect (function
+            | InheritingType.KnownIdent x -> x.tyargs
+            | InheritingType.UnknownIdent x -> x.tyargs
+            | _ -> [])
+          |> List.map (getKnownTypes innerCtx)
+
+        // We only need the anonymous interfaces that appear in the members
+        yield
+          c.members
+          |> Seq.collect (snd >> findTypesInClassMember (knownTypeFinder innerCtx) ())
+          |> Seq.filter (function KnownType.AnonymousInterface _ -> true | _ -> false)
+          |> Set.ofSeq
+      ] |> Set.union additionalKnownTypes
 
     let labels =
-      let emitType_ = emitType overrideFunc // labels should not have polymorphic this type
       match kind with
       | ClassKind.NormalClass _ ->
         getLabelsOfFullName flags overrideFunc innerCtx currentNamespace c.typeParams
       | ClassKind.ExportDefaultClass _ ->
-        c.implements
-        |> List.map (getAllInheritancesAndSelf innerCtx) |> Set.unionMany
-        |> getLabelsFromInheritingTypes flags overrideFunc innerCtx
+        inheritingTypes |> getLabelsFromInheritingTypes flags overrideFunc innerCtx
       | ClassKind.AnonymousInterface _ -> []
+    let emittedLabels = emitLabels innerCtx labels
 
     let useTags =
          not isAnonymous
@@ -964,10 +977,10 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       if useTags && innerCtx.options.inheritWithTags.HasProvide then
         let alias =
           emitTypeAliasesImpl
-            "tags" flags overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels |> Some)
+            "tags" flags overrideFunc innerCtx c.typeParams (Some emittedLabels)
             (fun x -> [Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target])
           |> concat newline
-        alias|> TypeAliasText |> Some
+        alias |> TypeAliasText |> Some
       else None
 
     let polymorphicThisDefinition =
@@ -991,8 +1004,6 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         | Name name ->
           assert (name = List.last innerCtx.currentNamespace)
           if innerCtx.options.subtyping |> List.contains Subtyping.Tag then
-            let labels =
-              getLabelsOfFullName flags overrideFunc innerCtx (innerCtx |> Context.getFullName []) c.typeParams
             if List.isEmpty labels then fallback
             else
               let isRec =
@@ -1000,16 +1011,11 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
                   | Case (_, args) | TagType (_, args) ->
                     args |> List.contains (str "t")
                 )
-              {| ty = Type.intf (emitLabels innerCtx labels) |> Some; isRec = isRec |}
+              {| ty = Type.intf emittedLabels |> Some; isRec = isRec |}
           else fallback
         | ExportDefaultUnnamedClass ->
-          let labels =
-            c.implements
-            |> List.map (getAllInheritancesAndSelf innerCtx) |> Set.unionMany
-            |> getLabelsFromInheritingTypes flags overrideFunc innerCtx
           if List.isEmpty labels then fallback
-          else
-            {| ty = Type.intf (emitLabels innerCtx labels) |> Some; isRec = false |}
+          else {| ty = Type.intf emittedLabels |> Some; isRec = false |}
       let selfTyText =
         match kind with
         | ClassKind.NormalClass x -> getSelfTyText x.orig
@@ -1090,7 +1096,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
   let addAsNode (name: string) =
     current
     |> add [name] node
-    |> inTrie [name] (addAnonymousInterface flags ctx knownTypes)
+    |> inTrie [name] (addAnonymousInterface flags ctx node.knownTypes)
     |> set {| StructuredTextNode.empty with exports = Option.toList export |}
 
   match kind with
@@ -1099,7 +1105,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
   | ClassKind.ExportDefaultClass _ ->
     current
     |> set {| StructuredTextNode.empty with exports = [ExportItem.DefaultUnnamedClass node] |}
-    |> addAnonymousInterface flags ctx knownTypes
+    |> addAnonymousInterface flags ctx node.knownTypes
 
 and addAnonymousInterfaceExcluding emitTypeFlags (ctx: Context) knownTypes ais (current: StructuredText) =
   knownTypes

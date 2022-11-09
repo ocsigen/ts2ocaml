@@ -915,22 +915,31 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
 
     let knownTypes =
       Set.unionMany [
-        // We only need the type arguments of the inherited types
-        yield!
-          inheritingTypes
-          |> Set.toList
-          |> List.collect (function
-            | InheritingType.KnownIdent x -> x.tyargs
-            | InheritingType.UnknownIdent x -> x.tyargs
-            | _ -> [])
-          |> List.map (getKnownTypes innerCtx)
+        if innerCtx.options.subtyping |> List.contains Subtyping.CastFunction then
+          yield! c.implements |> List.map (getKnownTypes innerCtx)
+        else
+          // We only need the type arguments of the inherited types
+          yield!
+            inheritingTypes
+            |> Set.toList
+            |> List.collect (function
+              | InheritingType.KnownIdent x -> x.tyargs
+              | InheritingType.UnknownIdent x -> x.tyargs
+              | InheritingType.Prim (_, tyargs) -> tyargs
+              | InheritingType.Other t -> [t])
+            |> List.map (getKnownTypes innerCtx)
 
         // We only need the anonymous interfaces that appear in the members
         yield
           c.members
           |> Seq.collect (snd >> findTypesInClassMember (knownTypeFinder innerCtx) ())
-          |> Seq.filter (function KnownType.AnonymousInterface _ -> true | _ -> false)
+          // |> Seq.filter (function KnownType.AnonymousInterface _ -> true | _ -> false)
           |> Set.ofSeq
+
+        yield!
+          c.typeParams
+          |> List.choose (fun c -> c.defaultType)
+          |> List.map (getKnownTypes innerCtx)
       ] |> Set.union additionalKnownTypes
 
     let labels =
@@ -1608,166 +1617,172 @@ module EmitModuleResult =
   let empty : EmitModuleResult =
     {| imports = []; types = []; impl = []; intf = []; comments = [] |}
 
-let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (dt: DependencyTrie<string>) (st: StructuredText) : EmitModuleResult =
-  let renamer = new OverloadRenamer()
-  let children =
-    st.children
-    |> Map.toList
-    |> List.map (fun (k, v) ->
-      let name =
+let rec emitModule (dt: DependencyTrie<string>) flags ctx st =
+  let isLinear = DependencyTrie.isLinear dt // compute only once
+  let rec go (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) : EmitModuleResult =
+    let renamer = new OverloadRenamer()
+    let children =
+      st.children
+      |> Map.toList
+      |> List.map (fun (k, v) ->
         let name =
-          if flags.isReservedModule then Naming.moduleNameReserved k
-          else Naming.moduleName k
-        name |> renamer.Rename "module"
-      let scopeRev, jsModule =
-        let overrideScope name =
-          match ctx |> Context.getExportTypeOfName [name] with
-          | None
-          | Some (ExportType.Child _) -> name :: flags.scopeRev
-          | Some ExportType.CommonJS -> []
-          | Some (ExportType.ES6 None) -> [name]
-          | Some ExportType.ES6Default -> ["default"]
-          | Some (ExportType.ES6 (Some name)) -> [name]
-        match v.value with
-        | None -> k :: flags.scopeRev, flags.jsModule
-        | Some v ->
-          match v.scope with
-          | Scope.Default  -> overrideScope k, flags.jsModule
-          | Scope.Path p   -> overrideScope p, flags.jsModule
-          | Scope.Module m -> [], Some m
-          | Scope.Global   -> [], None
-          | Scope.Ignore   -> flags.scopeRev, flags.jsModule
-      let flags = {| flags with scopeRev = scopeRev; jsModule = jsModule |}
-      let ctx = ctx |> Context.ofChildNamespace k
-      let result = emitModule flags ctx dt v
-      let openTypesModule =
-        if flags.isReservedModule then false
-        else
-          let hasTypeDefinitions = result.types |> List.isEmpty |> not
-          v.value
-          |> Option.map (fun v -> hasTypeDefinitions && v.openTypesModule)
-          |> Option.defaultValue hasTypeDefinitions
-      {| name = name; origName = k |}, openTypesModule, result)
-
-  let items =
-    let currentScope : CurrentScope = !!flags
-
-    let emitEnumCase (e: {| name: string; ty: text; comments: Comment list |}) =
-      let moduleName = Naming.moduleName e.name
-      let types =
-        tprintf "module %s : " moduleName +@ "{ type t = " + e.ty +@ " }"
-      let attrs = scopeToAttr currentScope [Attr.External.val_]
-      let intf = [
-        yield str $"type t = {e.ty}"
-        yield Statement.external attrs "value" (str "t") e.name
-      ]
-      let impl = [
-        yield Statement.open_ moduleName
-        yield str "type t = t"
-        yield Statement.external attrs "value" (str "t") e.name
-      ]
-      let m content = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
-      {| types = types; intf = Statement.moduleSig (m intf); impl = Statement.moduleVal (m impl) |}
-
-    let emitTypeDefText (e: {| name: string; tyargs:(TypeParam * text) list; isRec: bool; body: text option; shouldAssert: bool |}) =
-      let actual = Statement.typeAlias e.isRec e.name (e.tyargs |> List.map snd) e.body
-      let alias =
-        let tmp =
-          Statement.typeAlias false e.name (e.tyargs |> List.map snd)
-            (Type.appOpt (str e.name) (e.tyargs |> List.map snd) |> Some)
-        match e.body, e.shouldAssert with
-        | _, false | None, _ -> tmp
-        | Some b, true -> tmp +@ " = " + b
-      {| types = actual; intf = actual; impl = alias |}
-
-    let rec f = function
-      | ImportText t -> ImportText t
-      | TypeAliasText t -> TypeAliasText t
-      | TypeDefText d -> TypeDefText (emitTypeDefText d)
-      | Binding b -> Binding (b renamer currentScope)
-      | EnumCaseText e -> EnumCaseText (emitEnumCase e)
-      | Comment c -> Comment c
-    match st.value with None -> [] | Some v -> v.items |> List.map f
-
-  let imports =
-    items |> List.choose (function ImportText t -> Some t | _ -> None)
-
-  let types =
-    let items =
-      items |> List.choose (function
-        | TypeDefText d -> Some d.types
-        | EnumCaseText e -> Some e.types
-        | _ -> None)
-    let children =
-      children
-      |> List.filter (fun (_, _, c) -> c.types |> List.isEmpty |> not)
-      |> List.map (fun (k, _, c) -> {| k with content = c.imports @ c.types; comments = [] |})
-      |> Statement.moduleSCC dt Statement.moduleSigRec Statement.moduleSigNonRec ctx
-    children @ items
-
-  let exports =
-    st.value
-    |> Option.map (fun m -> m.exports |> emitExportModule ctx)
-    |> Option.defaultValue EmitModuleResult.empty
-
-  let intf =
-    let children =
-      children
-      |> List.filter (fun (_, _, c) -> c.intf |> List.isEmpty |> not)
-      |> List.map (fun (k, _, c) ->
-        let content = c.imports @ c.intf
-        {| k with content = content; comments = c.comments |})
-      |> Statement.moduleSigRec
-    let typeDefs =
-      items |> List.choose (function
-        | TypeAliasText t -> Some t
-        | TypeDefText d -> Some d.intf
-        | EnumCaseText e -> Some e.intf
-        | _ -> None)
-    [
-      yield! children
-      yield! typeDefs
-      for item in items do
-        match item with
-        | Binding b -> yield! Binding.emitForInterface b
-        | Comment c -> yield c
-        | _ -> ()
-      yield! exports.intf
-    ]
-
-  let impl =
-    let children =
-      children
-      |> List.filter (fun (_, _, c) -> c.impl |> List.isEmpty |> not)
-      |> List.map (fun (k, openTypesModule, c) ->
-        let content =
-          if openTypesModule then
-            Statement.open_ k.name :: c.imports @ c.impl
+          let name =
+            if flags.isReservedModule then Naming.moduleNameReserved k
+            else Naming.moduleName k
+          name |> renamer.Rename "module"
+        let scopeRev, jsModule =
+          let overrideScope name =
+            match ctx |> Context.getExportTypeOfName [name] with
+            | None
+            | Some (ExportType.Child _) -> name :: flags.scopeRev
+            | Some ExportType.CommonJS -> []
+            | Some (ExportType.ES6 None) -> [name]
+            | Some ExportType.ES6Default -> ["default"]
+            | Some (ExportType.ES6 (Some name)) -> [name]
+          match v.value with
+          | None -> k :: flags.scopeRev, flags.jsModule
+          | Some v ->
+            match v.scope with
+            | Scope.Default  -> overrideScope k, flags.jsModule
+            | Scope.Path p   -> overrideScope p, flags.jsModule
+            | Scope.Module m -> [], Some m
+            | Scope.Global   -> [], None
+            | Scope.Ignore   -> flags.scopeRev, flags.jsModule
+        let flags = {| flags with scopeRev = scopeRev; jsModule = jsModule |}
+        let ctx = ctx |> Context.ofChildNamespace k
+        let result = go flags ctx v
+        let openTypesModule =
+          if flags.isReservedModule then false
           else
-            c.imports @ c.impl
-        {| k with content = content; comments = c.comments |})
-      |> Statement.moduleValMany
-    let typeDefs =
-      items |> List.choose (function
-        | TypeAliasText t -> Some t
-        | TypeDefText d -> Some d.impl
-        | EnumCaseText e -> Some e.impl
-        | _ -> None)
-    [
-      yield! children
-      yield! typeDefs
-      for item in items do
-        match item with
-        | Binding b -> yield! Binding.emitForImplementation b
-        | Comment c -> yield c
-        | _ -> ()
-      yield! exports.impl
-    ]
+            let hasTypeDefinitions = result.types |> List.isEmpty |> not
+            v.value
+            |> Option.map (fun v -> hasTypeDefinitions && v.openTypesModule)
+            |> Option.defaultValue hasTypeDefinitions
+        {| name = name; origName = k |}, openTypesModule, result)
 
-  let comments =
-    match st.value with None -> [] | Some v -> v.comments
+    let items =
+      let currentScope : CurrentScope = !!flags
 
-  {| imports = imports; types = types; intf = intf; impl = impl; comments = comments |}
+      let emitEnumCase (e: {| name: string; ty: text; comments: Comment list |}) =
+        let moduleName = Naming.moduleName e.name
+        let types =
+          tprintf "module %s : " moduleName +@ "{ type t = " + e.ty +@ " }"
+        let attrs = scopeToAttr currentScope [Attr.External.val_]
+        let intf = [
+          yield str $"type t = {e.ty}"
+          yield Statement.external attrs "value" (str "t") e.name
+        ]
+        let impl = [
+          yield Statement.open_ moduleName
+          yield str "type t = t"
+          yield Statement.external attrs "value" (str "t") e.name
+        ]
+        let m content = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
+        {| types = types
+           intf = Statement.moduleSig (m intf)
+           impl = Statement.moduleVal (m (if isLinear then intf else impl))
+        |}
+
+      let emitTypeDefText (e: {| name: string; tyargs:(TypeParam * text) list; isRec: bool; body: text option; shouldAssert: bool |}) =
+        let actual = Statement.typeAlias e.isRec e.name (e.tyargs |> List.map snd) e.body
+        let alias =
+          let tmp =
+            Statement.typeAlias false e.name (e.tyargs |> List.map snd)
+              (Type.appOpt (str e.name) (e.tyargs |> List.map snd) |> Some)
+          match e.body, e.shouldAssert with
+          | _, false | None, _ -> tmp
+          | Some b, true -> tmp +@ " = " + b
+        {| types = actual; intf = actual; impl = alias |}
+
+      let rec f = function
+        | ImportText t -> ImportText t
+        | TypeAliasText t -> TypeAliasText t
+        | TypeDefText d -> TypeDefText (emitTypeDefText d)
+        | Binding b -> Binding (b renamer currentScope)
+        | EnumCaseText e -> EnumCaseText (emitEnumCase e)
+        | Comment c -> Comment c
+      match st.value with None -> [] | Some v -> v.items |> List.map f
+
+    let imports =
+      items |> List.choose (function ImportText t -> Some t | _ -> None)
+
+    let types =
+      if isLinear then []
+      else
+        let items =
+          items |> List.choose (function
+            | TypeDefText x | EnumCaseText x -> Some x.types
+            | _ -> None)
+        let children =
+          children
+          |> List.filter (fun (_, _, c) -> c.types |> List.isEmpty |> not)
+          |> List.map (fun (k, _, c) -> {| k with content = c.imports @ c.types; comments = [] |})
+          |> Statement.moduleSCC dt Statement.moduleSigRec Statement.moduleSigNonRec ctx
+        children @ items
+
+    let exports =
+      st.value
+      |> Option.map (fun m -> m.exports |> emitExportModule ctx)
+      |> Option.defaultValue EmitModuleResult.empty
+
+    let intf =
+      let children =
+        children
+        |> List.filter (fun (_, _, c) -> c.intf |> List.isEmpty |> not)
+        |> List.map (fun (k, _, c) ->
+          let content = c.imports @ c.intf
+          {| k with content = content; comments = c.comments |})
+        |> Statement.moduleSigRec
+      let typeDefs =
+        items |> List.choose (function
+          | TypeAliasText t -> Some t
+          | TypeDefText x | EnumCaseText x -> Some x.intf
+          | _ -> None)
+      [
+        yield! children
+        yield! typeDefs
+        for item in items do
+          match item with
+          | Binding b -> yield! Binding.emitForInterface b
+          | Comment c -> yield c
+          | _ -> ()
+        yield! exports.intf
+      ]
+
+    let impl =
+      let children =
+        children
+        |> List.filter (fun (_, _, c) -> c.impl |> List.isEmpty |> not)
+        |> List.map (fun (k, openTypesModule, c) ->
+          let content =
+            if not isLinear && openTypesModule then
+              Statement.open_ k.name :: c.imports @ c.impl
+            else
+              c.imports @ c.impl
+          {| k with content = content; comments = c.comments |})
+        |> Statement.moduleSCC dt Statement.moduleValMany Statement.moduleValMany ctx
+      let typeDefs =
+        items |> List.choose (function
+          | TypeAliasText t -> Some t
+          | TypeDefText d -> if isLinear then Some d.types else Some d.impl
+          | EnumCaseText x -> Some x.impl
+          | _ -> None)
+      [
+        yield! children
+        yield! typeDefs
+        for item in items do
+          match item with
+          | Binding b -> yield! Binding.emitForImplementation b
+          | Comment c -> yield c
+          | _ -> ()
+        yield! exports.impl
+      ]
+
+    let comments =
+      match st.value with None -> [] | Some v -> v.comments
+
+    {| imports = imports; types = types; intf = intf; impl = impl; comments = comments |}
+  go flags ctx st
 
 and emitExportModule (ctx: Context) (exports: ExportItem list) : EmitModuleResult =
   let emitModuleAlias name (i: Ident) =
@@ -1806,7 +1821,7 @@ and emitExportModule (ctx: Context) (exports: ExportItem list) : EmitModuleResul
       go isFirst acc rest
 
   let st = go true Trie.empty exports
-  st |> emitModule {| isReservedModule = true; jsModule = None; scopeRev = [] |} ctx Trie.empty
+  st |> emitModule Trie.empty {| isReservedModule = true; jsModule = None; scopeRev = [] |} ctx
 
 let header = [
   str "@@warning(\"-27-32-33-44\")"
@@ -1823,10 +1838,12 @@ let setTyperOptions (ctx: IContext<Options>) =
   ctx.options.noExtendsInTyprm <- true
 
 let emitTypes (types: text list) : text list =
-  [
-    Statement.moduleSigRec1 "Types" types
-    Statement.open_ "Types"
-  ]
+  if List.isEmpty types then []
+  else
+    [
+      Statement.moduleSigRec1 "Types" types
+      Statement.open_ "Types"
+    ]
 
 let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
   let refs =
@@ -1928,7 +1945,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
         if hasExport then Some moduleName else None
     {| jsModule = jsModule; scopeRev = []; isReservedModule = false |}
   let dt = DependencyTrie.ofTrie (StructuredTextNode.getReferences ctx) st
-  let m = emitModule flags ctx dt st
+  let m = emitModule dt flags ctx st
 
   let opens = [
     yield Statement.open_ "Js"

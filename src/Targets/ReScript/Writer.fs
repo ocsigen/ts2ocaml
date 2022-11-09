@@ -929,11 +929,9 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
               | InheritingType.Other t -> [t])
             |> List.map (getKnownTypes innerCtx)
 
-        // We only need the anonymous interfaces that appear in the members
         yield
           c.members
           |> Seq.collect (snd >> findTypesInClassMember (knownTypeFinder innerCtx) ())
-          // |> Seq.filter (function KnownType.AnonymousInterface _ -> true | _ -> false)
           |> Set.ofSeq
 
         yield!
@@ -1617,8 +1615,8 @@ module EmitModuleResult =
   let empty : EmitModuleResult =
     {| imports = []; types = []; impl = []; intf = []; comments = [] |}
 
-let rec emitModule (dt: DependencyTrie<string>) flags ctx st =
-  let isLinear = DependencyTrie.isLinear dt // compute only once
+let rec emitModule (dt: DependencyTrie<string>) flags (ctx: Context) st =
+  let isLinear = ctx.options.noTypesModule || DependencyTrie.isLinear dt // compute only once
   let rec go (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) : EmitModuleResult =
     let renamer = new OverloadRenamer()
     let children =
@@ -1750,6 +1748,20 @@ let rec emitModule (dt: DependencyTrie<string>) flags ctx st =
       ]
 
     let impl =
+      let fixmeRecursiveModules (ms: TextModule list) =
+        match ms with
+        | [] -> []
+        | [m] -> [Statement.moduleVal m]
+        | _ when ctx.options.noTypesModule ->
+          [ yield
+              commentStr (
+                sprintf "FIXME: start of recursive definitions (%s)"
+                  (ms |> List.map (fun m -> m.name) |> String.concat ", ")
+              )
+            yield! Statement.moduleValMany ms
+            yield commentStr "FIXME: end of recursive definitions" ]
+        | _ -> Statement.moduleValMany ms
+
       let children =
         children
         |> List.filter (fun (_, _, c) -> c.impl |> List.isEmpty |> not)
@@ -1760,7 +1772,7 @@ let rec emitModule (dt: DependencyTrie<string>) flags ctx st =
             else
               c.imports @ c.impl
           {| k with content = content; comments = c.comments |})
-        |> Statement.moduleSCC dt Statement.moduleValMany Statement.moduleValMany ctx
+        |> Statement.moduleSCC dt fixmeRecursiveModules Statement.moduleValMany ctx
       let typeDefs =
         items |> List.choose (function
           | TypeAliasText t -> Some t

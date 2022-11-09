@@ -72,12 +72,14 @@ type Options =
   // output options
   abstract outputDir: string option with get
   abstract resi: bool with get
-  // code generator options
+  // typer options
   abstract numberAsInt: bool with get, set
   abstract subtyping: Subtyping list with get, set
   abstract inheritWithTags: FeatureFlag with get, set
+  // code generator options
   abstract simplify: Simplify list with get, set
   abstract readableNames: bool with get, set
+  abstract noTypesModule: bool with get, set
 
 module Options =
   open Fable.Core.JsInterop
@@ -203,7 +205,8 @@ module Options =
       .group(
         !^ResizeArray[
           "simplify";
-          "human-readable-anonymous-interface-names";
+          "readable-names";
+          "no-types-module"
         ],
         "Code Generator Options:")
       .addCommaSeparatedStringSet(
@@ -217,6 +220,12 @@ module Options =
         "readable-names",
         (fun (o: Options) -> o.readableNames),
         descr="Try to use more readable names instead of AnonymousInterfaceN.",
+        defaultValue = false
+      )
+      .addFlag(
+        "no-types-module",
+        (fun (o: Options) -> o.noTypesModule),
+        descr="Unsafe. Do not emit Types module even if there are recursive modules.",
         defaultValue = false
       )
 

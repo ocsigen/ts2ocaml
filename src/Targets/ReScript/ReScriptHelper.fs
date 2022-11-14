@@ -310,9 +310,11 @@ module Type =
   let void_ = str "unit"
   let string  = str "string"
   let boolean = str "bool"
+  let int = str "int"
+  let float = str "float"
   let number (opt: Options) =
-    if opt.numberAsInt then str "int"
-    else str "float"
+    if opt.numberAsInt then int
+    else float
   let array = str "array"
   let readonlyArray = str "array"
   let option t = app (str "option") [t]

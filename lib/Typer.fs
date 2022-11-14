@@ -1370,7 +1370,7 @@ type ResolvedUnion = {
   caseUndefined: bool
   typeofableTypes: Set<Typeofable>
   caseArray: Set<Type> option
-  caseEnum: Set<Choice<Enum * EnumCase, Literal>>
+  caseEnum: Set<Choice<Enum * EnumCase * Type, Literal>>
   discriminatedUnions: Map<string, Map<Literal, Type>>
   otherTypes: Set<Type>
 }
@@ -1393,8 +1393,8 @@ module ResolvedUnion =
           ru.caseEnum
           |> Set.toSeq
           |> Seq.map (function
-            | Choice1Of2 ({ name = ty }, { name = name; value = Some value }) -> sprintf "%s.%s=%s" ty name (Literal.toString value)
-            | Choice1Of2 ({ name = ty }, { name = name; value = None }) -> sprintf "%s.%s=?" ty name
+            | Choice1Of2 ({ name = ty }, { name = name; value = Some value }, _) -> sprintf "%s.%s=%s" ty name (Literal.toString value)
+            | Choice1Of2 ({ name = ty }, { name = name; value = None }, _) -> sprintf "%s.%s=?" ty name
             | Choice2Of2 l -> Literal.toString l)
         yield sprintf "enum<%s>" (cases |> String.concat " | ")
       for k, m in ru.discriminatedUnions |> Map.toSeq do
@@ -1411,7 +1411,7 @@ module ResolvedUnion =
     let hasUndefined = nullOrUndefined |> List.contains (Prim Undefined)
     {| hasNull = hasNull; hasUndefined = hasUndefined; rest = rest |}
 
-  let rec private getEnumFromUnion ctx (u: UnionType) : Set<Choice<Enum * EnumCase, Literal>> * UnionType =
+  let rec private getEnumFromUnion ctx (u: UnionType) : Set<Choice<Enum * EnumCase * Type, Literal>> * UnionType =
     let (|Dummy|) _ = []
 
     let rec go t =
@@ -1429,9 +1429,9 @@ module ResolvedUnion =
               let bindings = Type.createBindings i.name loc a.typeParams tyargs
               go (a.target |> Type.substTypeVar bindings ())
             | Definition.Enum e ->
-              e.cases |> Seq.map (fun c -> Choice1Of2 (Choice1Of2 (e, c)))
+              e.cases |> Seq.map (fun c -> Choice1Of2 (Choice1Of2 (e, c, t)))
             | Definition.EnumCase (c, e) ->
-              Seq.singleton (Choice1Of2 (Choice1Of2 (e, c)))
+              Seq.singleton (Choice1Of2 (Choice1Of2 (e, c, t)))
             | _ -> Seq.empty
           let result =
             i |> Ident.getDefinitions ctx

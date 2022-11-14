@@ -32,13 +32,6 @@ module State =
 type Context = TyperContext<Options, State>
 module Context = TyperContext
 
-type Variance = Covariant | Contravariant | Invariant with
-  static member (~-) (v: Variance) =
-    match v with
-    | Covariant -> Contravariant
-    | Contravariant -> Covariant
-    | Invariant -> Invariant
-
 type Label =
   | Case of text * text list
   | TagType of text * text list
@@ -52,9 +45,7 @@ type [<RequireQualifiedAccess>] External =
 type EmitTypeFlags = {
   resolveUnion: bool
   needParen: bool
-  variance: Variance
   external: External
-  simplifyContravariantUnion: bool
   avoidTheseArgumentNames: Set<string>
 }
 
@@ -63,9 +54,7 @@ module EmitTypeFlags =
     {
       resolveUnion = true
       needParen = false
-      variance = Covariant
       external = External.None
-      simplifyContravariantUnion = false
       avoidTheseArgumentNames = Set.empty
     }
 
@@ -73,7 +62,6 @@ module EmitTypeFlags =
     { flags with external = External.None }
   let ofFuncArg isVariadic flags =
     { flags with
-        variance = -flags.variance
         external =
           match flags.external with
           | External.Root _ -> External.Argument isVariadic
@@ -347,18 +335,130 @@ and emitFuncType (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Conte
   | _ -> Type.curriedArrow (args ()) (retTy flags) |> paren
 
 and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
-  // TODO: more classification
-  let u = ResolvedUnion.checkNullOrUndefined u
-  let rest =
-    let rest = u.rest |> List.map (emitTypeImpl (EmitTypeFlags.noExternal flags) overrideFunc ctx)
-    if List.isEmpty rest then Type.never
-    else Type.union rest
-  match u.hasNull, u.hasUndefined with
-  | true, _ | _, true when flags.external = External.Return true -> Type.option rest
-  | true, true -> Type.null_or_undefined_or rest
-  | true, false -> Type.null_or rest
-  | false, true -> Type.undefined_or rest
-  | false, false -> rest
+  if flags.resolveUnion = false then
+    u.types
+    |> List.distinct
+    |> List.map (emitTypeImpl (EmitTypeFlags.noExternal flags) overrideFunc ctx)
+    |> Type.union
+  else if flags.external = External.Return true then
+    let u = ResolvedUnion.checkNullOrUndefined u
+    let rest =
+      if List.isEmpty u.rest then Type.never
+      else
+        let t = Union { types = u.rest }
+        emitTypeImpl (EmitTypeFlags.noExternal flags) overrideFunc ctx t
+    match u.hasNull, u.hasUndefined with
+    | true, _ | _, true -> Type.option rest
+    | false, false -> rest
+  else
+    let u = ResolvedUnion.resolve ctx u
+
+    let treatEnum (cases: Set<Choice<Enum * EnumCase * Type, Literal>>) =
+      let handleLiteral l attr ty =
+        match l with
+        | LString s -> Choice1Of2 {| name = Choice1Of2 s; value = None; attr = attr |}
+        | LInt i -> Choice1Of2 {| name = Choice2Of2 i; value = None; attr = attr |}
+        | LFloat _ -> Choice2Of2 (ty |? Type.float)
+        | LBool _ -> Choice2Of2 (ty |? Type.boolean)
+      let cases = [
+        for c in cases do
+          match c with
+          | Choice1Of2 (_, _, ty) ->
+            let ty = emitTypeImpl (EmitTypeFlags.noExternal flags) overrideFunc ctx ty
+            yield Choice2Of2 ty
+          | Choice2Of2 l -> yield handleLiteral l None None
+      ]
+      let cases, rest = List.splitChoice2 cases
+      [
+        if List.isEmpty cases |> not then
+          yield Type.polyVariant cases
+        yield! rest
+      ]
+
+    let treatArray (ts: Set<Type>) =
+      // TODO: think how to map multiple array cases properly
+      let elemT =
+        let elemT =
+          match Set.toList ts with
+          | [t] -> t
+          | ts -> Union { types = ts }
+        emitTypeImpl (EmitTypeFlags.noExternal flags) overrideFunc ctx elemT
+      Type.app Type.array [elemT]
+
+    let treatDUMany du =
+      // TODO: anonymous DU?
+      let types =
+        du
+        |> Map.toList
+        |> List.collect (fun (_, cases) -> Map.toList cases)
+        |> List.map (fun (_, t) -> t)
+      types
+      |> List.map (emitTypeImpl (EmitTypeFlags.noExternal { flags with resolveUnion = false }) overrideFunc ctx)
+      |> List.distinct
+
+    let baseTypes = [
+      if not (Set.isEmpty u.caseEnum) then
+        yield! treatEnum u.caseEnum
+      if not (Map.isEmpty u.discriminatedUnions) then
+        yield! treatDUMany u.discriminatedUnions
+      match u.caseArray with
+      | Some ts -> yield treatArray ts
+      | None -> ()
+      for t in u.otherTypes do
+        yield emitTypeImpl (EmitTypeFlags.noExternal { flags with resolveUnion = false }) overrideFunc ctx t
+    ]
+
+    let case name value = {| name = Choice1Of2 name; value = value; attr = None |}
+    let genPoly unwrap =
+      let cases = [
+        for t in u.typeofableTypes do
+          match t with
+          | Typeofable.String -> yield case "String" (Some Type.string)
+          | Typeofable.Number -> yield case "Number" (Some (Type.number ctx.options))
+          | Typeofable.Boolean -> yield case "Boolean" (Some Type.boolean)
+          | Typeofable.Symbol -> yield case "Symbol" (Some Type.symbol)
+          | Typeofable.BigInt -> yield case "BigInt" (Some Type.bigint)
+
+        if u.caseNull then
+          yield case "Null" (if unwrap then Some Type.null_ else None)
+        if u.caseUndefined then
+          yield case "Undefined" (if unwrap then Some Type.undefined else None)
+
+        match List.distinct baseTypes with
+        | [] -> ()
+        | ts ->
+          if unwrap then
+            for i, t in ts |> List.indexed do
+              yield case (sprintf "U%d" (i+1)) (Some t)
+          else
+            yield case "Other" (Some (Type.union ts))
+      ]
+      Type.polyVariant cases
+
+    let createNullable isNull isUndefined t =
+      match isNull, isUndefined with
+      | false, false -> t
+      | true, false -> Type.null_or t
+      | false, true -> Type.undefined_or t
+      | true, true -> Type.null_or_undefined_or t
+
+    let emitTypeofableType t = emitTypeImpl flags overrideFunc ctx (TypeofableType.toType t)
+
+    let isExternalArg = match flags.external with External.Argument _ -> true | _ -> false
+
+    match baseTypes, Set.toList u.typeofableTypes, u.caseNull, u.caseUndefined with
+    | [], [], false, false -> impossible "emitUnion_empty_union"
+    | [], [], true, false -> Type.null_
+    | [], [], false, true -> Type.undefined
+    | [], [], true, true -> Type.null_or_undefined_or Type.never
+    | [t], [], isNull, isUndefined -> createNullable isNull isUndefined t
+    | ts, [], isNull, isUndefined when not isExternalArg ->
+      createNullable isNull isUndefined (Type.union ts)
+    | [], [t], isNull, isUndefined -> createNullable isNull isUndefined (emitTypeofableType t)
+    | _, _, _, _ ->
+      match flags.external with
+      | External.Argument _ -> Attr.PolyVariant.unwrap +@ " " + genPoly true
+      | _ -> Type.app (str "Primitive.t") [genPoly false]
 
 /// `[ #A | #B | ... ]`
 and emitLabels (ctx: Context) labels =
@@ -621,7 +721,6 @@ let extValue flags overrideFunc ctx (t: Type) =
   ty, attr
 
 let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass: bool) (ma: MemberAttribute) m =
-  let flags = { flags with simplifyContravariantUnion = true }
   let emitType_ = emitTypeImpl flags overrideFunc
 
   let comments = emitComments ma.comments
@@ -1052,7 +1151,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
 
     let builder =
       let emitType_ ctx ty =
-        emitTypeImpl { flags with needParen = true; variance = Contravariant } overrideFunc ctx ty
+        emitTypeImpl { flags with needParen = true } overrideFunc ctx ty
       if not c.isPOJO then []
       else
         let field (fl: FieldLike) =
@@ -1362,7 +1461,6 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
 
   /// convert interface members to appropriate statements
   let intfToStmts (moduleIntf: Class<_>) ctx flags overrideFunc =
-    let flags = { flags with simplifyContravariantUnion = true }
     let inline extFunc ft = extFunc flags overrideFunc ctx ft
     let inline func ft = func flags overrideFunc ctx ft
     let inline newableFunc ft = newableFunc flags overrideFunc ctx ft

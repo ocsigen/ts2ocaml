@@ -426,6 +426,7 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
 
         match List.distinct baseTypes with
         | [] -> ()
+        | [t] -> yield case "Other" (Some t)
         | ts ->
           if unwrap then
             for i, t in ts |> List.indexed do

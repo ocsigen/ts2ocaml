@@ -749,9 +749,9 @@ braces@^3.0.1, braces@~3.0.2:
     fill-range "^7.0.1"
 
 browser-or-node@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/browser-or-node/-/browser-or-node-2.0.0.tgz#808ea90282a670931cdc0ea98166538a50dd0d89"
-  integrity sha512-3Lrks/Okgof+/cRguUNG+qRXSeq79SO3hY4QrXJayJofwJwHiGC0qi99uDjsfTwULUFSr1OGVsBkdIkygKjTUA==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/browser-or-node/-/browser-or-node-2.1.0.tgz#7b9d59ba265bf21449fcac0e87319d866e70ce13"
+  integrity sha512-xqztc8n12Vws8SZdtLNFrb1i8oWwVfEBtFqVZAim1sUibdziPS+q2Idv90lsiar9rx4d3TSvGo4pTR6nmlPGLQ==
 
 browserslist@^4.14.5, browserslist@^4.20.2:
   version "4.20.3"

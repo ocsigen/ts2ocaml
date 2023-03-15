@@ -44,6 +44,6 @@
     "react-player": "2.12.0",
     "webpack": "5.75.0",
     "webpack-cli": "5.0.0",
-    "webpack-dev-server": "4.11.0"
+    "webpack-dev-server": "4.12.0"
   }
 }

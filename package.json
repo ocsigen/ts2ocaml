@@ -34,7 +34,7 @@
   "devDependencies": {
     "@angular/common": "^15.0.0",
     "@babel/core": "7.21.0",
-    "@types/react-modal": "3.13.1",
+    "@types/react-modal": "3.16.0",
     "@types/semver": "7.3.9",
     "@types/vscode": "^1.63.1",
     "@types/yargs": "17.0.10",

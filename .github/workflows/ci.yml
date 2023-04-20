@@ -17,15 +17,12 @@ jobs:
         dotnet:
           - 5.0.x
         node-version:
-          - 16.x
+          - 20.x
         ocaml-compiler:
           - 4.08.x
-          - 4.09.x
-          - 4.10.x
-          - 4.11.x
           - 4.12.x
-          - 4.13.x
           - 4.14.x
+          - 5.0.x
 
     runs-on: ${{ matrix.os }}
 
@@ -34,7 +31,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Use .NET ${{ matrix.dotnet }}
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet }}
 
@@ -73,5 +70,5 @@ jobs:
       - uses: fastify/github-action-merge-dependabot@v3
         with:
           target: minor
-          exclude: 'typescript'
+          exclude: "typescript"
           merge-method: merge

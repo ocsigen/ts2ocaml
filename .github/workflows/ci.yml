@@ -72,7 +72,6 @@ jobs:
     steps:
       - uses: fastify/github-action-merge-dependabot@v3.0.0
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
           target: minor
           exclude: 'typescript'
           merge-method: merge

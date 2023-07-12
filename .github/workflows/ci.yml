@@ -15,7 +15,7 @@ jobs:
         os:
           - ubuntu-latest
         dotnet:
-          - 5.0.x
+          - 6.0.x
         node-version:
           - 16.x
         ocaml-compiler:

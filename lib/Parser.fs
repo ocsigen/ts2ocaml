@@ -571,7 +571,8 @@ module private ParserImpl =
         | UnknownType None ->
           nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
         | _ -> ()
-        let fl = { name = name; isOptional = false; value = ty }
+        let isOptional = nd.questionToken |> Option.isSome
+        let fl = { name = name; isOptional = isOptional; value = ty }
         attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
       | None ->
         match getPropertyExpression nd.name with
@@ -590,7 +591,8 @@ module private ParserImpl =
         | UnknownType None ->
           nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
         | _ -> ()
-        let fl = { name = name; isOptional = false; value = ty }
+        let isOptional = nd.questionToken |> Option.isSome
+        let fl = { name = name; isOptional = isOptional; value = ty }
         attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
       | None -> nodeWarn ctx nd "unsupported property name '%s' in PropertyDeclaration" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     | Kind.CallSignature ->
@@ -640,7 +642,8 @@ module private ParserImpl =
       | Some name ->
         let localTyprm, ty = extractType nd
         if not (List.isEmpty localTyprm) then nodeWarn ctx nd "getter with type argument is not supported"
-        let fl = { name = name; isOptional = false; value = ty }
+        let isOptional = nd.questionToken |> Option.isSome
+        let fl = { name = name; isOptional = isOptional; value = ty }
         attr, Getter fl
       | None -> nodeWarn ctx nd "unsupported property name '%s' in GetAccessor" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     | Kind.SetAccessor ->

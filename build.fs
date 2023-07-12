@@ -77,11 +77,13 @@ let setup () =
 
   Target.create "TestComplete" ignore
 
+  "Clean" ?=> "Build"
+
   "Clean"
-    ==> "YarnInstall"
+    ?=> "YarnInstall"
     ==> "Restore"
     ==> "Prepare"
-    ==> "Build"
+    ?=> "Build"
 
   "Prepare"
     ?=> "BuildForTest"
@@ -247,7 +249,8 @@ let main argv =
   Publish.setup ()
 
   Target.create "All" ignore
-  "Build"
+  "Prepare"
+    ==> "Build"
     ==> "Test"
     ==> "Publish"
     ==> "All"

@@ -62,7 +62,7 @@ It will be bundled by Webpack with the `development` mode.
 
 `dotnet run -t Build` performs the followings:
 - `yarn install` to populate `node_modules`
-- `dotnet restore` to install required F# libraries
+- `dotnet restore ts2ocaml.sln` to install required F# libraries
 - Compile F# source files into JS source files (through Fable)
 - Bundle the JS files into `dist/ts2ocaml.js` (through Webpack)
 

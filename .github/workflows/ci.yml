@@ -49,7 +49,7 @@ jobs:
 
       - name: Install .NET Dependencies
         run: |
-          dotnet restore
+          dotnet restore ts2ocaml.sln
           dotnet tool restore
 
       - name: Install OCaml Dependencies

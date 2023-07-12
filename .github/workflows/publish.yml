@@ -42,7 +42,7 @@ jobs:
           dune-cache: true
 
       - name: Install .NET Dependencies
-        run: dotnet restore
+        run: dotnet restore ts2ocaml.sln
            | dotnet tool restore
 
       - name: Install OCaml Dependencies

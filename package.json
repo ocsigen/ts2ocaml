@@ -23,13 +23,11 @@
     "dist/"
   ],
   "main": "./dist/ts2ocaml.js",
-  "bin": {
-    "ts2ocaml": "./dist/ts2ocaml.js"
-  },
+  "bin": "./dist/ts2ocaml.js",
   "dependencies": {
     "browser-or-node": "^2.0.0",
     "typescript": "4.6.4",
-    "yargs": "17.5.1"
+    "yargs": "17.7.1"
   },
   "devDependencies": {
     "@angular/common": "^16.0.1",

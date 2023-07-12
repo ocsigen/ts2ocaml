@@ -12,7 +12,7 @@ jobs:
         os:
           - ubuntu-latest
         dotnet:
-          - 5.0.x
+          - 6.0.x
         node-version:
           - 16.x
         ocaml-compiler:
@@ -42,14 +42,14 @@ jobs:
           dune-cache: true
 
       - name: Install .NET Dependencies
-        run: dotnet restore
+        run: dotnet restore ts2ocaml.sln
            | dotnet tool restore
 
       - name: Install OCaml Dependencies
         run: opam install . --deps-only
 
-      - name: Run FAKE
-        run: dotnet fake build target All
+      - name: Run build.fs
+        run: dotnet run target All
 
       - name: Push js_of_ocaml standard library to jsoo-stdlib
         if: success()

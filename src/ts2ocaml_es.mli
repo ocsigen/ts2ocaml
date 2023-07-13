@@ -2523,19 +2523,19 @@ and[@js.scope "Intl"] Intl : sig
     val t_of_js: Ojs.t -> t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_localeMatcher: 'tags this -> ([`L_s24_best_fit[@js "best fit"] | `L_s57_lookup[@js "lookup"]] [@js.enum]) option option [@@js.get "localeMatcher"]
+    val get_localeMatcher: 'tags this -> ([`L_s24_best_fit[@js "best fit"] | `L_s57_lookup[@js "lookup"]] [@js.enum]) option [@@js.get "localeMatcher"]
     val set_localeMatcher: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s57_lookup[@js "lookup"]] [@js.enum]) | `U2 of ([`L_s24_best_fit[@js "best fit"]] [@js.enum])] [@js.union]) -> unit [@@js.set "localeMatcher"]
-    val get_type: 'tags this -> PluralRuleType.t option option [@@js.get "type"]
+    val get_type: 'tags this -> PluralRuleType.t option [@@js.get "type"]
     val set_type: 'tags this -> ([`Undefined of undefined | `U1 of PluralRuleType.t] [@js.union]) -> unit [@@js.set "type"]
-    val get_minimumIntegerDigits: 'tags this -> float option option [@@js.get "minimumIntegerDigits"]
+    val get_minimumIntegerDigits: 'tags this -> float option [@@js.get "minimumIntegerDigits"]
     val set_minimumIntegerDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "minimumIntegerDigits"]
-    val get_minimumFractionDigits: 'tags this -> float option option [@@js.get "minimumFractionDigits"]
+    val get_minimumFractionDigits: 'tags this -> float option [@@js.get "minimumFractionDigits"]
     val set_minimumFractionDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "minimumFractionDigits"]
-    val get_maximumFractionDigits: 'tags this -> float option option [@@js.get "maximumFractionDigits"]
+    val get_maximumFractionDigits: 'tags this -> float option [@@js.get "maximumFractionDigits"]
     val set_maximumFractionDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "maximumFractionDigits"]
-    val get_minimumSignificantDigits: 'tags this -> float option option [@@js.get "minimumSignificantDigits"]
+    val get_minimumSignificantDigits: 'tags this -> float option [@@js.get "minimumSignificantDigits"]
     val set_minimumSignificantDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "minimumSignificantDigits"]
-    val get_maximumSignificantDigits: 'tags this -> float option option [@@js.get "maximumSignificantDigits"]
+    val get_maximumSignificantDigits: 'tags this -> float option [@@js.get "maximumSignificantDigits"]
     val set_maximumSignificantDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "maximumSignificantDigits"]
     val create: ?localeMatcher:([`L_s24_best_fit[@js "best fit"] | `L_s57_lookup[@js "lookup"]] [@js.enum]) -> ?type_:(PluralRuleType.t[@js "type"]) -> ?minimumIntegerDigits:float -> ?minimumFractionDigits:float -> ?maximumFractionDigits:float -> ?minimumSignificantDigits:float -> ?maximumSignificantDigits:float -> unit -> t [@@js.builder]
     val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -2731,65 +2731,65 @@ and[@js.scope "Intl"] Intl : sig
     val t_0_of_js: Ojs.t -> t_0
     
     (** language version: ES2020 *)
-    val get_compactDisplay: 'tags this -> ([`L_s56_long[@js "long"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "compactDisplay"]
+    val get_compactDisplay: 'tags this -> ([`L_s56_long[@js "long"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "compactDisplay"]
     
     (** language version: ES2020 *)
     val set_compactDisplay: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s89_short[@js "short"]] [@js.enum]) | `U2 of ([`L_s56_long[@js "long"]] [@js.enum])] [@js.union]) -> unit [@@js.set "compactDisplay"]
     
     (** language version: ES2020 *)
-    val get_notation: 'tags this -> ([`L_s27_compact[@js "compact"] | `L_s34_engineering[@js "engineering"] | `L_s85_scientific[@js "scientific"] | `L_s90_standard[@js "standard"]] [@js.enum]) option option [@@js.get "notation"]
+    val get_notation: 'tags this -> ([`L_s27_compact[@js "compact"] | `L_s34_engineering[@js "engineering"] | `L_s85_scientific[@js "scientific"] | `L_s90_standard[@js "standard"]] [@js.enum]) option [@@js.get "notation"]
     
     (** language version: ES2020 *)
     val set_notation: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s90_standard[@js "standard"]] [@js.enum]) | `U2 of ([`L_s85_scientific[@js "scientific"]] [@js.enum]) | `U3 of ([`L_s34_engineering[@js "engineering"]] [@js.enum]) | `U4 of ([`L_s27_compact[@js "compact"]] [@js.enum])] [@js.union]) -> unit [@@js.set "notation"]
     
     (** language version: ES2020 *)
-    val get_signDisplay: 'tags this -> ([`L_s21_always[@js "always"] | `L_s22_auto[@js "auto"] | `L_s36_exceptZero[@js "exceptZero"] | `L_s69_never[@js "never"]] [@js.enum]) option option [@@js.get "signDisplay"]
+    val get_signDisplay: 'tags this -> ([`L_s21_always[@js "always"] | `L_s22_auto[@js "auto"] | `L_s36_exceptZero[@js "exceptZero"] | `L_s69_never[@js "never"]] [@js.enum]) option [@@js.get "signDisplay"]
     
     (** language version: ES2020 *)
     val set_signDisplay: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s22_auto[@js "auto"]] [@js.enum]) | `U2 of ([`L_s69_never[@js "never"]] [@js.enum]) | `U3 of ([`L_s21_always[@js "always"]] [@js.enum]) | `U4 of ([`L_s36_exceptZero[@js "exceptZero"]] [@js.enum])] [@js.union]) -> unit [@@js.set "signDisplay"]
     
     (** language version: ES2020 *)
-    val get_unit: 'tags this -> string option option [@@js.get "unit"]
+    val get_unit: 'tags this -> string option [@@js.get "unit"]
     
     (** language version: ES2020 *)
     val set_unit: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "unit"]
     
     (** language version: ES2020 *)
-    val get_unitDisplay: 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "unitDisplay"]
+    val get_unitDisplay: 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "unitDisplay"]
     
     (** language version: ES2020 *)
     val set_unitDisplay: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s89_short[@js "short"]] [@js.enum]) | `U2 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U3 of ([`L_s68_narrow[@js "narrow"]] [@js.enum])] [@js.union]) -> unit [@@js.set "unitDisplay"]
     
     (** language version: ES2020 *)
-    val get_currencyDisplay: 'tags this -> string option option [@@js.get "currencyDisplay"]
+    val get_currencyDisplay: 'tags this -> string option [@@js.get "currencyDisplay"]
     
     (** language version: ES2020 *)
     val set_currencyDisplay: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "currencyDisplay"]
     
     (** language version: ES2020 *)
-    val get_currencySign: 'tags this -> string option option [@@js.get "currencySign"]
+    val get_currencySign: 'tags this -> string option [@@js.get "currencySign"]
     
     (** language version: ES2020 *)
     val set_currencySign: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "currencySign"]
-    val get_localeMatcher: 'tags this -> string option option [@@js.get "localeMatcher"]
+    val get_localeMatcher: 'tags this -> string option [@@js.get "localeMatcher"]
     val set_localeMatcher: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "localeMatcher"]
-    val get_style: 'tags this -> string option option [@@js.get "style"]
+    val get_style: 'tags this -> string option [@@js.get "style"]
     val set_style: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "style"]
-    val get_currency: 'tags this -> string option option [@@js.get "currency"]
+    val get_currency: 'tags this -> string option [@@js.get "currency"]
     val set_currency: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "currency"]
-    val get_currencySign': 'tags this -> string option option [@@js.get "currencySign"]
+    val get_currencySign': 'tags this -> string option [@@js.get "currencySign"]
     val set_currencySign': 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "currencySign"]
-    val get_useGrouping: 'tags this -> bool option option [@@js.get "useGrouping"]
+    val get_useGrouping: 'tags this -> bool option [@@js.get "useGrouping"]
     val set_useGrouping: 'tags this -> ([`Undefined of undefined | `U1 of bool] [@js.union]) -> unit [@@js.set "useGrouping"]
-    val get_minimumIntegerDigits: 'tags this -> float option option [@@js.get "minimumIntegerDigits"]
+    val get_minimumIntegerDigits: 'tags this -> float option [@@js.get "minimumIntegerDigits"]
     val set_minimumIntegerDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "minimumIntegerDigits"]
-    val get_minimumFractionDigits: 'tags this -> float option option [@@js.get "minimumFractionDigits"]
+    val get_minimumFractionDigits: 'tags this -> float option [@@js.get "minimumFractionDigits"]
     val set_minimumFractionDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "minimumFractionDigits"]
-    val get_maximumFractionDigits: 'tags this -> float option option [@@js.get "maximumFractionDigits"]
+    val get_maximumFractionDigits: 'tags this -> float option [@@js.get "maximumFractionDigits"]
     val set_maximumFractionDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "maximumFractionDigits"]
-    val get_minimumSignificantDigits: 'tags this -> float option option [@@js.get "minimumSignificantDigits"]
+    val get_minimumSignificantDigits: 'tags this -> float option [@@js.get "minimumSignificantDigits"]
     val set_minimumSignificantDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "minimumSignificantDigits"]
-    val get_maximumSignificantDigits: 'tags this -> float option option [@@js.get "maximumSignificantDigits"]
+    val get_maximumSignificantDigits: 'tags this -> float option [@@js.get "maximumSignificantDigits"]
     val set_maximumSignificantDigits: 'tags this -> ([`Undefined of undefined | `U1 of float] [@js.union]) -> unit [@@js.set "maximumSignificantDigits"]
     val create: ?compactDisplay:([`L_s56_long[@js "long"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?notation:([`L_s27_compact[@js "compact"] | `L_s34_engineering[@js "engineering"] | `L_s85_scientific[@js "scientific"] | `L_s90_standard[@js "standard"]] [@js.enum]) -> ?signDisplay:([`L_s21_always[@js "always"] | `L_s22_auto[@js "auto"] | `L_s36_exceptZero[@js "exceptZero"] | `L_s69_never[@js "never"]] [@js.enum]) -> ?unit:string -> ?unitDisplay:([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?currencyDisplay:string -> ?currencySign:string -> ?localeMatcher:string -> ?style:string -> ?currency:string -> ?currencySign:string -> ?useGrouping:bool -> ?minimumIntegerDigits:float -> ?minimumFractionDigits:float -> ?maximumFractionDigits:float -> ?minimumSignificantDigits:float -> ?maximumSignificantDigits:float -> unit -> t [@@js.builder]
     val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -3221,95 +3221,95 @@ and[@js.scope "Intl"] Intl : sig
     val t_0_of_js: Ojs.t -> t_0
     
     (** language version: ESNext *)
-    val get_formatMatcher: 'tags this -> ([`L_s23_basic[@js "basic"] | `L_s24_best_fit[@js "best fit"]] [@js.enum]) option option [@@js.get "formatMatcher"]
+    val get_formatMatcher: 'tags this -> ([`L_s23_basic[@js "basic"] | `L_s24_best_fit[@js "best fit"]] [@js.enum]) option [@@js.get "formatMatcher"]
     
     (** language version: ESNext *)
     val set_formatMatcher: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s23_basic[@js "basic"]] [@js.enum]) | `U2 of ([`L_s24_best_fit[@js "best fit"]] [@js.enum]) | `U3 of ([`L_s24_best_fit[@js "best fit"]] [@js.enum])] [@js.union]) -> unit [@@js.set "formatMatcher"]
     
     (** language version: ESNext *)
-    val get_dateStyle: 'tags this -> ([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "dateStyle"]
+    val get_dateStyle: 'tags this -> ([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "dateStyle"]
     
     (** language version: ESNext *)
     val set_dateStyle: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s44_full[@js "full"]] [@js.enum]) | `U2 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U3 of ([`L_s60_medium[@js "medium"]] [@js.enum]) | `U4 of ([`L_s89_short[@js "short"]] [@js.enum])] [@js.union]) -> unit [@@js.set "dateStyle"]
     
     (** language version: ESNext *)
-    val get_timeStyle: 'tags this -> ([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "timeStyle"]
+    val get_timeStyle: 'tags this -> ([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "timeStyle"]
     
     (** language version: ESNext *)
     val set_timeStyle: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s44_full[@js "full"]] [@js.enum]) | `U2 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U3 of ([`L_s60_medium[@js "medium"]] [@js.enum]) | `U4 of ([`L_s89_short[@js "short"]] [@js.enum])] [@js.union]) -> unit [@@js.set "timeStyle"]
     
     (** language version: ESNext *)
-    val get_dayPeriod: 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "dayPeriod"]
+    val get_dayPeriod: 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "dayPeriod"]
     
     (** language version: ESNext *)
     val set_dayPeriod: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s68_narrow[@js "narrow"]] [@js.enum]) | `U2 of ([`L_s89_short[@js "short"]] [@js.enum]) | `U3 of ([`L_s56_long[@js "long"]] [@js.enum])] [@js.union]) -> unit [@@js.set "dayPeriod"]
     
     (** language version: ESNext *)
-    val get_fractionalSecondDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3]] [@js.enum]) option option [@@js.get "fractionalSecondDigits"]
+    val get_fractionalSecondDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3]] [@js.enum]) option [@@js.get "fractionalSecondDigits"]
     
     (** language version: ESNext *)
     val set_fractionalSecondDigits: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_n_0[@js 0]] [@js.enum]) | `U2 of ([`L_n_1[@js 1]] [@js.enum]) | `U3 of ([`L_n_2[@js 2]] [@js.enum]) | `U4 of ([`L_n_3[@js 3]] [@js.enum])] [@js.union]) -> unit [@@js.set "fractionalSecondDigits"]
     
     (** language version: ES2020 *)
-    val get_calendar: 'tags this -> string option option [@@js.get "calendar"]
+    val get_calendar: 'tags this -> string option [@@js.get "calendar"]
     
     (** language version: ES2020 *)
     val set_calendar: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "calendar"]
     
     (** language version: ES2020 *)
-    val get_dayPeriod': 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "dayPeriod"]
+    val get_dayPeriod': 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "dayPeriod"]
     
     (** language version: ES2020 *)
     val set_dayPeriod': 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s68_narrow[@js "narrow"]] [@js.enum]) | `U2 of ([`L_s89_short[@js "short"]] [@js.enum]) | `U3 of ([`L_s56_long[@js "long"]] [@js.enum])] [@js.union]) -> unit [@@js.set "dayPeriod"]
     
     (** language version: ES2020 *)
-    val get_numberingSystem: 'tags this -> string option option [@@js.get "numberingSystem"]
+    val get_numberingSystem: 'tags this -> string option [@@js.get "numberingSystem"]
     
     (** language version: ES2020 *)
     val set_numberingSystem: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "numberingSystem"]
     
     (** language version: ES2020 *)
-    val get_dateStyle': 'tags this -> ([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "dateStyle"]
+    val get_dateStyle': 'tags this -> ([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "dateStyle"]
     
     (** language version: ES2020 *)
     val set_dateStyle': 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s44_full[@js "full"]] [@js.enum]) | `U2 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U3 of ([`L_s60_medium[@js "medium"]] [@js.enum]) | `U4 of ([`L_s89_short[@js "short"]] [@js.enum])] [@js.union]) -> unit [@@js.set "dateStyle"]
     
     (** language version: ES2020 *)
-    val get_timeStyle': 'tags this -> ([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "timeStyle"]
+    val get_timeStyle': 'tags this -> ([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "timeStyle"]
     
     (** language version: ES2020 *)
     val set_timeStyle': 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s44_full[@js "full"]] [@js.enum]) | `U2 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U3 of ([`L_s60_medium[@js "medium"]] [@js.enum]) | `U4 of ([`L_s89_short[@js "short"]] [@js.enum])] [@js.union]) -> unit [@@js.set "timeStyle"]
     
     (** language version: ES2020 *)
-    val get_hourCycle: 'tags this -> ([`L_s46_h11[@js "h11"] | `L_s47_h12[@js "h12"] | `L_s48_h23[@js "h23"] | `L_s49_h24[@js "h24"]] [@js.enum]) option option [@@js.get "hourCycle"]
+    val get_hourCycle: 'tags this -> ([`L_s46_h11[@js "h11"] | `L_s47_h12[@js "h12"] | `L_s48_h23[@js "h23"] | `L_s49_h24[@js "h24"]] [@js.enum]) option [@@js.get "hourCycle"]
     
     (** language version: ES2020 *)
     val set_hourCycle: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s46_h11[@js "h11"]] [@js.enum]) | `U2 of ([`L_s47_h12[@js "h12"]] [@js.enum]) | `U3 of ([`L_s48_h23[@js "h23"]] [@js.enum]) | `U4 of ([`L_s49_h24[@js "h24"]] [@js.enum])] [@js.union]) -> unit [@@js.set "hourCycle"]
-    val get_localeMatcher: 'tags this -> ([`L_s24_best_fit[@js "best fit"] | `L_s57_lookup[@js "lookup"]] [@js.enum]) option option [@@js.get "localeMatcher"]
+    val get_localeMatcher: 'tags this -> ([`L_s24_best_fit[@js "best fit"] | `L_s57_lookup[@js "lookup"]] [@js.enum]) option [@@js.get "localeMatcher"]
     val set_localeMatcher: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s24_best_fit[@js "best fit"]] [@js.enum]) | `U2 of ([`L_s57_lookup[@js "lookup"]] [@js.enum])] [@js.union]) -> unit [@@js.set "localeMatcher"]
-    val get_weekday: 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "weekday"]
+    val get_weekday: 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "weekday"]
     val set_weekday: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U2 of ([`L_s89_short[@js "short"]] [@js.enum]) | `U3 of ([`L_s68_narrow[@js "narrow"]] [@js.enum])] [@js.union]) -> unit [@@js.set "weekday"]
-    val get_era: 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "era"]
+    val get_era: 'tags this -> ([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "era"]
     val set_era: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U2 of ([`L_s89_short[@js "short"]] [@js.enum]) | `U3 of ([`L_s68_narrow[@js "narrow"]] [@js.enum])] [@js.union]) -> unit [@@js.set "era"]
-    val get_year: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option option [@@js.get "year"]
+    val get_year: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option [@@js.get "year"]
     val set_year: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s73_numeric[@js "numeric"]] [@js.enum]) | `U2 of ([`L_s0_2_digit[@js "2-digit"]] [@js.enum])] [@js.union]) -> unit [@@js.set "year"]
-    val get_month: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s73_numeric[@js "numeric"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "month"]
+    val get_month: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s73_numeric[@js "numeric"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "month"]
     val set_month: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s73_numeric[@js "numeric"]] [@js.enum]) | `U2 of ([`L_s0_2_digit[@js "2-digit"]] [@js.enum]) | `U3 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U4 of ([`L_s89_short[@js "short"]] [@js.enum]) | `U5 of ([`L_s68_narrow[@js "narrow"]] [@js.enum])] [@js.union]) -> unit [@@js.set "month"]
-    val get_day: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option option [@@js.get "day"]
+    val get_day: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option [@@js.get "day"]
     val set_day: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s73_numeric[@js "numeric"]] [@js.enum]) | `U2 of ([`L_s0_2_digit[@js "2-digit"]] [@js.enum])] [@js.union]) -> unit [@@js.set "day"]
-    val get_hour: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option option [@@js.get "hour"]
+    val get_hour: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option [@@js.get "hour"]
     val set_hour: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s73_numeric[@js "numeric"]] [@js.enum]) | `U2 of ([`L_s0_2_digit[@js "2-digit"]] [@js.enum])] [@js.union]) -> unit [@@js.set "hour"]
-    val get_minute: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option option [@@js.get "minute"]
+    val get_minute: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option [@@js.get "minute"]
     val set_minute: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s73_numeric[@js "numeric"]] [@js.enum]) | `U2 of ([`L_s0_2_digit[@js "2-digit"]] [@js.enum])] [@js.union]) -> unit [@@js.set "minute"]
-    val get_second: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option option [@@js.get "second"]
+    val get_second: 'tags this -> ([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) option [@@js.get "second"]
     val set_second: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s73_numeric[@js "numeric"]] [@js.enum]) | `U2 of ([`L_s0_2_digit[@js "2-digit"]] [@js.enum])] [@js.union]) -> unit [@@js.set "second"]
-    val get_timeZoneName: 'tags this -> ([`L_s56_long[@js "long"] | `L_s89_short[@js "short"]] [@js.enum]) option option [@@js.get "timeZoneName"]
+    val get_timeZoneName: 'tags this -> ([`L_s56_long[@js "long"] | `L_s89_short[@js "short"]] [@js.enum]) option [@@js.get "timeZoneName"]
     val set_timeZoneName: 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s56_long[@js "long"]] [@js.enum]) | `U2 of ([`L_s89_short[@js "short"]] [@js.enum])] [@js.union]) -> unit [@@js.set "timeZoneName"]
-    val get_formatMatcher': 'tags this -> ([`L_s23_basic[@js "basic"] | `L_s24_best_fit[@js "best fit"]] [@js.enum]) option option [@@js.get "formatMatcher"]
+    val get_formatMatcher': 'tags this -> ([`L_s23_basic[@js "basic"] | `L_s24_best_fit[@js "best fit"]] [@js.enum]) option [@@js.get "formatMatcher"]
     val set_formatMatcher': 'tags this -> ([`Undefined of undefined | `U1 of ([`L_s24_best_fit[@js "best fit"]] [@js.enum]) | `U2 of ([`L_s23_basic[@js "basic"]] [@js.enum])] [@js.union]) -> unit [@@js.set "formatMatcher"]
-    val get_hour12: 'tags this -> bool option option [@@js.get "hour12"]
+    val get_hour12: 'tags this -> bool option [@@js.get "hour12"]
     val set_hour12: 'tags this -> ([`Undefined of undefined | `U1 of bool] [@js.union]) -> unit [@@js.set "hour12"]
-    val get_timeZone: 'tags this -> string option option [@@js.get "timeZone"]
+    val get_timeZone: 'tags this -> string option [@@js.get "timeZone"]
     val set_timeZone: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "timeZone"]
     val create: ?formatMatcher:([`L_s23_basic[@js "basic"] | `L_s24_best_fit[@js "best fit"]] [@js.enum]) -> ?dateStyle:([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?timeStyle:([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?dayPeriod:([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?fractionalSecondDigits:([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3]] [@js.enum]) -> ?calendar:string -> ?dayPeriod:([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?numberingSystem:string -> ?dateStyle:([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?timeStyle:([`L_s44_full[@js "full"] | `L_s56_long[@js "long"] | `L_s60_medium[@js "medium"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?hourCycle:([`L_s46_h11[@js "h11"] | `L_s47_h12[@js "h12"] | `L_s48_h23[@js "h23"] | `L_s49_h24[@js "h24"]] [@js.enum]) -> ?localeMatcher:([`L_s24_best_fit[@js "best fit"] | `L_s57_lookup[@js "lookup"]] [@js.enum]) -> ?weekday:([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?era:([`L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?year:([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) -> ?month:([`L_s0_2_digit[@js "2-digit"] | `L_s56_long[@js "long"] | `L_s68_narrow[@js "narrow"] | `L_s73_numeric[@js "numeric"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?day:([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) -> ?hour:([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) -> ?minute:([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) -> ?second:([`L_s0_2_digit[@js "2-digit"] | `L_s73_numeric[@js "numeric"]] [@js.enum]) -> ?timeZoneName:([`L_s56_long[@js "long"] | `L_s89_short[@js "short"]] [@js.enum]) -> ?formatMatcher:([`L_s23_basic[@js "basic"] | `L_s24_best_fit[@js "best fit"]] [@js.enum]) -> ?hour12:bool -> ?timeZone:string -> unit -> t [@@js.builder]
     val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -3395,17 +3395,17 @@ and[@js.scope "Intl"] Intl : sig
     val t_of_js: Ojs.t -> t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_usage: 'tags this -> string option option [@@js.get "usage"]
+    val get_usage: 'tags this -> string option [@@js.get "usage"]
     val set_usage: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "usage"]
-    val get_localeMatcher: 'tags this -> string option option [@@js.get "localeMatcher"]
+    val get_localeMatcher: 'tags this -> string option [@@js.get "localeMatcher"]
     val set_localeMatcher: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "localeMatcher"]
-    val get_numeric: 'tags this -> bool option option [@@js.get "numeric"]
+    val get_numeric: 'tags this -> bool option [@@js.get "numeric"]
     val set_numeric: 'tags this -> ([`Undefined of undefined | `U1 of bool] [@js.union]) -> unit [@@js.set "numeric"]
-    val get_caseFirst: 'tags this -> string option option [@@js.get "caseFirst"]
+    val get_caseFirst: 'tags this -> string option [@@js.get "caseFirst"]
     val set_caseFirst: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "caseFirst"]
-    val get_sensitivity: 'tags this -> string option option [@@js.get "sensitivity"]
+    val get_sensitivity: 'tags this -> string option [@@js.get "sensitivity"]
     val set_sensitivity: 'tags this -> ([`Undefined of undefined | `U1 of string] [@js.union]) -> unit [@@js.set "sensitivity"]
-    val get_ignorePunctuation: 'tags this -> bool option option [@@js.get "ignorePunctuation"]
+    val get_ignorePunctuation: 'tags this -> bool option [@@js.get "ignorePunctuation"]
     val set_ignorePunctuation: 'tags this -> ([`Undefined of undefined | `U1 of bool] [@js.union]) -> unit [@@js.set "ignorePunctuation"]
     val create: ?usage:string -> ?localeMatcher:string -> ?numeric:bool -> ?caseFirst:string -> ?sensitivity:string -> ?ignorePunctuation:bool -> unit -> t [@@js.builder]
     val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]

@@ -2198,9 +2198,9 @@ module PerformanceMeasureOptions : sig
   val set_detail: 'tags this -> any -> unit [@@js.set "detail"]
   val get_duration: 'tags this -> DOMHighResTimeStamp.t option [@@js.get "duration"]
   val set_duration: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "duration"]
-  val get_end: 'tags this -> ([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "end"]
+  val get_end: 'tags this -> ([`String of string | `Undefined | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "end"]
   val set_end: 'tags this -> ([`U1 of string | `U2 of DOMHighResTimeStamp.t] [@js.union]) -> unit [@@js.set "end"]
-  val get_start: 'tags this -> ([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "start"]
+  val get_start: 'tags this -> ([`String of string | `Undefined | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "start"]
   val set_start: 'tags this -> ([`U1 of string | `U2 of DOMHighResTimeStamp.t] [@js.union]) -> unit [@@js.set "start"]
   val create: ?detail:any -> ?duration:DOMHighResTimeStamp.t -> ?end_:(([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t[@js "end"]) -> ?start:([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -3238,9 +3238,9 @@ module ConstrainDOMStringParameters : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_exact: 'tags this -> ([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "exact"]
+  val get_exact: 'tags this -> ([`String of string | `Undefined | `Other of string list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "exact"]
   val set_exact: 'tags this -> ([`U1 of string | `U2 of string list] [@js.union]) -> unit [@@js.set "exact"]
-  val get_ideal: 'tags this -> ([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "ideal"]
+  val get_ideal: 'tags this -> ([`String of string | `Undefined | `Other of string list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "ideal"]
   val set_ideal: 'tags this -> ([`U1 of string | `U2 of string list] [@js.union]) -> unit [@@js.set "ideal"]
   val create: ?exact:([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t -> ?ideal:([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -3813,11 +3813,11 @@ module RTCIceCandidateInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_candidate: 'tags this -> string option [@@js.get "candidate"]
   val set_candidate: 'tags this -> string -> unit [@@js.set "candidate"]
-  val get_sdpMLineIndex: 'tags this -> float option option [@@js.get "sdpMLineIndex"]
+  val get_sdpMLineIndex: 'tags this -> float option [@@js.get "sdpMLineIndex"]
   val set_sdpMLineIndex: 'tags this -> float option -> unit [@@js.set "sdpMLineIndex"]
-  val get_sdpMid: 'tags this -> string option option [@@js.get "sdpMid"]
+  val get_sdpMid: 'tags this -> string option [@@js.get "sdpMid"]
   val set_sdpMid: 'tags this -> string option -> unit [@@js.set "sdpMid"]
-  val get_usernameFragment: 'tags this -> string option option [@@js.get "usernameFragment"]
+  val get_usernameFragment: 'tags this -> string option [@@js.get "usernameFragment"]
   val set_usernameFragment: 'tags this -> string option -> unit [@@js.set "usernameFragment"]
   val create: ?candidate:string -> ?sdpMLineIndex:float -> ?sdpMid:string -> ?usernameFragment:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -3875,9 +3875,9 @@ module RTCPeerConnectionIceEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_candidate: 'tags this -> RTCIceCandidate.t option option [@@js.get "candidate"]
+  val get_candidate: 'tags this -> RTCIceCandidate.t option [@@js.get "candidate"]
   val set_candidate: 'tags this -> RTCIceCandidate.t option -> unit [@@js.set "candidate"]
-  val get_url: 'tags this -> string option option [@@js.get "url"]
+  val get_url: 'tags this -> string option [@@js.get "url"]
   val set_url: 'tags this -> string option -> unit [@@js.set "url"]
   val create: ?candidate:RTCIceCandidate.t -> ?url:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -3922,13 +3922,13 @@ module RTCPeerConnectionIceErrorEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_address: 'tags this -> string option option [@@js.get "address"]
+  val get_address: 'tags this -> string option [@@js.get "address"]
   val set_address: 'tags this -> string option -> unit [@@js.set "address"]
   val get_errorCode: 'tags this -> float [@@js.get "errorCode"]
   val set_errorCode: 'tags this -> float -> unit [@@js.set "errorCode"]
   val get_errorText: 'tags this -> string option [@@js.get "errorText"]
   val set_errorText: 'tags this -> string -> unit [@@js.set "errorText"]
-  val get_port: 'tags this -> float option option [@@js.get "port"]
+  val get_port: 'tags this -> float option [@@js.get "port"]
   val set_port: 'tags this -> float option -> unit [@@js.set "port"]
   val get_url: 'tags this -> string option [@@js.get "url"]
   val set_url: 'tags this -> string -> unit [@@js.set "url"]
@@ -8401,7 +8401,7 @@ module TrackEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_track: 'tags this -> TextTrack.t option option [@@js.get "track"]
+  val get_track: 'tags this -> TextTrack.t option [@@js.get "track"]
   val set_track: 'tags this -> TextTrack.t option -> unit [@@js.set "track"]
   val create: ?track:TextTrack.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -8657,7 +8657,7 @@ module MediaEncryptedEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_initData: 'tags this -> ArrayBuffer.t_0 option option [@@js.get "initData"]
+  val get_initData: 'tags this -> ArrayBuffer.t_0 option [@@js.get "initData"]
   val set_initData: 'tags this -> ArrayBuffer.t_0 option -> unit [@@js.set "initData"]
   val get_initDataType: 'tags this -> string option [@@js.get "initDataType"]
   val set_initDataType: 'tags this -> string -> unit [@@js.set "initDataType"]
@@ -9465,7 +9465,7 @@ module IDBVersionChangeEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_newVersion: 'tags this -> float option option [@@js.get "newVersion"]
+  val get_newVersion: 'tags this -> float option [@@js.get "newVersion"]
   val set_newVersion: 'tags this -> float option -> unit [@@js.set "newVersion"]
   val get_oldVersion: 'tags this -> float option [@@js.get "oldVersion"]
   val set_oldVersion: 'tags this -> float -> unit [@@js.set "oldVersion"]
@@ -9515,7 +9515,7 @@ module IDBObjectStoreParameters : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_autoIncrement: 'tags this -> bool option [@@js.get "autoIncrement"]
   val set_autoIncrement: 'tags this -> bool -> unit [@@js.set "autoIncrement"]
-  val get_keyPath: 'tags this -> ([`String of string | `Null | `Other of string list] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "keyPath"]
+  val get_keyPath: 'tags this -> ([`String of string | `Null | `Undefined | `Other of string list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "keyPath"]
   val set_keyPath: 'tags this -> ([`Null | `U1 of string | `U2 of string list] [@js.union]) -> unit [@@js.set "keyPath"]
   val create: ?autoIncrement:bool -> ?keyPath:([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -11317,13 +11317,13 @@ module StorageEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_key: 'tags this -> string option option [@@js.get "key"]
+  val get_key: 'tags this -> string option [@@js.get "key"]
   val set_key: 'tags this -> string option -> unit [@@js.set "key"]
-  val get_newValue: 'tags this -> string option option [@@js.get "newValue"]
+  val get_newValue: 'tags this -> string option [@@js.get "newValue"]
   val set_newValue: 'tags this -> string option -> unit [@@js.set "newValue"]
-  val get_oldValue: 'tags this -> string option option [@@js.get "oldValue"]
+  val get_oldValue: 'tags this -> string option [@@js.get "oldValue"]
   val set_oldValue: 'tags this -> string option -> unit [@@js.set "oldValue"]
-  val get_storageArea: 'tags this -> Storage.t option option [@@js.get "storageArea"]
+  val get_storageArea: 'tags this -> Storage.t option [@@js.get "storageArea"]
   val set_storageArea: 'tags this -> Storage.t option -> unit [@@js.set "storageArea"]
   val get_url: 'tags this -> string option [@@js.get "url"]
   val set_url: 'tags this -> string -> unit [@@js.set "url"]
@@ -11890,7 +11890,7 @@ module PushSubscriptionOptionsInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_applicationServerKey: 'tags this -> ([`String of string | `Null | `Other of BufferSource.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "applicationServerKey"]
+  val get_applicationServerKey: 'tags this -> ([`String of string | `Null | `Undefined | `Other of BufferSource.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "applicationServerKey"]
   val set_applicationServerKey: 'tags this -> ([`Null | `U1 of BufferSource.t | `U2 of string] [@js.union]) -> unit [@@js.set "applicationServerKey"]
   val get_userVisibleOnly: 'tags this -> bool option [@@js.get "userVisibleOnly"]
   val set_userVisibleOnly: 'tags this -> bool -> unit [@@js.set "userVisibleOnly"]
@@ -11947,7 +11947,7 @@ module PushSubscriptionJSON : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_endpoint: 'tags this -> string option [@@js.get "endpoint"]
   val set_endpoint: 'tags this -> string -> unit [@@js.set "endpoint"]
-  val get_expirationTime: 'tags this -> EpochTimeStamp.t option option [@@js.get "expirationTime"]
+  val get_expirationTime: 'tags this -> EpochTimeStamp.t option [@@js.get "expirationTime"]
   val set_expirationTime: 'tags this -> EpochTimeStamp.t option -> unit [@@js.set "expirationTime"]
   val get_keys: 'tags this -> (string, string) Record.t_2 option [@@js.get "keys"]
   val set_keys: 'tags this -> (string, string) Record.t_2 -> unit [@@js.set "keys"]
@@ -13186,11 +13186,11 @@ module MediaSessionActionDetails : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_action: 'tags this -> MediaSessionAction.t [@@js.get "action"]
   val set_action: 'tags this -> MediaSessionAction.t -> unit [@@js.set "action"]
-  val get_fastSeek: 'tags this -> bool option option [@@js.get "fastSeek"]
+  val get_fastSeek: 'tags this -> bool option [@@js.get "fastSeek"]
   val set_fastSeek: 'tags this -> bool option -> unit [@@js.set "fastSeek"]
-  val get_seekOffset: 'tags this -> float option option [@@js.get "seekOffset"]
+  val get_seekOffset: 'tags this -> float option [@@js.get "seekOffset"]
   val set_seekOffset: 'tags this -> float option -> unit [@@js.set "seekOffset"]
-  val get_seekTime: 'tags this -> float option option [@@js.get "seekTime"]
+  val get_seekTime: 'tags this -> float option [@@js.get "seekTime"]
   val set_seekTime: 'tags this -> float option -> unit [@@js.set "seekTime"]
   val create: action:MediaSessionAction.t -> ?fastSeek:bool -> ?seekOffset:float -> ?seekTime:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -13593,7 +13593,7 @@ module MediaKeySystemMediaCapability : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_contentType: 'tags this -> string option [@@js.get "contentType"]
   val set_contentType: 'tags this -> string -> unit [@@js.set "contentType"]
-  val get_encryptionScheme: 'tags this -> string option option [@@js.get "encryptionScheme"]
+  val get_encryptionScheme: 'tags this -> string option [@@js.get "encryptionScheme"]
   val set_encryptionScheme: 'tags this -> string option -> unit [@@js.set "encryptionScheme"]
   val get_robustness: 'tags this -> string option [@@js.get "robustness"]
   val set_robustness: 'tags this -> string -> unit [@@js.set "robustness"]
@@ -13722,13 +13722,13 @@ module MediaStreamConstraints : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_audio: 'tags this -> ([`Boolean of bool | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "audio"]
+  val get_audio: 'tags this -> ([`Boolean of bool | `Undefined | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "audio"]
   val set_audio: 'tags this -> ([`U1 of bool | `U2 of MediaTrackConstraints.t] [@js.union]) -> unit [@@js.set "audio"]
   val get_peerIdentity: 'tags this -> string option [@@js.get "peerIdentity"]
   val set_peerIdentity: 'tags this -> string -> unit [@@js.set "peerIdentity"]
   val get_preferCurrentTab: 'tags this -> bool option [@@js.get "preferCurrentTab"]
   val set_preferCurrentTab: 'tags this -> bool -> unit [@@js.set "preferCurrentTab"]
-  val get_video: 'tags this -> ([`Boolean of bool | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "video"]
+  val get_video: 'tags this -> ([`Boolean of bool | `Undefined | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "video"]
   val set_video: 'tags this -> ([`U1 of bool | `U2 of MediaTrackConstraints.t] [@js.union]) -> unit [@@js.set "video"]
   val create: ?audio:([`Boolean of bool | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t -> ?peerIdentity:string -> ?preferCurrentTab:bool -> ?video:([`Boolean of bool | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -13787,9 +13787,9 @@ module DisplayMediaStreamConstraints : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_audio: 'tags this -> ([`Boolean of bool | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "audio"]
+  val get_audio: 'tags this -> ([`Boolean of bool | `Undefined | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "audio"]
   val set_audio: 'tags this -> ([`U1 of bool | `U2 of MediaTrackConstraints.t] [@js.union]) -> unit [@@js.set "audio"]
-  val get_video: 'tags this -> ([`Boolean of bool | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "video"]
+  val get_video: 'tags this -> ([`Boolean of bool | `Undefined | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "video"]
   val set_video: 'tags this -> ([`U1 of bool | `U2 of MediaTrackConstraints.t] [@js.union]) -> unit [@@js.set "video"]
   val create: ?audio:([`Boolean of bool | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t -> ?video:([`Boolean of bool | `Other of MediaTrackConstraints.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -15211,11 +15211,11 @@ module DeviceOrientationEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_absolute: 'tags this -> bool option [@@js.get "absolute"]
   val set_absolute: 'tags this -> bool -> unit [@@js.set "absolute"]
-  val get_alpha: 'tags this -> float option option [@@js.get "alpha"]
+  val get_alpha: 'tags this -> float option [@@js.get "alpha"]
   val set_alpha: 'tags this -> float option -> unit [@@js.set "alpha"]
-  val get_beta: 'tags this -> float option option [@@js.get "beta"]
+  val get_beta: 'tags this -> float option [@@js.get "beta"]
   val set_beta: 'tags this -> float option -> unit [@@js.set "beta"]
-  val get_gamma: 'tags this -> float option option [@@js.get "gamma"]
+  val get_gamma: 'tags this -> float option [@@js.get "gamma"]
   val set_gamma: 'tags this -> float option -> unit [@@js.set "gamma"]
   val create: ?absolute:bool -> ?alpha:float -> ?beta:float -> ?gamma:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -15290,11 +15290,11 @@ module DeviceMotionEventRotationRateInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_alpha: 'tags this -> float option option [@@js.get "alpha"]
+  val get_alpha: 'tags this -> float option [@@js.get "alpha"]
   val set_alpha: 'tags this -> float option -> unit [@@js.set "alpha"]
-  val get_beta: 'tags this -> float option option [@@js.get "beta"]
+  val get_beta: 'tags this -> float option [@@js.get "beta"]
   val set_beta: 'tags this -> float option -> unit [@@js.set "beta"]
-  val get_gamma: 'tags this -> float option option [@@js.get "gamma"]
+  val get_gamma: 'tags this -> float option [@@js.get "gamma"]
   val set_gamma: 'tags this -> float option -> unit [@@js.set "gamma"]
   val create: ?alpha:float -> ?beta:float -> ?gamma:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -15315,11 +15315,11 @@ module DeviceMotionEventAccelerationInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_x: 'tags this -> float option option [@@js.get "x"]
+  val get_x: 'tags this -> float option [@@js.get "x"]
   val set_x: 'tags this -> float option -> unit [@@js.set "x"]
-  val get_y: 'tags this -> float option option [@@js.get "y"]
+  val get_y: 'tags this -> float option [@@js.get "y"]
   val set_y: 'tags this -> float option -> unit [@@js.set "y"]
-  val get_z: 'tags this -> float option option [@@js.get "z"]
+  val get_z: 'tags this -> float option [@@js.get "z"]
   val set_z: 'tags this -> float option -> unit [@@js.set "z"]
   val create: ?x:float -> ?y:float -> ?z:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -15584,7 +15584,7 @@ module CSSStyleSheetInit : sig
   val set_baseURL: 'tags this -> string -> unit [@@js.set "baseURL"]
   val get_disabled: 'tags this -> bool option [@@js.get "disabled"]
   val set_disabled: 'tags this -> bool -> unit [@@js.set "disabled"]
-  val get_media: 'tags this -> ([`String of string | `Other of MediaList.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "media"]
+  val get_media: 'tags this -> ([`String of string | `Undefined | `Other of MediaList.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "media"]
   val set_media: 'tags this -> ([`U1 of MediaList.t | `U2 of string] [@js.union]) -> unit [@@js.set "media"]
   val create: ?baseURL:string -> ?disabled:bool -> ?media:([`String of string | `Other of MediaList.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -16063,9 +16063,9 @@ module PropertyIndexedKeyframes : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_composite: 'tags this -> (CompositeOperationOrAuto.t list, CompositeOperationOrAuto.t) union2 option [@@js.get "composite"]
   val set_composite: 'tags this -> ([`U1 of CompositeOperationOrAuto.t | `U2 of CompositeOperationOrAuto.t list] [@js.union]) -> unit [@@js.set "composite"]
-  val get_easing: 'tags this -> ([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "easing"]
+  val get_easing: 'tags this -> ([`String of string | `Undefined | `Other of string list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "easing"]
   val set_easing: 'tags this -> ([`U1 of string | `U2 of string list] [@js.union]) -> unit [@@js.set "easing"]
-  val get_offset: 'tags this -> ([`Number of float | `Other of float option list] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "offset"]
+  val get_offset: 'tags this -> ([`Number of float | `Undefined | `Other of float option list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "offset"]
   val set_offset: 'tags this -> ([`U1 of float | `U2 of float option list] [@js.union]) -> unit [@@js.set "offset"]
   val get: 'tags this -> string -> ([`Number of float | `String of string | `Null | `Undefined | `Other of ([`String of string | `Other of float option] [@js.union on_field "dummy"]) Primitive.t list] [@js.union on_field "dummy"]) Primitive.t [@@js.index_get]
   val set: 'tags this -> string -> ([`Null | `Undefined of undefined | `U1 of string | `U2 of string list | `U3 of float | `U4 of float option list] [@js.union]) -> unit [@@js.index_set]
@@ -16123,7 +16123,7 @@ module EffectTiming : sig
   val set_delay: 'tags this -> float -> unit [@@js.set "delay"]
   val get_direction: 'tags this -> PlaybackDirection.t option [@@js.get "direction"]
   val set_direction: 'tags this -> PlaybackDirection.t -> unit [@@js.set "direction"]
-  val get_duration: 'tags this -> ([`Number of float | `String of string] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "duration"]
+  val get_duration: 'tags this -> ([`Number of float | `String of string | `Undefined] [@js.union on_field "dummy"]) Primitive.t [@@js.get "duration"]
   val set_duration: 'tags this -> ([`U1 of float | `U2 of string] [@js.union]) -> unit [@@js.set "duration"]
   val get_easing: 'tags this -> string option [@@js.get "easing"]
   val set_easing: 'tags this -> string -> unit [@@js.set "easing"]
@@ -16160,7 +16160,7 @@ module KeyframeEffectOptions : sig
   val set_composite: 'tags this -> CompositeOperation.t -> unit [@@js.set "composite"]
   val get_iterationComposite: 'tags this -> IterationCompositeOperation.t option [@@js.get "iterationComposite"]
   val set_iterationComposite: 'tags this -> IterationCompositeOperation.t -> unit [@@js.set "iterationComposite"]
-  val get_pseudoElement: 'tags this -> string option option [@@js.get "pseudoElement"]
+  val get_pseudoElement: 'tags this -> string option [@@js.get "pseudoElement"]
   val set_pseudoElement: 'tags this -> string option -> unit [@@js.set "pseudoElement"]
   val create: ?composite:CompositeOperation.t -> ?iterationComposite:IterationCompositeOperation.t -> ?pseudoElement:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -16206,7 +16206,7 @@ module Keyframe : sig
   val set_composite: 'tags this -> CompositeOperationOrAuto.t -> unit [@@js.set "composite"]
   val get_easing: 'tags this -> string option [@@js.get "easing"]
   val set_easing: 'tags this -> string -> unit [@@js.set "easing"]
-  val get_offset: 'tags this -> float option option [@@js.get "offset"]
+  val get_offset: 'tags this -> float option [@@js.get "offset"]
   val set_offset: 'tags this -> float option -> unit [@@js.set "offset"]
   val get: 'tags this -> string -> ([`Number of float | `String of string | `Null | `Undefined] [@js.union on_field "dummy"]) Primitive.t [@@js.index_get]
   val set: 'tags this -> string -> ([`Null | `Undefined of undefined | `U1 of string | `U2 of float] [@js.union]) -> unit [@@js.index_set]
@@ -16269,7 +16269,7 @@ module OptionalEffectTiming : sig
   val set_delay: 'tags this -> float -> unit [@@js.set "delay"]
   val get_direction: 'tags this -> PlaybackDirection.t option [@@js.get "direction"]
   val set_direction: 'tags this -> PlaybackDirection.t -> unit [@@js.set "direction"]
-  val get_duration: 'tags this -> ([`Number of float | `String of string] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "duration"]
+  val get_duration: 'tags this -> ([`Number of float | `String of string | `Undefined] [@js.union on_field "dummy"]) Primitive.t [@@js.get "duration"]
   val set_duration: 'tags this -> ([`U1 of float | `U2 of string] [@js.union]) -> unit [@@js.set "duration"]
   val get_easing: 'tags this -> string option [@@js.get "easing"]
   val set_easing: 'tags this -> string -> unit [@@js.set "easing"]
@@ -16312,13 +16312,13 @@ module ComputedEffectTiming : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_activeDuration: 'tags this -> CSSNumberish.t option [@@js.get "activeDuration"]
   val set_activeDuration: 'tags this -> CSSNumberish.t -> unit [@@js.set "activeDuration"]
-  val get_currentIteration: 'tags this -> float option option [@@js.get "currentIteration"]
+  val get_currentIteration: 'tags this -> float option [@@js.get "currentIteration"]
   val set_currentIteration: 'tags this -> float option -> unit [@@js.set "currentIteration"]
   val get_endTime: 'tags this -> CSSNumberish.t option [@@js.get "endTime"]
   val set_endTime: 'tags this -> CSSNumberish.t -> unit [@@js.set "endTime"]
-  val get_localTime: 'tags this -> CSSNumberish.t option option [@@js.get "localTime"]
+  val get_localTime: 'tags this -> CSSNumberish.t option [@@js.get "localTime"]
   val set_localTime: 'tags this -> CSSNumberish.t option -> unit [@@js.set "localTime"]
-  val get_progress: 'tags this -> float option option [@@js.get "progress"]
+  val get_progress: 'tags this -> float option [@@js.get "progress"]
   val set_progress: 'tags this -> float option -> unit [@@js.set "progress"]
   val get_startTime: 'tags this -> CSSNumberish.t option [@@js.get "startTime"]
   val set_startTime: 'tags this -> CSSNumberish.t -> unit [@@js.set "startTime"]
@@ -16364,9 +16364,9 @@ module AnimationPlaybackEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_currentTime: 'tags this -> CSSNumberish.t option option [@@js.get "currentTime"]
+  val get_currentTime: 'tags this -> CSSNumberish.t option [@@js.get "currentTime"]
   val set_currentTime: 'tags this -> CSSNumberish.t option -> unit [@@js.set "currentTime"]
-  val get_timelineTime: 'tags this -> CSSNumberish.t option option [@@js.get "timelineTime"]
+  val get_timelineTime: 'tags this -> CSSNumberish.t option [@@js.get "timelineTime"]
   val set_timelineTime: 'tags this -> CSSNumberish.t option -> unit [@@js.set "timelineTime"]
   val create: ?currentTime:CSSNumberish.t -> ?timelineTime:CSSNumberish.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -18399,7 +18399,7 @@ and ClipboardEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_clipboardData: 'tags this -> DataTransfer.t option option [@@js.get "clipboardData"]
+  val get_clipboardData: 'tags this -> DataTransfer.t option [@@js.get "clipboardData"]
   val set_clipboardData: 'tags this -> DataTransfer.t option -> unit [@@js.set "clipboardData"]
   val create: ?clipboardData:DataTransfer.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -19472,7 +19472,7 @@ and DragEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_dataTransfer: 'tags this -> DataTransfer.t option option [@@js.get "dataTransfer"]
+  val get_dataTransfer: 'tags this -> DataTransfer.t option [@@js.get "dataTransfer"]
   val set_dataTransfer: 'tags this -> DataTransfer.t option -> unit [@@js.set "dataTransfer"]
   val create: ?dataTransfer:DataTransfer.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -19819,7 +19819,7 @@ and FocusEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_relatedTarget: 'tags this -> EventTarget.t option option [@@js.get "relatedTarget"]
+  val get_relatedTarget: 'tags this -> EventTarget.t option [@@js.get "relatedTarget"]
   val set_relatedTarget: 'tags this -> EventTarget.t option -> unit [@@js.set "relatedTarget"]
   val create: ?relatedTarget:EventTarget.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -20504,13 +20504,13 @@ and GlobalEventHandlers : sig
   val set_ontimeupdate: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "ontimeupdate"]
   val get_ontoggle: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "ontoggle"]
   val set_ontoggle: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "ontoggle"]
-  val get_ontouchcancel: 'tags this -> (this:t -> ev:TouchEvent.t -> any) option option [@@js.get "ontouchcancel"]
+  val get_ontouchcancel: 'tags this -> (this:t -> ev:TouchEvent.t -> any) option [@@js.get "ontouchcancel"]
   val set_ontouchcancel: 'tags this -> ([`Null | `Undefined of undefined | `U1 of (this:t -> ev:TouchEvent.t -> any)] [@js.union]) -> unit [@@js.set "ontouchcancel"]
-  val get_ontouchend: 'tags this -> (this:t -> ev:TouchEvent.t -> any) option option [@@js.get "ontouchend"]
+  val get_ontouchend: 'tags this -> (this:t -> ev:TouchEvent.t -> any) option [@@js.get "ontouchend"]
   val set_ontouchend: 'tags this -> ([`Null | `Undefined of undefined | `U1 of (this:t -> ev:TouchEvent.t -> any)] [@js.union]) -> unit [@@js.set "ontouchend"]
-  val get_ontouchmove: 'tags this -> (this:t -> ev:TouchEvent.t -> any) option option [@@js.get "ontouchmove"]
+  val get_ontouchmove: 'tags this -> (this:t -> ev:TouchEvent.t -> any) option [@@js.get "ontouchmove"]
   val set_ontouchmove: 'tags this -> ([`Null | `Undefined of undefined | `U1 of (this:t -> ev:TouchEvent.t -> any)] [@js.union]) -> unit [@@js.set "ontouchmove"]
-  val get_ontouchstart: 'tags this -> (this:t -> ev:TouchEvent.t -> any) option option [@@js.get "ontouchstart"]
+  val get_ontouchstart: 'tags this -> (this:t -> ev:TouchEvent.t -> any) option [@@js.get "ontouchstart"]
   val set_ontouchstart: 'tags this -> ([`Null | `Undefined of undefined | `U1 of (this:t -> ev:TouchEvent.t -> any)] [@js.union]) -> unit [@@js.set "ontouchstart"]
   val get_ontransitioncancel: 'tags this -> (this:t -> ev:TransitionEvent.t -> any) option [@@js.get "ontransitioncancel"]
   val set_ontransitioncancel: 'tags this -> (this:t -> ev:TransitionEvent.t -> any) option -> unit [@@js.set "ontransitioncancel"]
@@ -22405,9 +22405,9 @@ and InputEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_data: 'tags this -> string option option [@@js.get "data"]
+  val get_data: 'tags this -> string option [@@js.get "data"]
   val set_data: 'tags this -> string option -> unit [@@js.set "data"]
-  val get_dataTransfer: 'tags this -> DataTransfer.t option option [@@js.get "dataTransfer"]
+  val get_dataTransfer: 'tags this -> DataTransfer.t option [@@js.get "dataTransfer"]
   val set_dataTransfer: 'tags this -> DataTransfer.t option -> unit [@@js.set "dataTransfer"]
   val get_inputType: 'tags this -> string option [@@js.get "inputType"]
   val set_inputType: 'tags this -> string -> unit [@@js.set "inputType"]
@@ -22605,7 +22605,7 @@ and MessageEventInit : sig
   val set_origin: ('tags, 'T) this -> string -> unit [@@js.set "origin"]
   val get_ports: ('tags, 'T) this -> MessagePort.t list option [@@js.get "ports"]
   val set_ports: ('tags, 'T) this -> MessagePort.t list -> unit [@@js.set "ports"]
-  val get_source: ('tags, 'T) this -> MessageEventSource.t option option [@@js.get "source"]
+  val get_source: ('tags, 'T) this -> MessageEventSource.t option [@@js.get "source"]
   val set_source: ('tags, 'T) this -> MessageEventSource.t option -> unit [@@js.set "source"]
   val create: ?data:'T -> ?lastEventId:string -> ?origin:string -> ?ports:MessagePort.t list -> ?source:MessageEventSource.t -> unit -> 'T t [@@js.builder]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
@@ -22777,7 +22777,7 @@ and MouseEventInit : sig
   val set_movementX: 'tags this -> float -> unit [@@js.set "movementX"]
   val get_movementY: 'tags this -> float option [@@js.get "movementY"]
   val set_movementY: 'tags this -> float -> unit [@@js.set "movementY"]
-  val get_relatedTarget: 'tags this -> EventTarget.t option option [@@js.get "relatedTarget"]
+  val get_relatedTarget: 'tags this -> EventTarget.t option [@@js.get "relatedTarget"]
   val set_relatedTarget: 'tags this -> EventTarget.t option -> unit [@@js.set "relatedTarget"]
   val get_screenX: 'tags this -> float option [@@js.get "screenX"]
   val set_screenX: 'tags this -> float -> unit [@@js.set "screenX"]
@@ -23782,7 +23782,7 @@ and RequestInit : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (** A BodyInit object or null to set request's body. *)
-  val get_body: 'tags this -> BodyInit.t option option [@@js.get "body"]
+  val get_body: 'tags this -> BodyInit.t option [@@js.get "body"]
   
   (** A BodyInit object or null to set request's body. *)
   val set_body: 'tags this -> BodyInit.t option -> unit [@@js.set "body"]
@@ -23848,7 +23848,7 @@ and RequestInit : sig
   val set_referrerPolicy: 'tags this -> ReferrerPolicy.t -> unit [@@js.set "referrerPolicy"]
   
   (** An AbortSignal to set request's signal. *)
-  val get_signal: 'tags this -> AbortSignal.t option option [@@js.get "signal"]
+  val get_signal: 'tags this -> AbortSignal.t option [@@js.get "signal"]
   
   (** An AbortSignal to set request's signal. *)
   val set_signal: 'tags this -> AbortSignal.t option -> unit [@@js.set "signal"]
@@ -25752,7 +25752,7 @@ and SubmitEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_submitter: 'tags this -> HTMLElement.t option option [@@js.get "submitter"]
+  val get_submitter: 'tags this -> HTMLElement.t option [@@js.get "submitter"]
   val set_submitter: 'tags this -> HTMLElement.t option -> unit [@@js.set "submitter"]
   val create: ?submitter:HTMLElement.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -25938,7 +25938,7 @@ and UIEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_detail: 'tags this -> float option [@@js.get "detail"]
   val set_detail: 'tags this -> float -> unit [@@js.set "detail"]
-  val get_view: 'tags this -> Window.t option option [@@js.get "view"]
+  val get_view: 'tags this -> Window.t option [@@js.get "view"]
   val set_view: 'tags this -> Window.t option -> unit [@@js.set "view"]
   
   (** @deprecated  *)
@@ -34603,7 +34603,7 @@ module ConvolverOptions : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_buffer: 'tags this -> AudioBuffer.t option option [@@js.get "buffer"]
+  val get_buffer: 'tags this -> AudioBuffer.t option [@@js.get "buffer"]
   val set_buffer: 'tags this -> AudioBuffer.t option -> unit [@@js.set "buffer"]
   val get_disableNormalization: 'tags this -> bool option [@@js.get "disableNormalization"]
   val set_disableNormalization: 'tags this -> bool -> unit [@@js.set "disableNormalization"]
@@ -34890,7 +34890,7 @@ module AudioBufferSourceOptions : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_buffer: 'tags this -> AudioBuffer.t option option [@@js.get "buffer"]
+  val get_buffer: 'tags this -> AudioBuffer.t option [@@js.get "buffer"]
   val set_buffer: 'tags this -> AudioBuffer.t option -> unit [@@js.set "buffer"]
   val get_detune: 'tags this -> float option [@@js.get "detune"]
   val set_detune: 'tags this -> float -> unit [@@js.set "detune"]
@@ -36741,11 +36741,11 @@ module IntersectionObserverInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_root: 'tags this -> (Document.t, Element.t) union2 option option [@@js.get "root"]
+  val get_root: 'tags this -> (Document.t, Element.t) union2 option [@@js.get "root"]
   val set_root: 'tags this -> ([`Null | `U1 of Element.t | `U2 of Document.t] [@js.union]) -> unit [@@js.set "root"]
   val get_rootMargin: 'tags this -> string option [@@js.get "rootMargin"]
   val set_rootMargin: 'tags this -> string -> unit [@@js.set "rootMargin"]
-  val get_threshold: 'tags this -> ([`Number of float | `Other of float list] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "threshold"]
+  val get_threshold: 'tags this -> ([`Number of float | `Undefined | `Other of float list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "threshold"]
   val set_threshold: 'tags this -> ([`U1 of float | `U2 of float list] [@js.union]) -> unit [@@js.set "threshold"]
   val create: ?root:(Document.t, Element.t) union2 -> ?rootMargin:string -> ?threshold:([`Number of float | `Other of float list] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -50568,7 +50568,7 @@ module AudioContextOptions : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_latencyHint: 'tags this -> ([`Number of float | `Other of AudioContextLatencyCategory.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "latencyHint"]
+  val get_latencyHint: 'tags this -> ([`Number of float | `Undefined | `Other of AudioContextLatencyCategory.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "latencyHint"]
   val set_latencyHint: 'tags this -> ([`U1 of AudioContextLatencyCategory.t | `U2 of float] [@js.union]) -> unit [@@js.set "latencyHint"]
   val get_sampleRate: 'tags this -> float option [@@js.get "sampleRate"]
   val set_sampleRate: 'tags this -> float -> unit [@@js.set "sampleRate"]
@@ -50815,7 +50815,7 @@ module MessageEventInit_Make (T : Ojs.T) : sig
   val set_origin: t -> string -> unit [@@js.set "origin"]
   val get_ports: t -> MessagePort.t list option [@@js.get "ports"]
   val set_ports: t -> MessagePort.t list -> unit [@@js.set "ports"]
-  val get_source: t -> MessageEventSource.t option option [@@js.get "source"]
+  val get_source: t -> MessageEventSource.t option [@@js.get "source"]
   val set_source: t -> MessageEventSource.t option -> unit [@@js.set "source"]
 end
 module QueuingStrategy_Make (T : Ojs.T) : sig

@@ -33,9 +33,9 @@ module PerformanceMeasureOptions : sig
   val set_detail: 'tags this -> any -> unit [@@js.set "detail"]
   val get_duration: 'tags this -> DOMHighResTimeStamp.t option [@@js.get "duration"]
   val set_duration: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "duration"]
-  val get_end: 'tags this -> ([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "end"]
+  val get_end: 'tags this -> ([`String of string | `Undefined | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "end"]
   val set_end: 'tags this -> ([`U1 of string | `U2 of DOMHighResTimeStamp.t] [@js.union]) -> unit [@@js.set "end"]
-  val get_start: 'tags this -> ([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "start"]
+  val get_start: 'tags this -> ([`String of string | `Undefined | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "start"]
   val set_start: 'tags this -> ([`U1 of string | `U2 of DOMHighResTimeStamp.t] [@js.union]) -> unit [@@js.set "start"]
   val create: ?detail:any -> ?duration:DOMHighResTimeStamp.t -> ?end_:(([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t[@js "end"]) -> ?start:([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -1986,7 +1986,7 @@ module IDBVersionChangeEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_newVersion: 'tags this -> float option option [@@js.get "newVersion"]
+  val get_newVersion: 'tags this -> float option [@@js.get "newVersion"]
   val set_newVersion: 'tags this -> float option -> unit [@@js.set "newVersion"]
   val get_oldVersion: 'tags this -> float option [@@js.get "oldVersion"]
   val set_oldVersion: 'tags this -> float -> unit [@@js.set "oldVersion"]
@@ -2036,7 +2036,7 @@ module IDBObjectStoreParameters : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_autoIncrement: 'tags this -> bool option [@@js.get "autoIncrement"]
   val set_autoIncrement: 'tags this -> bool -> unit [@@js.set "autoIncrement"]
-  val get_keyPath: 'tags this -> ([`String of string | `Null | `Other of string list] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "keyPath"]
+  val get_keyPath: 'tags this -> ([`String of string | `Null | `Undefined | `Other of string list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "keyPath"]
   val set_keyPath: 'tags this -> ([`Null | `U1 of string | `U2 of string list] [@js.union]) -> unit [@@js.set "keyPath"]
   val create: ?autoIncrement:bool -> ?keyPath:([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -4583,7 +4583,7 @@ module RequestInit : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (** A BodyInit object or null to set request's body. *)
-  val get_body: 'tags this -> BodyInit.t option option [@@js.get "body"]
+  val get_body: 'tags this -> BodyInit.t option [@@js.get "body"]
   
   (** A BodyInit object or null to set request's body. *)
   val set_body: 'tags this -> BodyInit.t option -> unit [@@js.set "body"]
@@ -4649,7 +4649,7 @@ module RequestInit : sig
   val set_referrerPolicy: 'tags this -> ReferrerPolicy.t -> unit [@@js.set "referrerPolicy"]
   
   (** An AbortSignal to set request's signal. *)
-  val get_signal: 'tags this -> AbortSignal.t option option [@@js.get "signal"]
+  val get_signal: 'tags this -> AbortSignal.t option [@@js.get "signal"]
   
   (** An AbortSignal to set request's signal. *)
   val set_signal: 'tags this -> AbortSignal.t option -> unit [@@js.set "signal"]
@@ -5427,7 +5427,7 @@ and MessageEventInit : sig
   val set_origin: ('tags, 'T) this -> string -> unit [@@js.set "origin"]
   val get_ports: ('tags, 'T) this -> MessagePort.t list option [@@js.get "ports"]
   val set_ports: ('tags, 'T) this -> MessagePort.t list -> unit [@@js.set "ports"]
-  val get_source: ('tags, 'T) this -> MessageEventSource.t option option [@@js.get "source"]
+  val get_source: ('tags, 'T) this -> MessageEventSource.t option [@@js.get "source"]
   val set_source: ('tags, 'T) this -> MessageEventSource.t option -> unit [@@js.set "source"]
   val create: ?data:'T -> ?lastEventId:string -> ?origin:string -> ?ports:MessagePort.t list -> ?source:MessageEventSource.t -> unit -> 'T t [@@js.builder]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
@@ -11131,7 +11131,7 @@ module ExtendableMessageEventInit : sig
   val set_origin: 'tags this -> string -> unit [@@js.set "origin"]
   val get_ports: 'tags this -> MessagePort.t list option [@@js.get "ports"]
   val set_ports: 'tags this -> MessagePort.t list -> unit [@@js.set "ports"]
-  val get_source: 'tags this -> (Client.t, MessagePort.t, ServiceWorker.t) union3 option option [@@js.get "source"]
+  val get_source: 'tags this -> (Client.t, MessagePort.t, ServiceWorker.t) union3 option [@@js.get "source"]
   val set_source: 'tags this -> ([`Null | `U1 of Client.t | `U2 of ServiceWorker.t | `U3 of MessagePort.t] [@js.union]) -> unit [@@js.set "source"]
   val create: ?data:any -> ?lastEventId:string -> ?origin:string -> ?ports:MessagePort.t list -> ?source:(Client.t, MessagePort.t, ServiceWorker.t) union3 -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -11223,7 +11223,7 @@ module PushSubscriptionOptionsInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_applicationServerKey: 'tags this -> ([`String of string | `Null | `Other of BufferSource.t] [@js.union on_field "dummy"]) Primitive.t option [@@js.get "applicationServerKey"]
+  val get_applicationServerKey: 'tags this -> ([`String of string | `Null | `Undefined | `Other of BufferSource.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "applicationServerKey"]
   val set_applicationServerKey: 'tags this -> ([`Null | `U1 of BufferSource.t | `U2 of string] [@js.union]) -> unit [@@js.set "applicationServerKey"]
   val get_userVisibleOnly: 'tags this -> bool option [@@js.get "userVisibleOnly"]
   val set_userVisibleOnly: 'tags this -> bool -> unit [@@js.set "userVisibleOnly"]
@@ -11272,7 +11272,7 @@ module PushSubscriptionJSON : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_endpoint: 'tags this -> string option [@@js.get "endpoint"]
   val set_endpoint: 'tags this -> string -> unit [@@js.set "endpoint"]
-  val get_expirationTime: 'tags this -> EpochTimeStamp.t option option [@@js.get "expirationTime"]
+  val get_expirationTime: 'tags this -> EpochTimeStamp.t option [@@js.get "expirationTime"]
   val set_expirationTime: 'tags this -> EpochTimeStamp.t option -> unit [@@js.set "expirationTime"]
   val get_keys: 'tags this -> (string, string) Record.t_2 option [@@js.get "keys"]
   val set_keys: 'tags this -> (string, string) Record.t_2 -> unit [@@js.set "keys"]
@@ -14359,7 +14359,7 @@ module MessageEventInit_Make (T : Ojs.T) : sig
   val set_origin: t -> string -> unit [@@js.set "origin"]
   val get_ports: t -> MessagePort.t list option [@@js.get "ports"]
   val set_ports: t -> MessagePort.t list -> unit [@@js.set "ports"]
-  val get_source: t -> MessageEventSource.t option option [@@js.get "source"]
+  val get_source: t -> MessageEventSource.t option [@@js.get "source"]
   val set_source: t -> MessageEventSource.t option -> unit [@@js.set "source"]
 end
 module QueuingStrategy_Make (T : Ojs.T) : sig

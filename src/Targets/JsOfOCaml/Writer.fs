@@ -745,6 +745,7 @@ let emitTypeAliasesImpl
     (baseName: string)
     flags overrideFunc
     (ctx: Context)
+    (loc: Location)
     (typrms: TypeParam list)
     (target: text)
     (lines: {| name: string; tyargs:(TypeParam * text) list; target: text; isOverload: bool |} -> 'a list) =
@@ -757,24 +758,34 @@ let emitTypeAliasesImpl
     for arity in arities |> Set.toSeq |> Seq.sortDescending do
       if arity <> maxArity then
         let name = Naming.createTypeNameOfArity arity None baseName
+
         let tyargs' = List.take arity tyargs
         let typrms' = List.take arity typrms
+
+        let bindings =
+          createBindings (ctx.currentNamespace @ [name]) loc
+            (typrms |> List.skip arity)
+            (typrms |> List.skip arity |> List.map (fun t ->
+              match t.defaultType with
+              | None -> impossible "emitTypeAliases"
+              | Some t -> t
+            ))
+
         let target =
           Type.appOpt
             (str baseName)
             [
               for tyarg in tyargs' do yield tyarg
               for t in typrms |> List.skip arity do
-                match t.defaultType with
-                | None -> impossible "emitTypeAliases"
-                | Some t -> yield emitType_ ctx t
+                let t' = repeatUntilEquilibrium (substTypeVar bindings ctx) (TypeVar t.name)
+                yield emitType_ ctx t'
             ]
         yield! lines {| name = name; tyargs = List.zip typrms' tyargs'; target = target; isOverload = true |}
   ]
 
-let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
+let emitTypeAliases flags overrideFunc ctx loc (typrms: TypeParam list) target =
   let emitType = emitTypeImpl flags
-  emitTypeAliasesImpl "t" flags overrideFunc ctx typrms target (
+  emitTypeAliasesImpl "t" flags overrideFunc ctx loc typrms target (
     fun x -> [
       yield  typeAlias x.name (x.tyargs |> List.map snd) x.target |> TypeDef
       yield! emitMappers ctx emitType x.name (x.tyargs |> List.map fst)
@@ -1032,7 +1043,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       if useTags && innerCtx.options.inheritWithTags.HasProvide then
         let alias =
           emitTypeAliasesImpl
-            "tags" { flags with forceSkipAttributes = true } overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels)
+            "tags" { flags with forceSkipAttributes = true } overrideFunc innerCtx c.loc c.typeParams (emitLabels innerCtx labels)
             (fun x -> [typeAlias x.name (x.tyargs |> List.map snd) x.target])
           |> concat newline
         Attr.js_stop_start_implem alias alias |> TypeDef |> Some
@@ -1065,7 +1076,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           | ClassKind.NormalClass x -> GetSelfTyText.class_ { flags with failContravariantTypeVar = true } overrideFunc innerCtx x.orig
           | ClassKind.ExportDefaultClass x -> GetSelfTyText.class_ { flags with failContravariantTypeVar = true } overrideFunc innerCtx x.orig
           | ClassKind.AnonymousInterface _ -> str "private Ojs.t"
-      emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText
+      emitTypeAliases flags overrideFunc innerCtx c.loc c.typeParams selfTyText
 
     let castFunctions = [
       // add a generic cast function if tag is available
@@ -1427,7 +1438,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       current
       |> inTrie [e.name] (fun module' ->
         let ctx = ctx |> Context.ofChildNamespace e.name
-        let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e e.cases)
+        let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx e.loc [] (GetSelfTyText.enumCases e e.cases)
         let module' =
           let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
           module' |> set node
@@ -1435,7 +1446,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           let ctx = ctx |> Context.ofChildNamespace c.name
           let comments = List.map emitCommentBody c.comments
           let items =
-            emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e [c])
+            emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx e.loc [] (GetSelfTyText.enumCases e [c])
           let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
           state |> add [c.name] node
         ) module')
@@ -1443,7 +1454,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | TypeAlias ta ->
       let ctx = ctx |> Context.ofChildNamespace ta.name
       let items =
-        emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target)
+        emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.loc ta.typeParams (emitSelfType ctx ta.target)
       let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
       current
       |> inTrie [ta.name] (set node)

@@ -1,4 +1,4 @@
-// ts2fable 0.8.0-build.664
+// ts2fable 0.8.0-build.723
 module rec TypeScript
 
 #nowarn "3390" // disable warnings for invalid XML comments
@@ -10,14 +10,10 @@ open Fable.Core.JS
 
 type Array<'T> = System.Collections.Generic.IList<'T>
 type ReadonlyArray<'T> = System.Collections.Generic.IReadOnlyList<'T>
-type ReadonlySet<'T> = Set<'T>
+type ReadonlyMap<'K, 'V> = Map<'K, 'V>
 type Symbol = obj
 
 let [<ImportAll("typescript")>] ts: Ts.IExports = jsNative
-
-type [<AllowNullLiteral>] IExports =
-    abstract setTimeout: handler: (obj option[] -> unit) * timeout: float -> obj option
-    abstract clearTimeout: handle: obj option -> unit
 
 module Ts =
     let [<Import("ScriptSnapshot","typescript/ts")>] scriptSnapshot: ScriptSnapshot.IExports = jsNative
@@ -27,7 +23,6 @@ module Ts =
         /// The version of the TypeScript compiler release
         abstract version: string
         abstract OperationCanceledException: OperationCanceledExceptionStatic
-        abstract getNodeMajorVersion: unit -> float option
         abstract sys: System with get, set
         abstract tokenToString: t: SyntaxKind -> string option
         abstract getPositionOfLineAndCharacter: sourceFile: SourceFileLike * line: float * character: float -> float
@@ -41,8 +36,8 @@ module Ts =
         abstract forEachLeadingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) * state: 'T -> 'U option
         abstract forEachTrailingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'U) -> 'U option
         abstract forEachTrailingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) * state: 'T -> 'U option
-        abstract reduceEachLeadingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U -> 'U) * state: 'T * initial: 'U -> 'U option
-        abstract reduceEachTrailingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U -> 'U) * state: 'T * initial: 'U -> 'U option
+        abstract reduceEachLeadingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) * state: 'T * initial: 'U -> 'U option
+        abstract reduceEachTrailingCommentRange: text: string * pos: float * cb: (float -> float -> CommentKind -> bool -> 'T -> 'U) * state: 'T * initial: 'U -> 'U option
         abstract getLeadingCommentRanges: text: string * pos: float -> CommentRange[] option
         abstract getTrailingCommentRanges: text: string * pos: float -> CommentRange[] option
         /// Optionally, get the shebang
@@ -51,7 +46,7 @@ module Ts =
         abstract isIdentifierPart: ch: float * languageVersion: ScriptTarget option * ?identifierVariant: LanguageVariant -> bool
         abstract createScanner: languageVersion: ScriptTarget * skipTrivia: bool * ?languageVariant: LanguageVariant * ?textInitial: string * ?onError: ErrorCallback * ?start: float * ?length: float -> Scanner
         abstract isExternalModuleNameRelative: moduleName: string -> bool
-        abstract sortAndDeduplicateDiagnostics: diagnostics: 'T[] -> SortedReadonlyArray<'T>
+        abstract sortAndDeduplicateDiagnostics: diagnostics: 'T[] -> SortedReadonlyArray<'T> 
         abstract getDefaultLibFileName: options: CompilerOptions -> string
         abstract textSpanEnd: span: TextSpan -> float
         abstract textSpanIsEmpty: span: TextSpan -> bool
@@ -69,7 +64,6 @@ module Ts =
         abstract textChangeRangeNewSpan: range: TextChangeRange -> TextSpan
         abstract textChangeRangeIsUnchanged: range: TextChangeRange -> bool
         abstract createTextChangeRange: span: TextSpan * newLength: float -> TextChangeRange
-        abstract unchangedTextChangeRange: TextChangeRange with get, set
         /// Called to merge all the changes that occurred across several versions of a script snapshot
         /// into a single change.  i.e. if a user keeps making successive edits to a script we will
         /// have a text change from V1 to V2, V2 to V3, ..., Vn.
@@ -80,22 +74,22 @@ module Ts =
         abstract getTypeParameterOwner: d: Declaration -> Declaration option
         abstract isParameterPropertyDeclaration: node: Node * parent: Node -> bool
         abstract isEmptyBindingPattern: node: BindingName -> bool
-        abstract isEmptyBindingElement: node: BindingElement -> bool
+        abstract isEmptyBindingElement: node: U2<BindingElement, ArrayBindingElement> -> bool
         abstract walkUpBindingElementsAndPatterns: binding: BindingElement -> U2<VariableDeclaration, ParameterDeclaration>
         abstract getCombinedModifierFlags: node: Declaration -> ModifierFlags
         abstract getCombinedNodeFlags: node: Node -> NodeFlags
         /// Checks to see if the locale is in the appropriate format,
         /// and if it is, attempts to set the appropriate language.
-        abstract validateLocaleAndSetLanguage: locale: string * sys: {| getExecutingFilePath: unit -> string; resolvePath: string -> string; fileExists: string -> bool; readFile: string -> string option |} * ?errors: Push<Diagnostic> -> unit
+        abstract validateLocaleAndSetLanguage: locale: string * sys: {| getExecutingFilePath: unit -> string; resolvePath: string -> string; fileExists: string -> bool; readFile: string -> string option |} * ?errors: Diagnostic[] -> unit
         abstract getOriginalNode: node: Node -> Node
-        abstract getOriginalNode: node: Node * nodeTest: (Node -> bool) -> 'T
+        abstract getOriginalNode: node: Node * nodeTest: (Node -> bool) -> 'T 
         abstract getOriginalNode: node: Node option -> Node option
-        abstract getOriginalNode: node: Node option * nodeTest: (Node option -> bool) -> 'T option
+        abstract getOriginalNode: node: Node option * nodeTest: (Node -> bool) -> 'T option 
         /// Iterates through the parent chain of a node and performs the callback on each parent until the callback
         /// returns a truthy value, then returns that value.
         /// If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
         /// At that point findAncestor returns undefined.
-        abstract findAncestor: node: Node option * callback: (Node -> bool) -> 'T option
+        abstract findAncestor: node: Node option * callback: (Node -> bool) -> 'T option 
         abstract findAncestor: node: Node option * callback: (Node -> U2<bool, string>) -> Node option
         /// <summary>Gets a value indicating whether a node originated in the parse tree.</summary>
         /// <param name="node">The node to test.</param>
@@ -108,7 +102,7 @@ module Ts =
         /// <param name="node">The original node.</param>
         /// <param name="nodeTest">A callback used to ensure the correct type of parse tree node is returned.</param>
         /// <returns>The original parse tree node if found; otherwise, undefined.</returns>
-        abstract getParseTreeNode: node: 'T option * ?nodeTest: (Node -> bool) -> 'T option
+        abstract getParseTreeNode: node: 'T option * ?nodeTest: (Node -> bool) -> 'T option 
         /// Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
         abstract escapeLeadingUnderscores: identifier: string -> __String
         /// <summary>Remove extra underscore from escaped identifier text content.</summary>
@@ -116,6 +110,9 @@ module Ts =
         /// <returns>The unescaped identifier text.</returns>
         abstract unescapeLeadingUnderscores: identifier: __String -> string
         abstract idText: identifierOrPrivateName: U2<Identifier, PrivateIdentifier> -> string
+        /// If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
+        /// SyntaxKind for the matching keyword.
+        abstract identifierToKeywordKind: node: Identifier -> KeywordSyntaxKind option
         abstract symbolName: symbol: Symbol -> string
         abstract getNameOfJSDocTypedef: declaration: JSDocTypedefTag -> U2<Identifier, PrivateIdentifier> option
         abstract getNameOfDeclaration: declaration: U2<Declaration, Expression> option -> DeclarationName option
@@ -174,6 +171,7 @@ module Ts =
         abstract getJSDocReturnTag: node: Node -> JSDocReturnTag option
         /// Gets the JSDoc template tag for the node if present
         abstract getJSDocTemplateTag: node: Node -> JSDocTemplateTag option
+        abstract getJSDocSatisfiesTag: node: Node -> JSDocSatisfiesTag option
         /// Gets the JSDoc type tag for the node if present and valid
         abstract getJSDocTypeTag: node: Node -> JSDocTypeTag option
         /// <summary>Gets the type node for the node if provided via JSDoc.</summary>
@@ -196,7 +194,7 @@ module Ts =
         /// Get all JSDoc tags related to a node, including those on parent nodes.
         abstract getJSDocTags: node: Node -> JSDocTag[]
         /// Gets all JSDoc tags that match a specified predicate
-        abstract getAllJSDocTags: node: Node * predicate: (JSDocTag -> bool) -> 'T[]
+        abstract getAllJSDocTags: node: Node * predicate: (JSDocTag -> bool) -> 'T[] 
         /// Gets all JSDoc tags of a specified kind
         abstract getAllJSDocTagsOfKind: node: Node * kind: SyntaxKind -> JSDocTag[]
         /// Gets the text of a jsdoc comment, flattening links to their text.
@@ -225,8 +223,6 @@ module Ts =
         abstract isNonNullChain: node: Node -> bool
         abstract isBreakOrContinueStatement: node: Node -> bool
         abstract isNamedExportBindings: node: Node -> bool
-        abstract isUnparsedTextLike: node: Node -> bool
-        abstract isUnparsedNode: node: Node -> bool
         abstract isJSDocPropertyLikeTag: node: Node -> bool
         /// True if kind is of some token syntax kind.
         /// For example, this is true for an IfKeyword but not for an IfStatement.
@@ -240,6 +236,8 @@ module Ts =
         abstract isTemplateLiteralToken: node: Node -> bool
         abstract isTemplateMiddleOrTemplateTail: node: Node -> bool
         abstract isImportOrExportSpecifier: node: Node -> bool
+        abstract isTypeOnlyImportDeclaration: node: Node -> bool
+        abstract isTypeOnlyExportDeclaration: node: Node -> bool
         abstract isTypeOnlyImportOrExportDeclaration: node: Node -> bool
         abstract isAssertionKey: node: Node -> bool
         abstract isStringTextContainingNode: node: Node -> bool
@@ -251,6 +249,7 @@ module Ts =
         abstract isClassElement: node: Node -> bool
         abstract isClassLike: node: Node -> bool
         abstract isAccessor: node: Node -> bool
+        abstract isAutoAccessorPropertyDeclaration: node: Node -> bool
         abstract isModifierLike: node: Node -> bool
         abstract isTypeElement: node: Node -> bool
         abstract isClassOrTypeElement: node: Node -> bool
@@ -262,12 +261,28 @@ module Ts =
         /// </summary>
         abstract isTypeNode: node: Node -> bool
         abstract isFunctionOrConstructorTypeNode: node: Node -> bool
+        abstract isArrayBindingElement: node: Node -> bool
         abstract isPropertyAccessOrQualifiedName: node: Node -> bool
         abstract isCallLikeExpression: node: Node -> bool
         abstract isCallOrNewExpression: node: Node -> bool
         abstract isTemplateLiteral: node: Node -> bool
+        abstract isLeftHandSideExpression: node: Node -> bool
+        abstract isLiteralTypeLiteral: node: Node -> bool
+        /// Determines whether a node is an expression based only on its kind.
+        abstract isExpression: node: Node -> bool
         abstract isAssertionExpression: node: Node -> bool
+        [<Emit("$0.isIterationStatement($1,false)")>] abstract isIterationStatement_false: node: Node -> bool
         abstract isIterationStatement: node: Node * lookInLabeledStatements: bool -> bool
+        abstract isConciseBody: node: Node -> bool
+        abstract isForInitializer: node: Node -> bool
+        abstract isModuleBody: node: Node -> bool
+        abstract isNamedImportBindings: node: Node -> bool
+        abstract isStatement: node: Node -> bool
+        abstract isModuleReference: node: Node -> bool
+        abstract isJsxTagNameExpression: node: Node -> bool
+        abstract isJsxChild: node: Node -> bool
+        abstract isJsxAttributeLike: node: Node -> bool
+        abstract isStringLiteralOrJsxExpression: node: Node -> bool
         abstract isJsxOpeningLikeElement: node: Node -> bool
         abstract isCaseOrDefaultClause: node: Node -> bool
         /// True if node is of a kind that may contain comment text.
@@ -277,52 +292,67 @@ module Ts =
         /// True if has initializer node attached to it.
         abstract hasOnlyExpressionInitializer: node: Node -> bool
         abstract isObjectLiteralElement: node: Node -> bool
-        abstract isStringLiteralLike: node: Node -> bool
+        abstract isStringLiteralLike: node: U2<Node, FileReference> -> bool
         abstract isJSDocLinkLike: node: Node -> bool
         abstract hasRestParameter: s: U2<SignatureDeclaration, JSDocSignature> -> bool
         abstract isRestParameter: node: U2<ParameterDeclaration, JSDocParameterTag> -> bool
-        abstract factory: NodeFactory
-        abstract createUnparsedSourceFile: text: string -> UnparsedSource
-        abstract createUnparsedSourceFile: inputFile: InputFiles * ``type``: IExportsCreateUnparsedSourceFile * ?stripInternal: bool -> UnparsedSource
-        abstract createUnparsedSourceFile: text: string * mapPath: string option * map: string option -> UnparsedSource
-        abstract createInputFiles: javascriptText: string * declarationText: string -> InputFiles
-        abstract createInputFiles: readFileText: (string -> string option) * javascriptPath: string * javascriptMapPath: string option * declarationPath: string * declarationMapPath: string option * buildInfoPath: string option -> InputFiles
-        abstract createInputFiles: javascriptText: string * declarationText: string * javascriptMapPath: string option * javascriptMapText: string option * declarationMapPath: string option * declarationMapText: string option -> InputFiles
+        abstract unchangedTextChangeRange: TextChangeRange with get, set
+        /// <summary>
+        /// This function checks multiple locations for JSDoc comments that apply to a host node.
+        /// At each location, the whole comment may apply to the node, or only a specific tag in
+        /// the comment. In the first case, location adds the entire <see cref="JSDoc" /> object. In the
+        /// second case, it adds the applicable <see cref="JSDocTag" />.
+        /// 
+        /// For example, a JSDoc comment before a parameter adds the entire <see cref="JSDoc" />. But a
+        /// <c>@param</c> tag on the parent function only adds the <see cref="JSDocTag" /> for the <c>@param</c>.
+        /// 
+        /// <code lang="ts">
+        /// /** JSDoc will be returned for `a` *\/
+        /// const a = 0
+        /// /**
+        ///   * Entire JSDoc will be returned for `b`
+        ///   * @param c JSDocTag will be returned for `c`
+        ///   *\/
+        /// function b(/** JSDoc will be returned for `c` *\/ c) {}
+        /// </code>
+        /// </summary>
+        abstract getJSDocCommentsAndTags: hostNode: Node -> U2<JSDoc, JSDocTag>[]
         /// Create an external source map source file reference
         abstract createSourceMapSource: fileName: string * text: string * ?skipTrivia: (float -> float) -> SourceMapSource
-        abstract setOriginalNode: node: 'T * original: Node option -> 'T
+        abstract setOriginalNode: node: 'T * original: Node option -> 'T 
+        abstract factory: NodeFactory
         /// <summary>Clears any <c>EmitNode</c> entries from parse-tree nodes.</summary>
         /// <param name="sourceFile">A source file.</param>
         abstract disposeEmitNodes: sourceFile: SourceFile option -> unit
         /// Sets flags that control emit behavior of a node.
-        abstract setEmitFlags: node: 'T * emitFlags: EmitFlags -> 'T
+        abstract setEmitFlags: node: 'T * emitFlags: EmitFlags -> 'T 
         /// Gets a custom text range to use when emitting source maps.
         abstract getSourceMapRange: node: Node -> SourceMapRange
         /// Sets a custom text range to use when emitting source maps.
-        abstract setSourceMapRange: node: 'T * range: SourceMapRange option -> 'T
+        abstract setSourceMapRange: node: 'T * range: SourceMapRange option -> 'T 
         /// Gets the TextRange to use for source maps for a token of a node.
         abstract getTokenSourceMapRange: node: Node * token: SyntaxKind -> SourceMapRange option
         /// Sets the TextRange to use for source maps for a token of a node.
-        abstract setTokenSourceMapRange: node: 'T * token: SyntaxKind * range: SourceMapRange option -> 'T
+        abstract setTokenSourceMapRange: node: 'T * token: SyntaxKind * range: SourceMapRange option -> 'T 
         /// Gets a custom text range to use when emitting comments.
         abstract getCommentRange: node: Node -> TextRange
         /// Sets a custom text range to use when emitting comments.
-        abstract setCommentRange: node: 'T * range: TextRange -> 'T
+        abstract setCommentRange: node: 'T * range: TextRange -> 'T 
         abstract getSyntheticLeadingComments: node: Node -> SynthesizedComment[] option
-        abstract setSyntheticLeadingComments: node: 'T * comments: SynthesizedComment[] option -> 'T
-        abstract addSyntheticLeadingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T
+        abstract setSyntheticLeadingComments: node: 'T * comments: SynthesizedComment[] option -> 'T 
+        abstract addSyntheticLeadingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T 
         abstract getSyntheticTrailingComments: node: Node -> SynthesizedComment[] option
-        abstract setSyntheticTrailingComments: node: 'T * comments: SynthesizedComment[] option -> 'T
-        abstract addSyntheticTrailingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T
-        abstract moveSyntheticComments: node: 'T * original: Node -> 'T
+        abstract setSyntheticTrailingComments: node: 'T * comments: SynthesizedComment[] option -> 'T 
+        abstract addSyntheticTrailingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T 
+        abstract moveSyntheticComments: node: 'T * original: Node -> 'T 
         /// Gets the constant value to emit for an expression representing an enum.
         abstract getConstantValue: node: AccessExpression -> U2<string, float> option
         /// Sets the constant value to emit for an expression.
         abstract setConstantValue: node: AccessExpression * value: U2<string, float> -> AccessExpression
         /// Adds an EmitHelper to a node.
-        abstract addEmitHelper: node: 'T * helper: EmitHelper -> 'T
+        abstract addEmitHelper: node: 'T * helper: EmitHelper -> 'T 
         /// Add EmitHelpers to a node.
-        abstract addEmitHelpers: node: 'T * helpers: EmitHelper[] option -> 'T
+        abstract addEmitHelpers: node: 'T * helpers: EmitHelper[] option -> 'T 
         /// Removes an EmitHelper from a node.
         abstract removeEmitHelper: node: Node * helper: EmitHelper -> bool
         /// Gets the EmitHelpers of a node.
@@ -342,8 +372,15 @@ module Ts =
         abstract isPlusToken: node: Node -> bool
         abstract isMinusToken: node: Node -> bool
         abstract isAsteriskToken: node: Node -> bool
+        abstract isExclamationToken: node: Node -> bool
+        abstract isQuestionToken: node: Node -> bool
+        abstract isColonToken: node: Node -> bool
+        abstract isQuestionDotToken: node: Node -> bool
+        abstract isEqualsGreaterThanToken: node: Node -> bool
         abstract isIdentifier: node: Node -> bool
         abstract isPrivateIdentifier: node: Node -> bool
+        abstract isAssertsKeyword: node: Node -> bool
+        abstract isAwaitKeyword: node: Node -> bool
         abstract isQualifiedName: node: Node -> bool
         abstract isComputedPropertyName: node: Node -> bool
         abstract isTypeParameterDeclaration: node: Node -> bool
@@ -413,6 +450,7 @@ module Ts =
         abstract isOmittedExpression: node: Node -> bool
         abstract isExpressionWithTypeArguments: node: Node -> bool
         abstract isAsExpression: node: Node -> bool
+        abstract isSatisfiesExpression: node: Node -> bool
         abstract isNonNullExpression: node: Node -> bool
         abstract isMetaProperty: node: Node -> bool
         abstract isSyntheticExpression: node: Node -> bool
@@ -478,6 +516,7 @@ module Ts =
         abstract isJsxAttributes: node: Node -> bool
         abstract isJsxSpreadAttribute: node: Node -> bool
         abstract isJsxExpression: node: Node -> bool
+        abstract isJsxNamespacedName: node: Node -> bool
         abstract isCaseClause: node: Node -> bool
         abstract isDefaultClause: node: Node -> bool
         abstract isHeritageClause: node: Node -> bool
@@ -486,10 +525,8 @@ module Ts =
         abstract isShorthandPropertyAssignment: node: Node -> bool
         abstract isSpreadAssignment: node: Node -> bool
         abstract isEnumMember: node: Node -> bool
-        abstract isUnparsedPrepend: node: Node -> bool
         abstract isSourceFile: node: Node -> bool
         abstract isBundle: node: Node -> bool
-        abstract isUnparsedSource: node: Node -> bool
         abstract isJSDocTypeExpression: node: Node -> bool
         abstract isJSDocNameReference: node: Node -> bool
         abstract isJSDocMemberName: node: Node -> bool
@@ -516,6 +553,7 @@ module Ts =
         abstract isJSDocProtectedTag: node: Node -> bool
         abstract isJSDocReadonlyTag: node: Node -> bool
         abstract isJSDocOverrideTag: node: Node -> bool
+        abstract isJSDocOverloadTag: node: Node -> bool
         abstract isJSDocDeprecatedTag: node: Node -> bool
         abstract isJSDocSeeTag: node: Node -> bool
         abstract isJSDocEnumTag: node: Node -> bool
@@ -528,7 +566,15 @@ module Ts =
         abstract isJSDocUnknownTag: node: Node -> bool
         abstract isJSDocPropertyTag: node: Node -> bool
         abstract isJSDocImplementsTag: node: Node -> bool
-        abstract setTextRange: range: 'T * location: TextRange option -> 'T
+        abstract isJSDocSatisfiesTag: node: Node -> bool
+        abstract isJSDocThrowsTag: node: Node -> bool
+        abstract isQuestionOrExclamationToken: node: Node -> bool
+        abstract isIdentifierOrThisTypeNode: node: Node -> bool
+        abstract isReadonlyKeywordOrPlusOrMinusToken: node: Node -> bool
+        abstract isQuestionOrPlusOrMinusToken: node: Node -> bool
+        abstract isModuleName: node: Node -> bool
+        abstract isBinaryOperatorToken: node: Node -> bool
+        abstract setTextRange: range: 'T * location: TextRange option -> 'T 
         abstract canHaveModifiers: node: Node -> bool
         abstract canHaveDecorators: node: Node -> bool
         /// <summary>
@@ -555,7 +601,7 @@ module Ts =
         abstract updateSourceFile: sourceFile: SourceFile * newText: string * textChangeRange: TextChangeRange * ?aggressiveChecks: bool -> SourceFile
         abstract parseCommandLine: commandLine: string[] * ?readFile: (string -> string option) -> ParsedCommandLine
         /// Reads the config file, reports errors if any and exits if the config file cannot be found
-        abstract getParsedCommandLineOfConfigFile: configFileName: string * optionsToExtend: CompilerOptions option * host: ParseConfigFileHost * ?extendedConfigCache: Map<ExtendedConfigCacheEntry> * ?watchOptionsToExtend: WatchOptions * ?extraFileExtensions: FileExtensionInfo[] -> ParsedCommandLine option
+        abstract getParsedCommandLineOfConfigFile: configFileName: string * optionsToExtend: CompilerOptions option * host: ParseConfigFileHost * ?extendedConfigCache: Map<string, ExtendedConfigCacheEntry> * ?watchOptionsToExtend: WatchOptions * ?extraFileExtensions: FileExtensionInfo[] -> ParsedCommandLine option
         /// <summary>Read tsconfig.json file</summary>
         /// <param name="fileName">The path to the config file</param>
         abstract readConfigFile: fileName: string * readFile: (string -> string option) -> {| config: obj option; error: Diagnostic option |}
@@ -567,7 +613,7 @@ module Ts =
         /// <param name="fileName">The path to the config file</param>
         abstract readJsonConfigFile: fileName: string * readFile: (string -> string option) -> TsConfigSourceFile
         /// Convert the json syntax tree into the json value
-        abstract convertToObject: sourceFile: JsonSourceFile * errors: Push<Diagnostic> -> obj option
+        abstract convertToObject: sourceFile: JsonSourceFile * errors: Diagnostic[] -> obj option
         /// <summary>Parse the contents of a config file (tsconfig.json).</summary>
         /// <param name="json">The contents of the config file to parse</param>
         /// <param name="host">Instance of ParseConfigHost used to enumerate files in folder.</param>
@@ -575,7 +621,7 @@ module Ts =
         /// A root directory to resolve relative path entries in the config
         /// file to. e.g. outDir
         /// </param>
-        abstract parseJsonConfigFileContent: json: obj option * host: ParseConfigHost * basePath: string * ?existingOptions: CompilerOptions * ?configFileName: string * ?resolutionStack: Path[] * ?extraFileExtensions: FileExtensionInfo[] * ?extendedConfigCache: Map<ExtendedConfigCacheEntry> * ?existingWatchOptions: WatchOptions -> ParsedCommandLine
+        abstract parseJsonConfigFileContent: json: obj option * host: ParseConfigHost * basePath: string * ?existingOptions: CompilerOptions * ?configFileName: string * ?resolutionStack: Path[] * ?extraFileExtensions: FileExtensionInfo[] * ?extendedConfigCache: Map<string, ExtendedConfigCacheEntry> * ?existingWatchOptions: WatchOptions -> ParsedCommandLine
         /// <summary>Parse the contents of a config file (tsconfig.json).</summary>
         /// <param name="jsonNode">The contents of the config file to parse</param>
         /// <param name="host">Instance of ParseConfigHost used to enumerate files in folder.</param>
@@ -583,7 +629,7 @@ module Ts =
         /// A root directory to resolve relative path entries in the config
         /// file to. e.g. outDir
         /// </param>
-        abstract parseJsonSourceFileConfigFileContent: sourceFile: TsConfigSourceFile * host: ParseConfigHost * basePath: string * ?existingOptions: CompilerOptions * ?configFileName: string * ?resolutionStack: Path[] * ?extraFileExtensions: FileExtensionInfo[] * ?extendedConfigCache: Map<ExtendedConfigCacheEntry> * ?existingWatchOptions: WatchOptions -> ParsedCommandLine
+        abstract parseJsonSourceFileConfigFileContent: sourceFile: TsConfigSourceFile * host: ParseConfigHost * basePath: string * ?existingOptions: CompilerOptions * ?configFileName: string * ?resolutionStack: Path[] * ?extraFileExtensions: FileExtensionInfo[] * ?extendedConfigCache: Map<string, ExtendedConfigCacheEntry> * ?existingWatchOptions: WatchOptions -> ParsedCommandLine
         abstract convertCompilerOptionsFromJson: jsonOptions: obj option * basePath: string * ?configFileName: string -> {| options: CompilerOptions; errors: Diagnostic[] |}
         abstract convertTypeAcquisitionFromJson: jsonOptions: obj option * basePath: string * ?configFileName: string -> {| options: TypeAcquisition; errors: Diagnostic[] |}
         abstract getEffectiveTypeRoots: options: CompilerOptions * host: GetEffectiveTypeRootsHost -> string[] option
@@ -592,7 +638,7 @@ module Ts =
         /// This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
         /// is assumed to be the same as root directory of the project.
         /// </param>
-        abstract resolveTypeReferenceDirective: typeReferenceDirectiveName: string * containingFile: string option * options: CompilerOptions * host: ModuleResolutionHost * ?redirectedReference: ResolvedProjectReference * ?cache: TypeReferenceDirectiveResolutionCache * ?resolutionMode: obj -> ResolvedTypeReferenceDirectiveWithFailedLookupLocations
+        abstract resolveTypeReferenceDirective: typeReferenceDirectiveName: string * containingFile: string option * options: CompilerOptions * host: ModuleResolutionHost * ?redirectedReference: ResolvedProjectReference * ?cache: TypeReferenceDirectiveResolutionCache * ?resolutionMode: ResolutionMode -> ResolvedTypeReferenceDirectiveWithFailedLookupLocations
         /// Given a set of options, returns the set of type directive names
         ///    that should be included for this program automatically.
         /// This list could either come from the config file,
@@ -600,38 +646,71 @@ module Ts =
         /// More type directives might appear in the program later as a result of loading actual source files;
         ///    this list is only the set of defaults that are implicitly included.
         abstract getAutomaticTypeDirectiveNames: options: CompilerOptions * host: ModuleResolutionHost -> string[]
-        abstract createModuleResolutionCache: currentDirectory: string * getCanonicalFileName: (string -> string) * ?options: CompilerOptions -> ModuleResolutionCache
+        abstract createModuleResolutionCache: currentDirectory: string * getCanonicalFileName: (string -> string) * ?options: CompilerOptions * ?packageJsonInfoCache: PackageJsonInfoCache -> ModuleResolutionCache
         abstract createTypeReferenceDirectiveResolutionCache: currentDirectory: string * getCanonicalFileName: (string -> string) * ?options: CompilerOptions * ?packageJsonInfoCache: PackageJsonInfoCache -> TypeReferenceDirectiveResolutionCache
-        abstract resolveModuleNameFromCache: moduleName: string * containingFile: string * cache: ModuleResolutionCache * ?mode: ModuleKind -> ResolvedModuleWithFailedLookupLocations option
-        abstract resolveModuleName: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference * ?resolutionMode: ModuleKind -> ResolvedModuleWithFailedLookupLocations
+        abstract resolveModuleNameFromCache: moduleName: string * containingFile: string * cache: ModuleResolutionCache * ?mode: ResolutionMode -> ResolvedModuleWithFailedLookupLocations option
+        abstract resolveModuleName: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference * ?resolutionMode: ResolutionMode -> ResolvedModuleWithFailedLookupLocations
+        abstract bundlerModuleNameResolver: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
         abstract nodeModuleNameResolver: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
         abstract classicNameResolver: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: NonRelativeModuleNameResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
-        /// <summary>Visits a Node using the supplied visitor, possibly returning a new Node in its place.</summary>
+        /// <summary>
+        /// Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+        /// 
+        /// - If the input node is undefined, then the output is undefined.
+        /// - If the visitor returns undefined, then the output is undefined.
+        /// - If the output node is not undefined, then it will satisfy the test function.
+        /// - In order to obtain a return type that is more specific than <c>Node</c>, a test
+        ///    function _must_ be provided, and that function must be a type predicate.
+        /// </summary>
         /// <param name="node">The Node to visit.</param>
         /// <param name="visitor">The callback used to visit the Node.</param>
         /// <param name="test">A callback to execute to verify the Node is valid.</param>
         /// <param name="lift">An optional callback to execute to lift a NodeArray into a valid Node.</param>
-        abstract visitNode: node: 'T * visitor: Visitor option * ?test: (Node -> bool) * ?lift: (Node[] -> 'T) -> 'T
-        /// <summary>Visits a Node using the supplied visitor, possibly returning a new Node in its place.</summary>
+        abstract visitNode: node: 'TIn * visitor: Visitor<'TIn, 'TVisited> * test: (Node -> bool) * ?lift: (Node[] -> Node) -> U2<'TOut, obj> 
+        /// <summary>
+        /// Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+        /// 
+        /// - If the input node is undefined, then the output is undefined.
+        /// - If the visitor returns undefined, then the output is undefined.
+        /// - If the output node is not undefined, then it will satisfy the test function.
+        /// - In order to obtain a return type that is more specific than <c>Node</c>, a test
+        ///    function _must_ be provided, and that function must be a type predicate.
+        /// </summary>
         /// <param name="node">The Node to visit.</param>
         /// <param name="visitor">The callback used to visit the Node.</param>
         /// <param name="test">A callback to execute to verify the Node is valid.</param>
         /// <param name="lift">An optional callback to execute to lift a NodeArray into a valid Node.</param>
-        abstract visitNode: node: 'T option * visitor: Visitor option * ?test: (Node -> bool) * ?lift: (Node[] -> 'T) -> 'T option
-        /// <summary>Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.</summary>
+        abstract visitNode: node: 'TIn * visitor: Visitor<'TIn, 'TVisited> * ?test: (Node -> bool) * ?lift: (Node[] -> Node) -> U2<Node, obj>
+        /// <summary>
+        /// Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+        /// 
+        /// - If the input node array is undefined, the output is undefined.
+        /// - If the visitor can return undefined, the node it visits in the array will be reused.
+        /// - If the output node array is not undefined, then its contents will satisfy the test.
+        /// - In order to obtain a return type that is more specific than <c>NodeArray&lt;Node&gt;</c>, a test
+        ///    function _must_ be provided, and that function must be a type predicate.
+        /// </summary>
         /// <param name="nodes">The NodeArray to visit.</param>
         /// <param name="visitor">The callback used to visit a Node.</param>
         /// <param name="test">A node test to execute for each node.</param>
         /// <param name="start">An optional value indicating the starting offset at which to start visiting.</param>
         /// <param name="count">An optional value indicating the maximum number of nodes to visit.</param>
-        abstract visitNodes: nodes: 'T[] * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[]
-        /// <summary>Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.</summary>
+        abstract visitNodes: nodes: 'TInArray * visitor: Visitor<'TIn, Node option> * test: (Node -> bool) * ?start: float * ?count: float -> U2<'TOut[], obj> 
+        /// <summary>
+        /// Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+        /// 
+        /// - If the input node array is undefined, the output is undefined.
+        /// - If the visitor can return undefined, the node it visits in the array will be reused.
+        /// - If the output node array is not undefined, then its contents will satisfy the test.
+        /// - In order to obtain a return type that is more specific than <c>NodeArray&lt;Node&gt;</c>, a test
+        ///    function _must_ be provided, and that function must be a type predicate.
+        /// </summary>
         /// <param name="nodes">The NodeArray to visit.</param>
         /// <param name="visitor">The callback used to visit a Node.</param>
         /// <param name="test">A node test to execute for each node.</param>
         /// <param name="start">An optional value indicating the starting offset at which to start visiting.</param>
         /// <param name="count">An optional value indicating the maximum number of nodes to visit.</param>
-        abstract visitNodes: nodes: 'T[] option * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[] option
+        abstract visitNodes: nodes: 'TInArray * visitor: Visitor<'TIn, Node option> * ?test: (Node -> bool) * ?start: float * ?count: float -> U2<Node[], obj> 
         /// Starts a new lexical environment and visits a statement list, ending the lexical environment
         /// and merging hoisted declarations upon completion.
         abstract visitLexicalEnvironment: statements: Statement[] * visitor: Visitor * context: TransformationContext * ?start: float * ?ensureUseStrict: bool * ?nodesVisitor: NodesVisitor -> Statement[]
@@ -650,16 +729,20 @@ module Ts =
         abstract visitFunctionBody: node: ConciseBody * visitor: Visitor * context: TransformationContext -> ConciseBody
         /// Visits an iteration body, adding any block-scoped variables required by the transformation.
         abstract visitIterationBody: body: Statement * visitor: Visitor * context: TransformationContext -> Statement
+        /// <summary>Visits the elements of a <see cref="CommaListExpression" />.</summary>
+        /// <param name="visitor">The visitor to use when visiting expressions whose result will not be discarded at runtime.</param>
+        /// <param name="discardVisitor">The visitor to use when visiting expressions whose result will be discarded at runtime. Defaults to <see cref="visitor" />.</param>
+        abstract visitCommaListElements: elements: Expression[] * visitor: Visitor * ?discardVisitor: Visitor -> Expression[]
         /// <summary>Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.</summary>
         /// <param name="node">The Node whose children will be visited.</param>
         /// <param name="visitor">The callback used to visit each child.</param>
         /// <param name="context">A lexical environment context for the visitor.</param>
-        abstract visitEachChild: node: 'T * visitor: Visitor * context: TransformationContext -> 'T
+        abstract visitEachChild: node: 'T * visitor: Visitor * context: TransformationContext -> 'T 
         /// <summary>Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.</summary>
         /// <param name="node">The Node whose children will be visited.</param>
         /// <param name="visitor">The callback used to visit each child.</param>
         /// <param name="context">A lexical environment context for the visitor.</param>
-        abstract visitEachChild: node: 'T option * visitor: Visitor * context: TransformationContext * ?nodesVisitor: obj * ?tokenVisitor: Visitor -> 'T option
+        abstract visitEachChild: node: 'T option * visitor: Visitor * context: TransformationContext * ?nodesVisitor: obj * ?tokenVisitor: Visitor -> 'T option 
         abstract getTsBuildInfoEmitOutputFilePath: options: CompilerOptions -> string option
         abstract getOutputFileNames: commandLine: ParsedCommandLine * inputFileName: string * ignoreCase: bool -> string[]
         abstract createPrinter: ?printerOptions: PrinterOptions * ?handlers: PrintHandlers -> Printer
@@ -673,7 +756,7 @@ module Ts =
         abstract flattenDiagnosticMessageText: diag: U2<string, DiagnosticMessageChain> option * newLine: string * ?indent: float -> string
         /// Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
         /// provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
-        abstract getModeForFileReference: ref: U2<FileReference, string> * containingFileMode: obj -> ModuleKind option
+        abstract getModeForFileReference: ref: U2<FileReference, string> * containingFileMode: ResolutionMode -> ResolutionMode
         /// <summary>
         /// Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
         /// defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
@@ -681,7 +764,7 @@ module Ts =
         /// </summary>
         /// <param name="file">File to fetch the resolution mode within</param>
         /// <param name="index">Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations</param>
-        abstract getModeForResolutionAtIndex: file: SourceFile * index: float -> ModuleKind option
+        abstract getModeForResolutionAtIndex: file: SourceFile * index: float -> ResolutionMode
         /// <summary>
         /// Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
         /// one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
@@ -691,7 +774,7 @@ module Ts =
         /// <param name="file">The file the import or import-like reference is contained within</param>
         /// <param name="usage">The module reference string</param>
         /// <returns>The final resolution mode of the import</returns>
-        abstract getModeForUsageLocation: file: {| impliedNodeFormat: obj option |} * usage: StringLiteralLike -> ModuleKind option
+        abstract getModeForUsageLocation: file: {| impliedNodeFormat: ResolutionMode option |} * usage: StringLiteralLike -> ModuleKind option
         abstract getConfigFileParsingDiagnostics: configFileParseResult: ParsedCommandLine -> Diagnostic[]
         /// <summary>
         /// A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
@@ -702,7 +785,7 @@ module Ts =
         /// <param name="host">The ModuleResolutionHost which can perform the filesystem lookups for package json data</param>
         /// <param name="options">The compiler options to perform the analysis under - relevant options are <c>moduleResolution</c> and <c>traceResolution</c></param>
         /// <returns><c>undefined</c> if the path has no relevant implied format, <c>ModuleKind.ESNext</c> for esm format, and <c>ModuleKind.CommonJS</c> for cjs format</returns>
-        abstract getImpliedNodeFormatForFile: fileName: Path * packageJsonInfoCache: PackageJsonInfoCache option * host: ModuleResolutionHost * options: CompilerOptions -> ModuleKind option
+        abstract getImpliedNodeFormatForFile: fileName: Path * packageJsonInfoCache: PackageJsonInfoCache option * host: ModuleResolutionHost * options: CompilerOptions -> ResolutionMode
         /// <summary>
         /// Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
         /// that represent a compilation unit.
@@ -730,8 +813,6 @@ module Ts =
         /// Returns the target config filename of a project reference.
         /// Note: The file might not exist.
         abstract resolveProjectReferencePath: ref: ProjectReference -> ResolvedConfigFileName
-        [<Obsolete("")>]
-        abstract resolveProjectReferencePath: host: ResolveProjectReferencePathHost * ref: ProjectReference -> ResolvedConfigFileName
         /// Create the builder to manage semantic diagnostics and cache them
         abstract createSemanticDiagnosticsBuilderProgram: newProgram: Program * host: BuilderProgramHost * ?oldProgram: SemanticDiagnosticsBuilderProgram * ?configFileParsingDiagnostics: Diagnostic[] -> SemanticDiagnosticsBuilderProgram
         abstract createSemanticDiagnosticsBuilderProgram: rootNames: string[] option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: SemanticDiagnosticsBuilderProgram * ?configFileParsingDiagnostics: Diagnostic[] * ?projectReferences: ProjectReference[] -> SemanticDiagnosticsBuilderProgram
@@ -744,20 +825,20 @@ module Ts =
         abstract createAbstractBuilder: rootNames: string[] option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: BuilderProgram * ?configFileParsingDiagnostics: Diagnostic[] * ?projectReferences: ProjectReference[] -> BuilderProgram
         abstract readBuilderProgram: compilerOptions: CompilerOptions * host: ReadBuildProgramHost -> EmitAndSemanticDiagnosticsBuilderProgram option
         abstract createIncrementalCompilerHost: options: CompilerOptions * ?system: System -> CompilerHost
-        abstract createIncrementalProgram: p0: IncrementalProgramOptions<'T> -> 'T
+        abstract createIncrementalProgram: p0: IncrementalProgramOptions<'T> -> 'T 
         /// Create the watch compiler host for either configFile or fileNames and its options
-        abstract createWatchCompilerHost: configFileName: string * optionsToExtend: CompilerOptions option * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?watchOptionsToExtend: WatchOptions * ?extraFileExtensions: FileExtensionInfo[] -> WatchCompilerHostOfConfigFile<'T>
-        abstract createWatchCompilerHost: rootFiles: string[] * options: CompilerOptions * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?projectReferences: ProjectReference[] * ?watchOptions: WatchOptions -> WatchCompilerHostOfFilesAndCompilerOptions<'T>
+        abstract createWatchCompilerHost: configFileName: string * optionsToExtend: CompilerOptions option * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?watchOptionsToExtend: WatchOptions * ?extraFileExtensions: FileExtensionInfo[] -> WatchCompilerHostOfConfigFile<'T> 
+        abstract createWatchCompilerHost: rootFiles: string[] * options: CompilerOptions * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?projectReferences: ProjectReference[] * ?watchOptions: WatchOptions -> WatchCompilerHostOfFilesAndCompilerOptions<'T> 
         /// Creates the watch from the host for root files and compiler options
-        abstract createWatchProgram: host: WatchCompilerHostOfFilesAndCompilerOptions<'T> -> WatchOfFilesAndCompilerOptions<'T>
+        abstract createWatchProgram: host: WatchCompilerHostOfFilesAndCompilerOptions<'T> -> WatchOfFilesAndCompilerOptions<'T> 
         /// Creates the watch from the host for config file
-        abstract createWatchProgram: host: WatchCompilerHostOfConfigFile<'T> -> WatchOfConfigFile<'T>
+        abstract createWatchProgram: host: WatchCompilerHostOfConfigFile<'T> -> WatchOfConfigFile<'T> 
         /// Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
         abstract createBuilderStatusReporter: system: System * ?pretty: bool -> DiagnosticReporter
-        abstract createSolutionBuilderHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportErrorSummary: ReportEmitErrorSummary -> SolutionBuilderHost<'T>
-        abstract createSolutionBuilderWithWatchHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter -> SolutionBuilderWithWatchHost<'T>
-        abstract createSolutionBuilder: host: SolutionBuilderHost<'T> * rootNames: string[] * defaultOptions: BuildOptions -> SolutionBuilder<'T>
-        abstract createSolutionBuilderWithWatch: host: SolutionBuilderWithWatchHost<'T> * rootNames: string[] * defaultOptions: BuildOptions * ?baseWatchOptions: WatchOptions -> SolutionBuilder<'T>
+        abstract createSolutionBuilderHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportErrorSummary: ReportEmitErrorSummary -> SolutionBuilderHost<'T> 
+        abstract createSolutionBuilderWithWatchHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter -> SolutionBuilderWithWatchHost<'T> 
+        abstract createSolutionBuilder: host: SolutionBuilderHost<'T> * rootNames: string[] * defaultOptions: BuildOptions -> SolutionBuilder<'T> 
+        abstract createSolutionBuilderWithWatch: host: SolutionBuilderWithWatchHost<'T> * rootNames: string[] * defaultOptions: BuildOptions * ?baseWatchOptions: WatchOptions -> SolutionBuilder<'T> 
         abstract getDefaultFormatCodeSettings: ?newLineCharacter: string -> FormatCodeSettings
         /// The classifier is used for syntactic highlighting in editors via the TSServer
         abstract createClassifier: unit -> Classifier
@@ -765,8 +846,6 @@ module Ts =
         abstract preProcessFile: sourceText: string * ?readImportFiles: bool * ?detectJavaScriptImports: bool -> PreProcessedFileInfo
         abstract transpileModule: input: string * transpileOptions: TranspileOptions -> TranspileOutput
         abstract transpile: input: string * ?compilerOptions: CompilerOptions * ?fileName: string * ?diagnostics: Diagnostic[] * ?moduleName: string -> string
-        /// The version of the language service API
-        abstract servicesVersion: obj
         abstract toEditorSettings: options: U2<EditorOptions, EditorSettings> -> EditorSettings
         abstract displayPartsToString: displayParts: SymbolDisplayPart[] option -> string
         abstract getDefaultCompilerOptions: unit -> CompilerOptions
@@ -778,11 +857,13 @@ module Ts =
         /// node package.
         /// The functionality is not supported if the ts module is consumed outside of a node module.
         abstract getDefaultLibFilePath: options: CompilerOptions -> string
+        /// The version of the language service API
+        abstract servicesVersion: obj
         /// <summary>Transform one or more nodes using the supplied transformers.</summary>
         /// <param name="source">A single <c>Node</c> or an array of <c>Node</c> objects.</param>
         /// <param name="transformers">An array of <c>TransformerFactory</c> callbacks used to process the transformation.</param>
         /// <param name="compilerOptions">Optional compiler options.</param>
-        abstract transform: source: U2<'T, 'T[]> * transformers: TransformerFactory<'T>[] * ?compilerOptions: CompilerOptions -> TransformationResult<'T>
+        abstract transform: source: U2<'T, 'T[]> * transformers: TransformerFactory<'T>[] * ?compilerOptions: CompilerOptions -> TransformationResult<'T> 
 
     /// <summary>
     /// Type of objects whose values are all of the same type.
@@ -799,63 +880,6 @@ module Ts =
     type [<AllowNullLiteral>] SortedArray<'T> =
         inherit Array<'T>
         abstract `` __sortedArrayBrand``: obj option with get, set
-
-    /// Common read methods for ES6 Map/Set.
-    type [<AllowNullLiteral>] ReadonlyCollection<'K> =
-        abstract size: float
-        abstract has: key: 'K -> bool
-        abstract keys: unit -> Iterator<'K>
-
-    /// Common write methods for ES6 Map/Set.
-    type [<AllowNullLiteral>] Collection<'K> =
-        inherit ReadonlyCollection<'K>
-        abstract delete: key: 'K -> bool
-        abstract clear: unit -> unit
-
-    /// ES6 Map interface, only read methods included.
-    type [<AllowNullLiteral>] ReadonlyESMap<'K, 'V> =
-        inherit ReadonlyCollection<'K>
-        abstract get: key: 'K -> 'V option
-        abstract values: unit -> Iterator<'V>
-        abstract entries: unit -> Iterator<'K * 'V>
-        abstract forEach: action: ('V -> 'K -> unit) -> unit
-
-    /// ES6 Map interface, only read methods included.
-    type [<AllowNullLiteral>] ReadonlyMap<'T> =
-        inherit ReadonlyESMap<string, 'T>
-
-    /// ES6 Map interface.
-    type [<AllowNullLiteral>] ESMap<'K, 'V> =
-        inherit ReadonlyESMap<'K, 'V>
-        inherit Collection<'K>
-        abstract set: key: 'K * value: 'V -> ESMap<'K, 'V>
-
-    /// ES6 Map interface.
-    type [<AllowNullLiteral>] Map<'T> =
-        inherit ESMap<string, 'T>
-
-    /// ES6 Set interface, only read methods included.
-    type [<AllowNullLiteral>] ReadonlySet<'T> =
-        inherit ReadonlyCollection<'T>
-        abstract has: value: 'T -> bool
-        abstract values: unit -> Iterator<'T>
-        abstract entries: unit -> Iterator<'T * 'T>
-        abstract forEach: action: ('T -> 'T -> unit) -> unit
-
-    /// ES6 Set interface.
-    type [<AllowNullLiteral>] Set<'T> =
-        inherit ReadonlySet<'T>
-        inherit Collection<'T>
-        abstract add: value: 'T -> Set<'T>
-        abstract delete: value: 'T -> bool
-
-    /// ES6 Iterator type.
-    type [<AllowNullLiteral>] Iterator<'T> =
-        abstract next: unit -> U2<{| value: 'T; ``done``: bool option |}, {| value: unit; ``done``: bool |}>
-
-    /// Array that is only intended to be pushed to, never read.
-    type [<AllowNullLiteral>] Push<'T> =
-        abstract push: [<ParamArray>] values: 'T[] -> unit
 
     type [<AllowNullLiteral>] Path =
         interface end
@@ -877,419 +901,492 @@ module Ts =
         | WhitespaceTrivia = 5
         | ShebangTrivia = 6
         | ConflictMarkerTrivia = 7
-        | NumericLiteral = 8
-        | BigIntLiteral = 9
-        | StringLiteral = 10
-        | JsxText = 11
-        | JsxTextAllWhiteSpaces = 12
-        | RegularExpressionLiteral = 13
-        | NoSubstitutionTemplateLiteral = 14
-        | TemplateHead = 15
-        | TemplateMiddle = 16
-        | TemplateTail = 17
-        | OpenBraceToken = 18
-        | CloseBraceToken = 19
-        | OpenParenToken = 20
-        | CloseParenToken = 21
-        | OpenBracketToken = 22
-        | CloseBracketToken = 23
-        | DotToken = 24
-        | DotDotDotToken = 25
-        | SemicolonToken = 26
-        | CommaToken = 27
-        | QuestionDotToken = 28
-        | LessThanToken = 29
-        | LessThanSlashToken = 30
-        | GreaterThanToken = 31
-        | LessThanEqualsToken = 32
-        | GreaterThanEqualsToken = 33
-        | EqualsEqualsToken = 34
-        | ExclamationEqualsToken = 35
-        | EqualsEqualsEqualsToken = 36
-        | ExclamationEqualsEqualsToken = 37
-        | EqualsGreaterThanToken = 38
-        | PlusToken = 39
-        | MinusToken = 40
-        | AsteriskToken = 41
-        | AsteriskAsteriskToken = 42
-        | SlashToken = 43
-        | PercentToken = 44
-        | PlusPlusToken = 45
-        | MinusMinusToken = 46
-        | LessThanLessThanToken = 47
-        | GreaterThanGreaterThanToken = 48
-        | GreaterThanGreaterThanGreaterThanToken = 49
-        | AmpersandToken = 50
-        | BarToken = 51
-        | CaretToken = 52
-        | ExclamationToken = 53
-        | TildeToken = 54
-        | AmpersandAmpersandToken = 55
-        | BarBarToken = 56
-        | QuestionToken = 57
-        | ColonToken = 58
-        | AtToken = 59
-        | QuestionQuestionToken = 60
+        | NonTextFileMarkerTrivia = 8
+        | NumericLiteral = 9
+        | BigIntLiteral = 10
+        | StringLiteral = 11
+        | JsxText = 12
+        | JsxTextAllWhiteSpaces = 13
+        | RegularExpressionLiteral = 14
+        | NoSubstitutionTemplateLiteral = 15
+        | TemplateHead = 16
+        | TemplateMiddle = 17
+        | TemplateTail = 18
+        | OpenBraceToken = 19
+        | CloseBraceToken = 20
+        | OpenParenToken = 21
+        | CloseParenToken = 22
+        | OpenBracketToken = 23
+        | CloseBracketToken = 24
+        | DotToken = 25
+        | DotDotDotToken = 26
+        | SemicolonToken = 27
+        | CommaToken = 28
+        | QuestionDotToken = 29
+        | LessThanToken = 30
+        | LessThanSlashToken = 31
+        | GreaterThanToken = 32
+        | LessThanEqualsToken = 33
+        | GreaterThanEqualsToken = 34
+        | EqualsEqualsToken = 35
+        | ExclamationEqualsToken = 36
+        | EqualsEqualsEqualsToken = 37
+        | ExclamationEqualsEqualsToken = 38
+        | EqualsGreaterThanToken = 39
+        | PlusToken = 40
+        | MinusToken = 41
+        | AsteriskToken = 42
+        | AsteriskAsteriskToken = 43
+        | SlashToken = 44
+        | PercentToken = 45
+        | PlusPlusToken = 46
+        | MinusMinusToken = 47
+        | LessThanLessThanToken = 48
+        | GreaterThanGreaterThanToken = 49
+        | GreaterThanGreaterThanGreaterThanToken = 50
+        | AmpersandToken = 51
+        | BarToken = 52
+        | CaretToken = 53
+        | ExclamationToken = 54
+        | TildeToken = 55
+        | AmpersandAmpersandToken = 56
+        | BarBarToken = 57
+        | QuestionToken = 58
+        | ColonToken = 59
+        | AtToken = 60
+        | QuestionQuestionToken = 61
         /// Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds.
-        | BacktickToken = 61
+        | BacktickToken = 62
         /// Only the JSDoc scanner produces HashToken. The normal scanner produces PrivateIdentifier.
-        | HashToken = 62
-        | EqualsToken = 63
-        | PlusEqualsToken = 64
-        | MinusEqualsToken = 65
-        | AsteriskEqualsToken = 66
-        | AsteriskAsteriskEqualsToken = 67
-        | SlashEqualsToken = 68
-        | PercentEqualsToken = 69
-        | LessThanLessThanEqualsToken = 70
-        | GreaterThanGreaterThanEqualsToken = 71
-        | GreaterThanGreaterThanGreaterThanEqualsToken = 72
-        | AmpersandEqualsToken = 73
-        | BarEqualsToken = 74
-        | BarBarEqualsToken = 75
-        | AmpersandAmpersandEqualsToken = 76
-        | QuestionQuestionEqualsToken = 77
-        | CaretEqualsToken = 78
-        | Identifier = 79
-        | PrivateIdentifier = 80
-        | BreakKeyword = 81
-        | CaseKeyword = 82
-        | CatchKeyword = 83
-        | ClassKeyword = 84
-        | ConstKeyword = 85
-        | ContinueKeyword = 86
-        | DebuggerKeyword = 87
-        | DefaultKeyword = 88
-        | DeleteKeyword = 89
-        | DoKeyword = 90
-        | ElseKeyword = 91
-        | EnumKeyword = 92
-        | ExportKeyword = 93
-        | ExtendsKeyword = 94
-        | FalseKeyword = 95
-        | FinallyKeyword = 96
-        | ForKeyword = 97
-        | FunctionKeyword = 98
-        | IfKeyword = 99
-        | ImportKeyword = 100
-        | InKeyword = 101
-        | InstanceOfKeyword = 102
-        | NewKeyword = 103
-        | NullKeyword = 104
-        | ReturnKeyword = 105
-        | SuperKeyword = 106
-        | SwitchKeyword = 107
-        | ThisKeyword = 108
-        | ThrowKeyword = 109
-        | TrueKeyword = 110
-        | TryKeyword = 111
-        | TypeOfKeyword = 112
-        | VarKeyword = 113
-        | VoidKeyword = 114
-        | WhileKeyword = 115
-        | WithKeyword = 116
-        | ImplementsKeyword = 117
-        | InterfaceKeyword = 118
-        | LetKeyword = 119
-        | PackageKeyword = 120
-        | PrivateKeyword = 121
-        | ProtectedKeyword = 122
-        | PublicKeyword = 123
-        | StaticKeyword = 124
-        | YieldKeyword = 125
-        | AbstractKeyword = 126
-        | AsKeyword = 127
-        | AssertsKeyword = 128
-        | AssertKeyword = 129
-        | AnyKeyword = 130
-        | AsyncKeyword = 131
-        | AwaitKeyword = 132
-        | BooleanKeyword = 133
-        | ConstructorKeyword = 134
-        | DeclareKeyword = 135
-        | GetKeyword = 136
-        | InferKeyword = 137
-        | IntrinsicKeyword = 138
-        | IsKeyword = 139
-        | KeyOfKeyword = 140
-        | ModuleKeyword = 141
-        | NamespaceKeyword = 142
-        | NeverKeyword = 143
-        | OutKeyword = 144
-        | ReadonlyKeyword = 145
-        | RequireKeyword = 146
-        | NumberKeyword = 147
-        | ObjectKeyword = 148
-        | SetKeyword = 149
-        | StringKeyword = 150
-        | SymbolKeyword = 151
-        | TypeKeyword = 152
-        | UndefinedKeyword = 153
-        | UniqueKeyword = 154
-        | UnknownKeyword = 155
-        | FromKeyword = 156
-        | GlobalKeyword = 157
-        | BigIntKeyword = 158
-        | OverrideKeyword = 159
-        | OfKeyword = 160
-        | QualifiedName = 161
-        | ComputedPropertyName = 162
-        | TypeParameter = 163
-        | Parameter = 164
-        | Decorator = 165
-        | PropertySignature = 166
-        | PropertyDeclaration = 167
-        | MethodSignature = 168
-        | MethodDeclaration = 169
-        | ClassStaticBlockDeclaration = 170
-        | Constructor = 171
-        | GetAccessor = 172
-        | SetAccessor = 173
-        | CallSignature = 174
-        | ConstructSignature = 175
-        | IndexSignature = 176
-        | TypePredicate = 177
-        | TypeReference = 178
-        | FunctionType = 179
-        | ConstructorType = 180
-        | TypeQuery = 181
-        | TypeLiteral = 182
-        | ArrayType = 183
-        | TupleType = 184
-        | OptionalType = 185
-        | RestType = 186
-        | UnionType = 187
-        | IntersectionType = 188
-        | ConditionalType = 189
-        | InferType = 190
-        | ParenthesizedType = 191
-        | ThisType = 192
-        | TypeOperator = 193
-        | IndexedAccessType = 194
-        | MappedType = 195
-        | LiteralType = 196
-        | NamedTupleMember = 197
-        | TemplateLiteralType = 198
-        | TemplateLiteralTypeSpan = 199
-        | ImportType = 200
-        | ObjectBindingPattern = 201
-        | ArrayBindingPattern = 202
-        | BindingElement = 203
-        | ArrayLiteralExpression = 204
-        | ObjectLiteralExpression = 205
-        | PropertyAccessExpression = 206
-        | ElementAccessExpression = 207
-        | CallExpression = 208
-        | NewExpression = 209
-        | TaggedTemplateExpression = 210
-        | TypeAssertionExpression = 211
-        | ParenthesizedExpression = 212
-        | FunctionExpression = 213
-        | ArrowFunction = 214
-        | DeleteExpression = 215
-        | TypeOfExpression = 216
-        | VoidExpression = 217
-        | AwaitExpression = 218
-        | PrefixUnaryExpression = 219
-        | PostfixUnaryExpression = 220
-        | BinaryExpression = 221
-        | ConditionalExpression = 222
-        | TemplateExpression = 223
-        | YieldExpression = 224
-        | SpreadElement = 225
-        | ClassExpression = 226
-        | OmittedExpression = 227
-        | ExpressionWithTypeArguments = 228
-        | AsExpression = 229
-        | NonNullExpression = 230
-        | MetaProperty = 231
-        | SyntheticExpression = 232
-        | TemplateSpan = 233
-        | SemicolonClassElement = 234
-        | Block = 235
-        | EmptyStatement = 236
-        | VariableStatement = 237
-        | ExpressionStatement = 238
-        | IfStatement = 239
-        | DoStatement = 240
-        | WhileStatement = 241
-        | ForStatement = 242
-        | ForInStatement = 243
-        | ForOfStatement = 244
-        | ContinueStatement = 245
-        | BreakStatement = 246
-        | ReturnStatement = 247
-        | WithStatement = 248
-        | SwitchStatement = 249
-        | LabeledStatement = 250
-        | ThrowStatement = 251
-        | TryStatement = 252
-        | DebuggerStatement = 253
-        | VariableDeclaration = 254
-        | VariableDeclarationList = 255
-        | FunctionDeclaration = 256
-        | ClassDeclaration = 257
-        | InterfaceDeclaration = 258
-        | TypeAliasDeclaration = 259
-        | EnumDeclaration = 260
-        | ModuleDeclaration = 261
-        | ModuleBlock = 262
-        | CaseBlock = 263
-        | NamespaceExportDeclaration = 264
-        | ImportEqualsDeclaration = 265
-        | ImportDeclaration = 266
-        | ImportClause = 267
-        | NamespaceImport = 268
-        | NamedImports = 269
-        | ImportSpecifier = 270
-        | ExportAssignment = 271
-        | ExportDeclaration = 272
-        | NamedExports = 273
-        | NamespaceExport = 274
-        | ExportSpecifier = 275
-        | MissingDeclaration = 276
-        | ExternalModuleReference = 277
-        | JsxElement = 278
-        | JsxSelfClosingElement = 279
-        | JsxOpeningElement = 280
-        | JsxClosingElement = 281
-        | JsxFragment = 282
-        | JsxOpeningFragment = 283
-        | JsxClosingFragment = 284
-        | JsxAttribute = 285
-        | JsxAttributes = 286
-        | JsxSpreadAttribute = 287
-        | JsxExpression = 288
-        | CaseClause = 289
-        | DefaultClause = 290
-        | HeritageClause = 291
-        | CatchClause = 292
-        | AssertClause = 293
-        | AssertEntry = 294
-        | ImportTypeAssertionContainer = 295
-        | PropertyAssignment = 296
-        | ShorthandPropertyAssignment = 297
-        | SpreadAssignment = 298
-        | EnumMember = 299
-        | UnparsedPrologue = 300
-        | UnparsedPrepend = 301
-        | UnparsedText = 302
-        | UnparsedInternalText = 303
-        | UnparsedSyntheticReference = 304
-        | SourceFile = 305
-        | Bundle = 306
-        | UnparsedSource = 307
-        | InputFiles = 308
-        | JSDocTypeExpression = 309
-        | JSDocNameReference = 310
-        | JSDocMemberName = 311
-        | JSDocAllType = 312
-        | JSDocUnknownType = 313
-        | JSDocNullableType = 314
-        | JSDocNonNullableType = 315
-        | JSDocOptionalType = 316
-        | JSDocFunctionType = 317
-        | JSDocVariadicType = 318
-        | JSDocNamepathType = 319
-        | JSDoc = 320
+        | HashToken = 63
+        | EqualsToken = 64
+        | PlusEqualsToken = 65
+        | MinusEqualsToken = 66
+        | AsteriskEqualsToken = 67
+        | AsteriskAsteriskEqualsToken = 68
+        | SlashEqualsToken = 69
+        | PercentEqualsToken = 70
+        | LessThanLessThanEqualsToken = 71
+        | GreaterThanGreaterThanEqualsToken = 72
+        | GreaterThanGreaterThanGreaterThanEqualsToken = 73
+        | AmpersandEqualsToken = 74
+        | BarEqualsToken = 75
+        | BarBarEqualsToken = 76
+        | AmpersandAmpersandEqualsToken = 77
+        | QuestionQuestionEqualsToken = 78
+        | CaretEqualsToken = 79
+        | Identifier = 80
+        | PrivateIdentifier = 81
+        | BreakKeyword = 83
+        | CaseKeyword = 84
+        | CatchKeyword = 85
+        | ClassKeyword = 86
+        | ConstKeyword = 87
+        | ContinueKeyword = 88
+        | DebuggerKeyword = 89
+        | DefaultKeyword = 90
+        | DeleteKeyword = 91
+        | DoKeyword = 92
+        | ElseKeyword = 93
+        | EnumKeyword = 94
+        | ExportKeyword = 95
+        | ExtendsKeyword = 96
+        | FalseKeyword = 97
+        | FinallyKeyword = 98
+        | ForKeyword = 99
+        | FunctionKeyword = 100
+        | IfKeyword = 101
+        | ImportKeyword = 102
+        | InKeyword = 103
+        | InstanceOfKeyword = 104
+        | NewKeyword = 105
+        | NullKeyword = 106
+        | ReturnKeyword = 107
+        | SuperKeyword = 108
+        | SwitchKeyword = 109
+        | ThisKeyword = 110
+        | ThrowKeyword = 111
+        | TrueKeyword = 112
+        | TryKeyword = 113
+        | TypeOfKeyword = 114
+        | VarKeyword = 115
+        | VoidKeyword = 116
+        | WhileKeyword = 117
+        | WithKeyword = 118
+        | ImplementsKeyword = 119
+        | InterfaceKeyword = 120
+        | LetKeyword = 121
+        | PackageKeyword = 122
+        | PrivateKeyword = 123
+        | ProtectedKeyword = 124
+        | PublicKeyword = 125
+        | StaticKeyword = 126
+        | YieldKeyword = 127
+        | AbstractKeyword = 128
+        | AccessorKeyword = 129
+        | AsKeyword = 130
+        | AssertsKeyword = 131
+        | AssertKeyword = 132
+        | AnyKeyword = 133
+        | AsyncKeyword = 134
+        | AwaitKeyword = 135
+        | BooleanKeyword = 136
+        | ConstructorKeyword = 137
+        | DeclareKeyword = 138
+        | GetKeyword = 139
+        | InferKeyword = 140
+        | IntrinsicKeyword = 141
+        | IsKeyword = 142
+        | KeyOfKeyword = 143
+        | ModuleKeyword = 144
+        | NamespaceKeyword = 145
+        | NeverKeyword = 146
+        | OutKeyword = 147
+        | ReadonlyKeyword = 148
+        | RequireKeyword = 149
+        | NumberKeyword = 150
+        | ObjectKeyword = 151
+        | SatisfiesKeyword = 152
+        | SetKeyword = 153
+        | StringKeyword = 154
+        | SymbolKeyword = 155
+        | TypeKeyword = 156
+        | UndefinedKeyword = 157
+        | UniqueKeyword = 158
+        | UnknownKeyword = 159
+        | FromKeyword = 160
+        | GlobalKeyword = 161
+        | BigIntKeyword = 162
+        | OverrideKeyword = 163
+        | OfKeyword = 164
+        | QualifiedName = 165
+        | ComputedPropertyName = 166
+        | TypeParameter = 167
+        | Parameter = 168
+        | Decorator = 169
+        | PropertySignature = 170
+        | PropertyDeclaration = 171
+        | MethodSignature = 172
+        | MethodDeclaration = 173
+        | ClassStaticBlockDeclaration = 174
+        | Constructor = 175
+        | GetAccessor = 176
+        | SetAccessor = 177
+        | CallSignature = 178
+        | ConstructSignature = 179
+        | IndexSignature = 180
+        | TypePredicate = 181
+        | TypeReference = 182
+        | FunctionType = 183
+        | ConstructorType = 184
+        | TypeQuery = 185
+        | TypeLiteral = 186
+        | ArrayType = 187
+        | TupleType = 188
+        | OptionalType = 189
+        | RestType = 190
+        | UnionType = 191
+        | IntersectionType = 192
+        | ConditionalType = 193
+        | InferType = 194
+        | ParenthesizedType = 195
+        | ThisType = 196
+        | TypeOperator = 197
+        | IndexedAccessType = 198
+        | MappedType = 199
+        | LiteralType = 200
+        | NamedTupleMember = 201
+        | TemplateLiteralType = 202
+        | TemplateLiteralTypeSpan = 203
+        | ImportType = 204
+        | ObjectBindingPattern = 205
+        | ArrayBindingPattern = 206
+        | BindingElement = 207
+        | ArrayLiteralExpression = 208
+        | ObjectLiteralExpression = 209
+        | PropertyAccessExpression = 210
+        | ElementAccessExpression = 211
+        | CallExpression = 212
+        | NewExpression = 213
+        | TaggedTemplateExpression = 214
+        | TypeAssertionExpression = 215
+        | ParenthesizedExpression = 216
+        | FunctionExpression = 217
+        | ArrowFunction = 218
+        | DeleteExpression = 219
+        | TypeOfExpression = 220
+        | VoidExpression = 221
+        | AwaitExpression = 222
+        | PrefixUnaryExpression = 223
+        | PostfixUnaryExpression = 224
+        | BinaryExpression = 225
+        | ConditionalExpression = 226
+        | TemplateExpression = 227
+        | YieldExpression = 228
+        | SpreadElement = 229
+        | ClassExpression = 230
+        | OmittedExpression = 231
+        | ExpressionWithTypeArguments = 232
+        | AsExpression = 233
+        | NonNullExpression = 234
+        | MetaProperty = 235
+        | SyntheticExpression = 236
+        | SatisfiesExpression = 237
+        | TemplateSpan = 238
+        | SemicolonClassElement = 239
+        | Block = 240
+        | EmptyStatement = 241
+        | VariableStatement = 242
+        | ExpressionStatement = 243
+        | IfStatement = 244
+        | DoStatement = 245
+        | WhileStatement = 246
+        | ForStatement = 247
+        | ForInStatement = 248
+        | ForOfStatement = 249
+        | ContinueStatement = 250
+        | BreakStatement = 251
+        | ReturnStatement = 252
+        | WithStatement = 253
+        | SwitchStatement = 254
+        | LabeledStatement = 255
+        | ThrowStatement = 256
+        | TryStatement = 257
+        | DebuggerStatement = 258
+        | VariableDeclaration = 259
+        | VariableDeclarationList = 260
+        | FunctionDeclaration = 261
+        | ClassDeclaration = 262
+        | InterfaceDeclaration = 263
+        | TypeAliasDeclaration = 264
+        | EnumDeclaration = 265
+        | ModuleDeclaration = 266
+        | ModuleBlock = 267
+        | CaseBlock = 268
+        | NamespaceExportDeclaration = 269
+        | ImportEqualsDeclaration = 270
+        | ImportDeclaration = 271
+        | ImportClause = 272
+        | NamespaceImport = 273
+        | NamedImports = 274
+        | ImportSpecifier = 275
+        | ExportAssignment = 276
+        | ExportDeclaration = 277
+        | NamedExports = 278
+        | NamespaceExport = 279
+        | ExportSpecifier = 280
+        | MissingDeclaration = 281
+        | ExternalModuleReference = 282
+        | JsxElement = 283
+        | JsxSelfClosingElement = 284
+        | JsxOpeningElement = 285
+        | JsxClosingElement = 286
+        | JsxFragment = 287
+        | JsxOpeningFragment = 288
+        | JsxClosingFragment = 289
+        | JsxAttribute = 290
+        | JsxAttributes = 291
+        | JsxSpreadAttribute = 292
+        | JsxExpression = 293
+        | JsxNamespacedName = 294
+        | CaseClause = 295
+        | DefaultClause = 296
+        | HeritageClause = 297
+        | CatchClause = 298
+        | AssertClause = 299
+        | AssertEntry = 300
+        | ImportTypeAssertionContainer = 301
+        | PropertyAssignment = 302
+        | ShorthandPropertyAssignment = 303
+        | SpreadAssignment = 304
+        | EnumMember = 305
+        /// <deprecated />
+        | UnparsedPrologue = 306
+        /// <deprecated />
+        | UnparsedPrepend = 307
+        /// <deprecated />
+        | UnparsedText = 308
+        /// <deprecated />
+        | UnparsedInternalText = 309
+        /// <deprecated />
+        | UnparsedSyntheticReference = 310
+        | SourceFile = 311
+        | Bundle = 312
+        /// <deprecated />
+        | UnparsedSource = 313
+        /// <deprecated />
+        | InputFiles = 314
+        | JSDocTypeExpression = 315
+        | JSDocNameReference = 316
+        | JSDocMemberName = 317
+        | JSDocAllType = 318
+        | JSDocUnknownType = 319
+        | JSDocNullableType = 320
+        | JSDocNonNullableType = 321
+        | JSDocOptionalType = 322
+        | JSDocFunctionType = 323
+        | JSDocVariadicType = 324
+        | JSDocNamepathType = 325
+        | JSDoc = 326
         /// <deprecated>Use SyntaxKind.JSDoc</deprecated>
-        | JSDocComment = 320
-        | JSDocText = 321
-        | JSDocTypeLiteral = 322
-        | JSDocSignature = 323
-        | JSDocLink = 324
-        | JSDocLinkCode = 325
-        | JSDocLinkPlain = 326
-        | JSDocTag = 327
-        | JSDocAugmentsTag = 328
-        | JSDocImplementsTag = 329
-        | JSDocAuthorTag = 330
-        | JSDocDeprecatedTag = 331
-        | JSDocClassTag = 332
-        | JSDocPublicTag = 333
-        | JSDocPrivateTag = 334
-        | JSDocProtectedTag = 335
-        | JSDocReadonlyTag = 336
-        | JSDocOverrideTag = 337
-        | JSDocCallbackTag = 338
-        | JSDocEnumTag = 339
-        | JSDocParameterTag = 340
-        | JSDocReturnTag = 341
-        | JSDocThisTag = 342
-        | JSDocTypeTag = 343
-        | JSDocTemplateTag = 344
-        | JSDocTypedefTag = 345
-        | JSDocSeeTag = 346
-        | JSDocPropertyTag = 347
-        | SyntaxList = 348
-        | NotEmittedStatement = 349
-        | PartiallyEmittedExpression = 350
-        | CommaListExpression = 351
-        | MergeDeclarationMarker = 352
-        | EndOfDeclarationMarker = 353
-        | SyntheticReferenceExpression = 354
-        | Count = 355
-        | FirstAssignment = 63
-        | LastAssignment = 78
-        | FirstCompoundAssignment = 64
-        | LastCompoundAssignment = 78
-        | FirstReservedWord = 81
-        | LastReservedWord = 116
-        | FirstKeyword = 81
-        | LastKeyword = 160
-        | FirstFutureReservedWord = 117
-        | LastFutureReservedWord = 125
-        | FirstTypeNode = 177
-        | LastTypeNode = 200
-        | FirstPunctuation = 18
-        | LastPunctuation = 78
+        | JSDocComment = 326
+        | JSDocText = 327
+        | JSDocTypeLiteral = 328
+        | JSDocSignature = 329
+        | JSDocLink = 330
+        | JSDocLinkCode = 331
+        | JSDocLinkPlain = 332
+        | JSDocTag = 333
+        | JSDocAugmentsTag = 334
+        | JSDocImplementsTag = 335
+        | JSDocAuthorTag = 336
+        | JSDocDeprecatedTag = 337
+        | JSDocClassTag = 338
+        | JSDocPublicTag = 339
+        | JSDocPrivateTag = 340
+        | JSDocProtectedTag = 341
+        | JSDocReadonlyTag = 342
+        | JSDocOverrideTag = 343
+        | JSDocCallbackTag = 344
+        | JSDocOverloadTag = 345
+        | JSDocEnumTag = 346
+        | JSDocParameterTag = 347
+        | JSDocReturnTag = 348
+        | JSDocThisTag = 349
+        | JSDocTypeTag = 350
+        | JSDocTemplateTag = 351
+        | JSDocTypedefTag = 352
+        | JSDocSeeTag = 353
+        | JSDocPropertyTag = 354
+        | JSDocThrowsTag = 355
+        | JSDocSatisfiesTag = 356
+        | SyntaxList = 357
+        | NotEmittedStatement = 358
+        | PartiallyEmittedExpression = 359
+        | CommaListExpression = 360
+        | SyntheticReferenceExpression = 361
+        | Count = 362
+        | FirstAssignment = 64
+        | LastAssignment = 79
+        | FirstCompoundAssignment = 65
+        | LastCompoundAssignment = 79
+        | FirstReservedWord = 83
+        | LastReservedWord = 118
+        | FirstKeyword = 83
+        | LastKeyword = 164
+        | FirstFutureReservedWord = 119
+        | LastFutureReservedWord = 127
+        | FirstTypeNode = 181
+        | LastTypeNode = 204
+        | FirstPunctuation = 19
+        | LastPunctuation = 79
         | FirstToken = 0
-        | LastToken = 160
+        | LastToken = 164
         | FirstTriviaToken = 2
         | LastTriviaToken = 7
-        | FirstLiteralToken = 8
-        | LastLiteralToken = 14
-        | FirstTemplateToken = 14
-        | LastTemplateToken = 17
-        | FirstBinaryOperator = 29
-        | LastBinaryOperator = 78
-        | FirstStatement = 237
-        | LastStatement = 253
-        | FirstNode = 161
-        | FirstJSDocNode = 309
-        | LastJSDocNode = 347
-        | FirstJSDocTagNode = 327
-        | LastJSDocTagNode = 347
+        | FirstLiteralToken = 9
+        | LastLiteralToken = 15
+        | FirstTemplateToken = 15
+        | LastTemplateToken = 18
+        | FirstBinaryOperator = 30
+        | LastBinaryOperator = 79
+        | FirstStatement = 242
+        | LastStatement = 258
+        | FirstNode = 165
+        | FirstJSDocNode = 315
+        | LastJSDocNode = 356
+        | FirstJSDocTagNode = 333
+        | LastJSDocTagNode = 356
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia
+    /// </code>
+    /// </remarks>
     type TriviaSyntaxKind =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral
+    /// </code>
+    /// </remarks>
     type LiteralSyntaxKind =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail
+    /// </code>
+    /// </remarks>
     type PseudoLiteralSyntaxKind =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.QuestionDotToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionToken | SyntaxKind.QuestionQuestionEqualsToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken
+    /// </code>
+    /// </remarks>
     type PunctuationSyntaxKind =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AssertKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SatisfiesKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword
+    /// </code>
+    /// </remarks>
     type KeywordSyntaxKind =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword
+    /// </code>
+    /// </remarks>
     type ModifierSyntaxKind =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword
+    /// </code>
+    /// </remarks>
     type KeywordTypeSyntaxKind =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind
+    /// </code>
+    /// </remarks>
     type TokenSyntaxKind =
-        U6<SyntaxKind, TriviaSyntaxKind, LiteralSyntaxKind, PseudoLiteralSyntaxKind, PunctuationSyntaxKind, KeywordSyntaxKind>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken
+    /// </code>
+    /// </remarks>
     type JsxTokenSyntaxKind =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind
+    /// </code>
+    /// </remarks>
     type JSDocSyntaxKind =
-        U2<SyntaxKind, KeywordSyntaxKind>
+        SyntaxKind
 
     type [<RequireQualifiedAccess>] NodeFlags =
         | None = 0
@@ -1331,9 +1428,10 @@ module Ts =
         | Protected = 16
         | Static = 32
         | Readonly = 64
-        | Abstract = 128
-        | Async = 256
-        | Default = 512
+        | Accessor = 128
+        | Abstract = 256
+        | Async = 512
+        | Default = 1024
         | Const = 2048
         | HasComputedJSDocModifiers = 4096
         | Deprecated = 8192
@@ -1345,10 +1443,10 @@ module Ts =
         | AccessibilityModifier = 28
         | ParameterPropertyModifier = 16476
         | NonPublicAccessibilityModifier = 24
-        | TypeScriptModifier = 116958
-        | ExportDefault = 513
-        | All = 257023
-        | Modifier = 125951
+        | TypeScriptModifier = 117086
+        | ExportDefault = 1025
+        | All = 258047
+        | Modifier = 126975
 
     type [<RequireQualifiedAccess>] JsxFlags =
         | None = 0
@@ -1380,190 +1478,199 @@ module Ts =
         abstract forEachChild: cbNode: (Node -> 'T option) * ?cbNodeArray: (Node[] -> 'T option) -> 'T option
 
     type [<AllowNullLiteral>] JSDocContainer =
-        interface end
+        inherit Node
+        abstract _jsdocContainerBrand: obj option with get, set
+
+    type [<AllowNullLiteral>] LocalsContainer =
+        inherit Node
+        abstract _localsContainerBrand: obj option with get, set
+
+    type [<AllowNullLiteral>] FlowContainer =
+        inherit Node
+        abstract _flowContainerBrand: obj option with get, set
 
     type HasJSDoc =
         obj
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasType =
-        | [<CompiledValue(214)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(229)>] AsExpression of AsExpression
-        | [<CompiledValue(174)>] CallSignatureDeclaration of CallSignatureDeclaration
-        | [<CompiledValue(175)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
-        | [<CompiledValue(171)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(180)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(256)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(213)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(179)>] FunctionTypeNode of FunctionTypeNode
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(176)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(317)>] JSDocFunctionType of JSDocFunctionType
-        | [<CompiledValue(315)>] JSDocNonNullableType of JSDocNonNullableType
-        | [<CompiledValue(314)>] JSDocNullableType of JSDocNullableType
-        | [<CompiledValue(316)>] JSDocOptionalType of JSDocOptionalType
-        | [<CompiledValue(309)>] JSDocTypeExpression of JSDocTypeExpression
-        | [<CompiledValue(318)>] JSDocVariadicType of JSDocVariadicType
-        | [<CompiledValue(195)>] MappedTypeNode of MappedTypeNode
-        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(168)>] MethodSignature of MethodSignature
-        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(191)>] ParenthesizedTypeNode of ParenthesizedTypeNode
-        | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(166)>] PropertySignature of PropertySignature
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(259)>] TypeAliasDeclaration of TypeAliasDeclaration
-        | [<CompiledValue(211)>] TypeAssertion of TypeAssertion
-        | [<CompiledValue(193)>] TypeOperatorNode of TypeOperatorNode
-        | [<CompiledValue(177)>] TypePredicateNode of TypePredicateNode
-        | [<CompiledValue(254)>] VariableDeclaration of VariableDeclaration
-        static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
-        static member inline op_ErasedCast(x: AsExpression) = AsExpression x
-        static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
-        static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
-        static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
-        static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
-        static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
-        static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
-        static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
-        static member inline op_ErasedCast(x: JSDocFunctionType) = JSDocFunctionType x
-        static member inline op_ErasedCast(x: JSDocNonNullableType) = JSDocNonNullableType x
-        static member inline op_ErasedCast(x: JSDocNullableType) = JSDocNullableType x
-        static member inline op_ErasedCast(x: JSDocOptionalType) = JSDocOptionalType x
-        static member inline op_ErasedCast(x: JSDocTypeExpression) = JSDocTypeExpression x
-        static member inline op_ErasedCast(x: JSDocVariadicType) = JSDocVariadicType x
-        static member inline op_ErasedCast(x: MappedTypeNode) = MappedTypeNode x
-        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
-        static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
-        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
-        static member inline op_ErasedCast(x: ParenthesizedTypeNode) = ParenthesizedTypeNode x
-        static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
-        static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
-        static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
-        static member inline op_ErasedCast(x: TypeAssertion) = TypeAssertion x
-        static member inline op_ErasedCast(x: TypeOperatorNode) = TypeOperatorNode x
-        static member inline op_ErasedCast(x: TypePredicateNode) = TypePredicateNode x
-        static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
+        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(233)>] AsExpression of AsExpression
+        | [<CompiledValue(178)>] CallSignatureDeclaration of CallSignatureDeclaration
+        | [<CompiledValue(179)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
+        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(323)>] JSDocFunctionType of JSDocFunctionType
+        | [<CompiledValue(321)>] JSDocNonNullableType of JSDocNonNullableType
+        | [<CompiledValue(320)>] JSDocNullableType of JSDocNullableType
+        | [<CompiledValue(322)>] JSDocOptionalType of JSDocOptionalType
+        | [<CompiledValue(315)>] JSDocTypeExpression of JSDocTypeExpression
+        | [<CompiledValue(324)>] JSDocVariadicType of JSDocVariadicType
+        | [<CompiledValue(199)>] MappedTypeNode of MappedTypeNode
+        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(172)>] MethodSignature of MethodSignature
+        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(195)>] ParenthesizedTypeNode of ParenthesizedTypeNode
+        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(170)>] PropertySignature of PropertySignature
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(264)>] TypeAliasDeclaration of TypeAliasDeclaration
+        | [<CompiledValue(215)>] TypeAssertion of TypeAssertion
+        | [<CompiledValue(197)>] TypeOperatorNode of TypeOperatorNode
+        | [<CompiledValue(181)>] TypePredicateNode of TypePredicateNode
+        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
+        // static member inline op_ErasedCast(x: AsExpression) = AsExpression x
+        // static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
+        // static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
+        // static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
+        // static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
+        // static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
+        // static member inline op_ErasedCast(x: JSDocFunctionType) = JSDocFunctionType x
+        // static member inline op_ErasedCast(x: JSDocNonNullableType) = JSDocNonNullableType x
+        // static member inline op_ErasedCast(x: JSDocNullableType) = JSDocNullableType x
+        // static member inline op_ErasedCast(x: JSDocOptionalType) = JSDocOptionalType x
+        // static member inline op_ErasedCast(x: JSDocTypeExpression) = JSDocTypeExpression x
+        // static member inline op_ErasedCast(x: JSDocVariadicType) = JSDocVariadicType x
+        // static member inline op_ErasedCast(x: MappedTypeNode) = MappedTypeNode x
+        // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        // static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
+        // static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        // static member inline op_ErasedCast(x: ParenthesizedTypeNode) = ParenthesizedTypeNode x
+        // static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
+        // static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
+        // static member inline op_ErasedCast(x: TypeAssertion) = TypeAssertion x
+        // static member inline op_ErasedCast(x: TypeOperatorNode) = TypeOperatorNode x
+        // static member inline op_ErasedCast(x: TypePredicateNode) = TypePredicateNode x
+        // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasTypeArguments =
-        | [<CompiledValue(208)>] CallExpression of CallExpression
-        | [<CompiledValue(280)>] JsxOpeningElement of JsxOpeningElement
-        | [<CompiledValue(279)>] JsxSelfClosingElement of JsxSelfClosingElement
-        | [<CompiledValue(209)>] NewExpression of NewExpression
-        | [<CompiledValue(210)>] TaggedTemplateExpression of TaggedTemplateExpression
-        static member inline op_ErasedCast(x: CallExpression) = CallExpression x
-        static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
-        static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
-        static member inline op_ErasedCast(x: NewExpression) = NewExpression x
-        static member inline op_ErasedCast(x: TaggedTemplateExpression) = TaggedTemplateExpression x
+        | [<CompiledValue(212)>] CallExpression of CallExpression
+        | [<CompiledValue(285)>] JsxOpeningElement of JsxOpeningElement
+        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(213)>] NewExpression of NewExpression
+        | [<CompiledValue(214)>] TaggedTemplateExpression of TaggedTemplateExpression
+        // static member inline op_ErasedCast(x: CallExpression) = CallExpression x
+        // static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
+        // static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
+        // static member inline op_ErasedCast(x: NewExpression) = NewExpression x
+        // static member inline op_ErasedCast(x: TaggedTemplateExpression) = TaggedTemplateExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasInitializer =
-        | [<CompiledValue(203)>] BindingElement of BindingElement
-        | [<CompiledValue(299)>] EnumMember of EnumMember
-        | [<CompiledValue(243)>] ForInStatement of ForInStatement
-        | [<CompiledValue(244)>] ForOfStatement of ForOfStatement
-        | [<CompiledValue(242)>] ForStatement of ForStatement
-        | [<CompiledValue(285)>] JsxAttribute of JsxAttribute
-        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(296)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(254)>] VariableDeclaration of VariableDeclaration
-        static member inline op_ErasedCast(x: BindingElement) = BindingElement x
-        static member inline op_ErasedCast(x: EnumMember) = EnumMember x
-        static member inline op_ErasedCast(x: ForInStatement) = ForInStatement x
-        static member inline op_ErasedCast(x: ForOfStatement) = ForOfStatement x
-        static member inline op_ErasedCast(x: ForStatement) = ForStatement x
-        static member inline op_ErasedCast(x: JsxAttribute) = JsxAttribute x
-        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
-        static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
-        static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
-        static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
+        | [<CompiledValue(207)>] BindingElement of BindingElement
+        | [<CompiledValue(305)>] EnumMember of EnumMember
+        | [<CompiledValue(248)>] ForInStatement of ForInStatement
+        | [<CompiledValue(249)>] ForOfStatement of ForOfStatement
+        | [<CompiledValue(247)>] ForStatement of ForStatement
+        | [<CompiledValue(290)>] JsxAttribute of JsxAttribute
+        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
+        // static member inline op_ErasedCast(x: EnumMember) = EnumMember x
+        // static member inline op_ErasedCast(x: ForInStatement) = ForInStatement x
+        // static member inline op_ErasedCast(x: ForOfStatement) = ForOfStatement x
+        // static member inline op_ErasedCast(x: ForStatement) = ForStatement x
+        // static member inline op_ErasedCast(x: JsxAttribute) = JsxAttribute x
+        // static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        // static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
+        // static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
+        // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasExpressionInitializer =
-        | [<CompiledValue(203)>] BindingElement of BindingElement
-        | [<CompiledValue(299)>] EnumMember of EnumMember
-        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(296)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(254)>] VariableDeclaration of VariableDeclaration
-        static member inline op_ErasedCast(x: BindingElement) = BindingElement x
-        static member inline op_ErasedCast(x: EnumMember) = EnumMember x
-        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
-        static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
-        static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
-        static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
+        | [<CompiledValue(207)>] BindingElement of BindingElement
+        | [<CompiledValue(305)>] EnumMember of EnumMember
+        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
+        // static member inline op_ErasedCast(x: EnumMember) = EnumMember x
+        // static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        // static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
+        // static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
+        // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasDecorators =
-        | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(226)>] ClassExpression of ClassExpression
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
-        static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
-        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
-        static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(230)>] ClassExpression of ClassExpression
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
+        // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        // static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        // static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasModifiers =
-        | [<CompiledValue(214)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(226)>] ClassExpression of ClassExpression
-        | [<CompiledValue(171)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(180)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(260)>] EnumDeclaration of EnumDeclaration
-        | [<CompiledValue(271)>] ExportAssignment of ExportAssignment
-        | [<CompiledValue(272)>] ExportDeclaration of ExportDeclaration
-        | [<CompiledValue(256)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(213)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(266)>] ImportDeclaration of ImportDeclaration
-        | [<CompiledValue(265)>] ImportEqualsDeclaration of ImportEqualsDeclaration
-        | [<CompiledValue(176)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(258)>] InterfaceDeclaration of InterfaceDeclaration
-        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(168)>] MethodSignature of MethodSignature
-        | [<CompiledValue(261)>] ModuleDeclaration of ModuleDeclaration
-        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(166)>] PropertySignature of PropertySignature
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(259)>] TypeAliasDeclaration of TypeAliasDeclaration
-        | [<CompiledValue(163)>] TypeParameterDeclaration of TypeParameterDeclaration
-        | [<CompiledValue(237)>] VariableStatement of VariableStatement
-        static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
-        static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
-        static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
-        static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
-        static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
-        static member inline op_ErasedCast(x: EnumDeclaration) = EnumDeclaration x
-        static member inline op_ErasedCast(x: ExportAssignment) = ExportAssignment x
-        static member inline op_ErasedCast(x: ExportDeclaration) = ExportDeclaration x
-        static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
-        static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: ImportDeclaration) = ImportDeclaration x
-        static member inline op_ErasedCast(x: ImportEqualsDeclaration) = ImportEqualsDeclaration x
-        static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
-        static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
-        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
-        static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
-        static member inline op_ErasedCast(x: ModuleDeclaration) = ModuleDeclaration x
-        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
-        static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
-        static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
-        static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
-        static member inline op_ErasedCast(x: TypeParameterDeclaration) = TypeParameterDeclaration x
-        static member inline op_ErasedCast(x: VariableStatement) = VariableStatement x
+        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(230)>] ClassExpression of ClassExpression
+        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(265)>] EnumDeclaration of EnumDeclaration
+        | [<CompiledValue(276)>] ExportAssignment of ExportAssignment
+        | [<CompiledValue(277)>] ExportDeclaration of ExportDeclaration
+        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(271)>] ImportDeclaration of ImportDeclaration
+        | [<CompiledValue(270)>] ImportEqualsDeclaration of ImportEqualsDeclaration
+        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(263)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(172)>] MethodSignature of MethodSignature
+        | [<CompiledValue(266)>] ModuleDeclaration of ModuleDeclaration
+        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(170)>] PropertySignature of PropertySignature
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(264)>] TypeAliasDeclaration of TypeAliasDeclaration
+        | [<CompiledValue(167)>] TypeParameterDeclaration of TypeParameterDeclaration
+        | [<CompiledValue(242)>] VariableStatement of VariableStatement
+        // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
+        // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
+        // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
+        // static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
+        // static member inline op_ErasedCast(x: EnumDeclaration) = EnumDeclaration x
+        // static member inline op_ErasedCast(x: ExportAssignment) = ExportAssignment x
+        // static member inline op_ErasedCast(x: ExportDeclaration) = ExportDeclaration x
+        // static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
+        // static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: ImportDeclaration) = ImportDeclaration x
+        // static member inline op_ErasedCast(x: ImportEqualsDeclaration) = ImportEqualsDeclaration x
+        // static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
+        // static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
+        // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        // static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
+        // static member inline op_ErasedCast(x: ModuleDeclaration) = ModuleDeclaration x
+        // static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        // static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
+        // static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
+        // static member inline op_ErasedCast(x: TypeParameterDeclaration) = TypeParameterDeclaration x
+        // static member inline op_ErasedCast(x: VariableStatement) = VariableStatement x
 
-    type [<AllowNullLiteral>] NodeArray<'T> =
+    type [<AllowNullLiteral>] NodeArray<'T > =
         inherit ReadonlyArray<'T>
         inherit ReadonlyTextRange
         abstract hasTrailingComma: bool
@@ -1578,160 +1685,406 @@ module Ts =
     type [<AllowNullLiteral>] PunctuationToken<'TKind> =
         inherit Token<'TKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.DotToken&gt;
+    /// </code>
+    /// </remarks>
     type DotToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.DotDotDotToken&gt;
+    /// </code>
+    /// </remarks>
     type DotDotDotToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.QuestionToken&gt;
+    /// </code>
+    /// </remarks>
     type QuestionToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.ExclamationToken&gt;
+    /// </code>
+    /// </remarks>
     type ExclamationToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.ColonToken&gt;
+    /// </code>
+    /// </remarks>
     type ColonToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.EqualsToken&gt;
+    /// </code>
+    /// </remarks>
     type EqualsToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.AmpersandAmpersandEqualsToken&gt;
+    /// </code>
+    /// </remarks>
+    type AmpersandAmpersandEqualsToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.BarBarEqualsToken&gt;
+    /// </code>
+    /// </remarks>
+    type BarBarEqualsToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.QuestionQuestionEqualsToken&gt;
+    /// </code>
+    /// </remarks>
+    type QuestionQuestionEqualsToken =
+        PunctuationToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.AsteriskToken&gt;
+    /// </code>
+    /// </remarks>
     type AsteriskToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.EqualsGreaterThanToken&gt;
+    /// </code>
+    /// </remarks>
     type EqualsGreaterThanToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.PlusToken&gt;
+    /// </code>
+    /// </remarks>
     type PlusToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.MinusToken&gt;
+    /// </code>
+    /// </remarks>
     type MinusToken =
         PunctuationToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// PunctuationToken&lt;SyntaxKind.QuestionDotToken&gt;
+    /// </code>
+    /// </remarks>
     type QuestionDotToken =
         PunctuationToken<SyntaxKind>
 
     type [<AllowNullLiteral>] KeywordToken<'TKind> =
         inherit Token<'TKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// KeywordToken&lt;SyntaxKind.AssertsKeyword&gt;
+    /// </code>
+    /// </remarks>
     type AssertsKeyword =
         KeywordToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// KeywordToken&lt;SyntaxKind.AssertKeyword&gt;
+    /// </code>
+    /// </remarks>
     type AssertKeyword =
         KeywordToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// KeywordToken&lt;SyntaxKind.AwaitKeyword&gt;
+    /// </code>
+    /// </remarks>
     type AwaitKeyword =
         KeywordToken<SyntaxKind>
 
-    [<Obsolete("Use `AwaitKeyword` instead.")>]
-    type AwaitKeywordToken =
-        AwaitKeyword
-
-    [<Obsolete("Use `AssertsKeyword` instead.")>]
-    type AssertsToken =
-        AssertsKeyword
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// KeywordToken&lt;SyntaxKind.CaseKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type CaseKeyword =
+        KeywordToken<SyntaxKind>
 
     type [<AllowNullLiteral>] ModifierToken<'TKind> =
         inherit KeywordToken<'TKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.AbstractKeyword&gt;
+    /// </code>
+    /// </remarks>
     type AbstractKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.AccessorKeyword&gt;
+    /// </code>
+    /// </remarks>
+    type AccessorKeyword =
+        ModifierToken<SyntaxKind>
+
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.AsyncKeyword&gt;
+    /// </code>
+    /// </remarks>
     type AsyncKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.ConstKeyword&gt;
+    /// </code>
+    /// </remarks>
     type ConstKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.DeclareKeyword&gt;
+    /// </code>
+    /// </remarks>
     type DeclareKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.DefaultKeyword&gt;
+    /// </code>
+    /// </remarks>
     type DefaultKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.ExportKeyword&gt;
+    /// </code>
+    /// </remarks>
     type ExportKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.InKeyword&gt;
+    /// </code>
+    /// </remarks>
     type InKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.PrivateKeyword&gt;
+    /// </code>
+    /// </remarks>
     type PrivateKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.ProtectedKeyword&gt;
+    /// </code>
+    /// </remarks>
     type ProtectedKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.PublicKeyword&gt;
+    /// </code>
+    /// </remarks>
     type PublicKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.ReadonlyKeyword&gt;
+    /// </code>
+    /// </remarks>
     type ReadonlyKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.OutKeyword&gt;
+    /// </code>
+    /// </remarks>
     type OutKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.OverrideKeyword&gt;
+    /// </code>
+    /// </remarks>
     type OverrideKeyword =
         ModifierToken<SyntaxKind>
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModifierToken&lt;SyntaxKind.StaticKeyword&gt;
+    /// </code>
+    /// </remarks>
     type StaticKeyword =
         ModifierToken<SyntaxKind>
 
-    [<Obsolete("Use `ReadonlyKeyword` instead.")>]
-    type ReadonlyToken =
-        ReadonlyKeyword
-
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] Modifier =
-        | [<CompiledValue(126)>] AbstractKeyword of AbstractKeyword
-        | [<CompiledValue(131)>] AsyncKeyword of AsyncKeyword
-        | [<CompiledValue(85)>] ConstKeyword of ConstKeyword
-        | [<CompiledValue(135)>] DeclareKeyword of DeclareKeyword
-        | [<CompiledValue(88)>] DefaultKeyword of DefaultKeyword
-        | [<CompiledValue(93)>] ExportKeyword of ExportKeyword
-        | [<CompiledValue(101)>] InKeyword of InKeyword
-        | [<CompiledValue(144)>] OutKeyword of OutKeyword
-        | [<CompiledValue(159)>] OverrideKeyword of OverrideKeyword
-        | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
-        | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
-        | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
-        | [<CompiledValue(145)>] ReadonlyKeyword of ReadonlyKeyword
-        | [<CompiledValue(124)>] StaticKeyword of StaticKeyword
-        [<Emit("$0.kind")>]
-        member _.kind : SyntaxKind = jsNative
+        | [<CompiledValue(128)>] AbstractKeyword of AbstractKeyword
+        | [<CompiledValue(129)>] AccessorKeyword of AccessorKeyword
+        | [<CompiledValue(134)>] AsyncKeyword of AsyncKeyword
+        | [<CompiledValue(87)>] ConstKeyword of ConstKeyword
+        | [<CompiledValue(138)>] DeclareKeyword of DeclareKeyword
+        | [<CompiledValue(90)>] DefaultKeyword of DefaultKeyword
+        | [<CompiledValue(95)>] ExportKeyword of ExportKeyword
+        | [<CompiledValue(103)>] InKeyword of InKeyword
+        | [<CompiledValue(147)>] OutKeyword of OutKeyword
+        | [<CompiledValue(163)>] OverrideKeyword of OverrideKeyword
+        | [<CompiledValue(123)>] PrivateKeyword of PrivateKeyword
+        | [<CompiledValue(124)>] ProtectedKeyword of ProtectedKeyword
+        | [<CompiledValue(125)>] PublicKeyword of PublicKeyword
+        | [<CompiledValue(148)>] ReadonlyKeyword of ReadonlyKeyword
+        | [<CompiledValue(126)>] StaticKeyword of StaticKeyword
+        // static member inline op_ErasedCast(x: AbstractKeyword) = AbstractKeyword x
+        // static member inline op_ErasedCast(x: AccessorKeyword) = AccessorKeyword x
+        // static member inline op_ErasedCast(x: AsyncKeyword) = AsyncKeyword x
+        // static member inline op_ErasedCast(x: ConstKeyword) = ConstKeyword x
+        // static member inline op_ErasedCast(x: DeclareKeyword) = DeclareKeyword x
+        // static member inline op_ErasedCast(x: DefaultKeyword) = DefaultKeyword x
+        // static member inline op_ErasedCast(x: ExportKeyword) = ExportKeyword x
+        // static member inline op_ErasedCast(x: InKeyword) = InKeyword x
+        // static member inline op_ErasedCast(x: OutKeyword) = OutKeyword x
+        // static member inline op_ErasedCast(x: OverrideKeyword) = OverrideKeyword x
+        // static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
+        // static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
+        // static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
+        // static member inline op_ErasedCast(x: ReadonlyKeyword) = ReadonlyKeyword x
+        // static member inline op_ErasedCast(x: StaticKeyword) = StaticKeyword x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ModifierLike =
-        | [<CompiledValue(126)>] AbstractKeyword of AbstractKeyword
-        | [<CompiledValue(131)>] AsyncKeyword of AsyncKeyword
-        | [<CompiledValue(85)>] ConstKeyword of ConstKeyword
-        | [<CompiledValue(135)>] DeclareKeyword of DeclareKeyword
-        | [<CompiledValue(165)>] Decorator of Decorator
-        | [<CompiledValue(88)>] DefaultKeyword of DefaultKeyword
-        | [<CompiledValue(93)>] ExportKeyword of ExportKeyword
-        | [<CompiledValue(101)>] InKeyword of InKeyword
-        | [<CompiledValue(144)>] OutKeyword of OutKeyword
-        | [<CompiledValue(159)>] OverrideKeyword of OverrideKeyword
-        | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
-        | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
-        | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
-        | [<CompiledValue(145)>] ReadonlyKeyword of ReadonlyKeyword
-        | [<CompiledValue(124)>] StaticKeyword of StaticKeyword
+        | [<CompiledValue(128)>] AbstractKeyword of AbstractKeyword
+        | [<CompiledValue(129)>] AccessorKeyword of AccessorKeyword
+        | [<CompiledValue(134)>] AsyncKeyword of AsyncKeyword
+        | [<CompiledValue(87)>] ConstKeyword of ConstKeyword
+        | [<CompiledValue(138)>] DeclareKeyword of DeclareKeyword
+        | [<CompiledValue(169)>] Decorator of Decorator
+        | [<CompiledValue(90)>] DefaultKeyword of DefaultKeyword
+        | [<CompiledValue(95)>] ExportKeyword of ExportKeyword
+        | [<CompiledValue(103)>] InKeyword of InKeyword
+        | [<CompiledValue(147)>] OutKeyword of OutKeyword
+        | [<CompiledValue(163)>] OverrideKeyword of OverrideKeyword
+        | [<CompiledValue(123)>] PrivateKeyword of PrivateKeyword
+        | [<CompiledValue(124)>] ProtectedKeyword of ProtectedKeyword
+        | [<CompiledValue(125)>] PublicKeyword of PublicKeyword
+        | [<CompiledValue(148)>] ReadonlyKeyword of ReadonlyKeyword
+        | [<CompiledValue(126)>] StaticKeyword of StaticKeyword
+        // static member inline op_ErasedCast(x: AbstractKeyword) = AbstractKeyword x
+        // static member inline op_ErasedCast(x: AccessorKeyword) = AccessorKeyword x
+        // static member inline op_ErasedCast(x: AsyncKeyword) = AsyncKeyword x
+        // static member inline op_ErasedCast(x: ConstKeyword) = ConstKeyword x
+        // static member inline op_ErasedCast(x: DeclareKeyword) = DeclareKeyword x
+        // static member inline op_ErasedCast(x: Decorator) = Decorator x
+        // static member inline op_ErasedCast(x: DefaultKeyword) = DefaultKeyword x
+        // static member inline op_ErasedCast(x: ExportKeyword) = ExportKeyword x
+        // static member inline op_ErasedCast(x: InKeyword) = InKeyword x
+        // static member inline op_ErasedCast(x: OutKeyword) = OutKeyword x
+        // static member inline op_ErasedCast(x: OverrideKeyword) = OverrideKeyword x
+        // static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
+        // static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
+        // static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
+        // static member inline op_ErasedCast(x: ReadonlyKeyword) = ReadonlyKeyword x
+        // static member inline op_ErasedCast(x: StaticKeyword) = StaticKeyword x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AccessibilityModifier =
-        | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
-        | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
-        | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
+        | [<CompiledValue(123)>] PrivateKeyword of PrivateKeyword
+        | [<CompiledValue(124)>] ProtectedKeyword of ProtectedKeyword
+        | [<CompiledValue(125)>] PublicKeyword of PublicKeyword
+        // static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
+        // static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
+        // static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ParameterPropertyModifier =
-        | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
-        | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
-        | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
-        | [<CompiledValue(145)>] ReadonlyKeyword of ReadonlyKeyword
+        | [<CompiledValue(123)>] PrivateKeyword of PrivateKeyword
+        | [<CompiledValue(124)>] ProtectedKeyword of ProtectedKeyword
+        | [<CompiledValue(125)>] PublicKeyword of PublicKeyword
+        | [<CompiledValue(148)>] ReadonlyKeyword of ReadonlyKeyword
+        // static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
+        // static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
+        // static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
+        // static member inline op_ErasedCast(x: ReadonlyKeyword) = ReadonlyKeyword x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ClassMemberModifier =
-        | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
-        | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
-        | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
-        | [<CompiledValue(145)>] ReadonlyKeyword of ReadonlyKeyword
-        | [<CompiledValue(124)>] StaticKeyword of StaticKeyword
+        | [<CompiledValue(129)>] AccessorKeyword of AccessorKeyword
+        | [<CompiledValue(123)>] PrivateKeyword of PrivateKeyword
+        | [<CompiledValue(124)>] ProtectedKeyword of ProtectedKeyword
+        | [<CompiledValue(125)>] PublicKeyword of PublicKeyword
+        | [<CompiledValue(148)>] ReadonlyKeyword of ReadonlyKeyword
+        | [<CompiledValue(126)>] StaticKeyword of StaticKeyword
+        // static member inline op_ErasedCast(x: AccessorKeyword) = AccessorKeyword x
+        // static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
+        // static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
+        // static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
+        // static member inline op_ErasedCast(x: ReadonlyKeyword) = ReadonlyKeyword x
+        // static member inline op_ErasedCast(x: StaticKeyword) = StaticKeyword x
 
     type ModifiersArray =
         Modifier[]
@@ -1746,14 +2099,14 @@ module Ts =
     type [<AllowNullLiteral>] Identifier =
         inherit PrimaryExpression
         inherit Declaration
+        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         /// <summary>
         /// Prefer to use <c>id.unescapedText</c>. (Note: This is available only in services, not internally to the TypeScript compiler.)
         /// Text of identifier, but if the identifier begins with two underscores, this will begin with three.
         /// </summary>
         abstract escapedText: __String
-        abstract originalKeywordKind: SyntaxKind option
-        abstract isInJSDocNamespace: bool option with get, set
         abstract text: string
 
     type [<AllowNullLiteral>] TransientIdentifier =
@@ -1762,55 +2115,58 @@ module Ts =
 
     type [<AllowNullLiteral>] QualifiedName =
         inherit Node
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract left: EntityName
         abstract right: Identifier
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] EntityName =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(161)>] QualifiedName of QualifiedName
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(165)>] QualifiedName of QualifiedName
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] PropertyName =
-        | [<CompiledValue(162)>] ComputedPropertyName of ComputedPropertyName
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(8)>] NumericLiteral of NumericLiteral
-        | [<CompiledValue(80)>] PrivateIdentifier of PrivateIdentifier
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        static member inline op_ErasedCast(x: ComputedPropertyName) = ComputedPropertyName x
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
-        static member inline op_ErasedCast(x: PrivateIdentifier) = PrivateIdentifier x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        | [<CompiledValue(166)>] ComputedPropertyName of ComputedPropertyName
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
+        | [<CompiledValue(81)>] PrivateIdentifier of PrivateIdentifier
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        // static member inline op_ErasedCast(x: ComputedPropertyName) = ComputedPropertyName x
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
+        // static member inline op_ErasedCast(x: PrivateIdentifier) = PrivateIdentifier x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] MemberName =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(80)>] PrivateIdentifier of PrivateIdentifier
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: PrivateIdentifier) = PrivateIdentifier x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(81)>] PrivateIdentifier of PrivateIdentifier
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: PrivateIdentifier) = PrivateIdentifier x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] DeclarationName =
-        | [<CompiledValue(202)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(162)>] ComputedPropertyName of ComputedPropertyName
-        | [<CompiledValue(207)>] ElementAccessExpression of ElementAccessExpression
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(14)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
-        | [<CompiledValue(8)>] NumericLiteral of NumericLiteral
-        | [<CompiledValue(201)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(80)>] PrivateIdentifier of PrivateIdentifier
-        | [<CompiledValue(206)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
-        static member inline op_ErasedCast(x: ComputedPropertyName) = ComputedPropertyName x
-        static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
-        static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
-        static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
-        static member inline op_ErasedCast(x: PrivateIdentifier) = PrivateIdentifier x
-        static member inline op_ErasedCast(x: PropertyAccessEntityNameExpression) = PropertyAccessEntityNameExpression x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(166)>] ComputedPropertyName of ComputedPropertyName
+        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(294)>] JsxNamespacedName of JsxNamespacedName
+        | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
+        | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
+        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(81)>] PrivateIdentifier of PrivateIdentifier
+        | [<CompiledValue(210)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
+        // static member inline op_ErasedCast(x: ComputedPropertyName) = ComputedPropertyName x
+        // static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: JsxNamespacedName) = JsxNamespacedName x
+        // static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
+        // static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
+        // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
+        // static member inline op_ErasedCast(x: PrivateIdentifier) = PrivateIdentifier x
+        // static member inline op_ErasedCast(x: PropertyAccessEntityNameExpression) = PropertyAccessEntityNameExpression x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<AllowNullLiteral>] Declaration =
         inherit Node
@@ -1845,6 +2201,7 @@ module Ts =
 
     type [<AllowNullLiteral>] TypeParameterDeclaration =
         inherit NamedDeclaration
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<DeclarationWithTypeParameterChildren, InferTypeNode>
         abstract modifiers: Modifier[] option
@@ -1864,52 +2221,54 @@ module Ts =
         abstract ``type``: TypeNode option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] SignatureDeclaration =
-        | [<CompiledValue(214)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(174)>] CallSignatureDeclaration of CallSignatureDeclaration
-        | [<CompiledValue(175)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
-        | [<CompiledValue(171)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(180)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(256)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(213)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(179)>] FunctionTypeNode of FunctionTypeNode
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(176)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(317)>] JSDocFunctionType of JSDocFunctionType
-        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(168)>] MethodSignature of MethodSignature
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
-        static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
-        static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
-        static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
-        static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
-        static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
-        static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
-        static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
-        static member inline op_ErasedCast(x: JSDocFunctionType) = JSDocFunctionType x
-        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
-        static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(178)>] CallSignatureDeclaration of CallSignatureDeclaration
+        | [<CompiledValue(179)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
+        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(323)>] JSDocFunctionType of JSDocFunctionType
+        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(172)>] MethodSignature of MethodSignature
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
+        // static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
+        // static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
+        // static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
+        // static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
+        // static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
+        // static member inline op_ErasedCast(x: JSDocFunctionType) = JSDocFunctionType x
+        // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        // static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
 
     type [<AllowNullLiteral>] CallSignatureDeclaration =
         inherit SignatureDeclarationBase
         inherit TypeElement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
 
     type [<AllowNullLiteral>] ConstructSignatureDeclaration =
         inherit SignatureDeclarationBase
         inherit TypeElement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingName =
-        | [<CompiledValue(202)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(201)>] ObjectBindingPattern of ObjectBindingPattern
-        static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
+        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
 
     type [<AllowNullLiteral>] VariableDeclaration =
         inherit NamedDeclaration
@@ -1941,6 +2300,7 @@ module Ts =
 
     type [<AllowNullLiteral>] BindingElement =
         inherit NamedDeclaration
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract parent: BindingPattern
         abstract propertyName: PropertyName option
@@ -1952,12 +2312,11 @@ module Ts =
         inherit TypeElement
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract parent: U2<TypeLiteralNode, InterfaceDeclaration>
         abstract modifiers: Modifier[] option
         abstract name: PropertyName
         abstract questionToken: QuestionToken option
         abstract ``type``: TypeNode option
-        [<Obsolete("A property signature cannot have an initializer")>]
-        abstract initializer: Expression option
 
     type [<AllowNullLiteral>] PropertyDeclaration =
         inherit ClassElement
@@ -1971,6 +2330,10 @@ module Ts =
         abstract ``type``: TypeNode option
         abstract initializer: Expression option
 
+    type [<AllowNullLiteral>] AutoAccessorPropertyDeclaration =
+        inherit PropertyDeclaration
+        abstract _autoAccessorBrand: obj option with get, set
+
     type [<AllowNullLiteral>] ObjectLiteralElement =
         inherit NamedDeclaration
         abstract _objectLiteralBrand: obj option with get, set
@@ -1978,18 +2341,18 @@ module Ts =
 
     /// Unlike ObjectLiteralElement, excludes JSXAttribute and JSXSpreadAttribute.
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ObjectLiteralElementLike =
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(296)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(297)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
-        | [<CompiledValue(298)>] SpreadAssignment of SpreadAssignment
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
-        static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
-        static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
-        static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(303)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
+        | [<CompiledValue(304)>] SpreadAssignment of SpreadAssignment
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        // static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
+        // static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
 
     type [<AllowNullLiteral>] PropertyAssignment =
         inherit ObjectLiteralElement
@@ -1998,10 +2361,6 @@ module Ts =
         abstract parent: ObjectLiteralExpression
         abstract name: PropertyName
         abstract initializer: Expression
-        [<Obsolete("A property assignment cannot have a question token")>]
-        abstract questionToken: QuestionToken option
-        [<Obsolete("A property assignment cannot have an exclamation token")>]
-        abstract exclamationToken: ExclamationToken option
 
     type [<AllowNullLiteral>] ShorthandPropertyAssignment =
         inherit ObjectLiteralElement
@@ -2011,12 +2370,6 @@ module Ts =
         abstract name: Identifier
         abstract equalsToken: EqualsToken option
         abstract objectAssignmentInitializer: Expression option
-        [<Obsolete("A shorthand property assignment cannot have modifiers")>]
-        abstract modifiers: Modifier[] option
-        [<Obsolete("A shorthand property assignment cannot have a question token")>]
-        abstract questionToken: QuestionToken option
-        [<Obsolete("A shorthand property assignment cannot have an exclamation token")>]
-        abstract exclamationToken: ExclamationToken option
 
     type [<AllowNullLiteral>] SpreadAssignment =
         inherit ObjectLiteralElement
@@ -2026,32 +2379,28 @@ module Ts =
         abstract expression: Expression
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] VariableLikeDeclaration =
-        | [<CompiledValue(203)>] BindingElement of BindingElement
-        | [<CompiledValue(299)>] EnumMember of EnumMember
-        | [<CompiledValue(340)>] JSDocParameterTag of JSDocParameterTag
-        | [<CompiledValue(347)>] JSDocPropertyTag of JSDocPropertyTag
-        | [<CompiledValue(285)>] JsxAttribute of JsxAttribute
-        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(296)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(166)>] PropertySignature of PropertySignature
-        | [<CompiledValue(297)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
-        | [<CompiledValue(254)>] VariableDeclaration of VariableDeclaration
-        static member inline op_ErasedCast(x: BindingElement) = BindingElement x
-        static member inline op_ErasedCast(x: EnumMember) = EnumMember x
-        static member inline op_ErasedCast(x: JSDocParameterTag) = JSDocParameterTag x
-        static member inline op_ErasedCast(x: JSDocPropertyTag) = JSDocPropertyTag x
-        static member inline op_ErasedCast(x: JsxAttribute) = JsxAttribute x
-        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
-        static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
-        static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
-        static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
-        static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
-        static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
-
-    type [<AllowNullLiteral>] PropertyLikeDeclaration =
-        inherit NamedDeclaration
-        abstract name: PropertyName
+        | [<CompiledValue(207)>] BindingElement of BindingElement
+        | [<CompiledValue(305)>] EnumMember of EnumMember
+        | [<CompiledValue(347)>] JSDocParameterTag of JSDocParameterTag
+        | [<CompiledValue(354)>] JSDocPropertyTag of JSDocPropertyTag
+        | [<CompiledValue(290)>] JsxAttribute of JsxAttribute
+        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(170)>] PropertySignature of PropertySignature
+        | [<CompiledValue(303)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
+        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
+        // static member inline op_ErasedCast(x: EnumMember) = EnumMember x
+        // static member inline op_ErasedCast(x: JSDocParameterTag) = JSDocParameterTag x
+        // static member inline op_ErasedCast(x: JSDocPropertyTag) = JSDocPropertyTag x
+        // static member inline op_ErasedCast(x: JsxAttribute) = JsxAttribute x
+        // static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        // static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
+        // static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
+        // static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
+        // static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
+        // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<AllowNullLiteral>] ObjectBindingPattern =
         inherit Node
@@ -2066,16 +2415,16 @@ module Ts =
         abstract elements: ArrayBindingElement[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingPattern =
-        | [<CompiledValue(202)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(201)>] ObjectBindingPattern of ObjectBindingPattern
-        static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
-        static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
+        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
+        // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ArrayBindingElement =
-        | [<CompiledValue(203)>] BindingElement of BindingElement
-        | [<CompiledValue(227)>] OmittedExpression of OmittedExpression
-        static member inline op_ErasedCast(x: BindingElement) = BindingElement x
-        static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
+        | [<CompiledValue(207)>] BindingElement of BindingElement
+        | [<CompiledValue(231)>] OmittedExpression of OmittedExpression
+        // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
+        // static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
 
     /// Several node kinds share function-like features such as a signature,
     /// a name, and a body. These nodes should extend FunctionLikeDeclarationBase.
@@ -2092,20 +2441,20 @@ module Ts =
         abstract body: U2<Block, Expression> option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] FunctionLikeDeclaration =
-        | [<CompiledValue(214)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(171)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(256)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(213)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
-        static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
-        static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
-        static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
+        // static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
+        // static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
+        // static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
 
     [<Obsolete("Use SignatureDeclaration")>]
     type FunctionLike =
@@ -2114,16 +2463,18 @@ module Ts =
     type [<AllowNullLiteral>] FunctionDeclaration =
         inherit FunctionLikeDeclarationBase
         inherit DeclarationStatement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract name: Identifier option
         abstract body: FunctionBody option
 
     type [<AllowNullLiteral>] MethodSignature =
         inherit SignatureDeclarationBase
         inherit TypeElement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
-        abstract parent: ObjectTypeDeclaration
+        abstract parent: U2<TypeLiteralNode, InterfaceDeclaration>
         abstract modifiers: Modifier[] option
         abstract name: PropertyName
 
@@ -2132,6 +2483,8 @@ module Ts =
         inherit ClassElement
         inherit ObjectLiteralElement
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract parent: U2<ClassLikeDeclaration, ObjectLiteralExpression>
         abstract modifiers: ModifierLike[] option
@@ -2142,14 +2495,16 @@ module Ts =
         inherit FunctionLikeDeclarationBase
         inherit ClassElement
         inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: ClassLikeDeclaration
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract body: FunctionBody option
 
     /// For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.
     type [<AllowNullLiteral>] SemicolonClassElement =
         inherit ClassElement
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: ClassLikeDeclaration
 
@@ -2159,6 +2514,8 @@ module Ts =
         inherit TypeElement
         inherit ObjectLiteralElement
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract parent: U4<ClassLikeDeclaration, ObjectLiteralExpression, TypeLiteralNode, InterfaceDeclaration>
         abstract modifiers: ModifierLike[] option
@@ -2171,6 +2528,8 @@ module Ts =
         inherit TypeElement
         inherit ObjectLiteralElement
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract parent: U4<ClassLikeDeclaration, ObjectLiteralExpression, TypeLiteralNode, InterfaceDeclaration>
         abstract modifiers: ModifierLike[] option
@@ -2178,23 +2537,25 @@ module Ts =
         abstract body: FunctionBody option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AccessorDeclaration =
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
 
     type [<AllowNullLiteral>] IndexSignatureDeclaration =
         inherit SignatureDeclarationBase
         inherit ClassElement
         inherit TypeElement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: ObjectTypeDeclaration
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract ``type``: TypeNode
 
     type [<AllowNullLiteral>] ClassStaticBlockDeclaration =
         inherit ClassElement
         inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: U2<ClassDeclaration, ClassExpression>
         abstract body: Block
@@ -2231,10 +2592,10 @@ module Ts =
         abstract kind: SyntaxKind
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] FunctionOrConstructorTypeNode =
-        | [<CompiledValue(180)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(179)>] FunctionTypeNode of FunctionTypeNode
-        static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
-        static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
+        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
+        // static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
+        // static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
 
     type [<AllowNullLiteral>] FunctionOrConstructorTypeNodeBase =
         inherit TypeNode
@@ -2244,12 +2605,12 @@ module Ts =
 
     type [<AllowNullLiteral>] FunctionTypeNode =
         inherit FunctionOrConstructorTypeNodeBase
+        inherit LocalsContainer
         abstract kind: SyntaxKind
-        [<Obsolete("A function type cannot have modifiers")>]
-        abstract modifiers: Modifier[] option
 
     type [<AllowNullLiteral>] ConstructorTypeNode =
         inherit FunctionOrConstructorTypeNodeBase
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract modifiers: Modifier[] option
 
@@ -2258,10 +2619,10 @@ module Ts =
         abstract typeArguments: TypeNode[] option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] TypeReferenceType =
-        | [<CompiledValue(228)>] ExpressionWithTypeArguments of ExpressionWithTypeArguments
-        | [<CompiledValue(178)>] TypeReferenceNode of TypeReferenceNode
-        static member inline op_ErasedCast(x: ExpressionWithTypeArguments) = ExpressionWithTypeArguments x
-        static member inline op_ErasedCast(x: TypeReferenceNode) = TypeReferenceNode x
+        | [<CompiledValue(232)>] ExpressionWithTypeArguments of ExpressionWithTypeArguments
+        | [<CompiledValue(182)>] TypeReferenceNode of TypeReferenceNode
+        // static member inline op_ErasedCast(x: ExpressionWithTypeArguments) = ExpressionWithTypeArguments x
+        // static member inline op_ErasedCast(x: TypeReferenceNode) = TypeReferenceNode x
 
     type [<AllowNullLiteral>] TypeReferenceNode =
         inherit NodeWithTypeArguments
@@ -2299,8 +2660,8 @@ module Ts =
 
     type [<AllowNullLiteral>] NamedTupleMember =
         inherit TypeNode
-        inherit JSDocContainer
         inherit Declaration
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract dotDotDotToken: Token<SyntaxKind> option
         abstract name: Identifier
@@ -2318,10 +2679,10 @@ module Ts =
         abstract ``type``: TypeNode
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] UnionOrIntersectionTypeNode =
-        | [<CompiledValue(188)>] IntersectionTypeNode of IntersectionTypeNode
-        | [<CompiledValue(187)>] UnionTypeNode of UnionTypeNode
-        static member inline op_ErasedCast(x: IntersectionTypeNode) = IntersectionTypeNode x
-        static member inline op_ErasedCast(x: UnionTypeNode) = UnionTypeNode x
+        | [<CompiledValue(192)>] IntersectionTypeNode of IntersectionTypeNode
+        | [<CompiledValue(191)>] UnionTypeNode of UnionTypeNode
+        // static member inline op_ErasedCast(x: IntersectionTypeNode) = IntersectionTypeNode x
+        // static member inline op_ErasedCast(x: UnionTypeNode) = UnionTypeNode x
 
     type [<AllowNullLiteral>] UnionTypeNode =
         inherit TypeNode
@@ -2335,6 +2696,7 @@ module Ts =
 
     type [<AllowNullLiteral>] ConditionalTypeNode =
         inherit TypeNode
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract checkType: TypeNode
         abstract extendsType: TypeNode
@@ -2366,6 +2728,7 @@ module Ts =
     type [<AllowNullLiteral>] MappedTypeNode =
         inherit TypeNode
         inherit Declaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option
         abstract typeParameter: TypeParameterDeclaration
@@ -2386,20 +2749,22 @@ module Ts =
         abstract kind: SyntaxKind
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] StringLiteralLike =
-        | [<CompiledValue(14)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        // static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] PropertyNameLiteral =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(14)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
-        | [<CompiledValue(8)>] NumericLiteral of NumericLiteral
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
-        static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(294)>] JsxNamespacedName of JsxNamespacedName
+        | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
+        | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: JsxNamespacedName) = JsxNamespacedName x
+        // static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
+        // static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<AllowNullLiteral>] TemplateLiteralTypeNode =
         inherit TypeNode
@@ -2439,6 +2804,12 @@ module Ts =
         inherit UnaryExpression
         abstract _updateExpressionBrand: obj option with get, set
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.TildeToken | SyntaxKind.ExclamationToken
+    /// </code>
+    /// </remarks>
     type PrefixUnaryOperator =
         SyntaxKind
 
@@ -2448,6 +2819,12 @@ module Ts =
         abstract operator: PrefixUnaryOperator
         abstract operand: UnaryExpression
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken
+    /// </code>
+    /// </remarks>
     type PostfixUnaryOperator =
         SyntaxKind
 
@@ -2482,17 +2859,19 @@ module Ts =
         abstract kind: SyntaxKind
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BooleanLiteral =
-        | [<CompiledValue(95)>] FalseLiteral of FalseLiteral
-        | [<CompiledValue(110)>] TrueLiteral of TrueLiteral
-        static member inline op_ErasedCast(x: FalseLiteral) = FalseLiteral x
-        static member inline op_ErasedCast(x: TrueLiteral) = TrueLiteral x
+        | [<CompiledValue(97)>] FalseLiteral of FalseLiteral
+        | [<CompiledValue(112)>] TrueLiteral of TrueLiteral
+        // static member inline op_ErasedCast(x: FalseLiteral) = FalseLiteral x
+        // static member inline op_ErasedCast(x: TrueLiteral) = TrueLiteral x
 
     type [<AllowNullLiteral>] ThisExpression =
         inherit PrimaryExpression
+        inherit FlowContainer
         abstract kind: SyntaxKind
 
     type [<AllowNullLiteral>] SuperExpression =
         inherit PrimaryExpression
+        inherit FlowContainer
         abstract kind: SyntaxKind
 
     type [<AllowNullLiteral>] ImportExpression =
@@ -2532,63 +2911,183 @@ module Ts =
         abstract ``type``: Type
         abstract tupleNameSource: U2<ParameterDeclaration, NamedTupleMember> option
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.AsteriskAsteriskToken
+    /// </code>
+    /// </remarks>
     type ExponentiationOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken
+    /// </code>
+    /// </remarks>
     type MultiplicativeOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ExponentiationOperator | MultiplicativeOperator
+    /// </code>
+    /// </remarks>
     type MultiplicativeOperatorOrHigher =
-        U2<ExponentiationOperator, MultiplicativeOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.PlusToken | SyntaxKind.MinusToken
+    /// </code>
+    /// </remarks>
     type AdditiveOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// MultiplicativeOperatorOrHigher | AdditiveOperator
+    /// </code>
+    /// </remarks>
     type AdditiveOperatorOrHigher =
-        U2<MultiplicativeOperatorOrHigher, AdditiveOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken
+    /// </code>
+    /// </remarks>
     type ShiftOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// AdditiveOperatorOrHigher | ShiftOperator
+    /// </code>
+    /// </remarks>
     type ShiftOperatorOrHigher =
-        U2<AdditiveOperatorOrHigher, ShiftOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.LessThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.InstanceOfKeyword | SyntaxKind.InKeyword
+    /// </code>
+    /// </remarks>
     type RelationalOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ShiftOperatorOrHigher | RelationalOperator
+    /// </code>
+    /// </remarks>
     type RelationalOperatorOrHigher =
-        U2<ShiftOperatorOrHigher, RelationalOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.EqualsEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.ExclamationEqualsToken
+    /// </code>
+    /// </remarks>
     type EqualityOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// RelationalOperatorOrHigher | EqualityOperator
+    /// </code>
+    /// </remarks>
     type EqualityOperatorOrHigher =
-        U2<RelationalOperatorOrHigher, EqualityOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken
+    /// </code>
+    /// </remarks>
     type BitwiseOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// EqualityOperatorOrHigher | BitwiseOperator
+    /// </code>
+    /// </remarks>
     type BitwiseOperatorOrHigher =
-        U2<EqualityOperatorOrHigher, BitwiseOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken
+    /// </code>
+    /// </remarks>
     type LogicalOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// BitwiseOperatorOrHigher | LogicalOperator
+    /// </code>
+    /// </remarks>
     type LogicalOperatorOrHigher =
-        U2<BitwiseOperatorOrHigher, LogicalOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.QuestionQuestionEqualsToken
+    /// </code>
+    /// </remarks>
     type CompoundAssignmentOperator =
         SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.EqualsToken | CompoundAssignmentOperator
+    /// </code>
+    /// </remarks>
     type AssignmentOperator =
-        U2<SyntaxKind, CompoundAssignmentOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.QuestionQuestionToken | LogicalOperatorOrHigher | AssignmentOperator
+    /// </code>
+    /// </remarks>
     type AssignmentOperatorOrHigher =
-        U3<SyntaxKind, LogicalOperatorOrHigher, AssignmentOperator>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// AssignmentOperatorOrHigher | SyntaxKind.CommaToken
+    /// </code>
+    /// </remarks>
     type BinaryOperator =
-        U2<AssignmentOperatorOrHigher, SyntaxKind>
+        SyntaxKind
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionEqualsToken
+    /// </code>
+    /// </remarks>
     type LogicalOrCoalescingAssignmentOperator =
         SyntaxKind
 
@@ -2598,6 +3097,7 @@ module Ts =
     type [<AllowNullLiteral>] BinaryExpression =
         inherit Expression
         inherit Declaration
+        inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract left: Expression
         abstract operatorToken: BinaryOperatorToken
@@ -2606,7 +3106,7 @@ module Ts =
     type AssignmentOperatorToken =
         Token<AssignmentOperator>
 
-    type [<AllowNullLiteral>] AssignmentExpression<'TOperator> =
+    type [<AllowNullLiteral>] AssignmentExpression<'TOperator > =
         inherit BinaryExpression
         abstract left: LeftHandSideExpression
         abstract operatorToken: 'TOperator
@@ -2623,118 +3123,118 @@ module Ts =
         U2<ObjectDestructuringAssignment, ArrayDestructuringAssignment>
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingOrAssignmentElement =
-        | [<CompiledValue(204)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(221)>] AssignmentExpression of AssignmentExpression<EqualsToken>
-        | [<CompiledValue(203)>] BindingElement of BindingElement
-        | [<CompiledValue(207)>] ElementAccessExpression of ElementAccessExpression
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(205)>] ObjectLiteralExpression of ObjectLiteralExpression
-        | [<CompiledValue(227)>] OmittedExpression of OmittedExpression
-        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(206)>] PropertyAccessExpression of PropertyAccessExpression
-        | [<CompiledValue(296)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(297)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
-        | [<CompiledValue(298)>] SpreadAssignment of SpreadAssignment
-        | [<CompiledValue(225)>] SpreadElement of SpreadElement
-        | [<CompiledValue(254)>] VariableDeclaration of VariableDeclaration
-        static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
-        static member inline op_ErasedCast(x: AssignmentExpression<EqualsToken>) = AssignmentExpression x
-        static member inline op_ErasedCast(x: BindingElement) = BindingElement x
-        static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
-        static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
-        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
-        static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
-        static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
-        static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
-        static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
-        static member inline op_ErasedCast(x: SpreadElement) = SpreadElement x
-        static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
+        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(225)>] AssignmentExpression of AssignmentExpression<EqualsToken>
+        | [<CompiledValue(207)>] BindingElement of BindingElement
+        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(231)>] OmittedExpression of OmittedExpression
+        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(210)>] PropertyAccessExpression of PropertyAccessExpression
+        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(303)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
+        | [<CompiledValue(304)>] SpreadAssignment of SpreadAssignment
+        | [<CompiledValue(229)>] SpreadElement of SpreadElement
+        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
+        // static member inline op_ErasedCast(x: AssignmentExpression<EqualsToken>) = AssignmentExpression x
+        // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
+        // static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
+        // static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
+        // static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        // static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
+        // static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
+        // static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
+        // static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
+        // static member inline op_ErasedCast(x: SpreadElement) = SpreadElement x
+        // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ObjectBindingOrAssignmentElement =
-        | [<CompiledValue(203)>] BindingElement of BindingElement
-        | [<CompiledValue(296)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(297)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
-        | [<CompiledValue(298)>] SpreadAssignment of SpreadAssignment
-        static member inline op_ErasedCast(x: BindingElement) = BindingElement x
-        static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
-        static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
-        static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
+        | [<CompiledValue(207)>] BindingElement of BindingElement
+        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(303)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
+        | [<CompiledValue(304)>] SpreadAssignment of SpreadAssignment
+        // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
+        // static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
+        // static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
+        // static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ArrayBindingOrAssignmentElement =
-        | [<CompiledValue(204)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(221)>] AssignmentExpression of AssignmentExpression<EqualsToken>
-        | [<CompiledValue(203)>] BindingElement of BindingElement
-        | [<CompiledValue(207)>] ElementAccessExpression of ElementAccessExpression
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(205)>] ObjectLiteralExpression of ObjectLiteralExpression
-        | [<CompiledValue(227)>] OmittedExpression of OmittedExpression
-        | [<CompiledValue(206)>] PropertyAccessExpression of PropertyAccessExpression
-        | [<CompiledValue(225)>] SpreadElement of SpreadElement
-        static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
-        static member inline op_ErasedCast(x: AssignmentExpression<EqualsToken>) = AssignmentExpression x
-        static member inline op_ErasedCast(x: BindingElement) = BindingElement x
-        static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
-        static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
-        static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
-        static member inline op_ErasedCast(x: SpreadElement) = SpreadElement x
+        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(225)>] AssignmentExpression of AssignmentExpression<EqualsToken>
+        | [<CompiledValue(207)>] BindingElement of BindingElement
+        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(231)>] OmittedExpression of OmittedExpression
+        | [<CompiledValue(210)>] PropertyAccessExpression of PropertyAccessExpression
+        | [<CompiledValue(229)>] SpreadElement of SpreadElement
+        // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
+        // static member inline op_ErasedCast(x: AssignmentExpression<EqualsToken>) = AssignmentExpression x
+        // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
+        // static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
+        // static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
+        // static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
+        // static member inline op_ErasedCast(x: SpreadElement) = SpreadElement x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingOrAssignmentElementRestIndicator =
-        | [<CompiledValue(25)>] DotDotDotToken of DotDotDotToken
-        | [<CompiledValue(298)>] SpreadAssignment of SpreadAssignment
-        | [<CompiledValue(225)>] SpreadElement of SpreadElement
-        static member inline op_ErasedCast(x: DotDotDotToken) = DotDotDotToken x
-        static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
-        static member inline op_ErasedCast(x: SpreadElement) = SpreadElement x
+        | [<CompiledValue(26)>] DotDotDotToken of DotDotDotToken
+        | [<CompiledValue(304)>] SpreadAssignment of SpreadAssignment
+        | [<CompiledValue(229)>] SpreadElement of SpreadElement
+        // static member inline op_ErasedCast(x: DotDotDotToken) = DotDotDotToken x
+        // static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
+        // static member inline op_ErasedCast(x: SpreadElement) = SpreadElement x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingOrAssignmentElementTarget =
-        | [<CompiledValue(202)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(204)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(207)>] ElementAccessExpression of ElementAccessExpression
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(201)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(205)>] ObjectLiteralExpression of ObjectLiteralExpression
-        | [<CompiledValue(227)>] OmittedExpression of OmittedExpression
-        | [<CompiledValue(206)>] PropertyAccessExpression of PropertyAccessExpression
-        static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
-        static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
-        static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
-        static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
-        static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
-        static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
+        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(231)>] OmittedExpression of OmittedExpression
+        | [<CompiledValue(210)>] PropertyAccessExpression of PropertyAccessExpression
+        // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
+        // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
+        // static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
+        // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
+        // static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
+        // static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ObjectBindingOrAssignmentPattern =
-        | [<CompiledValue(201)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(205)>] ObjectLiteralExpression of ObjectLiteralExpression
-        static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
-        static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
+        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
+        // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ArrayBindingOrAssignmentPattern =
-        | [<CompiledValue(202)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(204)>] ArrayLiteralExpression of ArrayLiteralExpression
-        static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
-        static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
+        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
+        // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AssignmentPattern =
-        | [<CompiledValue(204)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(205)>] ObjectLiteralExpression of ObjectLiteralExpression
-        static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
-        static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
+        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
+        // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingOrAssignmentPattern =
-        | [<CompiledValue(202)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(204)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(201)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(205)>] ObjectLiteralExpression of ObjectLiteralExpression
-        static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
-        static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
-        static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
-        static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
+        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
+        // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
+        // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
+        // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
 
     type [<AllowNullLiteral>] ConditionalExpression =
         inherit Expression
@@ -2755,6 +3255,8 @@ module Ts =
         inherit PrimaryExpression
         inherit FunctionLikeDeclarationBase
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract modifiers: Modifier[] option
         abstract name: Identifier option
@@ -2764,6 +3266,8 @@ module Ts =
         inherit Expression
         inherit FunctionLikeDeclarationBase
         inherit JSDocContainer
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract modifiers: Modifier[] option
         abstract equalsGreaterThanToken: EqualsGreaterThanToken
@@ -2813,18 +3317,18 @@ module Ts =
         abstract kind: SyntaxKind
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] LiteralToken =
-        | [<CompiledValue(9)>] BigIntLiteral of BigIntLiteral
-        | [<CompiledValue(11)>] JsxText of JsxText
-        | [<CompiledValue(14)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
-        | [<CompiledValue(8)>] NumericLiteral of NumericLiteral
-        | [<CompiledValue(13)>] RegularExpressionLiteral of RegularExpressionLiteral
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        static member inline op_ErasedCast(x: BigIntLiteral) = BigIntLiteral x
-        static member inline op_ErasedCast(x: JsxText) = JsxText x
-        static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
-        static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
-        static member inline op_ErasedCast(x: RegularExpressionLiteral) = RegularExpressionLiteral x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        | [<CompiledValue(10)>] BigIntLiteral of BigIntLiteral
+        | [<CompiledValue(12)>] JsxText of JsxText
+        | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
+        | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
+        | [<CompiledValue(14)>] RegularExpressionLiteral of RegularExpressionLiteral
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        // static member inline op_ErasedCast(x: BigIntLiteral) = BigIntLiteral x
+        // static member inline op_ErasedCast(x: JsxText) = JsxText x
+        // static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
+        // static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
+        // static member inline op_ErasedCast(x: RegularExpressionLiteral) = RegularExpressionLiteral x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<AllowNullLiteral>] TemplateHead =
         inherit TemplateLiteralLikeNode
@@ -2842,22 +3346,22 @@ module Ts =
         abstract parent: U2<TemplateSpan, TemplateLiteralTypeSpan>
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] PseudoLiteralToken =
-        | [<CompiledValue(15)>] TemplateHead of TemplateHead
-        | [<CompiledValue(16)>] TemplateMiddle of TemplateMiddle
-        | [<CompiledValue(17)>] TemplateTail of TemplateTail
-        static member inline op_ErasedCast(x: TemplateHead) = TemplateHead x
-        static member inline op_ErasedCast(x: TemplateMiddle) = TemplateMiddle x
-        static member inline op_ErasedCast(x: TemplateTail) = TemplateTail x
+        | [<CompiledValue(16)>] TemplateHead of TemplateHead
+        | [<CompiledValue(17)>] TemplateMiddle of TemplateMiddle
+        | [<CompiledValue(18)>] TemplateTail of TemplateTail
+        // static member inline op_ErasedCast(x: TemplateHead) = TemplateHead x
+        // static member inline op_ErasedCast(x: TemplateMiddle) = TemplateMiddle x
+        // static member inline op_ErasedCast(x: TemplateTail) = TemplateTail x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] TemplateLiteralToken =
-        | [<CompiledValue(14)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
-        | [<CompiledValue(15)>] TemplateHead of TemplateHead
-        | [<CompiledValue(16)>] TemplateMiddle of TemplateMiddle
-        | [<CompiledValue(17)>] TemplateTail of TemplateTail
-        static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
-        static member inline op_ErasedCast(x: TemplateHead) = TemplateHead x
-        static member inline op_ErasedCast(x: TemplateMiddle) = TemplateMiddle x
-        static member inline op_ErasedCast(x: TemplateTail) = TemplateTail x
+        | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
+        | [<CompiledValue(16)>] TemplateHead of TemplateHead
+        | [<CompiledValue(17)>] TemplateMiddle of TemplateMiddle
+        | [<CompiledValue(18)>] TemplateTail of TemplateTail
+        // static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
+        // static member inline op_ErasedCast(x: TemplateHead) = TemplateHead x
+        // static member inline op_ErasedCast(x: TemplateMiddle) = TemplateMiddle x
+        // static member inline op_ErasedCast(x: TemplateTail) = TemplateTail x
 
     type [<AllowNullLiteral>] TemplateExpression =
         inherit PrimaryExpression
@@ -2866,10 +3370,10 @@ module Ts =
         abstract templateSpans: TemplateSpan[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] TemplateLiteral =
-        | [<CompiledValue(14)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
-        | [<CompiledValue(223)>] TemplateExpression of TemplateExpression
-        static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
-        static member inline op_ErasedCast(x: TemplateExpression) = TemplateExpression x
+        | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
+        | [<CompiledValue(227)>] TemplateExpression of TemplateExpression
+        // static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
+        // static member inline op_ErasedCast(x: TemplateExpression) = TemplateExpression x
 
     type [<AllowNullLiteral>] TemplateSpan =
         inherit Node
@@ -2899,38 +3403,41 @@ module Ts =
     /// ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
     /// JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
     /// ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
-    type [<AllowNullLiteral>] ObjectLiteralExpressionBase<'T> =
+    type [<AllowNullLiteral>] ObjectLiteralExpressionBase<'T > =
         inherit PrimaryExpression
         inherit Declaration
         abstract properties: 'T[]
 
     type [<AllowNullLiteral>] ObjectLiteralExpression =
         inherit ObjectLiteralExpressionBase<ObjectLiteralElementLike>
+        inherit JSDocContainer
         abstract kind: SyntaxKind
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] EntityNameExpression =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(206)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: PropertyAccessEntityNameExpression) = PropertyAccessEntityNameExpression x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(210)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: PropertyAccessEntityNameExpression) = PropertyAccessEntityNameExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] EntityNameOrEntityNameExpression =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(206)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
-        | [<CompiledValue(161)>] QualifiedName of QualifiedName
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: PropertyAccessEntityNameExpression) = PropertyAccessEntityNameExpression x
-        static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(210)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
+        | [<CompiledValue(165)>] QualifiedName of QualifiedName
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: PropertyAccessEntityNameExpression) = PropertyAccessEntityNameExpression x
+        // static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AccessExpression =
-        | [<CompiledValue(207)>] ElementAccessExpression of ElementAccessExpression
-        | [<CompiledValue(206)>] PropertyAccessExpression of PropertyAccessExpression
-        static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
-        static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
+        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(210)>] PropertyAccessExpression of PropertyAccessExpression
+        // static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
+        // static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
 
     type [<AllowNullLiteral>] PropertyAccessExpression =
         inherit MemberExpression
         inherit NamedDeclaration
+        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: LeftHandSideExpression
         abstract questionDotToken: QuestionDotToken option
@@ -2954,6 +3461,9 @@ module Ts =
 
     type [<AllowNullLiteral>] ElementAccessExpression =
         inherit MemberExpression
+        inherit Declaration
+        inherit JSDocContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: LeftHandSideExpression
         abstract questionDotToken: QuestionDotToken option
@@ -2968,10 +3478,10 @@ module Ts =
         abstract expression: SuperExpression
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] SuperProperty =
-        | [<CompiledValue(207)>] SuperElementAccessExpression of SuperElementAccessExpression
-        | [<CompiledValue(206)>] SuperPropertyAccessExpression of SuperPropertyAccessExpression
-        static member inline op_ErasedCast(x: SuperElementAccessExpression) = SuperElementAccessExpression x
-        static member inline op_ErasedCast(x: SuperPropertyAccessExpression) = SuperPropertyAccessExpression x
+        | [<CompiledValue(211)>] SuperElementAccessExpression of SuperElementAccessExpression
+        | [<CompiledValue(210)>] SuperPropertyAccessExpression of SuperPropertyAccessExpression
+        // static member inline op_ErasedCast(x: SuperElementAccessExpression) = SuperElementAccessExpression x
+        // static member inline op_ErasedCast(x: SuperPropertyAccessExpression) = SuperPropertyAccessExpression x
 
     type [<AllowNullLiteral>] CallExpression =
         inherit LeftHandSideExpression
@@ -2987,14 +3497,14 @@ module Ts =
         abstract _optionalChainBrand: obj option with get, set
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] OptionalChain =
-        | [<CompiledValue(208)>] CallChain of CallChain
-        | [<CompiledValue(207)>] ElementAccessChain of ElementAccessChain
-        | [<CompiledValue(230)>] NonNullChain of NonNullChain
-        | [<CompiledValue(206)>] PropertyAccessChain of PropertyAccessChain
-        static member inline op_ErasedCast(x: CallChain) = CallChain x
-        static member inline op_ErasedCast(x: ElementAccessChain) = ElementAccessChain x
-        static member inline op_ErasedCast(x: NonNullChain) = NonNullChain x
-        static member inline op_ErasedCast(x: PropertyAccessChain) = PropertyAccessChain x
+        | [<CompiledValue(212)>] CallChain of CallChain
+        | [<CompiledValue(211)>] ElementAccessChain of ElementAccessChain
+        | [<CompiledValue(234)>] NonNullChain of NonNullChain
+        | [<CompiledValue(210)>] PropertyAccessChain of PropertyAccessChain
+        // static member inline op_ErasedCast(x: CallChain) = CallChain x
+        // static member inline op_ErasedCast(x: ElementAccessChain) = ElementAccessChain x
+        // static member inline op_ErasedCast(x: NonNullChain) = NonNullChain x
+        // static member inline op_ErasedCast(x: PropertyAccessChain) = PropertyAccessChain x
 
     type [<AllowNullLiteral>] SuperCall =
         inherit CallExpression
@@ -3026,18 +3536,18 @@ module Ts =
         abstract template: TemplateLiteral
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] CallLikeExpression =
-        | [<CompiledValue(208)>] CallExpression of CallExpression
-        | [<CompiledValue(165)>] Decorator of Decorator
-        | [<CompiledValue(280)>] JsxOpeningElement of JsxOpeningElement
-        | [<CompiledValue(279)>] JsxSelfClosingElement of JsxSelfClosingElement
-        | [<CompiledValue(209)>] NewExpression of NewExpression
-        | [<CompiledValue(210)>] TaggedTemplateExpression of TaggedTemplateExpression
-        static member inline op_ErasedCast(x: CallExpression) = CallExpression x
-        static member inline op_ErasedCast(x: Decorator) = Decorator x
-        static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
-        static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
-        static member inline op_ErasedCast(x: NewExpression) = NewExpression x
-        static member inline op_ErasedCast(x: TaggedTemplateExpression) = TaggedTemplateExpression x
+        | [<CompiledValue(212)>] CallExpression of CallExpression
+        | [<CompiledValue(169)>] Decorator of Decorator
+        | [<CompiledValue(285)>] JsxOpeningElement of JsxOpeningElement
+        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(213)>] NewExpression of NewExpression
+        | [<CompiledValue(214)>] TaggedTemplateExpression of TaggedTemplateExpression
+        // static member inline op_ErasedCast(x: CallExpression) = CallExpression x
+        // static member inline op_ErasedCast(x: Decorator) = Decorator x
+        // static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
+        // static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
+        // static member inline op_ErasedCast(x: NewExpression) = NewExpression x
+        // static member inline op_ErasedCast(x: TaggedTemplateExpression) = TaggedTemplateExpression x
 
     type [<AllowNullLiteral>] AsExpression =
         inherit Expression
@@ -3051,11 +3561,17 @@ module Ts =
         abstract ``type``: TypeNode
         abstract expression: UnaryExpression
 
+    type [<AllowNullLiteral>] SatisfiesExpression =
+        inherit Expression
+        abstract kind: SyntaxKind
+        abstract expression: Expression
+        abstract ``type``: TypeNode
+
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AssertionExpression =
-        | [<CompiledValue(229)>] AsExpression of AsExpression
-        | [<CompiledValue(211)>] TypeAssertion of TypeAssertion
-        static member inline op_ErasedCast(x: AsExpression) = AsExpression x
-        static member inline op_ErasedCast(x: TypeAssertion) = TypeAssertion x
+        | [<CompiledValue(233)>] AsExpression of AsExpression
+        | [<CompiledValue(215)>] TypeAssertion of TypeAssertion
+        // static member inline op_ErasedCast(x: AsExpression) = AsExpression x
+        // static member inline op_ErasedCast(x: TypeAssertion) = TypeAssertion x
 
     type [<AllowNullLiteral>] NonNullExpression =
         inherit LeftHandSideExpression
@@ -3068,6 +3584,7 @@ module Ts =
 
     type [<AllowNullLiteral>] MetaProperty =
         inherit PrimaryExpression
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract keywordToken: SyntaxKind
         abstract name: Identifier
@@ -3080,33 +3597,49 @@ module Ts =
         abstract closingElement: JsxClosingElement
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxOpeningLikeElement =
-        | [<CompiledValue(280)>] JsxOpeningElement of JsxOpeningElement
-        | [<CompiledValue(279)>] JsxSelfClosingElement of JsxSelfClosingElement
-        static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
-        static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
+        | [<CompiledValue(285)>] JsxOpeningElement of JsxOpeningElement
+        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
+        // static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
+        // static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxAttributeLike =
-        | [<CompiledValue(285)>] JsxAttribute of JsxAttribute
-        | [<CompiledValue(287)>] JsxSpreadAttribute of JsxSpreadAttribute
-        static member inline op_ErasedCast(x: JsxAttribute) = JsxAttribute x
-        static member inline op_ErasedCast(x: JsxSpreadAttribute) = JsxSpreadAttribute x
+        | [<CompiledValue(290)>] JsxAttribute of JsxAttribute
+        | [<CompiledValue(292)>] JsxSpreadAttribute of JsxSpreadAttribute
+        // static member inline op_ErasedCast(x: JsxAttribute) = JsxAttribute x
+        // static member inline op_ErasedCast(x: JsxSpreadAttribute) = JsxSpreadAttribute x
+
+    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxAttributeName =
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(294)>] JsxNamespacedName of JsxNamespacedName
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: JsxNamespacedName) = JsxNamespacedName x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxTagNameExpression =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(206)>] JsxTagNamePropertyAccess of JsxTagNamePropertyAccess
-        | [<CompiledValue(108)>] ThisExpression of ThisExpression
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: JsxTagNamePropertyAccess) = JsxTagNamePropertyAccess x
-        static member inline op_ErasedCast(x: ThisExpression) = ThisExpression x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(294)>] JsxNamespacedName of JsxNamespacedName
+        | [<CompiledValue(210)>] JsxTagNamePropertyAccess of JsxTagNamePropertyAccess
+        | [<CompiledValue(110)>] ThisExpression of ThisExpression
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: JsxNamespacedName) = JsxNamespacedName x
+        // static member inline op_ErasedCast(x: JsxTagNamePropertyAccess) = JsxTagNamePropertyAccess x
+        // static member inline op_ErasedCast(x: ThisExpression) = ThisExpression x
 
     type [<AllowNullLiteral>] JsxTagNamePropertyAccess =
         inherit PropertyAccessExpression
-        abstract expression: JsxTagNameExpression
+        abstract expression: U3<Identifier, ThisExpression, JsxTagNamePropertyAccess>
 
     type [<AllowNullLiteral>] JsxAttributes =
-        inherit ObjectLiteralExpressionBase<JsxAttributeLike>
+        inherit PrimaryExpression
+        inherit Declaration
+        abstract properties: JsxAttributeLike[]
         abstract kind: SyntaxKind
         abstract parent: JsxOpeningLikeElement
+
+    type [<AllowNullLiteral>] JsxNamespacedName =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract name: Identifier
+        abstract ``namespace``: Identifier
 
     type [<AllowNullLiteral>] JsxOpeningElement =
         inherit Expression
@@ -3141,23 +3674,23 @@ module Ts =
         abstract parent: JsxFragment
 
     type [<AllowNullLiteral>] JsxAttribute =
-        inherit ObjectLiteralElement
+        inherit Declaration
         abstract kind: SyntaxKind
         abstract parent: JsxAttributes
-        abstract name: Identifier
+        abstract name: JsxAttributeName
         abstract initializer: JsxAttributeValue option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxAttributeValue =
-        | [<CompiledValue(278)>] JsxElement of JsxElement
-        | [<CompiledValue(288)>] JsxExpression of JsxExpression
-        | [<CompiledValue(282)>] JsxFragment of JsxFragment
-        | [<CompiledValue(279)>] JsxSelfClosingElement of JsxSelfClosingElement
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        static member inline op_ErasedCast(x: JsxElement) = JsxElement x
-        static member inline op_ErasedCast(x: JsxExpression) = JsxExpression x
-        static member inline op_ErasedCast(x: JsxFragment) = JsxFragment x
-        static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        | [<CompiledValue(283)>] JsxElement of JsxElement
+        | [<CompiledValue(293)>] JsxExpression of JsxExpression
+        | [<CompiledValue(287)>] JsxFragment of JsxFragment
+        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        // static member inline op_ErasedCast(x: JsxElement) = JsxElement x
+        // static member inline op_ErasedCast(x: JsxExpression) = JsxExpression x
+        // static member inline op_ErasedCast(x: JsxFragment) = JsxFragment x
+        // static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<AllowNullLiteral>] JsxSpreadAttribute =
         inherit ObjectLiteralElement
@@ -3185,16 +3718,16 @@ module Ts =
         abstract containsOnlyTriviaWhiteSpaces: bool
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxChild =
-        | [<CompiledValue(278)>] JsxElement of JsxElement
-        | [<CompiledValue(288)>] JsxExpression of JsxExpression
-        | [<CompiledValue(282)>] JsxFragment of JsxFragment
-        | [<CompiledValue(279)>] JsxSelfClosingElement of JsxSelfClosingElement
-        | [<CompiledValue(11)>] JsxText of JsxText
-        static member inline op_ErasedCast(x: JsxElement) = JsxElement x
-        static member inline op_ErasedCast(x: JsxExpression) = JsxExpression x
-        static member inline op_ErasedCast(x: JsxFragment) = JsxFragment x
-        static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
-        static member inline op_ErasedCast(x: JsxText) = JsxText x
+        | [<CompiledValue(283)>] JsxElement of JsxElement
+        | [<CompiledValue(293)>] JsxExpression of JsxExpression
+        | [<CompiledValue(287)>] JsxFragment of JsxFragment
+        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(12)>] JsxText of JsxText
+        // static member inline op_ErasedCast(x: JsxElement) = JsxElement x
+        // static member inline op_ErasedCast(x: JsxExpression) = JsxExpression x
+        // static member inline op_ErasedCast(x: JsxFragment) = JsxFragment x
+        // static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
+        // static member inline op_ErasedCast(x: JsxText) = JsxText x
 
     type [<AllowNullLiteral>] Statement =
         inherit Node
@@ -3217,43 +3750,49 @@ module Ts =
 
     type [<AllowNullLiteral>] DebuggerStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
 
     type [<AllowNullLiteral>] MissingDeclaration =
         inherit DeclarationStatement
+        inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract name: Identifier option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BlockLike =
-        | [<CompiledValue(235)>] Block of Block
-        | [<CompiledValue(289)>] CaseClause of CaseClause
-        | [<CompiledValue(290)>] DefaultClause of DefaultClause
-        | [<CompiledValue(262)>] ModuleBlock of ModuleBlock
-        | [<CompiledValue(305)>] SourceFile of SourceFile
-        static member inline op_ErasedCast(x: Block) = Block x
-        static member inline op_ErasedCast(x: CaseClause) = CaseClause x
-        static member inline op_ErasedCast(x: DefaultClause) = DefaultClause x
-        static member inline op_ErasedCast(x: ModuleBlock) = ModuleBlock x
-        static member inline op_ErasedCast(x: SourceFile) = SourceFile x
+        | [<CompiledValue(240)>] Block of Block
+        | [<CompiledValue(295)>] CaseClause of CaseClause
+        | [<CompiledValue(296)>] DefaultClause of DefaultClause
+        | [<CompiledValue(267)>] ModuleBlock of ModuleBlock
+        | [<CompiledValue(311)>] SourceFile of SourceFile
+        // static member inline op_ErasedCast(x: Block) = Block x
+        // static member inline op_ErasedCast(x: CaseClause) = CaseClause x
+        // static member inline op_ErasedCast(x: DefaultClause) = DefaultClause x
+        // static member inline op_ErasedCast(x: ModuleBlock) = ModuleBlock x
+        // static member inline op_ErasedCast(x: SourceFile) = SourceFile x
 
     type [<AllowNullLiteral>] Block =
         inherit Statement
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract statements: Statement[]
 
     type [<AllowNullLiteral>] VariableStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract declarationList: VariableDeclarationList
 
     type [<AllowNullLiteral>] ExpressionStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
     type [<AllowNullLiteral>] IfStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
         abstract thenStatement: Statement
@@ -3265,11 +3804,13 @@ module Ts =
 
     type [<AllowNullLiteral>] DoStatement =
         inherit IterationStatement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
     type [<AllowNullLiteral>] WhileStatement =
         inherit IterationStatement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
@@ -3278,25 +3819,31 @@ module Ts =
 
     type [<AllowNullLiteral>] ForStatement =
         inherit IterationStatement
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract initializer: ForInitializer option
         abstract condition: Expression option
         abstract incrementor: Expression option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ForInOrOfStatement =
-        | [<CompiledValue(243)>] ForInStatement of ForInStatement
-        | [<CompiledValue(244)>] ForOfStatement of ForOfStatement
-        static member inline op_ErasedCast(x: ForInStatement) = ForInStatement x
-        static member inline op_ErasedCast(x: ForOfStatement) = ForOfStatement x
+        | [<CompiledValue(248)>] ForInStatement of ForInStatement
+        | [<CompiledValue(249)>] ForOfStatement of ForOfStatement
+        // static member inline op_ErasedCast(x: ForInStatement) = ForInStatement x
+        // static member inline op_ErasedCast(x: ForOfStatement) = ForOfStatement x
 
     type [<AllowNullLiteral>] ForInStatement =
         inherit IterationStatement
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract initializer: ForInitializer
         abstract expression: Expression
 
     type [<AllowNullLiteral>] ForOfStatement =
         inherit IterationStatement
+        inherit LocalsContainer
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract awaitModifier: AwaitKeyword option
         abstract initializer: ForInitializer
@@ -3304,33 +3851,38 @@ module Ts =
 
     type [<AllowNullLiteral>] BreakStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract label: Identifier option
 
     type [<AllowNullLiteral>] ContinueStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract label: Identifier option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BreakOrContinueStatement =
-        | [<CompiledValue(246)>] BreakStatement of BreakStatement
-        | [<CompiledValue(245)>] ContinueStatement of ContinueStatement
-        static member inline op_ErasedCast(x: BreakStatement) = BreakStatement x
-        static member inline op_ErasedCast(x: ContinueStatement) = ContinueStatement x
+        | [<CompiledValue(251)>] BreakStatement of BreakStatement
+        | [<CompiledValue(250)>] ContinueStatement of ContinueStatement
+        // static member inline op_ErasedCast(x: BreakStatement) = BreakStatement x
+        // static member inline op_ErasedCast(x: ContinueStatement) = ContinueStatement x
 
     type [<AllowNullLiteral>] ReturnStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression option
 
     type [<AllowNullLiteral>] WithStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
         abstract statement: Statement
 
     type [<AllowNullLiteral>] SwitchStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
         abstract caseBlock: CaseBlock
@@ -3338,6 +3890,7 @@ module Ts =
 
     type [<AllowNullLiteral>] CaseBlock =
         inherit Node
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: SwitchStatement
         abstract clauses: CaseOrDefaultClause[]
@@ -3357,24 +3910,27 @@ module Ts =
         abstract statements: Statement[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] CaseOrDefaultClause =
-        | [<CompiledValue(289)>] CaseClause of CaseClause
-        | [<CompiledValue(290)>] DefaultClause of DefaultClause
-        static member inline op_ErasedCast(x: CaseClause) = CaseClause x
-        static member inline op_ErasedCast(x: DefaultClause) = DefaultClause x
+        | [<CompiledValue(295)>] CaseClause of CaseClause
+        | [<CompiledValue(296)>] DefaultClause of DefaultClause
+        // static member inline op_ErasedCast(x: CaseClause) = CaseClause x
+        // static member inline op_ErasedCast(x: DefaultClause) = DefaultClause x
 
     type [<AllowNullLiteral>] LabeledStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract label: Identifier
         abstract statement: Statement
 
     type [<AllowNullLiteral>] ThrowStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract expression: Expression
 
     type [<AllowNullLiteral>] TryStatement =
         inherit Statement
+        inherit FlowContainer
         abstract kind: SyntaxKind
         abstract tryBlock: Block
         abstract catchClause: CatchClause option
@@ -3382,106 +3938,107 @@ module Ts =
 
     type [<AllowNullLiteral>] CatchClause =
         inherit Node
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: TryStatement
         abstract variableDeclaration: VariableDeclaration option
         abstract block: Block
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ObjectTypeDeclaration =
-        | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(226)>] ClassExpression of ClassExpression
-        | [<CompiledValue(258)>] InterfaceDeclaration of InterfaceDeclaration
-        | [<CompiledValue(182)>] TypeLiteralNode of TypeLiteralNode
-        static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
-        static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
-        static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
-        static member inline op_ErasedCast(x: TypeLiteralNode) = TypeLiteralNode x
+        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(230)>] ClassExpression of ClassExpression
+        | [<CompiledValue(263)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(186)>] TypeLiteralNode of TypeLiteralNode
+        // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
+        // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
+        // static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
+        // static member inline op_ErasedCast(x: TypeLiteralNode) = TypeLiteralNode x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] DeclarationWithTypeParameters =
-        | [<CompiledValue(214)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(174)>] CallSignatureDeclaration of CallSignatureDeclaration
-        | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(226)>] ClassExpression of ClassExpression
-        | [<CompiledValue(175)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
-        | [<CompiledValue(171)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(180)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(256)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(213)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(179)>] FunctionTypeNode of FunctionTypeNode
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(176)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(258)>] InterfaceDeclaration of InterfaceDeclaration
-        | [<CompiledValue(338)>] JSDocCallbackTag of JSDocCallbackTag
-        | [<CompiledValue(317)>] JSDocFunctionType of JSDocFunctionType
-        | [<CompiledValue(323)>] JSDocSignature of JSDocSignature
-        | [<CompiledValue(344)>] JSDocTemplateTag of JSDocTemplateTag
-        | [<CompiledValue(345)>] JSDocTypedefTag of JSDocTypedefTag
-        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(168)>] MethodSignature of MethodSignature
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(259)>] TypeAliasDeclaration of TypeAliasDeclaration
-        static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
-        static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
-        static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
-        static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
-        static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
-        static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
-        static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
-        static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
-        static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
-        static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
-        static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
-        static member inline op_ErasedCast(x: JSDocCallbackTag) = JSDocCallbackTag x
-        static member inline op_ErasedCast(x: JSDocFunctionType) = JSDocFunctionType x
-        static member inline op_ErasedCast(x: JSDocSignature) = JSDocSignature x
-        static member inline op_ErasedCast(x: JSDocTemplateTag) = JSDocTemplateTag x
-        static member inline op_ErasedCast(x: JSDocTypedefTag) = JSDocTypedefTag x
-        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
-        static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
-        static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
+        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(178)>] CallSignatureDeclaration of CallSignatureDeclaration
+        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(230)>] ClassExpression of ClassExpression
+        | [<CompiledValue(179)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
+        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(263)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(344)>] JSDocCallbackTag of JSDocCallbackTag
+        | [<CompiledValue(323)>] JSDocFunctionType of JSDocFunctionType
+        | [<CompiledValue(329)>] JSDocSignature of JSDocSignature
+        | [<CompiledValue(351)>] JSDocTemplateTag of JSDocTemplateTag
+        | [<CompiledValue(352)>] JSDocTypedefTag of JSDocTypedefTag
+        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(172)>] MethodSignature of MethodSignature
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(264)>] TypeAliasDeclaration of TypeAliasDeclaration
+        // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
+        // static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
+        // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
+        // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
+        // static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
+        // static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
+        // static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
+        // static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
+        // static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
+        // static member inline op_ErasedCast(x: JSDocCallbackTag) = JSDocCallbackTag x
+        // static member inline op_ErasedCast(x: JSDocFunctionType) = JSDocFunctionType x
+        // static member inline op_ErasedCast(x: JSDocSignature) = JSDocSignature x
+        // static member inline op_ErasedCast(x: JSDocTemplateTag) = JSDocTemplateTag x
+        // static member inline op_ErasedCast(x: JSDocTypedefTag) = JSDocTypedefTag x
+        // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        // static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] DeclarationWithTypeParameterChildren =
-        | [<CompiledValue(214)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(174)>] CallSignatureDeclaration of CallSignatureDeclaration
-        | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(226)>] ClassExpression of ClassExpression
-        | [<CompiledValue(175)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
-        | [<CompiledValue(171)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(180)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(256)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(213)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(179)>] FunctionTypeNode of FunctionTypeNode
-        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(176)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(258)>] InterfaceDeclaration of InterfaceDeclaration
-        | [<CompiledValue(317)>] JSDocFunctionType of JSDocFunctionType
-        | [<CompiledValue(344)>] JSDocTemplateTag of JSDocTemplateTag
-        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(168)>] MethodSignature of MethodSignature
-        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(259)>] TypeAliasDeclaration of TypeAliasDeclaration
-        static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
-        static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
-        static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
-        static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
-        static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
-        static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
-        static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
-        static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
-        static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
-        static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
-        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
-        static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
-        static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
-        static member inline op_ErasedCast(x: JSDocFunctionType) = JSDocFunctionType x
-        static member inline op_ErasedCast(x: JSDocTemplateTag) = JSDocTemplateTag x
-        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
-        static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
-        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
-        static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
+        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(178)>] CallSignatureDeclaration of CallSignatureDeclaration
+        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(230)>] ClassExpression of ClassExpression
+        | [<CompiledValue(179)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
+        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(263)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(323)>] JSDocFunctionType of JSDocFunctionType
+        | [<CompiledValue(351)>] JSDocTemplateTag of JSDocTemplateTag
+        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(172)>] MethodSignature of MethodSignature
+        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(264)>] TypeAliasDeclaration of TypeAliasDeclaration
+        // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
+        // static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
+        // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
+        // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
+        // static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
+        // static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
+        // static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
+        // static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
+        // static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
+        // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
+        // static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
+        // static member inline op_ErasedCast(x: JSDocFunctionType) = JSDocFunctionType x
+        // static member inline op_ErasedCast(x: JSDocTemplateTag) = JSDocTemplateTag x
+        // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        // static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
+        // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        // static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
 
     type [<AllowNullLiteral>] ClassLikeDeclarationBase =
         inherit NamedDeclaration
@@ -3507,10 +4064,10 @@ module Ts =
         abstract modifiers: ModifierLike[] option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ClassLikeDeclaration =
-        | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(226)>] ClassExpression of ClassExpression
-        static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
-        static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
+        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(230)>] ClassExpression of ClassExpression
+        // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
+        // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
 
     type [<AllowNullLiteral>] ClassElement =
         inherit NamedDeclaration
@@ -3527,7 +4084,7 @@ module Ts =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract name: Identifier
         abstract typeParameters: TypeParameterDeclaration[] option
         abstract heritageClauses: HeritageClause[] option
@@ -3543,8 +4100,9 @@ module Ts =
     type [<AllowNullLiteral>] TypeAliasDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract name: Identifier
         abstract typeParameters: TypeParameterDeclaration[] option
         abstract ``type``: TypeNode
@@ -3561,38 +4119,39 @@ module Ts =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract name: Identifier
         abstract members: EnumMember[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ModuleName =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ModuleBody =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(262)>] ModuleBlock of ModuleBlock
-        | [<CompiledValue(261)>] ModuleDeclaration of U2<NamespaceDeclaration, JSDocNamespaceDeclaration>
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: ModuleBlock) = ModuleBlock x
-        static member inline op_ErasedCast(x: U2<NamespaceDeclaration, JSDocNamespaceDeclaration>) = ModuleDeclaration x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(267)>] ModuleBlock of ModuleBlock
+        | [<CompiledValue(266)>] ModuleDeclaration of U2<NamespaceDeclaration, JSDocNamespaceDeclaration>
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: ModuleBlock) = ModuleBlock x
+        // static member inline op_ErasedCast(x: U2<NamespaceDeclaration, JSDocNamespaceDeclaration>) = ModuleDeclaration x
 
     type [<AllowNullLiteral>] ModuleDeclaration =
         inherit DeclarationStatement
         inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: U2<ModuleBody, SourceFile>
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract name: ModuleName
         abstract body: U2<ModuleBody, JSDocNamespaceDeclaration> option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] NamespaceBody =
-        | [<CompiledValue(262)>] ModuleBlock of ModuleBlock
-        | [<CompiledValue(261)>] NamespaceDeclaration of NamespaceDeclaration
-        static member inline op_ErasedCast(x: ModuleBlock) = ModuleBlock x
-        static member inline op_ErasedCast(x: NamespaceDeclaration) = NamespaceDeclaration x
+        | [<CompiledValue(267)>] ModuleBlock of ModuleBlock
+        | [<CompiledValue(266)>] NamespaceDeclaration of NamespaceDeclaration
+        // static member inline op_ErasedCast(x: ModuleBlock) = ModuleBlock x
+        // static member inline op_ErasedCast(x: NamespaceDeclaration) = NamespaceDeclaration x
 
     type [<AllowNullLiteral>] NamespaceDeclaration =
         inherit ModuleDeclaration
@@ -3600,10 +4159,10 @@ module Ts =
         abstract body: NamespaceBody
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JSDocNamespaceBody =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(261)>] JSDocNamespaceDeclaration of JSDocNamespaceDeclaration
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: JSDocNamespaceDeclaration) = JSDocNamespaceDeclaration x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(266)>] JSDocNamespaceDeclaration of JSDocNamespaceDeclaration
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: JSDocNamespaceDeclaration) = JSDocNamespaceDeclaration x
 
     type [<AllowNullLiteral>] JSDocNamespaceDeclaration =
         inherit ModuleDeclaration
@@ -3618,12 +4177,12 @@ module Ts =
         abstract statements: Statement[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ModuleReference =
-        | [<CompiledValue(277)>] ExternalModuleReference of ExternalModuleReference
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(161)>] QualifiedName of QualifiedName
-        static member inline op_ErasedCast(x: ExternalModuleReference) = ExternalModuleReference x
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
+        | [<CompiledValue(282)>] ExternalModuleReference of ExternalModuleReference
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(165)>] QualifiedName of QualifiedName
+        // static member inline op_ErasedCast(x: ExternalModuleReference) = ExternalModuleReference x
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
 
     /// One of:
     /// - import x = require("mod");
@@ -3633,7 +4192,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract name: Identifier
         abstract isTypeOnly: bool
         abstract moduleReference: ModuleReference
@@ -3648,23 +4207,23 @@ module Ts =
         inherit Statement
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract importClause: ImportClause option
         /// If this is not a StringLiteral it will be a grammar error.
         abstract moduleSpecifier: Expression
         abstract assertClause: AssertClause option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] NamedImportBindings =
-        | [<CompiledValue(269)>] NamedImports of NamedImports
-        | [<CompiledValue(268)>] NamespaceImport of NamespaceImport
-        static member inline op_ErasedCast(x: NamedImports) = NamedImports x
-        static member inline op_ErasedCast(x: NamespaceImport) = NamespaceImport x
+        | [<CompiledValue(274)>] NamedImports of NamedImports
+        | [<CompiledValue(273)>] NamespaceImport of NamespaceImport
+        // static member inline op_ErasedCast(x: NamedImports) = NamedImports x
+        // static member inline op_ErasedCast(x: NamespaceImport) = NamespaceImport x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] NamedExportBindings =
-        | [<CompiledValue(273)>] NamedExports of NamedExports
-        | [<CompiledValue(274)>] NamespaceExport of NamespaceExport
-        static member inline op_ErasedCast(x: NamedExports) = NamedExports x
-        static member inline op_ErasedCast(x: NamespaceExport) = NamespaceExport x
+        | [<CompiledValue(278)>] NamedExports of NamedExports
+        | [<CompiledValue(279)>] NamespaceExport of NamespaceExport
+        // static member inline op_ErasedCast(x: NamedExports) = NamedExports x
+        // static member inline op_ErasedCast(x: NamespaceExport) = NamespaceExport x
 
     type [<AllowNullLiteral>] ImportClause =
         inherit NamedDeclaration
@@ -3675,10 +4234,10 @@ module Ts =
         abstract namedBindings: NamedImportBindings option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AssertionKey =
-        | [<CompiledValue(79)>] Identifier of Identifier
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        static member inline op_ErasedCast(x: Identifier) = Identifier x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<AllowNullLiteral>] AssertEntry =
         inherit Node
@@ -3717,7 +4276,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract isTypeOnly: bool
         /// <summary>Will not be assigned in the case of <c>export * from "foo";</c></summary>
         abstract exportClause: NamedExportBindings option
@@ -3738,10 +4297,10 @@ module Ts =
         abstract elements: ExportSpecifier[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] NamedImportsOrExports =
-        | [<CompiledValue(273)>] NamedExports of NamedExports
-        | [<CompiledValue(269)>] NamedImports of NamedImports
-        static member inline op_ErasedCast(x: NamedExports) = NamedExports x
-        static member inline op_ErasedCast(x: NamedImports) = NamedImports x
+        | [<CompiledValue(278)>] NamedExports of NamedExports
+        | [<CompiledValue(274)>] NamedImports of NamedImports
+        // static member inline op_ErasedCast(x: NamedExports) = NamedExports x
+        // static member inline op_ErasedCast(x: NamedImports) = NamedImports x
 
     type [<AllowNullLiteral>] ImportSpecifier =
         inherit NamedDeclaration
@@ -3761,25 +4320,35 @@ module Ts =
         abstract name: Identifier
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ImportOrExportSpecifier =
-        | [<CompiledValue(275)>] ExportSpecifier of ExportSpecifier
-        | [<CompiledValue(270)>] ImportSpecifier of ImportSpecifier
-        static member inline op_ErasedCast(x: ExportSpecifier) = ExportSpecifier x
-        static member inline op_ErasedCast(x: ImportSpecifier) = ImportSpecifier x
+        | [<CompiledValue(280)>] ExportSpecifier of ExportSpecifier
+        | [<CompiledValue(275)>] ImportSpecifier of ImportSpecifier
+        // static member inline op_ErasedCast(x: ExportSpecifier) = ExportSpecifier x
+        // static member inline op_ErasedCast(x: ImportSpecifier) = ImportSpecifier x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] TypeOnlyCompatibleAliasDeclaration =
-        | [<CompiledValue(275)>] ExportSpecifier of ExportSpecifier
-        | [<CompiledValue(267)>] ImportClause of ImportClause
-        | [<CompiledValue(265)>] ImportEqualsDeclaration of ImportEqualsDeclaration
-        | [<CompiledValue(270)>] ImportSpecifier of ImportSpecifier
-        | [<CompiledValue(268)>] NamespaceImport of NamespaceImport
-        static member inline op_ErasedCast(x: ExportSpecifier) = ExportSpecifier x
-        static member inline op_ErasedCast(x: ImportClause) = ImportClause x
-        static member inline op_ErasedCast(x: ImportEqualsDeclaration) = ImportEqualsDeclaration x
-        static member inline op_ErasedCast(x: ImportSpecifier) = ImportSpecifier x
-        static member inline op_ErasedCast(x: NamespaceImport) = NamespaceImport x
+        | [<CompiledValue(277)>] ExportDeclaration of ExportDeclaration
+        | [<CompiledValue(280)>] ExportSpecifier of ExportSpecifier
+        | [<CompiledValue(272)>] ImportClause of ImportClause
+        | [<CompiledValue(270)>] ImportEqualsDeclaration of ImportEqualsDeclaration
+        | [<CompiledValue(275)>] ImportSpecifier of ImportSpecifier
+        | [<CompiledValue(279)>] NamespaceExport of NamespaceExport
+        | [<CompiledValue(273)>] NamespaceImport of NamespaceImport
+        // static member inline op_ErasedCast(x: ExportDeclaration) = ExportDeclaration x
+        // static member inline op_ErasedCast(x: ExportSpecifier) = ExportSpecifier x
+        // static member inline op_ErasedCast(x: ImportClause) = ImportClause x
+        // static member inline op_ErasedCast(x: ImportEqualsDeclaration) = ImportEqualsDeclaration x
+        // static member inline op_ErasedCast(x: ImportSpecifier) = ImportSpecifier x
+        // static member inline op_ErasedCast(x: NamespaceExport) = NamespaceExport x
+        // static member inline op_ErasedCast(x: NamespaceImport) = NamespaceImport x
+
+    type TypeOnlyImportDeclaration =
+        obj
+
+    type TypeOnlyExportDeclaration =
+        obj
 
     type TypeOnlyAliasDeclaration =
-        obj
+        U2<TypeOnlyImportDeclaration, TypeOnlyExportDeclaration>
 
     /// <summary>
     /// This is either an <c>export =</c> or an <c>export default</c> declaration.
@@ -3790,19 +4359,25 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: SourceFile
-        abstract modifiers: Modifier[] option
+        abstract modifiers: ModifierLike[] option
         abstract isExportEquals: bool option
         abstract expression: Expression
 
     type [<AllowNullLiteral>] FileReference =
         inherit TextRange
         abstract fileName: string with get, set
-        abstract resolutionMode: obj option with get, set
+        abstract resolutionMode: ResolutionMode option with get, set
 
     type [<AllowNullLiteral>] CheckJsDirective =
         inherit TextRange
         abstract enabled: bool with get, set
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia
+    /// </code>
+    /// </remarks>
     type CommentKind =
         SyntaxKind
 
@@ -3867,6 +4442,7 @@ module Ts =
     type [<AllowNullLiteral>] JSDocFunctionType =
         inherit JSDocType
         inherit SignatureDeclarationBase
+        inherit LocalsContainer
         abstract kind: SyntaxKind
 
     type [<AllowNullLiteral>] JSDocVariadicType =
@@ -3880,14 +4456,14 @@ module Ts =
         abstract ``type``: TypeNode
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JSDocTypeReferencingNode =
-        | [<CompiledValue(315)>] JSDocNonNullableType of JSDocNonNullableType
-        | [<CompiledValue(314)>] JSDocNullableType of JSDocNullableType
-        | [<CompiledValue(316)>] JSDocOptionalType of JSDocOptionalType
-        | [<CompiledValue(318)>] JSDocVariadicType of JSDocVariadicType
-        static member inline op_ErasedCast(x: JSDocNonNullableType) = JSDocNonNullableType x
-        static member inline op_ErasedCast(x: JSDocNullableType) = JSDocNullableType x
-        static member inline op_ErasedCast(x: JSDocOptionalType) = JSDocOptionalType x
-        static member inline op_ErasedCast(x: JSDocVariadicType) = JSDocVariadicType x
+        | [<CompiledValue(321)>] JSDocNonNullableType of JSDocNonNullableType
+        | [<CompiledValue(320)>] JSDocNullableType of JSDocNullableType
+        | [<CompiledValue(322)>] JSDocOptionalType of JSDocOptionalType
+        | [<CompiledValue(324)>] JSDocVariadicType of JSDocVariadicType
+        // static member inline op_ErasedCast(x: JSDocNonNullableType) = JSDocNonNullableType x
+        // static member inline op_ErasedCast(x: JSDocNullableType) = JSDocNullableType x
+        // static member inline op_ErasedCast(x: JSDocOptionalType) = JSDocOptionalType x
+        // static member inline op_ErasedCast(x: JSDocVariadicType) = JSDocVariadicType x
 
     type [<AllowNullLiteral>] JSDoc =
         inherit Node
@@ -3921,14 +4497,14 @@ module Ts =
         abstract text: string with get, set
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JSDocComment =
-        | [<CompiledValue(324)>] JSDocLink of JSDocLink
-        | [<CompiledValue(325)>] JSDocLinkCode of JSDocLinkCode
-        | [<CompiledValue(326)>] JSDocLinkPlain of JSDocLinkPlain
-        | [<CompiledValue(321)>] JSDocText of JSDocText
-        static member inline op_ErasedCast(x: JSDocLink) = JSDocLink x
-        static member inline op_ErasedCast(x: JSDocLinkCode) = JSDocLinkCode x
-        static member inline op_ErasedCast(x: JSDocLinkPlain) = JSDocLinkPlain x
-        static member inline op_ErasedCast(x: JSDocText) = JSDocText x
+        | [<CompiledValue(330)>] JSDocLink of JSDocLink
+        | [<CompiledValue(331)>] JSDocLinkCode of JSDocLinkCode
+        | [<CompiledValue(332)>] JSDocLinkPlain of JSDocLinkPlain
+        | [<CompiledValue(327)>] JSDocText of JSDocText
+        // static member inline op_ErasedCast(x: JSDocLink) = JSDocLink x
+        // static member inline op_ErasedCast(x: JSDocLinkCode) = JSDocLinkCode x
+        // static member inline op_ErasedCast(x: JSDocLinkPlain) = JSDocLinkPlain x
+        // static member inline op_ErasedCast(x: JSDocText) = JSDocText x
 
     type [<AllowNullLiteral>] JSDocText =
         inherit Node
@@ -3988,6 +4564,7 @@ module Ts =
     type [<AllowNullLiteral>] JSDocEnumTag =
         inherit JSDocTag
         inherit Declaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: JSDoc
         abstract typeExpression: JSDocTypeExpression
@@ -4021,6 +4598,7 @@ module Ts =
     type [<AllowNullLiteral>] JSDocTypedefTag =
         inherit JSDocTag
         inherit NamedDeclaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: JSDoc
         abstract fullName: U2<JSDocNamespaceDeclaration, Identifier> option
@@ -4030,15 +4608,29 @@ module Ts =
     type [<AllowNullLiteral>] JSDocCallbackTag =
         inherit JSDocTag
         inherit NamedDeclaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract parent: JSDoc
         abstract fullName: U2<JSDocNamespaceDeclaration, Identifier> option
         abstract name: Identifier option
         abstract typeExpression: JSDocSignature
 
+    type [<AllowNullLiteral>] JSDocOverloadTag =
+        inherit JSDocTag
+        abstract kind: SyntaxKind
+        abstract parent: JSDoc
+        abstract typeExpression: JSDocSignature
+
+    type [<AllowNullLiteral>] JSDocThrowsTag =
+        inherit JSDocTag
+        abstract kind: SyntaxKind
+        abstract typeExpression: JSDocTypeExpression option
+
     type [<AllowNullLiteral>] JSDocSignature =
         inherit JSDocType
         inherit Declaration
+        inherit JSDocContainer
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract typeParameters: JSDocTemplateTag[] option
         abstract parameters: JSDocParameterTag[]
@@ -4064,10 +4656,16 @@ module Ts =
 
     type [<AllowNullLiteral>] JSDocTypeLiteral =
         inherit JSDocType
+        inherit Declaration
         abstract kind: SyntaxKind
         abstract jsDocPropertyTags: JSDocPropertyLikeTag[] option
         /// If true, then this type literal represents an *array* of its type.
         abstract isArrayType: bool
+
+    type [<AllowNullLiteral>] JSDocSatisfiesTag =
+        inherit JSDocTag
+        abstract kind: SyntaxKind
+        abstract typeExpression: JSDocTypeExpression
 
     type [<RequireQualifiedAccess>] FlowFlags =
         | Unreachable = 1
@@ -4138,7 +4736,7 @@ module Ts =
         U2<Type, IncompleteType>
 
     type [<AllowNullLiteral>] IncompleteType =
-        abstract flags: TypeFlags with get, set
+        abstract flags: U2<TypeFlags, float> with get, set
         abstract ``type``: Type with get, set
 
     type [<AllowNullLiteral>] AmdDependency =
@@ -4150,8 +4748,18 @@ module Ts =
         abstract text: string
         abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
 
+    /// <remarks>
+    /// Original in TypeScript:  
+    /// <code lang="typescript">
+    /// ModuleKind.ESNext | ModuleKind.CommonJS | undefined
+    /// </code>
+    /// </remarks>
+    type ResolutionMode =
+        ModuleKind
+
     type [<AllowNullLiteral>] SourceFile =
         inherit Declaration
+        inherit LocalsContainer
         abstract kind: SyntaxKind
         abstract statements: Statement[]
         abstract endOfFileToken: Token<SyntaxKind>
@@ -4189,7 +4797,7 @@ module Ts =
         /// of <c>node</c>). If so, this field will be unset and source files will be considered to be
         /// CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
         /// </summary>
-        abstract impliedNodeFormat: ModuleKind option with get, set
+        abstract impliedNodeFormat: ResolutionMode option with get, set
         abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
         abstract getLineEndOfPosition: pos: float -> float
         abstract getLineStarts: unit -> float[]
@@ -4199,9 +4807,9 @@ module Ts =
     type [<AllowNullLiteral>] Bundle =
         inherit Node
         abstract kind: SyntaxKind
-        abstract prepends: U2<InputFiles, UnparsedSource>[]
         abstract sourceFiles: SourceFile[]
 
+    [<Obsolete("")>]
     type [<AllowNullLiteral>] InputFiles =
         inherit Node
         abstract kind: SyntaxKind
@@ -4214,6 +4822,7 @@ module Ts =
         abstract declarationMapPath: string option with get, set
         abstract declarationMapText: string option with get, set
 
+    [<Obsolete("")>]
     type [<AllowNullLiteral>] UnparsedSource =
         inherit Node
         abstract kind: SyntaxKind
@@ -4230,30 +4839,43 @@ module Ts =
         abstract syntheticReferences: UnparsedSyntheticReference[] option
         abstract texts: UnparsedSourceText[]
 
+    /// <deprecated />
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] UnparsedSourceText =
-        | [<CompiledValue(303)>] UnparsedTextLike of UnparsedTextLike
-        | [<CompiledValue(301)>] UnparsedPrepend of UnparsedPrepend
-        | [<CompiledValue(302)>] UnparsedTextLike' of UnparsedTextLike
+        | [<CompiledValue(309)>] UnparsedTextLike of UnparsedTextLike
+        | [<CompiledValue(307)>] UnparsedPrepend of UnparsedPrepend
+        | [<CompiledValue(308)>] UnparsedTextLike' of UnparsedTextLike
+        // static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike x
+        // static member inline op_ErasedCast(x: UnparsedPrepend) = UnparsedPrepend x
+        // static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike' x
 
+    /// <deprecated />
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] UnparsedNode =
-        | [<CompiledValue(303)>] UnparsedTextLike of UnparsedTextLike
-        | [<CompiledValue(301)>] UnparsedPrepend of UnparsedPrepend
-        | [<CompiledValue(300)>] UnparsedPrologue of UnparsedPrologue
-        | [<CompiledValue(304)>] UnparsedSyntheticReference of UnparsedSyntheticReference
-        | [<CompiledValue(302)>] UnparsedTextLike' of UnparsedTextLike
+        | [<CompiledValue(309)>] UnparsedTextLike of UnparsedTextLike
+        | [<CompiledValue(307)>] UnparsedPrepend of UnparsedPrepend
+        | [<CompiledValue(306)>] UnparsedPrologue of UnparsedPrologue
+        | [<CompiledValue(310)>] UnparsedSyntheticReference of UnparsedSyntheticReference
+        | [<CompiledValue(308)>] UnparsedTextLike' of UnparsedTextLike
+        // static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike x
+        // static member inline op_ErasedCast(x: UnparsedPrepend) = UnparsedPrepend x
+        // static member inline op_ErasedCast(x: UnparsedPrologue) = UnparsedPrologue x
+        // static member inline op_ErasedCast(x: UnparsedSyntheticReference) = UnparsedSyntheticReference x
+        // static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike' x
 
+    [<Obsolete("")>]
     type [<AllowNullLiteral>] UnparsedSection =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: UnparsedSource
         abstract data: string option
 
+    [<Obsolete("")>]
     type [<AllowNullLiteral>] UnparsedPrologue =
         inherit UnparsedSection
         abstract kind: SyntaxKind
         abstract parent: UnparsedSource
         abstract data: string
 
+    [<Obsolete("")>]
     type [<AllowNullLiteral>] UnparsedPrepend =
         inherit UnparsedSection
         abstract kind: SyntaxKind
@@ -4261,11 +4883,13 @@ module Ts =
         abstract data: string
         abstract texts: UnparsedTextLike[]
 
+    [<Obsolete("")>]
     type [<AllowNullLiteral>] UnparsedTextLike =
         inherit UnparsedSection
         abstract kind: SyntaxKind
         abstract parent: UnparsedSource
 
+    [<Obsolete("")>]
     type [<AllowNullLiteral>] UnparsedSyntheticReference =
         inherit UnparsedSection
         abstract kind: SyntaxKind
@@ -4286,22 +4910,22 @@ module Ts =
         abstract operand: NumericLiteral
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsonObjectExpression =
-        | [<CompiledValue(204)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(95)>] FalseLiteral of FalseLiteral
-        | [<CompiledValue(104)>] NullLiteral of NullLiteral
-        | [<CompiledValue(8)>] NumericLiteral of NumericLiteral
-        | [<CompiledValue(205)>] ObjectLiteralExpression of ObjectLiteralExpression
-        | [<CompiledValue(219)>] JsonMinusNumericLiteral of JsonMinusNumericLiteral
-        | [<CompiledValue(10)>] StringLiteral of StringLiteral
-        | [<CompiledValue(110)>] TrueLiteral of TrueLiteral
-        static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
-        static member inline op_ErasedCast(x: FalseLiteral) = FalseLiteral x
-        static member inline op_ErasedCast(x: NullLiteral) = NullLiteral x
-        static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
-        static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
-        static member inline op_ErasedCast(x: JsonMinusNumericLiteral) = JsonMinusNumericLiteral x
-        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
-        static member inline op_ErasedCast(x: TrueLiteral) = TrueLiteral x
+        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(97)>] FalseLiteral of FalseLiteral
+        | [<CompiledValue(106)>] NullLiteral of NullLiteral
+        | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
+        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(223)>] JsonMinusNumericLiteral of JsonMinusNumericLiteral
+        | [<CompiledValue(11)>] StringLiteral of StringLiteral
+        | [<CompiledValue(112)>] TrueLiteral of TrueLiteral
+        // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
+        // static member inline op_ErasedCast(x: FalseLiteral) = FalseLiteral x
+        // static member inline op_ErasedCast(x: NullLiteral) = NullLiteral x
+        // static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
+        // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
+        // static member inline op_ErasedCast(x: JsonMinusNumericLiteral) = JsonMinusNumericLiteral x
+        // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
+        // static member inline op_ErasedCast(x: TrueLiteral) = TrueLiteral x
 
     type [<AllowNullLiteral>] JsonObjectExpressionStatement =
         inherit ExpressionStatement
@@ -4422,8 +5046,6 @@ module Ts =
         | DiagnosticsPresent_OutputsGenerated = 2
         | InvalidProject_OutputsSkipped = 3
         | ProjectReferenceCycle_OutputsSkipped = 4
-        /// <deprecated>Use ProjectReferenceCycle_OutputsSkipped instead.</deprecated>
-        | ProjectReferenceCycle_OutputsSkupped = 4
 
     type [<AllowNullLiteral>] EmitResult =
         abstract emitSkipped: bool with get, set
@@ -4433,12 +5055,14 @@ module Ts =
 
     type [<AllowNullLiteral>] TypeChecker =
         abstract getTypeOfSymbolAtLocation: symbol: Symbol * node: Node -> Type
+        abstract getTypeOfSymbol: symbol: Symbol -> Type
         abstract getDeclaredTypeOfSymbol: symbol: Symbol -> Type
         abstract getPropertiesOfType: ``type``: Type -> Symbol[]
         abstract getPropertyOfType: ``type``: Type * propertyName: string -> Symbol option
         abstract getPrivateIdentifierPropertyOfType: leftType: Type * name: string * location: Node -> Symbol option
         abstract getIndexInfoOfType: ``type``: Type * kind: IndexKind -> IndexInfo option
         abstract getIndexInfosOfType: ``type``: Type -> IndexInfo[]
+        abstract getIndexInfosOfIndexSymbol: indexSymbol: Symbol -> IndexInfo[]
         abstract getSignaturesOfType: ``type``: Type * kind: SignatureKind -> Signature[]
         abstract getIndexTypeOfType: ``type``: Type * kind: IndexKind -> Type option
         abstract getBaseTypes: ``type``: InterfaceType -> BaseType[]
@@ -4518,6 +5142,51 @@ module Ts =
         abstract getApparentType: ``type``: Type -> Type
         abstract getBaseConstraintOfType: ``type``: Type -> Type option
         abstract getDefaultFromTypeParameter: ``type``: Type -> Type option
+        /// <summary>
+        /// Gets the intrinsic <c>any</c> type. There are multiple types that act as <c>any</c> used internally in the compiler,
+        /// so the type returned by this function should not be used in equality checks to determine if another type
+        /// is <c>any</c>. Instead, use <c>type.flags &amp; TypeFlags.Any</c>.
+        /// </summary>
+        abstract getAnyType: unit -> Type
+        abstract getStringType: unit -> Type
+        abstract getStringLiteralType: value: string -> StringLiteralType
+        abstract getNumberType: unit -> Type
+        abstract getNumberLiteralType: value: float -> NumberLiteralType
+        abstract getBigIntType: unit -> Type
+        abstract getBooleanType: unit -> Type
+        abstract getFalseType: unit -> Type
+        abstract getTrueType: unit -> Type
+        abstract getVoidType: unit -> Type
+        /// <summary>
+        /// Gets the intrinsic <c>undefined</c> type. There are multiple types that act as <c>undefined</c> used internally in the compiler
+        /// depending on compiler options, so the type returned by this function should not be used in equality checks to determine
+        /// if another type is <c>undefined</c>. Instead, use <c>type.flags &amp; TypeFlags.Undefined</c>.
+        /// </summary>
+        abstract getUndefinedType: unit -> Type
+        /// <summary>
+        /// Gets the intrinsic <c>null</c> type. There are multiple types that act as <c>null</c> used internally in the compiler,
+        /// so the type returned by this function should not be used in equality checks to determine if another type
+        /// is <c>null</c>. Instead, use <c>type.flags &amp; TypeFlags.Null</c>.
+        /// </summary>
+        abstract getNullType: unit -> Type
+        abstract getESSymbolType: unit -> Type
+        /// <summary>
+        /// Gets the intrinsic <c>never</c> type. There are multiple types that act as <c>never</c> used internally in the compiler,
+        /// so the type returned by this function should not be used in equality checks to determine if another type
+        /// is <c>never</c>. Instead, use <c>type.flags &amp; TypeFlags.Never</c>.
+        /// </summary>
+        abstract getNeverType: unit -> Type
+        /// <summary>
+        /// True if this type is the <c>Array</c> or <c>ReadonlyArray</c> type from lib.d.ts.
+        /// This function will _not_ return true if passed a type which
+        /// extends <c>Array</c> (for example, the TypeScript AST's <c>NodeArray</c> type).
+        /// </summary>
+        abstract isArrayType: ``type``: Type -> bool
+        /// True if this type is a tuple type. This function will _not_ return true if
+        /// passed a type which extends from a tuple.
+        abstract isTupleType: ``type``: Type -> bool
+        /// <summary>True if this type is assignable to <c>ReadonlyArray&lt;any&gt;</c>.</summary>
+        abstract isArrayLikeType: ``type``: Type -> bool
         abstract getTypePredicateOfSignature: signature: Signature -> TypePredicate option
         /// Depending on the operation performed, it may be appropriate to throw away the checker
         /// if the cancellation token is triggered. Typically, if it is used for error checking
@@ -4546,8 +5215,6 @@ module Ts =
         | OmitThisParameter = 33554432
         | AllowThisInObjectLiteral = 32768
         | AllowQualifiedNameInPlaceOfIdentifier = 65536
-        /// <deprecated>AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead.</deprecated>
-        | AllowQualifedNameInPlaceOfIdentifier = 65536
         | AllowAnonymousIdentifier = 131072
         | AllowEmptyUnionOrIntersection = 262144
         | AllowEmptyTuple = 524288
@@ -4582,8 +5249,6 @@ module Ts =
         | InElementType = 2097152
         | InFirstTypeArgument = 4194304
         | InTypeAlias = 8388608
-        /// <deprecated />
-        | WriteOwnNameForAnyLike = 0
         | NodeBuilderFlagsMask = 848330091
 
     type [<RequireQualifiedAccess>] SymbolFormatFlags =
@@ -4636,10 +5301,10 @@ module Ts =
         | [<CompiledValue(2)>] AssertsThisTypePredicate of AssertsThisTypePredicate
         | [<CompiledValue(1)>] IdentifierTypePredicate of IdentifierTypePredicate
         | [<CompiledValue(0)>] ThisTypePredicate of ThisTypePredicate
-        static member inline op_ErasedCast(x: AssertsIdentifierTypePredicate) = AssertsIdentifierTypePredicate x
-        static member inline op_ErasedCast(x: AssertsThisTypePredicate) = AssertsThisTypePredicate x
-        static member inline op_ErasedCast(x: IdentifierTypePredicate) = IdentifierTypePredicate x
-        static member inline op_ErasedCast(x: ThisTypePredicate) = ThisTypePredicate x
+        // static member inline op_ErasedCast(x: AssertsIdentifierTypePredicate) = AssertsIdentifierTypePredicate x
+        // static member inline op_ErasedCast(x: AssertsThisTypePredicate) = AssertsThisTypePredicate x
+        // static member inline op_ErasedCast(x: IdentifierTypePredicate) = IdentifierTypePredicate x
+        // static member inline op_ErasedCast(x: ThisTypePredicate) = ThisTypePredicate x
 
     type [<RequireQualifiedAccess>] SymbolFlags =
         | None = 0
@@ -4693,6 +5358,7 @@ module Ts =
         | MethodExcludes = 103359
         | GetAccessorExcludes = 46015
         | SetAccessorExcludes = 78783
+        | AccessorExcludes = 13247
         | TypeParameterExcludes = 526824
         | TypeAliasExcludes = 788968
         | AliasExcludes = 2097152
@@ -4746,18 +5412,17 @@ module Ts =
     type __String =
         U2<obj, InternalSymbolName>
 
-    /// <summary>ReadonlyMap where keys are <c>__String</c>s.</summary>
-    type [<AllowNullLiteral>] ReadonlyUnderscoreEscapedMap<'T> =
-        inherit ReadonlyESMap<__String, 'T>
+    [<Obsolete("Use ReadonlyMap<__String, T> instead.")>]
+    type ReadonlyUnderscoreEscapedMap<'T> =
+        ReadonlyMap<__String, 'T>
 
-    /// <summary>Map where keys are <c>__String</c>s.</summary>
-    type [<AllowNullLiteral>] UnderscoreEscapedMap<'T> =
-        inherit ESMap<__String, 'T>
-        inherit ReadonlyUnderscoreEscapedMap<'T>
+    [<Obsolete("Use Map<__String, T> instead.")>]
+    type UnderscoreEscapedMap<'T> =
+        Map<__String, 'T>
 
     /// SymbolTable based on ES6 Map interface.
     type SymbolTable =
-        UnderscoreEscapedMap<Symbol>
+        Map<__String, Symbol>
 
     type [<RequireQualifiedAccess>] TypeFlags =
         | Any = 1
@@ -4790,7 +5455,8 @@ module Ts =
         | TemplateLiteral = 134217728
         | StringMapping = 268435456
         | Literal = 2944
-        | Unit = 109440
+        | Unit = 109472
+        | Freshable = 2976
         | StringOrNumberLiteral = 384
         | PossiblyFalsy = 117724
         | StringLike = 402653316
@@ -4810,14 +5476,14 @@ module Ts =
         | Narrowable = 536624127
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] DestructuringPattern =
-        | [<CompiledValue(202)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(204)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(201)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(205)>] ObjectLiteralExpression of ObjectLiteralExpression
-        static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
-        static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
-        static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
-        static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
+        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
+        // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
+        // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
+        // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
 
     type [<AllowNullLiteral>] Type =
         abstract flags: TypeFlags with get, set
@@ -4849,11 +5515,14 @@ module Ts =
         abstract isClass: unit -> bool
         abstract isIndexType: unit -> bool
 
-    type [<AllowNullLiteral>] LiteralType =
+    type [<AllowNullLiteral>] FreshableType =
         inherit Type
+        abstract freshType: FreshableType with get, set
+        abstract regularType: FreshableType with get, set
+
+    type [<AllowNullLiteral>] LiteralType =
+        inherit FreshableType
         abstract value: U3<string, float, PseudoBigInt> with get, set
-        abstract freshType: LiteralType with get, set
-        abstract regularType: LiteralType with get, set
 
     type [<AllowNullLiteral>] UniqueESSymbolType =
         inherit Type
@@ -4873,9 +5542,10 @@ module Ts =
         abstract value: PseudoBigInt with get, set
 
     type [<AllowNullLiteral>] EnumType =
-        inherit Type
+        inherit FreshableType
 
     type [<RequireQualifiedAccess>] ObjectFlags =
+        | None = 0
         | Class = 1
         | Interface = 2
         | Reference = 4
@@ -4952,8 +5622,11 @@ module Ts =
     type [<AllowNullLiteral>] TupleType =
         inherit GenericType
         abstract elementFlags: ElementFlags[] with get, set
+        /// Number of required or variadic elements
         abstract minLength: float with get, set
+        /// Number of initial required or optional elements
         abstract fixedLength: float with get, set
+        /// True if tuple has any rest or variadic elements
         abstract hasRestElement: bool with get, set
         abstract combinedFlags: ElementFlags with get, set
         abstract readonly: bool with get, set
@@ -5009,7 +5682,7 @@ module Ts =
         abstract isDistributive: bool with get, set
         abstract inferTypeParameters: TypeParameter[] option with get, set
         abstract outerTypeParameters: TypeParameter[] option with get, set
-        abstract instantiations: Map<Type> option with get, set
+        abstract instantiations: Map<string, Type> option with get, set
         abstract aliasSymbol: Symbol option with get, set
         abstract aliasTypeArguments: Type[] option with get, set
 
@@ -5035,7 +5708,7 @@ module Ts =
         inherit InstantiableType
         abstract objectFlags: ObjectFlags with get, set
         abstract baseType: Type with get, set
-        abstract substitute: Type with get, set
+        abstract ``constraint``: Type with get, set
 
     type [<RequireQualifiedAccess>] SignatureKind =
         | Call = 0
@@ -5064,6 +5737,7 @@ module Ts =
         abstract declaration: IndexSignatureDeclaration option with get, set
 
     type [<RequireQualifiedAccess>] InferencePriority =
+        | None = 0
         | NakedTypeVariable = 1
         | SpeculativeTuple = 2
         | SubstituteSource = 4
@@ -5078,10 +5752,6 @@ module Ts =
         | MaxValue = 2048
         | PriorityImpliesCombination = 416
         | Circularity = -1
-
-    [<Obsolete("Use FileExtensionInfo instead.")>]
-    type JsFileExtensionInfo =
-        FileExtensionInfo
 
     type [<AllowNullLiteral>] FileExtensionInfo =
         abstract extension: string with get, set
@@ -5136,9 +5806,15 @@ module Ts =
 
     type [<RequireQualifiedAccess>] ModuleResolutionKind =
         | Classic = 1
+        /// <deprecated>
+        /// <c>NodeJs</c> was renamed to <c>Node10</c> to better reflect the version of Node that it targets.
+        /// Use the new name or consider switching to a modern module resolution target.
+        /// </deprecated>
         | NodeJs = 2
+        | Node10 = 2
         | Node16 = 3
         | NodeNext = 99
+        | Bundler = 100
 
     type [<RequireQualifiedAccess>] ModuleDetectionKind =
         /// Files with imports, exports and/or import.meta are considered modules
@@ -5185,7 +5861,9 @@ module Ts =
         U8<string, float, bool, U2<string, float>[], string[], MapLike<string[]>, PluginImport[], ProjectReference[]> option
 
     type [<AllowNullLiteral>] CompilerOptions =
+        abstract allowImportingTsExtensions: bool option with get, set
         abstract allowJs: bool option with get, set
+        abstract allowArbitraryExtensions: bool option with get, set
         abstract allowSyntheticDefaultImports: bool option with get, set
         abstract allowUmdGlobalAccess: bool option with get, set
         abstract allowUnreachableCode: bool option with get, set
@@ -5194,6 +5872,7 @@ module Ts =
         abstract baseUrl: string option with get, set
         abstract charset: string option with get, set
         abstract checkJs: bool option with get, set
+        abstract customConditions: string[] option with get, set
         abstract declaration: bool option with get, set
         abstract declarationMap: bool option with get, set
         abstract emitDeclarationOnly: bool option with get, set
@@ -5208,6 +5887,7 @@ module Ts =
         abstract exactOptionalPropertyTypes: bool option with get, set
         abstract experimentalDecorators: bool option with get, set
         abstract forceConsistentCasingInFileNames: bool option with get, set
+        abstract ignoreDeprecations: string option with get, set
         abstract importHelpers: bool option with get, set
         abstract importsNotUsedAsValues: ImportsNotUsedAsValues option with get, set
         abstract inlineSourceMap: bool option with get, set
@@ -5258,6 +5938,8 @@ module Ts =
         abstract incremental: bool option with get, set
         abstract tsBuildInfoFile: string option with get, set
         abstract removeComments: bool option with get, set
+        abstract resolvePackageJsonExports: bool option with get, set
+        abstract resolvePackageJsonImports: bool option with get, set
         abstract rootDir: string option with get, set
         abstract rootDirs: string[] option with get, set
         abstract skipLibCheck: bool option with get, set
@@ -5279,6 +5961,7 @@ module Ts =
         abstract types: string[] option with get, set
         /// Paths used to compute primary types search locations
         abstract typeRoots: string[] option with get, set
+        abstract verbatimModuleSyntax: bool option with get, set
         abstract esModuleInterop: bool option with get, set
         abstract useDefineForClassFields: bool option with get, set
         [<EmitIndexer>] abstract Item: option: string -> U2<CompilerOptionsValue, TsConfigSourceFile> option with get, set
@@ -5293,9 +5976,6 @@ module Ts =
         [<EmitIndexer>] abstract Item: option: string -> CompilerOptionsValue option with get, set
 
     type [<AllowNullLiteral>] TypeAcquisition =
-        [<Obsolete("typingOptions.enableAutoDiscovery
-Use typeAcquisition.enable instead.")>]
-        abstract enableAutoDiscovery: bool option with get, set
         abstract enable: bool option with get, set
         abstract ``include``: string[] option with get, set
         abstract exclude: string[] option with get, set
@@ -5422,6 +6102,9 @@ Use typeAcquisition.enable instead.")>]
         abstract resolvedFileName: string with get, set
         /// <summary>True if <c>resolvedFileName</c> comes from <c>node_modules</c>.</summary>
         abstract isExternalLibraryImport: bool option with get, set
+        /// True if the original module reference used a .ts extension to refer directly to a .ts file,
+        /// which should produce an error during checking if emit is enabled.
+        abstract resolvedUsingTsExtension: bool option with get, set
 
     /// <summary>
     /// ResolvedModule with an explicitly provided <c>extension</c> property.
@@ -5432,7 +6115,7 @@ Use typeAcquisition.enable instead.")>]
         inherit ResolvedModule
         /// Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
         /// This is optional for backwards-compatibility, but will be added if not provided.
-        abstract extension: Extension with get, set
+        abstract extension: string with get, set
         abstract packageId: PackageId option with get, set
 
     /// <summary>
@@ -5479,7 +6162,6 @@ Use typeAcquisition.enable instead.")>]
 
     type [<AllowNullLiteral>] ResolvedTypeReferenceDirectiveWithFailedLookupLocations =
         abstract resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective option
-        abstract failedLookupLocations: string[]
 
     type [<AllowNullLiteral>] CompilerHost =
         inherit ModuleResolutionHost
@@ -5494,12 +6176,13 @@ Use typeAcquisition.enable instead.")>]
         abstract useCaseSensitiveFileNames: unit -> bool
         abstract getNewLine: unit -> string
         abstract readDirectory: rootDir: string * extensions: string[] * excludes: string[] option * includes: string[] * ?depth: float -> string[]
-        abstract resolveModuleNames: moduleNames: string[] * containingFile: string * reusedNames: string[] option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResolvedModule option[]
         /// <summary>Returns the module resolution cache used by a provided <c>resolveModuleNames</c> implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it</summary>
         abstract getModuleResolutionCache: unit -> ModuleResolutionCache option
-        /// This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
-        abstract resolveTypeReferenceDirectives: typeReferenceDirectiveNames: U2<string[], FileReference[]> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingFileMode: obj -> ResolvedTypeReferenceDirective option[]
+        abstract resolveModuleNameLiterals: moduleLiterals: StringLiteralLike[] * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile * reusedNames: StringLiteralLike[] option -> ResolvedModuleWithFailedLookupLocations[]
+        abstract resolveTypeReferenceDirectiveReferences: typeDirectiveReferences: 'T[] * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile option * reusedNames: 'T[] option -> ResolvedTypeReferenceDirectiveWithFailedLookupLocations[]
         abstract getEnvironmentVariable: name: string -> string option
+        /// If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives
+        abstract hasInvalidatedResolutions: filePath: Path -> bool
         abstract createHash: data: string -> string
         abstract getParsedCommandLine: fileName: string -> ParsedCommandLine option
 
@@ -5516,31 +6199,31 @@ Use typeAcquisition.enable instead.")>]
     type [<RequireQualifiedAccess>] EmitFlags =
         | None = 0
         | SingleLine = 1
-        | AdviseOnEmitNode = 2
-        | NoSubstitution = 4
-        | CapturesThis = 8
-        | NoLeadingSourceMap = 16
-        | NoTrailingSourceMap = 32
-        | NoSourceMap = 48
-        | NoNestedSourceMaps = 64
-        | NoTokenLeadingSourceMaps = 128
-        | NoTokenTrailingSourceMaps = 256
-        | NoTokenSourceMaps = 384
-        | NoLeadingComments = 512
-        | NoTrailingComments = 1024
-        | NoComments = 1536
-        | NoNestedComments = 2048
-        | HelperName = 4096
-        | ExportName = 8192
-        | LocalName = 16384
-        | InternalName = 32768
-        | Indented = 65536
-        | NoIndentation = 131072
-        | AsyncFunctionBody = 262144
-        | ReuseTempVariableScope = 524288
-        | CustomPrologue = 1048576
-        | NoHoisting = 2097152
-        | HasEndOfDeclarationMarker = 4194304
+        | MultiLine = 2
+        | AdviseOnEmitNode = 4
+        | NoSubstitution = 8
+        | CapturesThis = 16
+        | NoLeadingSourceMap = 32
+        | NoTrailingSourceMap = 64
+        | NoSourceMap = 96
+        | NoNestedSourceMaps = 128
+        | NoTokenLeadingSourceMaps = 256
+        | NoTokenTrailingSourceMaps = 512
+        | NoTokenSourceMaps = 768
+        | NoLeadingComments = 1024
+        | NoTrailingComments = 2048
+        | NoComments = 3072
+        | NoNestedComments = 4096
+        | HelperName = 8192
+        | ExportName = 16384
+        | LocalName = 32768
+        | InternalName = 65536
+        | Indented = 131072
+        | NoIndentation = 262144
+        | AsyncFunctionBody = 524288
+        | ReuseTempVariableScope = 1048576
+        | CustomPrologue = 2097152
+        | NoHoisting = 4194304
         | Iterator = 8388608
         | NoAsciiEscaping = 16777216
 
@@ -5563,8 +6246,8 @@ Use typeAcquisition.enable instead.")>]
     type [<TypeScriptTaggedUnion("scoped")>] [<RequireQualifiedAccess>] EmitHelper =
         | [<CompiledValue(false)>] UnscopedEmitHelper of UnscopedEmitHelper
         | [<CompiledValue(true)>] ScopedEmitHelper of ScopedEmitHelper
-        static member inline op_ErasedCast(x: UnscopedEmitHelper) = UnscopedEmitHelper x
-        static member inline op_ErasedCast(x: ScopedEmitHelper) = ScopedEmitHelper x
+        // static member inline op_ErasedCast(x: UnscopedEmitHelper) = UnscopedEmitHelper x
+        // static member inline op_ErasedCast(x: ScopedEmitHelper) = ScopedEmitHelper x
 
     type [<AllowNullLiteral>] EmitHelperUniqueNameCallback =
         [<Emit("$0($1...)")>] abstract Invoke: name: string -> string
@@ -5598,11 +6281,11 @@ Use typeAcquisition.enable instead.")>]
         | Function
 
     type [<AllowNullLiteral>] NodeFactory =
-        abstract createNodeArray: ?elements: 'T[] * ?hasTrailingComma: bool -> 'T[]
+        abstract createNodeArray: ?elements: 'T[] * ?hasTrailingComma: bool -> 'T[] 
         abstract createNumericLiteral: value: U2<string, float> * ?numericLiteralFlags: TokenFlags -> NumericLiteral
         abstract createBigIntLiteral: value: U2<string, PseudoBigInt> -> BigIntLiteral
         abstract createStringLiteral: text: string * ?isSingleQuote: bool -> StringLiteral
-        abstract createStringLiteralFromNode: sourceNode: PropertyNameLiteral * ?isSingleQuote: bool -> StringLiteral
+        abstract createStringLiteralFromNode: sourceNode: U2<PropertyNameLiteral, PrivateIdentifier> * ?isSingleQuote: bool -> StringLiteral
         abstract createRegularExpressionLiteral: text: string -> RegularExpressionLiteral
         abstract createIdentifier: text: string -> Identifier
         /// <summary>Create a unique temporary variable.</summary>
@@ -5629,7 +6312,10 @@ Use typeAcquisition.enable instead.")>]
         /// Create a unique name generated for a node.
         abstract getGeneratedNameForNode: node: Node option * ?flags: GeneratedIdentifierFlags -> Identifier
         abstract createPrivateIdentifier: text: string -> PrivateIdentifier
+        abstract createUniquePrivateName: ?text: string -> PrivateIdentifier
+        abstract getGeneratedPrivateNameForNode: node: Node -> PrivateIdentifier
         abstract createToken: token: SyntaxKind -> SuperExpression
+        abstract createToken: token: 'TKind -> PunctuationToken<'TKind>
         abstract createSuper: unit -> SuperExpression
         abstract createThis: unit -> ThisExpression
         abstract createNull: unit -> NullLiteral
@@ -5655,8 +6341,8 @@ Use typeAcquisition.enable instead.")>]
         abstract updateMethodSignature: node: MethodSignature * modifiers: Modifier[] option * name: PropertyName * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> MethodSignature
         abstract createMethodDeclaration: modifiers: ModifierLike[] option * asteriskToken: AsteriskToken option * name: U2<string, PropertyName> * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
         abstract updateMethodDeclaration: node: MethodDeclaration * modifiers: ModifierLike[] option * asteriskToken: AsteriskToken option * name: PropertyName * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
-        abstract createConstructorDeclaration: modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
-        abstract updateConstructorDeclaration: node: ConstructorDeclaration * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
+        abstract createConstructorDeclaration: modifiers: ModifierLike[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
+        abstract updateConstructorDeclaration: node: ConstructorDeclaration * modifiers: ModifierLike[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
         abstract createGetAccessorDeclaration: modifiers: ModifierLike[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
         abstract updateGetAccessorDeclaration: node: GetAccessorDeclaration * modifiers: ModifierLike[] option * name: PropertyName * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
         abstract createSetAccessorDeclaration: modifiers: ModifierLike[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
@@ -5665,8 +6351,8 @@ Use typeAcquisition.enable instead.")>]
         abstract updateCallSignature: node: CallSignatureDeclaration * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> CallSignatureDeclaration
         abstract createConstructSignature: typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> ConstructSignatureDeclaration
         abstract updateConstructSignature: node: ConstructSignatureDeclaration * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> ConstructSignatureDeclaration
-        abstract createIndexSignature: modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
-        abstract updateIndexSignature: node: IndexSignatureDeclaration * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
+        abstract createIndexSignature: modifiers: ModifierLike[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
+        abstract updateIndexSignature: node: IndexSignatureDeclaration * modifiers: ModifierLike[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
         abstract createTemplateLiteralTypeSpan: ``type``: TypeNode * literal: U2<TemplateMiddle, TemplateTail> -> TemplateLiteralTypeSpan
         abstract updateTemplateLiteralTypeSpan: node: TemplateLiteralTypeSpan * ``type``: TypeNode * literal: U2<TemplateMiddle, TemplateTail> -> TemplateLiteralTypeSpan
         abstract createClassStaticBlockDeclaration: body: Block -> ClassStaticBlockDeclaration
@@ -5795,13 +6481,15 @@ Use typeAcquisition.enable instead.")>]
         abstract updateNonNullChain: node: NonNullChain * expression: Expression -> NonNullChain
         abstract createMetaProperty: keywordToken: obj * name: Identifier -> MetaProperty
         abstract updateMetaProperty: node: MetaProperty * name: Identifier -> MetaProperty
+        abstract createSatisfiesExpression: expression: Expression * ``type``: TypeNode -> SatisfiesExpression
+        abstract updateSatisfiesExpression: node: SatisfiesExpression * expression: Expression * ``type``: TypeNode -> SatisfiesExpression
         abstract createTemplateSpan: expression: Expression * literal: U2<TemplateMiddle, TemplateTail> -> TemplateSpan
         abstract updateTemplateSpan: node: TemplateSpan * expression: Expression * literal: U2<TemplateMiddle, TemplateTail> -> TemplateSpan
         abstract createSemicolonClassElement: unit -> SemicolonClassElement
         abstract createBlock: statements: Statement[] * ?multiLine: bool -> Block
         abstract updateBlock: node: Block * statements: Statement[] -> Block
-        abstract createVariableStatement: modifiers: Modifier[] option * declarationList: U2<VariableDeclarationList, VariableDeclaration[]> -> VariableStatement
-        abstract updateVariableStatement: node: VariableStatement * modifiers: Modifier[] option * declarationList: VariableDeclarationList -> VariableStatement
+        abstract createVariableStatement: modifiers: ModifierLike[] option * declarationList: U2<VariableDeclarationList, VariableDeclaration[]> -> VariableStatement
+        abstract updateVariableStatement: node: VariableStatement * modifiers: ModifierLike[] option * declarationList: VariableDeclarationList -> VariableStatement
         abstract createEmptyStatement: unit -> EmptyStatement
         abstract createExpressionStatement: expression: Expression -> ExpressionStatement
         abstract updateExpressionStatement: node: ExpressionStatement * expression: Expression -> ExpressionStatement
@@ -5842,24 +6530,24 @@ Use typeAcquisition.enable instead.")>]
         abstract updateFunctionDeclaration: node: FunctionDeclaration * modifiers: ModifierLike[] option * asteriskToken: AsteriskToken option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
         abstract createClassDeclaration: modifiers: ModifierLike[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
         abstract updateClassDeclaration: node: ClassDeclaration * modifiers: ModifierLike[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
-        abstract createInterfaceDeclaration: modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
-        abstract updateInterfaceDeclaration: node: InterfaceDeclaration * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
-        abstract createTypeAliasDeclaration: modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
-        abstract updateTypeAliasDeclaration: node: TypeAliasDeclaration * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
-        abstract createEnumDeclaration: modifiers: Modifier[] option * name: U2<string, Identifier> * members: EnumMember[] -> EnumDeclaration
-        abstract updateEnumDeclaration: node: EnumDeclaration * modifiers: Modifier[] option * name: Identifier * members: EnumMember[] -> EnumDeclaration
-        abstract createModuleDeclaration: modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option * ?flags: NodeFlags -> ModuleDeclaration
-        abstract updateModuleDeclaration: node: ModuleDeclaration * modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option -> ModuleDeclaration
+        abstract createInterfaceDeclaration: modifiers: ModifierLike[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
+        abstract updateInterfaceDeclaration: node: InterfaceDeclaration * modifiers: ModifierLike[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
+        abstract createTypeAliasDeclaration: modifiers: ModifierLike[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
+        abstract updateTypeAliasDeclaration: node: TypeAliasDeclaration * modifiers: ModifierLike[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
+        abstract createEnumDeclaration: modifiers: ModifierLike[] option * name: U2<string, Identifier> * members: EnumMember[] -> EnumDeclaration
+        abstract updateEnumDeclaration: node: EnumDeclaration * modifiers: ModifierLike[] option * name: Identifier * members: EnumMember[] -> EnumDeclaration
+        abstract createModuleDeclaration: modifiers: ModifierLike[] option * name: ModuleName * body: ModuleBody option * ?flags: NodeFlags -> ModuleDeclaration
+        abstract updateModuleDeclaration: node: ModuleDeclaration * modifiers: ModifierLike[] option * name: ModuleName * body: ModuleBody option -> ModuleDeclaration
         abstract createModuleBlock: statements: Statement[] -> ModuleBlock
         abstract updateModuleBlock: node: ModuleBlock * statements: Statement[] -> ModuleBlock
         abstract createCaseBlock: clauses: CaseOrDefaultClause[] -> CaseBlock
         abstract updateCaseBlock: node: CaseBlock * clauses: CaseOrDefaultClause[] -> CaseBlock
         abstract createNamespaceExportDeclaration: name: U2<string, Identifier> -> NamespaceExportDeclaration
         abstract updateNamespaceExportDeclaration: node: NamespaceExportDeclaration * name: Identifier -> NamespaceExportDeclaration
-        abstract createImportEqualsDeclaration: modifiers: Modifier[] option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
-        abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * modifiers: Modifier[] option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
-        abstract createImportDeclaration: modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
-        abstract updateImportDeclaration: node: ImportDeclaration * modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
+        abstract createImportEqualsDeclaration: modifiers: ModifierLike[] option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
+        abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * modifiers: ModifierLike[] option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
+        abstract createImportDeclaration: modifiers: ModifierLike[] option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
+        abstract updateImportDeclaration: node: ImportDeclaration * modifiers: ModifierLike[] option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
         abstract createImportClause: isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
         abstract updateImportClause: node: ImportClause * isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
         abstract createAssertClause: elements: AssertEntry[] * ?multiLine: bool -> AssertClause
@@ -5876,10 +6564,10 @@ Use typeAcquisition.enable instead.")>]
         abstract updateNamedImports: node: NamedImports * elements: ImportSpecifier[] -> NamedImports
         abstract createImportSpecifier: isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
         abstract updateImportSpecifier: node: ImportSpecifier * isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
-        abstract createExportAssignment: modifiers: Modifier[] option * isExportEquals: bool option * expression: Expression -> ExportAssignment
-        abstract updateExportAssignment: node: ExportAssignment * modifiers: Modifier[] option * expression: Expression -> ExportAssignment
-        abstract createExportDeclaration: modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
-        abstract updateExportDeclaration: node: ExportDeclaration * modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
+        abstract createExportAssignment: modifiers: ModifierLike[] option * isExportEquals: bool option * expression: Expression -> ExportAssignment
+        abstract updateExportAssignment: node: ExportAssignment * modifiers: ModifierLike[] option * expression: Expression -> ExportAssignment
+        abstract createExportDeclaration: modifiers: ModifierLike[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
+        abstract updateExportDeclaration: node: ExportDeclaration * modifiers: ModifierLike[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
         abstract createNamedExports: elements: ExportSpecifier[] -> NamedExports
         abstract updateNamedExports: node: NamedExports * elements: ExportSpecifier[] -> NamedExports
         abstract createExportSpecifier: isTypeOnly: bool * propertyName: U2<string, Identifier> option * name: U2<string, Identifier> -> ExportSpecifier
@@ -5936,6 +6624,8 @@ Use typeAcquisition.enable instead.")>]
         abstract updateJSDocEnumTag: node: JSDocEnumTag * tagName: Identifier option * typeExpression: JSDocTypeExpression * comment: U2<string, JSDocComment[]> option -> JSDocEnumTag
         abstract createJSDocCallbackTag: tagName: Identifier option * typeExpression: JSDocSignature * ?fullName: U2<Identifier, JSDocNamespaceDeclaration> * ?comment: U2<string, JSDocComment[]> -> JSDocCallbackTag
         abstract updateJSDocCallbackTag: node: JSDocCallbackTag * tagName: Identifier option * typeExpression: JSDocSignature * fullName: U2<Identifier, JSDocNamespaceDeclaration> option * comment: U2<string, JSDocComment[]> option -> JSDocCallbackTag
+        abstract createJSDocOverloadTag: tagName: Identifier option * typeExpression: JSDocSignature * ?comment: U2<string, JSDocComment[]> -> JSDocOverloadTag
+        abstract updateJSDocOverloadTag: node: JSDocOverloadTag * tagName: Identifier option * typeExpression: JSDocSignature * comment: U2<string, JSDocComment[]> option -> JSDocOverloadTag
         abstract createJSDocAugmentsTag: tagName: Identifier option * className: obj * ?comment: U2<string, JSDocComment[]> -> JSDocAugmentsTag
         abstract updateJSDocAugmentsTag: node: JSDocAugmentsTag * tagName: Identifier option * className: obj * comment: U2<string, JSDocComment[]> option -> JSDocAugmentsTag
         abstract createJSDocImplementsTag: tagName: Identifier option * className: obj * ?comment: U2<string, JSDocComment[]> -> JSDocImplementsTag
@@ -5954,10 +6644,14 @@ Use typeAcquisition.enable instead.")>]
         abstract updateJSDocReadonlyTag: node: JSDocReadonlyTag * tagName: Identifier option * comment: U2<string, JSDocComment[]> option -> JSDocReadonlyTag
         abstract createJSDocUnknownTag: tagName: Identifier * ?comment: U2<string, JSDocComment[]> -> JSDocUnknownTag
         abstract updateJSDocUnknownTag: node: JSDocUnknownTag * tagName: Identifier * comment: U2<string, JSDocComment[]> option -> JSDocUnknownTag
-        abstract createJSDocDeprecatedTag: tagName: Identifier * ?comment: U2<string, JSDocComment[]> -> JSDocDeprecatedTag
-        abstract updateJSDocDeprecatedTag: node: JSDocDeprecatedTag * tagName: Identifier * ?comment: U2<string, JSDocComment[]> -> JSDocDeprecatedTag
-        abstract createJSDocOverrideTag: tagName: Identifier * ?comment: U2<string, JSDocComment[]> -> JSDocOverrideTag
-        abstract updateJSDocOverrideTag: node: JSDocOverrideTag * tagName: Identifier * ?comment: U2<string, JSDocComment[]> -> JSDocOverrideTag
+        abstract createJSDocDeprecatedTag: tagName: Identifier option * ?comment: U2<string, JSDocComment[]> -> JSDocDeprecatedTag
+        abstract updateJSDocDeprecatedTag: node: JSDocDeprecatedTag * tagName: Identifier option * ?comment: U2<string, JSDocComment[]> -> JSDocDeprecatedTag
+        abstract createJSDocOverrideTag: tagName: Identifier option * ?comment: U2<string, JSDocComment[]> -> JSDocOverrideTag
+        abstract updateJSDocOverrideTag: node: JSDocOverrideTag * tagName: Identifier option * ?comment: U2<string, JSDocComment[]> -> JSDocOverrideTag
+        abstract createJSDocThrowsTag: tagName: Identifier * typeExpression: JSDocTypeExpression option * ?comment: U2<string, JSDocComment[]> -> JSDocThrowsTag
+        abstract updateJSDocThrowsTag: node: JSDocThrowsTag * tagName: Identifier option * typeExpression: JSDocTypeExpression option * ?comment: U2<string, JSDocComment[]> -> JSDocThrowsTag
+        abstract createJSDocSatisfiesTag: tagName: Identifier option * typeExpression: JSDocTypeExpression * ?comment: U2<string, JSDocComment[]> -> JSDocSatisfiesTag
+        abstract updateJSDocSatisfiesTag: node: JSDocSatisfiesTag * tagName: Identifier option * typeExpression: JSDocTypeExpression * comment: U2<string, JSDocComment[]> option -> JSDocSatisfiesTag
         abstract createJSDocText: text: string -> JSDocText
         abstract updateJSDocText: node: JSDocText * text: string -> JSDocText
         abstract createJSDocComment: ?comment: U2<string, JSDocComment[]> * ?tags: JSDocTag[] -> JSDoc
@@ -5976,14 +6670,16 @@ Use typeAcquisition.enable instead.")>]
         abstract createJsxOpeningFragment: unit -> JsxOpeningFragment
         abstract createJsxJsxClosingFragment: unit -> JsxClosingFragment
         abstract updateJsxFragment: node: JsxFragment * openingFragment: JsxOpeningFragment * children: JsxChild[] * closingFragment: JsxClosingFragment -> JsxFragment
-        abstract createJsxAttribute: name: Identifier * initializer: JsxAttributeValue option -> JsxAttribute
-        abstract updateJsxAttribute: node: JsxAttribute * name: Identifier * initializer: JsxAttributeValue option -> JsxAttribute
+        abstract createJsxAttribute: name: JsxAttributeName * initializer: JsxAttributeValue option -> JsxAttribute
+        abstract updateJsxAttribute: node: JsxAttribute * name: JsxAttributeName * initializer: JsxAttributeValue option -> JsxAttribute
         abstract createJsxAttributes: properties: JsxAttributeLike[] -> JsxAttributes
         abstract updateJsxAttributes: node: JsxAttributes * properties: JsxAttributeLike[] -> JsxAttributes
         abstract createJsxSpreadAttribute: expression: Expression -> JsxSpreadAttribute
         abstract updateJsxSpreadAttribute: node: JsxSpreadAttribute * expression: Expression -> JsxSpreadAttribute
         abstract createJsxExpression: dotDotDotToken: DotDotDotToken option * expression: Expression option -> JsxExpression
         abstract updateJsxExpression: node: JsxExpression * expression: Expression option -> JsxExpression
+        abstract createJsxNamespacedName: ``namespace``: Identifier * name: Identifier -> JsxNamespacedName
+        abstract updateJsxNamespacedName: node: JsxNamespacedName * ``namespace``: Identifier * name: Identifier -> JsxNamespacedName
         abstract createCaseClause: expression: Expression * statements: Statement[] -> CaseClause
         abstract updateCaseClause: node: CaseClause * expression: Expression * statements: Statement[] -> CaseClause
         abstract createDefaultClause: statements: Statement[] -> DefaultClause
@@ -6007,8 +6703,8 @@ Use typeAcquisition.enable instead.")>]
         abstract updatePartiallyEmittedExpression: node: PartiallyEmittedExpression * expression: Expression -> PartiallyEmittedExpression
         abstract createCommaListExpression: elements: Expression[] -> CommaListExpression
         abstract updateCommaListExpression: node: CommaListExpression * elements: Expression[] -> CommaListExpression
-        abstract createBundle: sourceFiles: SourceFile[] * ?prepends: U2<UnparsedSource, InputFiles>[] -> Bundle
-        abstract updateBundle: node: Bundle * sourceFiles: SourceFile[] * ?prepends: U2<UnparsedSource, InputFiles>[] -> Bundle
+        abstract createBundle: sourceFiles: SourceFile[] -> Bundle
+        abstract updateBundle: node: Bundle * sourceFiles: SourceFile[] -> Bundle
         abstract createComma: left: Expression * right: Expression -> BinaryExpression
         abstract createAssignment: left: U2<ObjectLiteralExpression, ArrayLiteralExpression> * right: Expression -> DestructuringAssignment
         abstract createAssignment: left: Expression * right: Expression -> AssignmentExpression<EqualsToken>
@@ -6050,94 +6746,6 @@ Use typeAcquisition.enable instead.")>]
         abstract createExportDefault: expression: Expression -> ExportAssignment
         abstract createExternalModuleExport: exportName: Identifier -> ExportDeclaration
         abstract restoreOuterExpressions: outerExpression: Expression option * innerExpression: Expression * ?kinds: OuterExpressionKinds -> Expression
-        [<Obsolete("Use the overload that accepts 'modifiers'")>]
-        abstract createConstructorTypeNode: typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> ConstructorTypeNode
-        [<Obsolete("Use the overload that accepts 'modifiers'")>]
-        abstract updateConstructorTypeNode: node: ConstructorTypeNode * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> ConstructorTypeNode
-        [<Obsolete("Use the overload that accepts 'assertions'")>]
-        abstract createImportTypeNode: argument: TypeNode * ?qualifier: EntityName * ?typeArguments: TypeNode[] * ?isTypeOf: bool -> ImportTypeNode
-        [<Obsolete("Use the overload that accepts 'assertions'")>]
-        abstract updateImportTypeNode: node: ImportTypeNode * argument: TypeNode * qualifier: EntityName option * typeArguments: TypeNode[] option * ?isTypeOf: bool -> ImportTypeNode
-        [<Obsolete("Use the overload that accepts 'modifiers'")>]
-        abstract createTypeParameterDeclaration: name: U2<string, Identifier> * ?``constraint``: TypeNode * ?defaultType: TypeNode -> TypeParameterDeclaration
-        [<Obsolete("Use the overload that accepts 'modifiers'")>]
-        abstract updateTypeParameterDeclaration: node: TypeParameterDeclaration * name: Identifier * ``constraint``: TypeNode option * defaultType: TypeNode option -> TypeParameterDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createParameterDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * ?questionToken: QuestionToken * ?``type``: TypeNode * ?initializer: Expression -> ParameterDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateParameterDeclaration: node: ParameterDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * questionToken: QuestionToken option * ``type``: TypeNode option * initializer: Expression option -> ParameterDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createPropertyDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updatePropertyDeclaration: node: PropertyDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createMethodDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: U2<string, PropertyName> * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateMethodDeclaration: node: MethodDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: PropertyName * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
-        [<Obsolete("This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createConstructorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
-        [<Obsolete("This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateConstructorDeclaration: node: ConstructorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createGetAccessorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateGetAccessorDeclaration: node: GetAccessorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: PropertyName * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createSetAccessorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateSetAccessorDeclaration: node: SetAccessorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: PropertyName * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createIndexSignature: decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
-        [<Obsolete("Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.")>]
-        abstract updateIndexSignature: node: IndexSignatureDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
-        [<Obsolete("Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.")>]
-        abstract createClassStaticBlockDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * body: Block -> ClassStaticBlockDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateClassStaticBlockDeclaration: node: ClassStaticBlockDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * body: Block -> ClassStaticBlockDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createClassExpression: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassExpression
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateClassExpression: node: ClassExpression * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassExpression
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createFunctionDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateFunctionDeclaration: node: FunctionDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createClassDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
-        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateClassDeclaration: node: ClassDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createInterfaceDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateInterfaceDeclaration: node: InterfaceDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createTypeAliasDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateTypeAliasDeclaration: node: TypeAliasDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createEnumDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * members: EnumMember[] -> EnumDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateEnumDeclaration: node: EnumDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * members: EnumMember[] -> EnumDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createModuleDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option * ?flags: NodeFlags -> ModuleDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateModuleDeclaration: node: ModuleDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option -> ModuleDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createImportEqualsDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createImportDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateImportDeclaration: node: ImportDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createExportAssignment: decorators: Decorator[] option * modifiers: Modifier[] option * isExportEquals: bool option * expression: Expression -> ExportAssignment
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateExportAssignment: node: ExportAssignment * decorators: Decorator[] option * modifiers: Modifier[] option * expression: Expression -> ExportAssignment
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract createExportDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
-        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
-        abstract updateExportDeclaration: node: ExportDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
 
     type [<AllowNullLiteral>] CoreTransformationContext =
         abstract factory: NodeFactory
@@ -6189,7 +6797,7 @@ Use typeAcquisition.enable instead.")>]
         /// </summary>
         abstract onEmitNode: hint: EmitHint * node: Node * emitCallback: (EmitHint -> Node -> unit) -> unit
 
-    type [<AllowNullLiteral>] TransformationResult<'T> =
+    type [<AllowNullLiteral>] TransformationResult<'T > =
         /// Gets the transformed source files.
         abstract transformed: 'T[] with get, set
         /// Gets diagnostics for the transformation.
@@ -6213,7 +6821,7 @@ Use typeAcquisition.enable instead.")>]
     /// A function that is used to initialize and return a <c>Transformer</c> callback, which in turn
     /// will be used to transform one or more nodes.
     /// </summary>
-    type [<AllowNullLiteral>] TransformerFactory<'T> =
+    type [<AllowNullLiteral>] TransformerFactory<'T > =
         /// <summary>
         /// A function that is used to initialize and return a <c>Transformer</c> callback, which in turn
         /// will be used to transform one or more nodes.
@@ -6221,25 +6829,56 @@ Use typeAcquisition.enable instead.")>]
         [<Emit("$0($1...)")>] abstract Invoke: context: TransformationContext -> Transformer<'T>
 
     /// A function that transforms a node.
-    type [<AllowNullLiteral>] Transformer<'T> =
+    type [<AllowNullLiteral>] Transformer<'T > =
         /// A function that transforms a node.
         [<Emit("$0($1...)")>] abstract Invoke: node: 'T -> 'T
 
     /// A function that accepts and possibly transforms a node.
-    type [<AllowNullLiteral>] Visitor =
+    type Visitor =
+        Visitor<Node, Node option>
+
+    /// A function that accepts and possibly transforms a node.
+    type Visitor<'TIn > =
+        Visitor<'TIn, 'TIn option>
+
+    /// A function that accepts and possibly transforms a node.
+    type [<AllowNullLiteral>] Visitor<'TIn, 'TOut > =
         /// A function that accepts and possibly transforms a node.
-        [<Emit("$0($1...)")>] abstract Invoke: node: Node -> VisitResult<Node>
+        [<Emit("$0($1...)")>] abstract Invoke: node: 'TIn -> VisitResult<'TOut>
 
+    /// <summary>
+    /// A function that walks a node using the given visitor, lifting node arrays into single nodes,
+    /// returning an node which satisfies the test.
+    /// 
+    /// - If the input node is undefined, then the output is undefined.
+    /// - If the visitor returns undefined, then the output is undefined.
+    /// - If the output node is not undefined, then it will satisfy the test function.
+    /// - In order to obtain a return type that is more specific than <c>Node</c>, a test
+    ///    function _must_ be provided, and that function must be a type predicate.
+    /// 
+    /// For the canonical implementation of this type, @see {visitNode}.
+    /// </summary>
     type [<AllowNullLiteral>] NodeVisitor =
-        [<Emit("$0($1...)")>] abstract Invoke: nodes: 'T * visitor: Visitor option * ?test: (Node -> bool) * ?lift: (Node[] -> 'T) -> 'T
-        [<Emit("$0($1...)")>] abstract Invoke: nodes: 'T option * visitor: Visitor option * ?test: (Node -> bool) * ?lift: (Node[] -> 'T) -> 'T option
+        [<Emit("$0($1...)")>] abstract Invoke: node: 'TIn * visitor: Visitor<'TIn, 'TVisited> * test: (Node -> bool) * ?lift: (Node[] -> Node) -> U2<'TOut, obj> 
+        [<Emit("$0($1...)")>] abstract Invoke: node: 'TIn * visitor: Visitor<'TIn, 'TVisited> * ?test: (Node -> bool) * ?lift: (Node[] -> Node) -> U2<Node, obj>
 
+    /// <summary>
+    /// A function that walks a node array using the given visitor, returning an array whose contents satisfy the test.
+    /// 
+    /// - If the input node array is undefined, the output is undefined.
+    /// - If the visitor can return undefined, the node it visits in the array will be reused.
+    /// - If the output node array is not undefined, then its contents will satisfy the test.
+    /// - In order to obtain a return type that is more specific than <c>NodeArray&lt;Node&gt;</c>, a test
+    ///    function _must_ be provided, and that function must be a type predicate.
+    /// 
+    /// For the canonical implementation of this type, @see {visitNodes}.
+    /// </summary>
     type [<AllowNullLiteral>] NodesVisitor =
-        [<Emit("$0($1...)")>] abstract Invoke: nodes: 'T[] * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[]
-        [<Emit("$0($1...)")>] abstract Invoke: nodes: 'T[] option * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[] option
+        [<Emit("$0($1...)")>] abstract Invoke: nodes: 'TInArray * visitor: Visitor<'TIn, Node option> * test: (Node -> bool) * ?start: float * ?count: float -> U2<'TOut[], obj> 
+        [<Emit("$0($1...)")>] abstract Invoke: nodes: 'TInArray * visitor: Visitor<'TIn, Node option> * ?test: (Node -> bool) * ?start: float * ?count: float -> U2<Node[], obj> 
 
     type VisitResult<'T> =
-        U2<'T, 'T[]> option
+        U2<'T, Node[]>
 
     type [<AllowNullLiteral>] Printer =
         /// <summary>Print a node and its subtree as-is, without any emit transformations.</summary>
@@ -6261,7 +6900,7 @@ Use typeAcquisition.enable instead.")>]
         /// </param>
         abstract printNode: hint: EmitHint * node: Node * sourceFile: SourceFile -> string
         /// Prints a list of nodes using the given format flags
-        abstract printList: format: ListFormat * list: 'T[] * sourceFile: SourceFile -> string
+        abstract printList: format: ListFormat * list: 'T[] * sourceFile: SourceFile -> string 
         /// Prints a source file as-is, without any emit transformations.
         abstract printFile: sourceFile: SourceFile -> string
         /// Prints a bundle of source files as-is, without any emit transformations.
@@ -6320,7 +6959,6 @@ Use typeAcquisition.enable instead.")>]
         abstract noEmitHelpers: bool option with get, set
 
     type [<AllowNullLiteral>] GetEffectiveTypeRootsHost =
-        abstract directoryExists: directoryName: string -> bool
         abstract getCurrentDirectory: unit -> string
 
     type [<AllowNullLiteral>] TextSpan =
@@ -6436,6 +7074,12 @@ Use typeAcquisition.enable instead.")>]
         abstract includeInlayEnumMemberValueHints: bool option
         abstract allowRenameOfImportPath: bool option
         abstract autoImportFileExcludePatterns: string[] option
+        abstract organizeImportsIgnoreCase: U2<bool, string> option
+        abstract organizeImportsCollation: UserPreferencesOrganizeImportsCollation option
+        abstract organizeImportsLocale: string option
+        abstract organizeImportsNumericCollation: bool option
+        abstract organizeImportsAccentCollation: bool option
+        abstract organizeImportsCaseFirst: UserPreferencesOrganizeImportsCaseFirst option
 
     /// Represents a bigint literal value without requiring bigint support
     type [<AllowNullLiteral>] PseudoBigInt =
@@ -6452,6 +7096,18 @@ Use typeAcquisition.enable instead.")>]
 
     type [<AllowNullLiteral>] DirectoryWatcherCallback =
         [<Emit("$0($1...)")>] abstract Invoke: fileName: string -> unit
+
+    type [<StringEnum>] [<RequireQualifiedAccess>] BufferEncoding =
+        | Ascii
+        | Utf8
+        | [<CompiledName("utf-8")>] ``utf-8``
+        | Utf16le
+        | Ucs2
+        | [<CompiledName("ucs-2")>] ``ucs-2``
+        | Base64
+        | Latin1
+        | Binary
+        | Hex
 
     type [<AllowNullLiteral>] System =
         abstract args: string[] with get, set
@@ -6493,13 +7149,13 @@ Use typeAcquisition.enable instead.")>]
         abstract close: unit -> unit
 
     type [<AllowNullLiteral>] ErrorCallback =
-        [<Emit("$0($1...)")>] abstract Invoke: message: DiagnosticMessage * length: float -> unit
+        [<Emit("$0($1...)")>] abstract Invoke: message: DiagnosticMessage * length: float * ?arg0: obj -> unit
 
     type [<AllowNullLiteral>] Scanner =
-        abstract getStartPos: unit -> float
         abstract getToken: unit -> SyntaxKind
-        abstract getTextPos: unit -> float
-        abstract getTokenPos: unit -> float
+        abstract getTokenFullStart: unit -> float
+        abstract getTokenStart: unit -> float
+        abstract getTokenEnd: unit -> float
         abstract getTokenText: unit -> string
         abstract getTokenValue: unit -> string
         abstract hasUnicodeEscape: unit -> bool
@@ -6512,7 +7168,6 @@ Use typeAcquisition.enable instead.")>]
         abstract reScanSlashToken: unit -> SyntaxKind
         abstract reScanAsteriskEqualsToken: unit -> SyntaxKind
         abstract reScanTemplateToken: isTaggedTemplate: bool -> SyntaxKind
-        abstract reScanTemplateHeadOrNoSubstitutionTemplate: unit -> SyntaxKind
         abstract scanJsxIdentifier: unit -> SyntaxKind
         abstract scanJsxAttributeValue: unit -> SyntaxKind
         abstract reScanJsxAttributeValue: unit -> SyntaxKind
@@ -6529,7 +7184,7 @@ Use typeAcquisition.enable instead.")>]
         abstract setOnError: onError: ErrorCallback option -> unit
         abstract setScriptTarget: scriptTarget: ScriptTarget -> unit
         abstract setLanguageVariant: variant: LanguageVariant -> unit
-        abstract setTextPos: textPos: float -> unit
+        abstract resetTokenState: pos: float -> unit
         abstract lookAhead: callback: (unit -> 'T) -> 'T
         abstract scanRange: start: float * length: float * callback: (unit -> 'T) -> 'T
         abstract tryScan: callback: (unit -> 'T) -> 'T
@@ -6544,7 +7199,7 @@ Use typeAcquisition.enable instead.")>]
         /// and files on disk, but needs to be done with a module resolution cache in scope to be performant.
         /// This is usually <c>undefined</c> for compilations that do not have <c>moduleResolution</c> values of <c>node16</c> or <c>nodenext</c>.
         /// </summary>
-        abstract impliedNodeFormat: ModuleKind option with get, set
+        abstract impliedNodeFormat: ResolutionMode option with get, set
         /// <summary>
         /// Controls how module-y-ness is set for the given file. Usually the result of calling
         /// <c>getSetExternalModuleIndicator</c> on a valid <c>CompilerOptions</c> object. If not present, the default
@@ -6572,7 +7227,7 @@ Use typeAcquisition.enable instead.")>]
         abstract watchOptions: WatchOptions option with get, set
         abstract typeAcquisition: TypeAcquisition option with get, set
         /// Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet
-        abstract extendedConfigPath: string option with get, set
+        abstract extendedConfigPath: U2<string, string[]> option with get, set
 
     type [<AllowNullLiteral>] ExtendedConfigCacheEntry =
         abstract extendedResult: TsConfigSourceFile with get, set
@@ -6580,24 +7235,38 @@ Use typeAcquisition.enable instead.")>]
 
     type [<AllowNullLiteral>] TypeReferenceDirectiveResolutionCache =
         inherit PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>
+        inherit NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>
         inherit PackageJsonInfoCache
 
     type [<AllowNullLiteral>] ModeAwareCache<'T> =
-        abstract get: key: string * mode: ModuleKind option -> 'T option
-        abstract set: key: string * mode: ModuleKind option * value: 'T -> ModeAwareCache<'T>
-        abstract delete: key: string * mode: ModuleKind option -> ModeAwareCache<'T>
-        abstract has: key: string * mode: ModuleKind option -> bool
-        abstract forEach: cb: ('T -> string -> ModuleKind option -> unit) -> unit
+        abstract get: key: string * mode: ResolutionMode -> 'T option
+        abstract set: key: string * mode: ResolutionMode * value: 'T -> ModeAwareCache<'T>
+        abstract delete: key: string * mode: ResolutionMode -> ModeAwareCache<'T>
+        abstract has: key: string * mode: ResolutionMode -> bool
+        abstract forEach: cb: ('T -> string -> ResolutionMode -> unit) -> unit
         abstract size: unit -> float
 
     /// Cached resolutions per containing directory.
     /// This assumes that any module id will have the same resolution for sibling files located in the same folder.
     type [<AllowNullLiteral>] PerDirectoryResolutionCache<'T> =
+        abstract getFromDirectoryCache: name: string * mode: ResolutionMode * directoryName: string * redirectedReference: ResolvedProjectReference option -> 'T option
         abstract getOrCreateCacheForDirectory: directoryName: string * ?redirectedReference: ResolvedProjectReference -> ModeAwareCache<'T>
         abstract clear: unit -> unit
         /// Updates with the current compilerOptions the cache will operate with.
         /// This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
         abstract update: options: CompilerOptions -> unit
+
+    type [<AllowNullLiteral>] NonRelativeNameResolutionCache<'T> =
+        abstract getFromNonRelativeNameCache: nonRelativeName: string * mode: ResolutionMode * directoryName: string * redirectedReference: ResolvedProjectReference option -> 'T option
+        abstract getOrCreateCacheForNonRelativeName: nonRelativeName: string * mode: ResolutionMode * ?redirectedReference: ResolvedProjectReference -> PerNonRelativeNameCache<'T>
+        abstract clear: unit -> unit
+        /// Updates with the current compilerOptions the cache will operate with.
+        /// This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
+        abstract update: options: CompilerOptions -> unit
+
+    type [<AllowNullLiteral>] PerNonRelativeNameCache<'T> =
+        abstract get: directory: string -> 'T option
+        abstract set: directory: string * result: 'T -> unit
 
     type [<AllowNullLiteral>] ModuleResolutionCache =
         inherit PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>
@@ -6608,24 +7277,19 @@ Use typeAcquisition.enable instead.")>]
     /// Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
     /// We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
     type [<AllowNullLiteral>] NonRelativeModuleNameResolutionCache =
+        inherit NonRelativeNameResolutionCache<ResolvedModuleWithFailedLookupLocations>
         inherit PackageJsonInfoCache
-        abstract getOrCreateCacheForModuleName: nonRelativeModuleName: string * mode: ModuleKind option * ?redirectedReference: ResolvedProjectReference -> PerModuleNameCache
 
     type [<AllowNullLiteral>] PackageJsonInfoCache =
         abstract clear: unit -> unit
 
-    type [<AllowNullLiteral>] PerModuleNameCache =
-        abstract get: directory: string -> ResolvedModuleWithFailedLookupLocations option
-        abstract set: directory: string * result: ResolvedModuleWithFailedLookupLocations -> unit
+    type PerModuleNameCache =
+        PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>
 
     type [<AllowNullLiteral>] FormatDiagnosticsHost =
         abstract getCurrentDirectory: unit -> string
         abstract getCanonicalFileName: fileName: string -> string
         abstract getNewLine: unit -> string
-
-    [<Obsolete("")>]
-    type [<AllowNullLiteral>] ResolveProjectReferencePathHost =
-        abstract fileExists: fileName: string -> bool
 
     type [<AllowNullLiteral>] EmitOutput =
         abstract outputFiles: OutputFile[] with get, set
@@ -6640,8 +7304,6 @@ Use typeAcquisition.enable instead.")>]
         {| result: 'T; affected: U2<SourceFile, Program> |} option
 
     type [<AllowNullLiteral>] BuilderProgramHost =
-        /// return true if file names are treated with case sensitivity
-        abstract useCaseSensitiveFileNames: unit -> bool
         /// If provided this would be used this hash instead of actual file shape text for detecting changes
         abstract createHash: data: string -> string
         /// When emit or emitNextAffectedFile are called without writeFile,
@@ -6711,7 +7373,7 @@ Use typeAcquisition.enable instead.")>]
         abstract getCurrentDirectory: unit -> string
         abstract readFile: fileName: string -> string option
 
-    type [<AllowNullLiteral>] IncrementalProgramOptions<'T> =
+    type [<AllowNullLiteral>] IncrementalProgramOptions<'T > =
         abstract rootNames: string[] with get, set
         abstract options: CompilerOptions with get, set
         abstract configFileParsingDiagnostics: Diagnostic[] option with get, set
@@ -6723,7 +7385,7 @@ Use typeAcquisition.enable instead.")>]
         [<Emit("$0($1...)")>] abstract Invoke: diagnostic: Diagnostic * newLine: string * options: CompilerOptions * ?errorCount: float -> unit
 
     /// Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program
-    type [<AllowNullLiteral>] CreateProgram<'T> =
+    type [<AllowNullLiteral>] CreateProgram<'T > =
         /// Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program
         [<Emit("$0($1...)")>] abstract Invoke: rootNames: string[] option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: 'T * ?configFileParsingDiagnostics: Diagnostic[] * ?projectReferences: ProjectReference[] -> 'T
 
@@ -6732,15 +7394,15 @@ Use typeAcquisition.enable instead.")>]
         /// If provided, called with Diagnostic message that informs about change in watch status
         abstract onWatchStatusChange: diagnostic: Diagnostic * newLine: string * options: CompilerOptions * ?errorCount: float -> unit
         /// Used to watch changes in source files, missing files needed to update the program or config file
-        abstract watchFile: path: string * callback: FileWatcherCallback * ?pollingInterval: float * ?options: CompilerOptions -> FileWatcher
+        abstract watchFile: path: string * callback: FileWatcherCallback * ?pollingInterval: float * ?options: WatchOptions -> FileWatcher
         /// Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added
-        abstract watchDirectory: path: string * callback: DirectoryWatcherCallback * ?recursive: bool * ?options: CompilerOptions -> FileWatcher
+        abstract watchDirectory: path: string * callback: DirectoryWatcherCallback * ?recursive: bool * ?options: WatchOptions -> FileWatcher
         /// If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together
         abstract setTimeout: callback: (obj option[] -> unit) * ms: float * [<ParamArray>] args: obj option[] -> obj option
         /// If provided, will be used to reset existing delayed compilation
         abstract clearTimeout: timeoutId: obj option -> unit
 
-    type [<AllowNullLiteral>] ProgramHost<'T> =
+    type [<AllowNullLiteral>] ProgramHost<'T > =
         /// Used to create the program when need for program creation or recreation detected
         abstract createProgram: CreateProgram<'T> with get, set
         abstract useCaseSensitiveFileNames: unit -> bool
@@ -6767,14 +7429,14 @@ Use typeAcquisition.enable instead.")>]
         abstract trace: s: string -> unit
         /// If provided is used to get the environment variable
         abstract getEnvironmentVariable: name: string -> string option
-        /// If provided, used to resolve the module names, otherwise typescript's default module resolution
-        abstract resolveModuleNames: moduleNames: string[] * containingFile: string * reusedNames: string[] option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResolvedModule option[]
-        /// If provided, used to resolve type reference directives, otherwise typescript's default resolution
-        abstract resolveTypeReferenceDirectives: typeReferenceDirectiveNames: U2<string[], FileReference[]> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingFileMode: obj -> ResolvedTypeReferenceDirective option[]
+        abstract resolveModuleNameLiterals: moduleLiterals: StringLiteralLike[] * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile * reusedNames: StringLiteralLike[] option -> ResolvedModuleWithFailedLookupLocations[]
+        abstract resolveTypeReferenceDirectiveReferences: typeDirectiveReferences: 'T[] * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile option * reusedNames: 'T[] option -> ResolvedTypeReferenceDirectiveWithFailedLookupLocations[]
+        /// If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives
+        abstract hasInvalidatedResolutions: filePath: Path -> bool
         /// <summary>Returns the module resolution cache used by a provided <c>resolveModuleNames</c> implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it</summary>
         abstract getModuleResolutionCache: unit -> ModuleResolutionCache option
 
-    type [<AllowNullLiteral>] WatchCompilerHost<'T> =
+    type [<AllowNullLiteral>] WatchCompilerHost<'T > =
         inherit ProgramHost<'T>
         inherit WatchHost
         /// Instead of using output d.ts file from project reference, use its source file
@@ -6785,7 +7447,7 @@ Use typeAcquisition.enable instead.")>]
         abstract afterProgramCreate: program: 'T -> unit
 
     /// Host to create watch with root files and options
-    type [<AllowNullLiteral>] WatchCompilerHostOfFilesAndCompilerOptions<'T> =
+    type [<AllowNullLiteral>] WatchCompilerHostOfFilesAndCompilerOptions<'T > =
         inherit WatchCompilerHost<'T>
         /// root files to use to generate program
         abstract rootFiles: string[] with get, set
@@ -6796,7 +7458,7 @@ Use typeAcquisition.enable instead.")>]
         abstract projectReferences: ProjectReference[] option with get, set
 
     /// Host to create watch with config file
-    type [<AllowNullLiteral>] WatchCompilerHostOfConfigFile<'T> =
+    type [<AllowNullLiteral>] WatchCompilerHostOfConfigFile<'T > =
         inherit WatchCompilerHost<'T>
         inherit ConfigFileDiagnosticsReporter
         /// Name of the config file to compile
@@ -6831,6 +7493,11 @@ Use typeAcquisition.enable instead.")>]
         abstract verbose: bool option with get, set
         abstract incremental: bool option with get, set
         abstract assumeChangesOnlyAffectDirectDependencies: bool option with get, set
+        abstract declaration: bool option with get, set
+        abstract declarationMap: bool option with get, set
+        abstract emitDeclarationOnly: bool option with get, set
+        abstract sourceMap: bool option with get, set
+        abstract inlineSourceMap: bool option with get, set
         abstract traceResolution: bool option with get, set
         [<EmitIndexer>] abstract Item: option: string -> CompilerOptionsValue option with get, set
 
@@ -6841,7 +7508,7 @@ Use typeAcquisition.enable instead.")>]
         abstract fileName: string with get, set
         abstract line: float with get, set
 
-    type [<AllowNullLiteral>] SolutionBuilderHostBase<'T> =
+    type [<AllowNullLiteral>] SolutionBuilderHostBase<'T > =
         inherit ProgramHost<'T>
         abstract createDirectory: path: string -> unit
         /// Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
@@ -6856,15 +7523,15 @@ Use typeAcquisition.enable instead.")>]
         abstract reportSolutionBuilderStatus: DiagnosticReporter with get, set
         abstract afterProgramEmitAndDiagnostics: program: 'T -> unit
 
-    type [<AllowNullLiteral>] SolutionBuilderHost<'T> =
+    type [<AllowNullLiteral>] SolutionBuilderHost<'T > =
         inherit SolutionBuilderHostBase<'T>
         abstract reportErrorSummary: ReportEmitErrorSummary option with get, set
 
-    type [<AllowNullLiteral>] SolutionBuilderWithWatchHost<'T> =
+    type [<AllowNullLiteral>] SolutionBuilderWithWatchHost<'T > =
         inherit SolutionBuilderHostBase<'T>
         inherit WatchHost
 
-    type [<AllowNullLiteral>] SolutionBuilder<'T> =
+    type [<AllowNullLiteral>] SolutionBuilder<'T > =
         abstract build: ?project: string * ?cancellationToken: CancellationToken * ?writeFile: WriteFileCallback * ?getCustomTransformers: (string -> CustomTransformers) -> ExitStatus
         abstract clean: ?project: string -> ExitStatus
         abstract buildReferences: project: string * ?cancellationToken: CancellationToken * ?writeFile: WriteFileCallback * ?getCustomTransformers: (string -> CustomTransformers) -> ExitStatus
@@ -6873,6 +7540,7 @@ Use typeAcquisition.enable instead.")>]
 
     type [<RequireQualifiedAccess>] InvalidatedProjectKind =
         | Build = 0
+        /// <deprecated />
         | UpdateBundle = 1
         | UpdateOutputFileStamps = 2
 
@@ -6889,7 +7557,7 @@ Use typeAcquisition.enable instead.")>]
         abstract kind: InvalidatedProjectKind
         abstract updateOutputFileStatmps: unit -> unit
 
-    type [<AllowNullLiteral>] BuildInvalidedProject<'T> =
+    type [<AllowNullLiteral>] BuildInvalidedProject<'T > =
         inherit InvalidatedProjectBase
         abstract kind: InvalidatedProjectKind
         abstract getBuilderProgram: unit -> 'T option
@@ -6905,18 +7573,27 @@ Use typeAcquisition.enable instead.")>]
         abstract getSemanticDiagnosticsOfNextAffectedFile: ?cancellationToken: CancellationToken * ?ignoreSourceFile: (SourceFile -> bool) -> AffectedFileResult<Diagnostic[]>
         abstract emit: ?targetSourceFile: SourceFile * ?writeFile: WriteFileCallback * ?cancellationToken: CancellationToken * ?emitOnlyDtsFiles: bool * ?customTransformers: CustomTransformers -> EmitResult option
 
-    type [<AllowNullLiteral>] UpdateBundleProject<'T> =
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] UpdateBundleProject<'T > =
         inherit InvalidatedProjectBase
         abstract kind: InvalidatedProjectKind
         abstract emit: ?writeFile: WriteFileCallback * ?customTransformers: CustomTransformers -> U2<EmitResult, BuildInvalidedProject<'T>> option
 
-    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] InvalidatedProject<'T> =
+    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] InvalidatedProject<'T > =
         | [<CompiledValue(0)>] BuildInvalidedProject of BuildInvalidedProject<'T>
         | [<CompiledValue(1)>] UpdateBundleProject of UpdateBundleProject<'T>
         | [<CompiledValue(2)>] UpdateOutputFileStampsProject of UpdateOutputFileStampsProject
-        static member inline op_ErasedCast(x: BuildInvalidedProject<'T>) = BuildInvalidedProject x
-        static member inline op_ErasedCast(x: UpdateBundleProject<'T>) = UpdateBundleProject x
-        static member inline op_ErasedCast(x: UpdateOutputFileStampsProject) = UpdateOutputFileStampsProject x
+        // static member inline op_ErasedCast(x: BuildInvalidedProject<'T>) = BuildInvalidedProject x
+        // static member inline op_ErasedCast(x: UpdateBundleProject<'T>) = UpdateBundleProject x
+        // static member inline op_ErasedCast(x: UpdateOutputFileStampsProject) = UpdateOutputFileStampsProject x
+
+    module JsTyping =
+
+        type [<AllowNullLiteral>] TypingResolutionHost =
+            abstract directoryExists: path: string -> bool
+            abstract fileExists: fileName: string -> bool
+            abstract readFile: path: string * ?encoding: string -> string option
+            abstract readDirectory: rootDir: string * extensions: string[] * excludes: string[] option * includes: string[] option * ?depth: float -> string[]
 
     module Server =
 
@@ -6941,8 +7618,11 @@ Use typeAcquisition.enable instead.")>]
         type EventInitializationFailed =
             string
 
+        type ActionWatchTypingLocations =
+            string
+
         type [<AllowNullLiteral>] TypingInstallerResponse =
-            abstract kind: U7<ActionSet, ActionInvalidate, EventTypesRegistry, ActionPackageInstalled, EventBeginInstallTypes, EventEndInstallTypes, EventInitializationFailed>
+            abstract kind: U8<ActionSet, ActionInvalidate, EventTypesRegistry, ActionPackageInstalled, EventBeginInstallTypes, EventEndInstallTypes, EventInitializationFailed, ActionWatchTypingLocations>
 
         type [<AllowNullLiteral>] TypingInstallerRequestWithProjectName =
             abstract projectName: string
@@ -6952,7 +7632,6 @@ Use typeAcquisition.enable instead.")>]
             abstract fileNames: string[]
             abstract projectRootPath: Path
             abstract compilerOptions: CompilerOptions
-            abstract watchOptions: WatchOptions option
             abstract typeAcquisition: TypeAcquisition
             abstract unresolvedImports: SortedReadonlyArray<string>
             abstract cachePath: string option
@@ -7008,6 +7687,13 @@ Use typeAcquisition.enable instead.")>]
             abstract kind: EventEndInstallTypes
             abstract installSuccess: bool
 
+        type [<AllowNullLiteral>] InstallTypingHost =
+            inherit JsTyping.TypingResolutionHost
+            abstract useCaseSensitiveFileNames: bool with get, set
+            abstract writeFile: path: string * content: string -> unit
+            abstract createDirectory: path: string -> unit
+            abstract getCurrentDirectory: unit -> string
+
         type [<AllowNullLiteral>] SetTypings =
             inherit ProjectResponse
             abstract typeAcquisition: TypeAcquisition
@@ -7015,6 +7701,12 @@ Use typeAcquisition.enable instead.")>]
             abstract typings: string[]
             abstract unresolvedImports: SortedReadonlyArray<string>
             abstract kind: ActionSet
+
+        type [<AllowNullLiteral>] WatchTypingLocations =
+            inherit ProjectResponse
+            /// if files is undefined, retain same set of watchers
+            abstract files: string[] option
+            abstract kind: ActionWatchTypingLocations
 
     /// Represents an immutable snapshot of a script at a specified time.Once acquired, the
     /// snapshot is observably immutable. i.e. the same calls with the same parameters will return
@@ -7092,9 +7784,9 @@ Use typeAcquisition.enable instead.")>]
         abstract readFile: path: string * ?encoding: string -> string option
         abstract fileExists: path: string -> bool
         abstract getTypeRootsVersion: unit -> float
-        abstract resolveModuleNames: moduleNames: string[] * containingFile: string * reusedNames: string[] option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResolvedModule option[]
-        abstract getResolvedModuleWithFailedLookupLocationsFromCache: modulename: string * containingFile: string * ?resolutionMode: ModuleKind -> ResolvedModuleWithFailedLookupLocations option
-        abstract resolveTypeReferenceDirectives: typeDirectiveNames: U2<string[], FileReference[]> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingFileMode: obj -> ResolvedTypeReferenceDirective option[]
+        abstract getResolvedModuleWithFailedLookupLocationsFromCache: modulename: string * containingFile: string * ?resolutionMode: ResolutionMode -> ResolvedModuleWithFailedLookupLocations option
+        abstract resolveModuleNameLiterals: moduleLiterals: StringLiteralLike[] * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile * reusedNames: StringLiteralLike[] option -> ResolvedModuleWithFailedLookupLocations[]
+        abstract resolveTypeReferenceDirectiveReferences: typeDirectiveReferences: 'T[] * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * containingSourceFile: SourceFile option * reusedNames: 'T[] option -> ResolvedTypeReferenceDirectiveWithFailedLookupLocations[]
         abstract getDirectories: directoryName: string -> string[]
         /// Gets a set of custom transformers to use during emit.
         abstract getCustomTransformers: unit -> CustomTransformers option
@@ -7154,11 +7846,7 @@ Use typeAcquisition.enable instead.")>]
         abstract getSuggestionDiagnostics: fileName: string -> DiagnosticWithLocation[]
         /// Gets global diagnostics related to the program configuration and compiler options.
         abstract getCompilerOptionsDiagnostics: unit -> Diagnostic[]
-        [<Obsolete("Use getEncodedSyntacticClassifications instead.")>]
-        abstract getSyntacticClassifications: fileName: string * span: TextSpan -> ClassifiedSpan[]
         abstract getSyntacticClassifications: fileName: string * span: TextSpan * format: SemanticClassificationFormat -> U2<ClassifiedSpan[], ClassifiedSpan2020[]>
-        [<Obsolete("Use getEncodedSemanticClassifications instead.")>]
-        abstract getSemanticClassifications: fileName: string * span: TextSpan -> ClassifiedSpan[]
         abstract getSemanticClassifications: fileName: string * span: TextSpan * format: SemanticClassificationFormat -> U2<ClassifiedSpan[], ClassifiedSpan2020[]>
         /// Encoded as triples of [start, length, ClassificationType].
         abstract getEncodedSyntacticClassifications: fileName: string * span: TextSpan -> Classifications
@@ -7201,9 +7889,7 @@ Use typeAcquisition.enable instead.")>]
         abstract getBreakpointStatementAtPosition: fileName: string * position: float -> TextSpan option
         abstract getSignatureHelpItems: fileName: string * position: float * options: SignatureHelpItemsOptions option -> SignatureHelpItems option
         abstract getRenameInfo: fileName: string * position: float * preferences: UserPreferences -> RenameInfo
-        [<Obsolete("Use the signature with `UserPreferences` instead.")>]
-        abstract getRenameInfo: fileName: string * position: float * ?options: RenameInfoOptions -> RenameInfo
-        abstract findRenameLocations: fileName: string * position: float * findInStrings: bool * findInComments: bool * ?providePrefixAndSuffixTextForRename: bool -> RenameLocation[] option
+        abstract findRenameLocations: fileName: string * position: float * findInStrings: bool * findInComments: bool * preferences: UserPreferences -> RenameLocation[] option
         abstract getSmartSelectionRange: fileName: string * position: float -> SelectionRange
         abstract getDefinitionAtPosition: fileName: string * position: float -> DefinitionInfo[] option
         abstract getDefinitionAndBoundSpan: fileName: string * position: float -> DefinitionInfoAndBoundSpan option
@@ -7213,8 +7899,6 @@ Use typeAcquisition.enable instead.")>]
         abstract findReferences: fileName: string * position: float -> ReferencedSymbol[] option
         abstract getDocumentHighlights: fileName: string * position: float * filesToSearch: string[] -> DocumentHighlights[] option
         abstract getFileReferences: fileName: string -> ReferenceEntry[]
-        [<Obsolete("")>]
-        abstract getOccurrencesAtPosition: fileName: string * position: float -> ReferenceEntry[] option
         abstract getNavigateToItems: searchValue: string * ?maxResultCount: float * ?fileName: string * ?excludeDtsFiles: bool -> NavigateToItem[]
         abstract getNavigationBarItems: fileName: string -> NavigationBarItem[]
         abstract getNavigationTree: fileName: string -> NavigationTree
@@ -7229,13 +7913,14 @@ Use typeAcquisition.enable instead.")>]
         abstract getFormattingEditsForRange: fileName: string * start: float * ``end``: float * options: U2<FormatCodeOptions, FormatCodeSettings> -> TextChange[]
         abstract getFormattingEditsForDocument: fileName: string * options: U2<FormatCodeOptions, FormatCodeSettings> -> TextChange[]
         abstract getFormattingEditsAfterKeystroke: fileName: string * position: float * key: string * options: U2<FormatCodeOptions, FormatCodeSettings> -> TextChange[]
-        abstract getDocCommentTemplateAtPosition: fileName: string * position: float * ?options: DocCommentTemplateOptions -> TextInsertion option
+        abstract getDocCommentTemplateAtPosition: fileName: string * position: float * ?options: DocCommentTemplateOptions * ?formatOptions: FormatCodeSettings -> TextInsertion option
         abstract isValidBraceCompletionAtPosition: fileName: string * position: float * openingBrace: float -> bool
         /// <summary>
         /// This will return a defined result if the position is after the <c>&gt;</c> of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
         /// Editors should call this after <c>&gt;</c> is typed.
         /// </summary>
         abstract getJsxClosingTagAtPosition: fileName: string * position: float -> JsxClosingTagInfo option
+        abstract getLinkedEditingRangeAtPosition: fileName: string * position: float -> LinkedEditingInfo option
         abstract getSpanOfEnclosingComment: fileName: string * position: float * onlyMultiLine: bool -> TextSpan option
         abstract toLineColumnOffset: fileName: string * position: float -> LineAndCharacter
         abstract getCodeFixesAtPosition: fileName: string * start: float * ``end``: float * errorCodes: float[] * formatOptions: FormatCodeSettings * preferences: UserPreferences -> CodeFixAction[]
@@ -7243,14 +7928,15 @@ Use typeAcquisition.enable instead.")>]
         abstract applyCodeActionCommand: action: CodeActionCommand * ?formatSettings: FormatCodeSettings -> Promise<ApplyCodeActionCommandResult>
         abstract applyCodeActionCommand: action: CodeActionCommand[] * ?formatSettings: FormatCodeSettings -> Promise<ApplyCodeActionCommandResult[]>
         abstract applyCodeActionCommand: action: U2<CodeActionCommand, CodeActionCommand[]> * ?formatSettings: FormatCodeSettings -> Promise<U2<ApplyCodeActionCommandResult, ApplyCodeActionCommandResult[]>>
-        [<Obsolete("`fileName` will be ignored")>]
-        abstract applyCodeActionCommand: fileName: string * action: CodeActionCommand -> Promise<ApplyCodeActionCommandResult>
-        [<Obsolete("`fileName` will be ignored")>]
-        abstract applyCodeActionCommand: fileName: string * action: CodeActionCommand[] -> Promise<ApplyCodeActionCommandResult[]>
-        [<Obsolete("`fileName` will be ignored")>]
-        abstract applyCodeActionCommand: fileName: string * action: U2<CodeActionCommand, CodeActionCommand[]> -> Promise<U2<ApplyCodeActionCommandResult, ApplyCodeActionCommandResult[]>>
-        abstract getApplicableRefactors: fileName: string * positionOrRange: U2<float, TextRange> * preferences: UserPreferences option * ?triggerReason: RefactorTriggerReason * ?kind: string -> ApplicableRefactorInfo[]
-        abstract getEditsForRefactor: fileName: string * formatOptions: FormatCodeSettings * positionOrRange: U2<float, TextRange> * refactorName: string * actionName: string * preferences: UserPreferences option -> RefactorEditInfo option
+        /// <param name="includeInteractiveActions">
+        /// Include refactor actions that require additional arguments to be
+        /// passed when calling <c>getEditsForRefactor</c>. When true, clients should inspect the <c>isInteractive</c>
+        /// property of each returned <c>RefactorActionInfo</c> and ensure they are able to collect the appropriate
+        /// arguments for any interactive action before offering it.
+        /// </param>
+        abstract getApplicableRefactors: fileName: string * positionOrRange: U2<float, TextRange> * preferences: UserPreferences option * ?triggerReason: RefactorTriggerReason * ?kind: string * ?includeInteractiveActions: bool -> ApplicableRefactorInfo[]
+        abstract getEditsForRefactor: fileName: string * formatOptions: FormatCodeSettings * positionOrRange: U2<float, TextRange> * refactorName: string * actionName: string * preferences: UserPreferences option * ?interactiveRefactorArguments: InteractiveRefactorArguments -> RefactorEditInfo option
+        abstract getMoveToRefactoringFileSuggestions: fileName: string * positionOrRange: U2<float, TextRange> * preferences: UserPreferences option * ?triggerReason: RefactorTriggerReason * ?kind: string -> {| newFileName: string; files: string[] |}
         abstract organizeImports: args: OrganizeImportsArgs * formatOptions: FormatCodeSettings * preferences: UserPreferences option -> FileTextChanges[]
         abstract getEditsForFileRename: oldFilePath: string * newFilePath: string * formatOptions: FormatCodeSettings * preferences: UserPreferences option -> FileTextChanges[]
         abstract getEmitOutput: fileName: string * ?emitOnlyDtsFiles: bool * ?forceDtsEmit: bool -> EmitOutput
@@ -7259,6 +7945,7 @@ Use typeAcquisition.enable instead.")>]
         abstract toggleMultilineComment: fileName: string * textRange: TextRange -> TextChange[]
         abstract commentSelection: fileName: string * textRange: TextRange -> TextChange[]
         abstract uncommentSelection: fileName: string * textRange: TextRange -> TextChange[]
+        abstract getSupportedCodeFixes: ?fileName: string -> string[]
         abstract dispose: unit -> unit
 
     type [<AllowNullLiteral>] LanguageServiceGetCombinedCodeFixFixId =
@@ -7267,23 +7954,32 @@ Use typeAcquisition.enable instead.")>]
     type [<AllowNullLiteral>] JsxClosingTagInfo =
         abstract newText: string
 
+    type [<AllowNullLiteral>] LinkedEditingInfo =
+        abstract ranges: TextSpan[]
+        abstract wordPattern: string option with get, set
+
     type [<AllowNullLiteral>] CombinedCodeFixScope =
         abstract ``type``: string with get, set
         abstract fileName: string with get, set
 
+    type [<StringEnum>] [<RequireQualifiedAccess>] OrganizeImportsMode =
+        | [<CompiledName("All")>] All
+        | [<CompiledName("SortAndCombine")>] SortAndCombine
+        | [<CompiledName("RemoveUnused")>] RemoveUnused
+
     type [<AllowNullLiteral>] OrganizeImportsArgs =
         inherit CombinedCodeFixScope
-        abstract skipDestructiveCodeActions: bool option with get, set
+        abstract mode: OrganizeImportsMode option with get, set
 
     type [<StringEnum>] [<RequireQualifiedAccess>] CompletionsTriggerCharacter =
-        | [<CompiledName(".")>] Dot
-        | [<CompiledName("\"")>] BackSlash
-        | [<CompiledName("'")>] SingleQuote
-        | [<CompiledName("`")>] BackQuote
-        | [<CompiledName("/")>] Slash
-        | [<CompiledName("@")>] At
-        | [<CompiledName("<")>] LessThan
-        | [<CompiledName("#")>] Sharp
+        | [<CompiledName(".")>] DOT
+        | [<CompiledName("\"")>] QUOTATION
+        | [<CompiledName("'")>] ``'``
+        | [<CompiledName("`")>] BACKTICK
+        | [<CompiledName("/")>] SLASH
+        | [<CompiledName("@")>] AT
+        | [<CompiledName("<")>] ``<``
+        | [<CompiledName("#")>] ``#``
         | [<CompiledName(" ")>] Empty
 
     type [<RequireQualifiedAccess>] CompletionTriggerKind =
@@ -7300,15 +7996,18 @@ Use typeAcquisition.enable instead.")>]
         /// (as opposed to when the user explicitly requested them) this should be set.
         abstract triggerCharacter: CompletionsTriggerCharacter option with get, set
         abstract triggerKind: CompletionTriggerKind option with get, set
-        [<Obsolete("Use includeCompletionsForModuleExports")>]
-        abstract includeExternalModuleExports: bool option with get, set
-        [<Obsolete("Use includeCompletionsWithInsertText")>]
-        abstract includeInsertTextCompletions: bool option with get, set
+        /// <summary>
+        /// Include a <c>symbol</c> property on each completion entry object.
+        /// Symbols reference cyclic data structures and sometimes an entire TypeChecker instance,
+        /// so use caution when serializing or retaining completion entries retrieved with this option.
+        /// </summary>
+        /// <default>false</default>
+        abstract includeSymbol: bool option with get, set
 
     type [<StringEnum>] [<RequireQualifiedAccess>] SignatureHelpTriggerCharacter =
-        | [<CompiledName(",")>] Comma
-        | [<CompiledName("(")>] LeftParen
-        | [<CompiledName("<")>] LessThan
+        | [<CompiledName(",")>] ``,``
+        | [<CompiledName("(")>] ``(``
+        | [<CompiledName("<")>] ``<``
 
     type SignatureHelpRetriggerCharacter =
         U2<SignatureHelpTriggerCharacter, string>
@@ -7320,9 +8019,9 @@ Use typeAcquisition.enable instead.")>]
         | [<CompiledName("characterTyped")>] SignatureHelpCharacterTypedReason of SignatureHelpCharacterTypedReason
         | [<CompiledName("invoked")>] SignatureHelpInvokedReason of SignatureHelpInvokedReason
         | [<CompiledName("retrigger")>] SignatureHelpRetriggeredReason of SignatureHelpRetriggeredReason
-        static member inline op_ErasedCast(x: SignatureHelpCharacterTypedReason) = SignatureHelpCharacterTypedReason x
-        static member inline op_ErasedCast(x: SignatureHelpInvokedReason) = SignatureHelpInvokedReason x
-        static member inline op_ErasedCast(x: SignatureHelpRetriggeredReason) = SignatureHelpRetriggeredReason x
+        // static member inline op_ErasedCast(x: SignatureHelpCharacterTypedReason) = SignatureHelpCharacterTypedReason x
+        // static member inline op_ErasedCast(x: SignatureHelpInvokedReason) = SignatureHelpInvokedReason x
+        // static member inline op_ErasedCast(x: SignatureHelpRetriggeredReason) = SignatureHelpRetriggeredReason x
 
     /// Signals that the user manually requested signature help.
     /// The language service will unconditionally attempt to provide a result.
@@ -7500,6 +8199,11 @@ Use typeAcquisition.enable instead.")>]
         abstract notApplicableReason: string option with get, set
         /// The hierarchical dotted name of the refactor action.
         abstract kind: string option with get, set
+        /// <summary>
+        /// Indicates that the action requires additional arguments to be passed
+        /// when calling <c>getEditsForRefactor</c>.
+        /// </summary>
+        abstract isInteractive: bool option with get, set
 
     /// A set of edits to make in response to a refactor action, plus an optional
     /// location where renaming should be invoked from
@@ -7508,6 +8212,7 @@ Use typeAcquisition.enable instead.")>]
         abstract renameFilename: string option with get, set
         abstract renameLocation: float option with get, set
         abstract commands: CodeActionCommand[] option with get, set
+        abstract notApplicableReason: string option with get, set
 
     type [<StringEnum>] [<RequireQualifiedAccess>] RefactorTriggerReason =
         | Implicit
@@ -7638,6 +8343,7 @@ Use typeAcquisition.enable instead.")>]
         abstract insertSpaceBeforeTypeAnnotation: bool option
         abstract indentMultiLineObjectLiteralBeginningOnBlankLine: bool option
         abstract semicolons: SemicolonPreference option
+        abstract indentSwitchCase: bool option
 
     type [<AllowNullLiteral>] DefinitionInfo =
         inherit DocumentSpan
@@ -7713,8 +8419,8 @@ Use typeAcquisition.enable instead.")>]
     type [<TypeScriptTaggedUnion("canRename")>] [<RequireQualifiedAccess>] RenameInfo =
         | [<CompiledValue(false)>] RenameInfoFailure of RenameInfoFailure
         | [<CompiledValue(true)>] RenameInfoSuccess of RenameInfoSuccess
-        static member inline op_ErasedCast(x: RenameInfoFailure) = RenameInfoFailure x
-        static member inline op_ErasedCast(x: RenameInfoSuccess) = RenameInfoSuccess x
+        // static member inline op_ErasedCast(x: RenameInfoFailure) = RenameInfoFailure x
+        // static member inline op_ErasedCast(x: RenameInfoSuccess) = RenameInfoSuccess x
 
     type [<AllowNullLiteral>] RenameInfoSuccess =
         abstract canRename: bool with get, set
@@ -7739,6 +8445,9 @@ Use typeAcquisition.enable instead.")>]
 
     type [<AllowNullLiteral>] DocCommentTemplateOptions =
         abstract generateReturnInDocTemplate: bool option
+
+    type [<AllowNullLiteral>] InteractiveRefactorArguments =
+        abstract targetFile: string with get, set
 
     type [<AllowNullLiteral>] SignatureHelpParameter =
         abstract name: string with get, set
@@ -7789,7 +8498,7 @@ Use typeAcquisition.enable instead.")>]
         abstract isGlobalCompletion: bool with get, set
         abstract isMemberCompletion: bool with get, set
         /// <summary>
-        /// In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+        /// In the absence of <c>CompletionEntry["replacementSpan"]</c>, the editor may choose whether to use
         /// this span or its default one. If <c>CompletionEntry["replacementSpan"]</c> is defined, that span
         /// must be used to commit that completion entry.
         /// </summary>
@@ -7804,6 +8513,7 @@ Use typeAcquisition.enable instead.")>]
         /// The name of the property or export in the module's symbol table. Differs from the completion name
         /// in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
         abstract exportName: string with get, set
+        abstract exportMapKey: string option with get, set
         abstract moduleSpecifier: string option with get, set
         /// The file name declaring the export's module symbol, if it was an external module
         abstract fileName: string option with get, set
@@ -7814,7 +8524,6 @@ Use typeAcquisition.enable instead.")>]
 
     type [<AllowNullLiteral>] CompletionEntryDataUnresolved =
         inherit CompletionEntryDataAutoImport
-        /// <summary>The key in the <c>ExportMapCache</c> where the completion entry's <c>SymbolExportInfo[]</c> is found</summary>
         abstract exportMapKey: string with get, set
 
     type [<AllowNullLiteral>] CompletionEntryDataResolved =
@@ -7844,6 +8553,12 @@ Use typeAcquisition.enable instead.")>]
         abstract isPackageJsonImport: bool option with get, set
         abstract isImportStatementCompletion: bool option with get, set
         /// <summary>
+        /// For API purposes.
+        /// Included for non-string completions only when <c>includeSymbol: true</c> option is passed to <c>getCompletionsAtPosition</c>.
+        /// </summary>
+        /// <example>Get declaration of completion: <c>symbol.valueDeclaration</c></example>
+        abstract symbol: Symbol option with get, set
+        /// <summary>
         /// A property to be sent back to TS Server in the CompletionDetailsRequest, along with <c>name</c>,
         /// that allows TS Server to look up the symbol represented by the completion item, disambiguating
         /// items with the same name. Currently only defined for auto-import completions, but the type is
@@ -7865,8 +8580,6 @@ Use typeAcquisition.enable instead.")>]
         abstract documentation: SymbolDisplayPart[] option with get, set
         abstract tags: JSDocTagInfo[] option with get, set
         abstract codeActions: CodeAction[] option with get, set
-        [<Obsolete("Use `sourceDisplay` instead.")>]
-        abstract source: SymbolDisplayPart[] option with get, set
         abstract sourceDisplay: SymbolDisplayPart[] option with get, set
 
     type [<AllowNullLiteral>] OutliningSpan =
@@ -7927,28 +8640,6 @@ Use typeAcquisition.enable instead.")>]
         abstract classification: TokenClass with get, set
 
     type [<AllowNullLiteral>] Classifier =
-        /// <summary>
-        /// Gives lexical classifications of tokens on a line without any syntactic context.
-        /// For instance, a token consisting of the text 'string' can be either an identifier
-        /// named 'string' or the keyword 'string', however, because this classifier is not aware,
-        /// it relies on certain heuristics to give acceptable results. For classifications where
-        /// speed trumps accuracy, this function is preferable; however, for true accuracy, the
-        /// syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
-        /// lexical, syntactic, and semantic classifiers may issue the best user experience.
-        /// </summary>
-        /// <param name="text">The text of a line to classify.</param>
-        /// <param name="lexState">The state of the lexical classifier at the end of the previous line.</param>
-        /// <param name="syntacticClassifierAbsent">
-        /// Whether the client is *not* using a syntactic classifier.
-        /// If there is no syntactic classifier (syntacticClassifierAbsent=true),
-        /// certain heuristics may be used in its place; however, if there is a
-        /// syntactic classifier (syntacticClassifierAbsent=false), certain
-        /// classifications which may be incorrectly categorized will be given
-        /// back as Identifiers in order to allow the syntactic classifier to
-        /// subsume the classification.
-        /// </param>
-        [<Obsolete("Use getLexicalClassifications instead.")>]
-        abstract getClassificationsForLine: text: string * lexState: EndOfLineState * syntacticClassifierAbsent: bool -> ClassificationResult
         abstract getEncodedLexicalClassifications: text: string * endOfLineState: EndOfLineState * syntacticClassifierAbsent: bool -> Classifications
 
     type [<StringEnum>] [<RequireQualifiedAccess>] ScriptElementKind =
@@ -7989,6 +8680,8 @@ Use typeAcquisition.enable instead.")>]
         /// class X { [public|private]* foo:number; }
         /// interface Y { foo:number; }
         | [<CompiledName("property")>] MemberVariableElement
+        /// class X { [public|private]* accessor foo: number; }
+        | [<CompiledName("accessor")>] MemberAccessorVariableElement
         /// class X { constructor() { } }
         /// class X { static { } }
         | [<CompiledName("constructor")>] ConstructorImplementationElement
@@ -8166,8 +8859,6 @@ Use typeAcquisition.enable instead.")>]
         abstract updateDocument: fileName: string * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
         abstract updateDocumentWithKey: fileName: string * path: Path * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * key: DocumentRegistryBucketKey * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
         abstract getKeyForCompilationSettings: settings: CompilerOptions -> DocumentRegistryBucketKey
-        [<Obsolete("pass scriptKind and impliedNodeFormat for correctness")>]
-        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions * ?scriptKind: ScriptKind -> unit
         /// <summary>
         /// Informs the DocumentRegistry that a file is not needed any longer.
         /// 
@@ -8178,10 +8869,8 @@ Use typeAcquisition.enable instead.")>]
         /// <param name="compilationSettings">The compilation settings used to acquire the file</param>
         /// <param name="scriptKind">The script kind of the file to be released</param>
         /// <param name="impliedNodeFormat">The implied source file format of the file to be released</param>
-        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions * scriptKind: ScriptKind * impliedNodeFormat: obj -> unit
-        [<Obsolete("pass scriptKind for and impliedNodeFormat correctness")>]
-        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey * ?scriptKind: ScriptKind -> unit
-        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey * scriptKind: ScriptKind * impliedNodeFormat: obj -> unit
+        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions * scriptKind: ScriptKind * impliedNodeFormat: ResolutionMode -> unit
+        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey * scriptKind: ScriptKind * impliedNodeFormat: ResolutionMode -> unit
         abstract reportStats: unit -> string
 
     type [<AllowNullLiteral>] DocumentRegistryBucketKey =
@@ -8199,10 +8888,6 @@ Use typeAcquisition.enable instead.")>]
         abstract outputText: string with get, set
         abstract diagnostics: Diagnostic[] option with get, set
         abstract sourceMapText: string option with get, set
-
-    type [<StringEnum>] [<RequireQualifiedAccess>] IExportsCreateUnparsedSourceFile =
-        | Js
-        | Dts
 
     type [<AllowNullLiteral>] DiagnosticMessageReportsUnnecessary =
         interface end
@@ -8238,6 +8923,14 @@ Use typeAcquisition.enable instead.")>]
         | None
         | Literals
         | All
+
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesOrganizeImportsCollation =
+        | Ordinal
+        | Unicode
+
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesOrganizeImportsCaseFirst =
+        | Upper
+        | Lower
 
     type [<StringEnum>] [<RequireQualifiedAccess>] PerformanceEventKind =
         | [<CompiledName("UpdateGraph")>] UpdateGraph

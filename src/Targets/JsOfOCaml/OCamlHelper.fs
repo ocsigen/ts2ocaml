@@ -429,6 +429,7 @@ let jsBuilder name (fields: {| isOptional: bool; name: string; value: text |} li
       let name =
         match Naming.valueName f.name with
         | "_" -> renamer.Rename "arg" "__"
+        | s when not (Char.isAlphabet s[0] || s[0] = '_') -> renamer.Rename "arg" $"_{s}"
         | name -> name
       let value =
         if name = f.name then f.value

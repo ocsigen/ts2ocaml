@@ -55,12 +55,11 @@ let setup () =
 
   Target.create "Restore" <| fun _ ->
     DotNet.restore
-      (DotNet.Options.withWorkingDirectory __SOURCE_DIRECTORY__)
+      id
       "ts2ocaml.sln"
 
   Target.create "YarnInstall" <| fun _ ->
-    Yarn.installFrozenLockFile (fun ``params`` ->
-      { ``params`` with WorkingDirectory = "./" })
+    Yarn.installFrozenLockFile id
 
   Target.create "Prepare" ignore
 
@@ -234,9 +233,17 @@ module Publish =
 
     "Build" ?=> "Test" ?=> "Publish"
 
+// Utility targets
+
+module Utility =
+  let setup () =
+    Target.create "UpdateBindings" <| fun _ -> BindingUpdater.run ()
+    "Prepare" ==> "UpdateBindings"
+
 [<EntryPoint>]
 let main argv =
-  Shell.cd __SOURCE_DIRECTORY__
+  // ensure working at the repository root
+  Shell.cd (Path.combine __SOURCE_DIRECTORY__ "..")
 
   argv
   |> Array.toList
@@ -247,6 +254,7 @@ let main argv =
   setup ()
   Test.setup ()
   Publish.setup ()
+  Utility.setup ()
 
   Target.create "All" ignore
   "Prepare"

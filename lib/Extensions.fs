@@ -7,6 +7,11 @@ let inline (|?) (xo: 'a option) (y: 'a) : 'a = Option.defaultValue y xo
 let impossible fmt =
   Printf.ksprintf (fun msg -> failwith ("impossible: " + msg)) fmt
 
+/// Repeatedly apply `f` until the same result is obtained.
+let rec repeatUntilEquilibrium<'a when 'a: equality> (f: 'a -> 'a) a =
+  let a' = f a
+  if (a = a') then a' else repeatUntilEquilibrium f a'
+
 open System
 
 module Enum =

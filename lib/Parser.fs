@@ -57,15 +57,15 @@ module private ParserImpl =
       ctx.logger.errorf "%s at %s\n%s" s (Node.ppLocation node) (Node.ppLine node)
     ) format
 
-  let modifiers (n: Ts.Node) =
-    if ts.canHaveModifiers(n) then ts.getModifiers(!!n) else None
+  let modifiers (n: Ts.Node) : Ts.ModifierLike[] option =
+    if ts.canHaveModifiers(n) then
+      Some !!(ts.getModifiers(!!n))
+    else None
 
-  let hasModifier (kind: Ts.SyntaxKind) (modifiers: Ts.ModifiersArray option) =
-    match modifiers with
-    | None -> false
-    | Some mds -> mds |> Array.exists (fun md -> md.kind = kind)
+  let hasModifier (kind: Ts.SyntaxKind) (modifiers: Ts.ModifierLike[] option) =
+    modifiers |> Option.exists (Array.exists (fun md -> (!!md : Ts.Token<_>).kind = kind))
 
-  let getAccessibility (modifiersOpt: Ts.ModifiersArray option) : Accessibility option =
+  let getAccessibility (modifiersOpt: Ts.ModifierLike[] option) : Accessibility option =
     if modifiersOpt |> hasModifier Kind.PublicKeyword then
       Some Public
     else if modifiersOpt |> hasModifier Kind.ProtectedKeyword then
@@ -75,7 +75,7 @@ module private ParserImpl =
     else
       None
 
-  let getExported (modifiersOpt: Ts.ModifiersArray option) : Exported =
+  let getExported (modifiersOpt: Ts.ModifierLike[] option) : Exported =
     if modifiersOpt |> hasModifier Kind.DeclareKeyword then
       Exported.Declared
     else if modifiersOpt |> hasModifier Kind.ExportKeyword |> not then
@@ -85,7 +85,7 @@ module private ParserImpl =
     else
       Exported.Yes
 
-  let isReadOnly (m: Ts.ModifiersArray option) : bool =
+  let isReadOnly (m: Ts.ModifierLike[] option) : bool =
     m |> hasModifier Kind.ReadonlyKeyword
 
   let getText (x: 'a) : string =
@@ -122,7 +122,7 @@ module private ParserImpl =
     match ctx.checker.getSymbolAtLocation i with
     | None -> None
     | Some s ->
-      let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
+      let check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
       let rec go (symbol: Ts.Symbol) =
         let flags = symbol.getFlags()
         if flags = Ts.SymbolFlags.Alias then
@@ -387,7 +387,7 @@ module private ParserImpl =
     | Kind.ArrayType ->
       let t = t :?> Ts.ArrayTypeNode
       let elem = readTypeNode typrm ctx t.elementType
-      if t |> modifiers |> isReadOnly then
+      if isReadOnly (modifiers t) then
         App (APrim ReadonlyArray, [elem], Node.location t)
       else
         App (APrim Array, [elem], Node.location t)
@@ -603,7 +603,7 @@ module private ParserImpl =
         | _ -> ()
         let isOptional = nd.questionToken |> Option.isSome
         let fl = { name = name; isOptional = isOptional; value = ty }
-        attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
+        attr, Field (fl, (if isReadOnly !!nd.modifiers then ReadOnly else Mutable))
       | Error expr -> readSymbolIndexer expr (Choice1Of2 ty) fail
     | Kind.PropertyDeclaration ->
       let nd = nd :?> Ts.PropertyDeclaration
@@ -749,7 +749,7 @@ module private ParserImpl =
     match getPropertyName em.name with
     | Ok name ->
       let value =
-        let inline fallback () =
+        let fallback () =
           match ctx.checker.getConstantValue(!^em) with
           | None -> None
           | Some (U2.Case1 str) -> Some (LString str)
@@ -867,7 +867,7 @@ module private ParserImpl =
           let clauses =
             nes.elements
             |> Array.map (fun x ->
-              let inline ident (name: Ts.Identifier) = readIdent ctx name
+              let ident (name: Ts.Identifier) = readIdent ctx name
               match x.propertyName with
               | None -> ES6ReExport {| target = ident x.name; renameAs = None |}
               | Some propertyName -> ES6ReExport {| target = ident propertyName; renameAs = Some x.name.text  |})
@@ -891,7 +891,7 @@ module private ParserImpl =
         let clauses =
           nes.elements
           |> Array.map (fun x ->
-            let inline ident (name: Ts.Identifier) = readIdent ctx name
+            let ident (name: Ts.Identifier) = readIdent ctx name
             match x.propertyName with
             | None -> ES6Export {| target = ident x.name; renameAs = None |}
             | Some propertyName -> ES6Export {| target = ident propertyName; renameAs = Some x.name.text  |})
@@ -940,7 +940,7 @@ module private ParserImpl =
       | Kind.StringLiteral ->
         let comments = readCommentsForNamedDeclaration ctx c
         let moduleSpecifier = (!!i.moduleSpecifier : Ts.StringLiteral).text
-        let inline create clauses =
+        let create clauses =
           Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; clauses = clauses; origText = i.getText() })
         match c.name, c.namedBindings with
         | None, None -> create [ES6WildcardImport moduleSpecifier]

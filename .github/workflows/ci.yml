@@ -56,7 +56,7 @@ jobs:
         run: opam install . --deps-only
 
       - name: Build and test the project
-        run: ./fake test
+        run: bash fake test
 
   auto-merge:
     name: Auto-Merge PRs by Dependabot

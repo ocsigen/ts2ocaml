@@ -6,7 +6,7 @@ set -o pipefail
 echo "Restoring dotnet tools..."
 dotnet tool restore
 
-if [ -z "$@"]; then
+if [ -z "$@" ]; then
   FAKE_DETAILED_ERRORS=true dotnet run --project ./build/build.fsproj
 else
   FAKE_DETAILED_ERRORS=true dotnet run --project ./build/build.fsproj -- -t "$@"

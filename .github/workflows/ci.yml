@@ -15,31 +15,28 @@ jobs:
         os:
           - ubuntu-latest
         dotnet:
-          - 5.0.x
+          - 6.0.x
         node-version:
-          - 16.x
+          - 20.x
         ocaml-compiler:
           - 4.08.x
-          - 4.09.x
-          - 4.10.x
-          - 4.11.x
           - 4.12.x
-          - 4.13.x
           - 4.14.x
+          - 5.0.x
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use .NET ${{ matrix.dotnet }}
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet }}
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: yarn
@@ -52,14 +49,14 @@ jobs:
 
       - name: Install .NET Dependencies
         run: |
-          dotnet restore
+          dotnet restore ts2ocaml.sln
           dotnet tool restore
 
       - name: Install OCaml Dependencies
         run: opam install . --deps-only
 
-      - name: Run FAKE
-        run: dotnet fake build target Test
+      - name: Run build.fs
+        run: dotnet run target Test
 
   auto-merge:
     name: Auto-Merge PRs by Dependabot
@@ -70,9 +67,8 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      - uses: fastify/github-action-merge-dependabot@v3.0.0
+      - uses: fastify/github-action-merge-dependabot@v3
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
           target: minor
-          exclude: 'typescript'
+          exclude: "typescript"
           merge-method: merge

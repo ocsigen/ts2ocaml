@@ -184,7 +184,7 @@ module JS =
   let typeof (_: 'a) : string = jsNative
 
   let cloneWith (f: 'a -> unit) (x: 'a) =
-    let newX = JS.Constructors.Object.assign(!!{||}, x) :?> 'a
+    let newX = JS.Constructors.Object.assign(!!{||}, [x]) :?> 'a
     f newX
     newX
 

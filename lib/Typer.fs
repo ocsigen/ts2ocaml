@@ -588,7 +588,6 @@ module Type =
         boundTyprms |> List.map (fun x -> TypeVar x.name),
         MultipleLocation (funcs |> List.map (fun f -> f.loc))
       )
-
   let normalizeUnion (u: UnionType) : UnionType =
     let rec go ts =
       ts |> List.collect (function

@@ -70,7 +70,7 @@ let literalToIdentifier (ctx: Context) (l: Literal) : text =
       if Char.isAlphabetOrDigit c then c
       else '_'
     ) |> Seq.toArray |> System.String
-  let inline formatNumber (x: 'a) =
+  let formatNumber (x: 'a) =
     string x
     |> String.replace "+" "plus"
     |> String.replace "-" "minus"
@@ -154,8 +154,8 @@ type TypeEmitter = Context -> Type -> text
 
 type OverrideFunc = EmitTypeFlags -> TypeEmitter -> Context -> Type -> text option
 module OverrideFunc =
-  let inline noOverride _flags _emitType _ctx _ty = None
-  let inline combine (f1: OverrideFunc) (f2: OverrideFunc) : OverrideFunc =
+  let noOverride _flags _emitType _ctx _ty = None
+  let combine (f1: OverrideFunc) (f2: OverrideFunc) : OverrideFunc =
     fun _flags _emitType _ctx ty ->
       match f2 _flags _emitType _ctx ty with
       | Some text -> Some text
@@ -302,7 +302,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     | Intrinsic -> Type.ojs_t
     | Func (f, [], _) ->
       let renamer = new OverloadRenamer(used=(flags.avoidTheseArgumentNames |> Set.map (fun s -> "value", s)))
-      let inline rename x = renamer.Rename "value" x
+      let rename x = renamer.Rename "value" x
       // warning 16 (this optional argument cannot be erased) is widened since OCaml 4.12:
       // labelled arguments after the optional argument does not prevent warning 16 anymore, so
       //
@@ -465,7 +465,7 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
     | _, _, _, _ -> fallback ()
 
 and emitLabelsBody (ctx: Context) labels =
-  let inline tag t =
+  let tag t =
     if ctx.options.inheritWithTags.HasConsume then t
     else empty
   let rec go firstCaseEmitted acc = function
@@ -606,13 +606,13 @@ module StructuredTextItem =
 let removeLabels (xs: Choice<FieldLike, Type> list) =
     xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
 
-let inline func ft = Func (ft, [], ft.loc)
+let func ft = Func (ft, [], ft.loc)
 
 let rec emitMembers flags overrideFunc ctx (selfTy: Type) (ma: MemberAttribute) m = [
   let flags = { flags with simplifyContravariantUnion = true }
   let emitType_ = emitTypeImpl flags overrideFunc
 
-  let inline comments () =
+  let comments () =
     match ma.comments with
     | [] -> Seq.empty
     | xs ->
@@ -621,7 +621,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (ma: MemberAttribute) 
         yield docComment (xs |> List.map emitCommentBody |> concat newline) |> ScopeIndependent
       }
 
-  let inline overloaded (f: (string -> string) -> text list) =
+  let overloaded (f: (string -> string) -> text list) =
     OverloadedText (fun renamer -> f (renamer.Rename "value"))
 
   match m with
@@ -654,7 +654,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (ma: MemberAttribute) 
         if ma.isStatic then [Choice2Of2 (Prim Void)]
         else [Choice2Of2 PolymorphicThis]
       let ret =
-        if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
+        if fl.isOptional then createUnion [fl.value; Prim Undefined]
         else fl.value
       func { isVariadic = false; args = args; returnType = ret; loc = ma.loc } |> emitType_ ctx
     yield! comments ()
@@ -781,7 +781,7 @@ let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
     ]
   )
 
-let inline private overloaded (f: (string -> string) -> text list) =
+let private overloaded (f: (string -> string) -> text list) =
   OverloadedText (fun renamer -> f (renamer.Rename "value"))
 
 let genJsCustomMapper (typrms: TypeParam list) =
@@ -944,7 +944,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       if c.typeParams |> List.isEmpty then None
       else
         let typeParams = c.typeParams |> List.map (fun tp -> tp.name) |> Set.ofList
-        let inline (|Dummy|) _ = []
+        let (|Dummy|) _ = []
         let overrideFunc =
           OverrideFunc.combine overrideFunc <|
             fun (flags: EmitTypeFlags) _emitType _ctx -> function
@@ -1492,7 +1492,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         |> set node
         |> addExport value.name Kind.OfValue (if value.isConst then "const" else "let")
         |> addAnonymousInterface
-      let inline (|Dummy|) _ = []
+      let (|Dummy|) _ = []
       match value.typ with
       | AnonymousInterface intf when Simplify.Has(ctx.options.simplify, Simplify.AnonymousInterfaceValue) ->
         let knownTypes = knownTypes ()
@@ -1709,7 +1709,7 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
   let flags = { EmitTypeFlags.defaultValue with failContravariantTypeVar = true }
   let emitType_ = emitTypeImpl flags OverrideFunc.noOverride
 
-  let inline emitTypeName name args =
+  let emitTypeName name args =
     Type.appOpt (str (Naming.flattenedTypeName name)) args
 
   let rec go (prefix: unit -> string) (ctx: Context) (v: Statement) =
@@ -1984,7 +1984,7 @@ let emitReferenceFileDirectives (ctx: Context) (src: SourceFile) : text list =
 
 let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx: IContext<Options>) =
   let derivedOutputFileName =
-    let inline log x =
+    let log x =
       ctx.logger.tracef "* the inferred output file name is '%s'" x
       x
     JsHelper.deriveModuleName info (sources |> List.map (fun s -> s.fileName))

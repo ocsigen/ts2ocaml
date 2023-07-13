@@ -40,8 +40,8 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
 ## Requirements
 
-- [.NET SDK 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
-  - [FAKE](https://fake.build/) and [Fable](https://fable.io/) are required to build this tool.
+- [.NET SDK 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
+  - [Fable](https://fable.io/) is required to build this tool.
   - Run `dotnet tool restore` in the root directory of this repo to install them.
 
 - OCaml 4.08 or higher
@@ -54,15 +54,15 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
 ## Debugging
 
-`dotnet fake build -t Watch` to live update `dist/ts2ocaml.js`.
+`dotnet run -t Watch` to live update `dist/ts2ocaml.js`.
 
 It will be bundled by Webpack with the `development` mode.
 
 ## Building
 
-`dotnet fake build -t Build` performs the followings:
+`dotnet run -t Build` performs the followings:
 - `yarn install` to populate `node_modules`
-- `dotnet restore` to install required F# libraries
+- `dotnet restore ts2ocaml.sln` to install required F# libraries
 - Compile F# source files into JS source files (through Fable)
 - Bundle the JS files into `dist/ts2ocaml.js` (through Webpack)
 
@@ -70,7 +70,7 @@ The resulting `dist/ts2ocaml.js` is then ready to run through `node`.
 
 ## Testing
 
-`dotnet fake build -t Test` builds the tool and then performs the followings:
+`dotnet run -t Test` builds the tool and then performs the followings:
 
 ### Test the tool for [`js_of_ocaml` target](js_of_ocaml.md)
 
@@ -92,7 +92,7 @@ The resulting `dist/ts2ocaml.js` is then ready to run through `node`.
 
 ## Publishing
 
-`dotnet fake build -t Publish` builds the tool, runs the tests, and then performs the followings:
+`dotnet run -t Publish` builds the tool, runs the tests, and then performs the followings:
 
 ### Prepare for publishing the standard library for [`js_of_ocaml` target](js_of_ocaml.md) to the `jsoo-stdlib` branch
 

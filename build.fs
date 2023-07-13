@@ -1,17 +1,4 @@
-#r "paket:
-nuget Fake.DotNet.Cli
-nuget Fake.DotNet.Paket
-nuget Fake.Core.Target
-nuget Fake.Core.Process
-nuget Fake.Core.String
-nuget Fake.Core.ReleaseNotes
-nuget Fake.IO.FileSystem
-nuget Fake.Tools.Git
-nuget Fake.JavaScript.Yarn
-//"
-#load ".fake/build.fsx/intellisense.fsx"
-
-#nowarn "52"
+#nowarn "20" "52"
 
 open Fake.Core
 open Fake.Core.TargetOperators
@@ -20,7 +7,6 @@ open Fake.IO
 open Fake.IO.Globbing.Operators
 open Fake.IO.FileSystemOperators
 open Fake.JavaScript
-
 let rootDir = Path.getFullName "."
 let srcDir = "./src"
 let outputDir = "./output"
@@ -55,55 +41,58 @@ let dune args = run opamTool "./" (sprintf "exec -- dune %s" args)
 
 // Build targets
 
-Target.create "Clean" <| fun _ ->
-  !! "src/bin"
-  ++ "src/obj"
-  ++ distDir
-  ++ "src/.fable"
-  |> Seq.iter Shell.cleanDir
+let setup () =
+  Target.create "Clean" <| fun _ ->
+    !! "src/bin"
+    ++ "src/obj"
+    ++ distDir
+    ++ "src/.fable"
+    |> Seq.iter Shell.cleanDir
 
-  !! "src/**/*fs.js"
-  ++ "src/**/*fs.js.map"
-  |> Seq.iter Shell.rm
+    !! "src/**/*fs.js"
+    ++ "src/**/*fs.js.map"
+    |> Seq.iter Shell.rm
 
-Target.create "Restore" <| fun _ ->
-  DotNet.restore
-    (DotNet.Options.withWorkingDirectory __SOURCE_DIRECTORY__)
-    "ts2ocaml.sln"
+  Target.create "Restore" <| fun _ ->
+    DotNet.restore
+      (DotNet.Options.withWorkingDirectory __SOURCE_DIRECTORY__)
+      "ts2ocaml.sln"
 
-Target.create "YarnInstall" <| fun _ ->
-  Yarn.installFrozenLockFile (fun ``params`` ->
-    { ``params`` with WorkingDirectory = "./" })
+  Target.create "YarnInstall" <| fun _ ->
+    Yarn.installFrozenLockFile (fun ``params`` ->
+      { ``params`` with WorkingDirectory = "./" })
 
-Target.create "Prepare" ignore
+  Target.create "Prepare" ignore
 
-Target.create "BuildForPublish" <| fun _ ->
-  dotnetExec "fable" $"{srcDir} --sourceMaps --run webpack --mode=production"
+  Target.create "BuildForPublish" <| fun _ ->
+    dotnetExec "fable" $"{srcDir} --sourceMaps --run webpack --mode=production"
 
-Target.create "BuildForTest" <| fun _ ->
-  dotnetExec "fable" $"{srcDir} --sourceMaps --define DEBUG --run webpack --mode=development"
+  Target.create "BuildForTest" <| fun _ ->
+    dotnetExec "fable" $"{srcDir} --sourceMaps --define DEBUG --run webpack --mode=development"
 
-Target.create "Build" ignore
+  Target.create "Build" ignore
 
-Target.create "Watch" <| fun _ ->
-  dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w --mode=development"
+  Target.create "Watch" <| fun _ ->
+    dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w --mode=development"
 
-Target.create "TestComplete" ignore
+  Target.create "TestComplete" ignore
 
-"Clean"
-  ==> "YarnInstall"
-  ==> "Restore"
-  ==> "Prepare"
-  ==> "Build"
+  "Clean" ?=> "Build"
 
-"Prepare"
-  ?=> "BuildForTest"
-  ?=> "TestComplete"
-  ?=> "BuildForPublish"
-  ==> "Build"
+  "Clean"
+    ?=> "YarnInstall"
+    ==> "Restore"
+    ==> "Prepare"
+    ?=> "Build"
 
-"Prepare"
-  ?=> "Watch"
+  "Prepare"
+    ?=> "BuildForTest"
+    ?=> "TestComplete"
+    ?=> "BuildForPublish"
+    ==> "Build"
+
+  "Prepare"
+    ?=> "Watch"
 
 // Test targets
 
@@ -157,24 +146,25 @@ module Test =
         printfn "* copied to %s" file
       inDirectory testDir <| fun () -> dune "build"
 
-Target.create "TestJsooClean" <| fun _ -> Test.Jsoo.clean ()
-Target.create "TestJsooGenerateBindings" <| fun _ -> Test.Jsoo.generateBindings ()
-Target.create "TestJsooBuild" <| fun _ -> Test.Jsoo.build ()
-Target.create "TestJsoo" ignore
+  let setup () =
+    Target.create "TestJsooClean" <| fun _ -> Jsoo.clean ()
+    Target.create "TestJsooGenerateBindings" <| fun _ -> Jsoo.generateBindings ()
+    Target.create "TestJsooBuild" <| fun _ -> Jsoo.build ()
+    Target.create "TestJsoo" ignore
 
-"BuildForTest"
-  ==> "TestJsooClean"
-  ==> "TestJsooGenerateBindings"
-  ==> "TestJsooBuild"
-  ==> "TestJsoo"
+    "BuildForTest"
+      ==> "TestJsooClean"
+      ==> "TestJsooGenerateBindings"
+      ==> "TestJsooBuild"
+      ==> "TestJsoo"
 
-Target.create "Test" ignore
-Target.create "TestOnly" ignore
+    Target.create "Test" ignore
+    Target.create "TestOnly" ignore
 
-"TestJsoo"
-  ==> "TestOnly"
-  ==> "TestComplete"
-  ==> "Test"
+    "TestJsoo"
+      ==> "TestOnly"
+      ==> "TestComplete"
+      ==> "Test"
 
 // Publish targets
 
@@ -222,33 +212,50 @@ module Publish =
     let testBuild () =
       inDirectory targetDir <| fun () -> dune "build"
 
-Target.create "Publish" <| fun _ -> ()
-Target.create "PublishOnly" <| fun _ -> ()
+  let setup () =
+    Target.create "Publish" <| fun _ -> ()
+    Target.create "PublishOnly" <| fun _ -> ()
 
-Target.create "PublishNpm" <| fun _ ->
-  Publish.Npm.updateVersion ()
+    Target.create "PublishNpm" <| fun _ ->
+      Npm.updateVersion ()
 
-Target.create "PublishJsoo" <| fun _ ->
-  Publish.Jsoo.copyArtifacts ()
-  Publish.Jsoo.updateVersion ()
-  Publish.Jsoo.testBuild ()
+    Target.create "PublishJsoo" <| fun _ ->
+      Jsoo.copyArtifacts ()
+      Jsoo.updateVersion ()
+      Jsoo.testBuild ()
 
-"BuildForPublish"
-  ==> "PublishNpm"
-  ==> "PublishJsoo"
-  ==> "PublishOnly"
-  ==> "Publish"
+    "BuildForPublish"
+      ==> "PublishNpm"
+      ==> "PublishJsoo"
+      ==> "PublishOnly"
+      ==> "Publish"
 
-"TestJsoo" ==> "PublishJsoo"
+    "TestJsoo" ==> "PublishJsoo"
 
-"Build" ?=> "Test" ?=> "Publish"
+    "Build" ?=> "Test" ?=> "Publish"
 
-Target.create "All" ignore
+[<EntryPoint>]
+let main argv =
+  Shell.cd __SOURCE_DIRECTORY__
 
-"Build"
-  ==> "Test"
-  ==> "Publish"
-  ==> "All"
+  argv
+  |> Array.toList
+  |> Context.FakeExecutionContext.Create false "build.fsx"
+  |> Context.RuntimeContext.Fake
+  |> Context.setExecutionContext
 
-// start build
-Target.runOrDefault "Build"
+  setup ()
+  Test.setup ()
+  Publish.setup ()
+
+  Target.create "All" ignore
+  "Prepare"
+    ==> "Build"
+    ==> "Test"
+    ==> "Publish"
+    ==> "All"
+
+  // start build
+  Target.runOrDefault "All"
+  
+  0

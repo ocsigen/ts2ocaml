@@ -539,20 +539,35 @@ module Type =
         boundTyprms |> List.map (fun x -> TypeVar x.name),
         MultipleLocation (funcs |> List.map (fun f -> f.loc))
       )
+  let normalizeUnion (u: UnionType) : UnionType =
+    let rec go ts =
+      ts |> List.collect (function
+        | Union u -> go u.types
+        | t -> [t]
+      )
+    { u with types = go u.types |> List.distinct }
+
+  let normalizeIntersection (i: IntersectionType) : IntersectionType =
+    let rec go ts =
+      ts |> List.collect (function
+        | Intersection i -> go i.types
+        | t -> [t]
+      )
+    { i with types = go i.types |> List.distinct }
 
   // TODO: more optimization
-  let createUnion (_ctx: TyperContext<_, _>) (types: Type list) =
+  let createUnion (types: Type list) =
     match types with
     | [] -> Prim Never
     | [x] -> x
-    | _ -> Union { types = types }
+    | _ -> Union (normalizeUnion { types = types })
 
   // TODO: more optimization
-  let createIntersection (_ctx: TyperContext<_, _>) (types: Type list) =
+  let createIntersection (types: Type list) =
     match types with
     | [] -> Prim Any
     | [x] -> x
-    | _ -> Intersection { types = types }
+    | _ -> Intersection (normalizeIntersection { types = types })
 
   let substTypeVarInInheritingType subst ctx = function
     | InheritingType.KnownIdent x ->
@@ -694,7 +709,7 @@ module Type =
           let members = c.members |> List.map snd
           let intersection = function
             | [] -> None
-            | ts -> createIntersection ctx ts |> Some
+            | ts -> createIntersection ts |> Some
           let rec go = function
             | TypeLiteral (LString name) ->
               let funcs, others =
@@ -815,7 +830,7 @@ module Type =
               | _ -> None)
           match types with
           | [] -> onFail ()
-          | _ -> createIntersection ctx types
+          | _ -> createIntersection types
 
       | Keyof t ->
         let t = resolveErasedTypeImpl typeQueries ctx t

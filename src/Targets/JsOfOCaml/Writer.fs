@@ -704,7 +704,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (ma: MemberAttribute) 
         if ma.isStatic then [Choice2Of2 (Prim Void)]
         else [Choice2Of2 PolymorphicThis]
       let ret =
-        if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
+        if fl.isOptional then createUnion [fl.value; Prim Undefined]
         else fl.value
       func { isVariadic = false; args = args; returnType = ret; loc = ma.loc } |> emitType_ ctx
     yield! comments ()

@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-alpha.0]
+- Upgrade TypeScript to v5.
+- Added an explicit support of ambient modules.
+  - Topological sorting inside ambient modules now works as expected (#157).
+- Perform various improvements over messages.
+  - Messages now come with color (warning: yellow, error: red).
+  - The error location is now shown with a code frame.
+- Deprecate the `--safe-arity` option.
+  - Ts2ocaml now generates minimal arity-safe output by default.
+- Perform massive internal refactoring.
+
 ## [1.4.6] - 2023-07-13
 - Fix a bug which generated unnecessarily duplicated option type (#315).
 

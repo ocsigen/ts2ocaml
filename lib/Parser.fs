@@ -12,6 +12,7 @@ open TypeScript
 type Node = Ts.Node
 type TypeChecker = Ts.TypeChecker
 type Kind = Ts.SyntaxKind
+type ModuleName = Ts.ModuleName
 
 type ParserContext =
   inherit IContext
@@ -30,16 +31,21 @@ module private ParserImpl =
     let ppLocation (n: Node) =
       let src = n.getSourceFile()
       let pos = src.getLineAndCharacterOfPosition (n.getStart())
-      sprintf "line %i, col %i of %s" (int pos.line + 1) (int pos.character + 1) src.fileName
+      sprintf "line %i, col %i of %s" (int pos.line + 1) (int pos.character + 1) (Path.relativeToCwd src.fileName)
 
     let ppLine (n: Node) =
       let src = n.getSourceFile()
-      let pos = src.getLineAndCharacterOfPosition (n.getStart())
-      let startPos = int <| src.getPositionOfLineAndCharacter(pos.line, 0.)
-      let endPos = int <| src.getLineEndOfPosition(n.getEnd())
-      let lines =
-        src.text.Substring(startPos, endPos - startPos) |> String.toLines
-      lines |> Array.map (sprintf "> %s") |> String.concat System.Environment.NewLine
+      let startPos = src.getLineAndCharacterOfPosition(n.getStart())
+      let endPos = src.getLineAndCharacterOfPosition(n.getEnd())
+      let text = src.text
+      Codeframe.Codeframe.CreateColumns(
+        text,
+        int startPos.line + 1,
+        int startPos.character + 1,
+        int endPos.line + 1,
+        int endPos.character + 1,
+        linesAbove=0, linesBelow=0
+      )
 
   let nodeWarn (ctx: ParserContext) (node: Node) format =
     Printf.kprintf (fun s ->
@@ -51,12 +57,15 @@ module private ParserImpl =
       ctx.logger.errorf "%s at %s\n%s" s (Node.ppLocation node) (Node.ppLine node)
     ) format
 
-  let hasModifier (kind: Ts.SyntaxKind) (modifiers: Ts.ModifiersArray option) =
-    match modifiers with
-    | None -> false
-    | Some mds -> mds |> Seq.exists (fun md -> md.kind = kind)
+  let modifiers (n: Ts.Node) : Ts.ModifierLike[] option =
+    if ts.canHaveModifiers(n) then
+      Some !!(ts.getModifiers(!!n))
+    else None
 
-  let getAccessibility (modifiersOpt: Ts.ModifiersArray option) : Accessibility option =
+  let hasModifier (kind: Ts.SyntaxKind) (modifiers: Ts.ModifierLike[] option) =
+    modifiers |> Option.exists (Array.exists (fun md -> (!!md : Ts.Token<_>).kind = kind))
+
+  let getAccessibility (modifiersOpt: Ts.ModifierLike[] option) : Accessibility option =
     if modifiersOpt |> hasModifier Kind.PublicKeyword then
       Some Public
     else if modifiersOpt |> hasModifier Kind.ProtectedKeyword then
@@ -66,7 +75,7 @@ module private ParserImpl =
     else
       None
 
-  let getExported (modifiersOpt: Ts.ModifiersArray option) : Exported =
+  let getExported (modifiersOpt: Ts.ModifierLike[] option) : Exported =
     if modifiersOpt |> hasModifier Kind.DeclareKeyword then
       Exported.Declared
     else if modifiersOpt |> hasModifier Kind.ExportKeyword |> not then
@@ -76,36 +85,25 @@ module private ParserImpl =
     else
       Exported.Yes
 
-  let isReadOnly (m: Ts.ModifiersArray option) : bool =
+  let isReadOnly (m: Ts.ModifierLike[] option) : bool =
     m |> hasModifier Kind.ReadonlyKeyword
 
   let getText (x: 'a) : string =
     (!!x : Ts.Node).getText() |> removeQuotesAndTrim
 
-  let getPropertyName (pn: Ts.PropertyName) : string option =
-    let node : Node = !!pn
-    match node.kind with
-    | Kind.Identifier -> Some (!!pn : Ts.Identifier).text
-    | Kind.PrivateIdentifier -> Some (!!pn : Ts.PrivateIdentifier).text
-    | Kind.StringLiteral -> Some (!!pn : Ts.StringLiteral).text
-    | Kind.NumericLiteral -> Some (!!pn : Ts.NumericLiteral).text
-    | _ -> None
+  let getPropertyName (pn: Ts.PropertyName) : Result<string, Ts.Expression> =
+    match pn with
+    | Ts.PropertyName.Identifier i -> Ok i.text
+    | Ts.PropertyName.PrivateIdentifier i -> Ok i.text
+    | Ts.PropertyName.StringLiteral s -> Ok s.text
+    | Ts.PropertyName.NumericLiteral n -> Ok n.text
+    | Ts.PropertyName.ComputedPropertyName c -> Error c.expression
 
-  let getPropertyExpression (pn: Ts.PropertyName) : Ts.Expression option =
-    let node : Node = !!pn
-    match node.kind with
-    | Kind.ComputedPropertyName -> Some (!!pn : Ts.ComputedPropertyName).expression
-    | _ -> None
-
-  let getBindingName ctx (bn: Ts.BindingName): string option =
-    let syntaxNode : Node = !! bn
-    match syntaxNode.kind with
-    | Kind.Identifier ->
-      let id : Ts.Identifier = !! bn
-      Some id.text
-    | Kind.ObjectBindingPattern
-    | Kind.ArrayBindingPattern -> None
-    | _ -> nodeError ctx syntaxNode "unknown Binding Name kind: %s" (Enum.pp syntaxNode.kind)
+  let getBindingName (bn: Ts.BindingName): string option =
+    match bn with
+    | Ts.BindingName.Identifier i -> Some i.text
+    | Ts.BindingName.ObjectBindingPattern _
+    | Ts.BindingName.ArrayBindingPattern _ -> None
 
   let rec extractNestedName (node: Node) =
     seq {
@@ -124,7 +122,7 @@ module private ParserImpl =
     match ctx.checker.getSymbolAtLocation i with
     | None -> None
     | Some s ->
-      let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
+      let check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
       let rec go (symbol: Ts.Symbol) =
         let flags = symbol.getFlags()
         if flags = Ts.SymbolFlags.Alias then
@@ -148,37 +146,46 @@ module private ParserImpl =
           ] |> Some
       go s
 
-  let normalizeQualifiedName (fileNames: string list) (s: string) =
-    s
-    |> String.split "."
-    |> List.ofArray
-    |> function
-      | x :: xs when x.StartsWith("\"") ->
-        let basenames = fileNames |> List.map JsHelper.stripExtension
-        if basenames |> List.exists (fun basename -> x.EndsWith(basename + "\"")) then xs
-        else x.Trim('"') :: xs
-      | xs -> xs
+  type Source = {|
+    file: Path.Absolute
+    moduleName: string option
+  |}
 
-  let getFullName (ctx: ParserContext) (nd: Node) =
-    match ctx.checker.getSymbolAtLocation nd with
-    | None -> None
-    | Some s ->
-      let source = ctx.currentSource.fileName
-      let fullName =
-        ctx.checker.getFullyQualifiedName s |> normalizeQualifiedName [source]
-      Some { source = source; name = fullName }
+  let getSource (d: Ts.Declaration) : Source =
+    let sourceFile = d.getSourceFile()
+    let rec findAmbientModule (n: Ts.Node) =
+      if isNullOrUndefined n then None
+      else
+        match n.kind with
+        | Kind.SourceFile -> None
+        | Kind.ModuleDeclaration ->
+          let md = n :?> Ts.ModuleDeclaration
+          match md.name with
+          | ModuleName.StringLiteral s -> Some s.text
+          | ModuleName.Identifier _ -> findAmbientModule n.parent
+        | _ -> findAmbientModule n.parent
+    let ambientModuleName = findAmbientModule d
+    {| file = Path.absolute sourceFile.fileName; moduleName = ambientModuleName |}
+
+  let makeFullName (fn: string list) (s: Source) =
+    let name =
+      match s.moduleName, fn with
+      | Some m, x :: _ when x = $"\"{m}\"" -> fn
+      | Some m, _ -> $"\"{m}\"" :: fn
+      | None, x :: fn when x.StartsWith("\"") -> fn
+      | None, _ -> fn
+    { source = s.file; name = name }
 
   let getFullNames (ctx: ParserContext) (nd: Node) =
     let getSources (s: Ts.Symbol) =
       s.declarations
-      |> Option.toList
-      |> List.collect (fun decs ->
-        decs |> Seq.map (fun dec -> dec.getSourceFile()) |> List.ofSeq)
-      |> List.map (fun x -> x.fileName)
-      |> List.distinct
+      |> Option.toArray
+      |> Array.collect (Array.map getSource)
+      |> Array.distinctBy (fun x -> x.file)
+      |> List.ofArray
 
     let getRootAndAliasedSymbols (s: Ts.Symbol) =
-      let roots = ctx.checker.getRootSymbols(s)
+      let roots = ctx.checker.getRootSymbols(s) |> ResizeArray
       try
         let s = ctx.checker.getAliasedSymbol(s)
         if not (ctx.checker.isUnknownSymbol s || ctx.checker.isUndefinedSymbol s) then
@@ -194,10 +201,11 @@ module private ParserImpl =
         let sources = getSources s
         let fullName =
           ctx.checker.getFullyQualifiedName s
-          |> normalizeQualifiedName sources
+          |> String.split "."
+          |> List.ofArray
         let newItems =
           sources
-          |> List.map (fun source -> { source = source; name = fullName })
+          |> List.map (makeFullName fullName)
           |> Set.ofList
         if Set.isSubset newItems acc then acc
         else
@@ -215,7 +223,7 @@ module private ParserImpl =
       let kind = getKindFromName ctx nd
       let loc = Node.location nd
       let fullName = getFullNames ctx nd
-      { name = name; kind = kind; fullName = fullName; loc = loc; parent = parent }
+      { name = name; kind = kind; fullName = fullName; loc = loc; parent = parent; misc = IdentMiscData.Empty }
     match nd.kind with
     | Kind.Identifier | Kind.PrivateIdentifier ->
       let i = nd :?> Ts.Identifier
@@ -237,16 +245,35 @@ module private ParserImpl =
     else
       readIdent ctx nd |> Choice1Of2
 
+  type DeclarationWithTypeParameters =
+    inherit Ts.Node
+    abstract typeParameters: Ts.TypeParameterDeclaration[] option with get
+
+  let getArityOfIdentType (ctx: ParserContext) (nd: Ts.Node) (i: Ident) : Ident =
+    match ctx.checker.getSymbolAtLocation nd with
+    | None -> i
+    | Some symbol ->
+      let arity =
+        symbol.declarations
+        |> Option.toArray
+        |> Array.concat
+        |> Array.fold (fun maxArity decl ->
+            match (decl :?> DeclarationWithTypeParameters).typeParameters with
+            | Some tps when tps.Length > maxArity -> tps.Length
+            | _ -> maxArity
+          ) 0
+      { i with misc = { i.misc with maxArity = Some arity } }
+
   let sanitizeCommentText str : string list =
     str |> String.toLines |> List.ofArray
 
-  let readCommentText (comment: U2<string, ResizeArray<Ts.JSDocComment>>) : string list =
+  let readCommentText (comment: U2<string, Ts.JSDocComment[]>) : string list =
     let str =
       if JS.typeof comment = "string" then
         box comment :?> string
       else
-        let texts = box comment :?> ResizeArray<Ts.JSDocText> // TODO: do not ignore links
-        texts |> Seq.map (fun x -> x.text) |> String.concat ""
+        let texts = box comment :?> Ts.JSDocText[] // TODO: do not ignore links
+        texts |> Array.map (fun x -> x.text) |> String.concat ""
     sanitizeCommentText str
 
   let readNonJSDocComments (ctx: ParserContext) (node: Node) : Comment list =
@@ -256,13 +283,13 @@ module private ParserImpl =
     | None -> []
     | Some ranges ->
       ranges
-      |> Seq.map (fun range ->
+      |> Array.map (fun range ->
         fullText.[int range.pos .. int range.``end``]
         |> sanitizeCommentText |> Summary)
-      |> Seq.toList
+      |> Array.toList
 
   let readJSDocTag (tag: Ts.JSDocTag) : Comment =
-    let text = tag.comment |> Option.map readCommentText |> Option.defaultValue []
+    let text = tag.comment |> Option.map readCommentText |? []
     match tag.kind with
     | Kind.JSDocParameterTag ->
       let tag = tag :?> Ts.JSDocParameterTag
@@ -280,18 +307,18 @@ module private ParserImpl =
       | tagName ->
         Other (tagName, text, tag)
 
-  let readJSDocComments (docComment: ResizeArray<Ts.SymbolDisplayPart>) (tags: Ts.JSDocTag seq) : Comment list =
+  let readJSDocComments (docComment: Ts.SymbolDisplayPart[]) (tags: Ts.JSDocTag[]) : Comment list =
     let desc =
       let text =
         docComment
-        |> List.ofSeq
+        |> List.ofArray
         |> List.collect (fun sdp -> sdp.text |> sanitizeCommentText)
       if List.isEmpty text then []
       else [Description text]
     let tags =
       tags
-      |> Seq.map readJSDocTag
-      |> List.ofSeq
+      |> Array.map readJSDocTag
+      |> List.ofArray
     desc @ tags
 
   let readCommentsForNamedDeclaration (ctx: ParserContext) (nd: Ts.NamedDeclaration) : Comment list =
@@ -313,7 +340,7 @@ module private ParserImpl =
     | Kind.MethodDeclaration | Kind.Constructor | Kind.GetAccessor | Kind.SetAccessor
     | Kind.FunctionExpression | Kind.ArrowFunction ->
       try
-        match ctx.checker.getSignatureFromDeclaration nd with
+        match ctx.checker.getSignatureFromDeclaration !!nd with
         | None ->
           fallback ()
         | Some signature ->
@@ -360,22 +387,22 @@ module private ParserImpl =
     | Kind.ArrayType ->
       let t = t :?> Ts.ArrayTypeNode
       let elem = readTypeNode typrm ctx t.elementType
-      if isReadOnly t.modifiers then
+      if isReadOnly (modifiers t) then
         App (APrim ReadonlyArray, [elem], Node.location t)
       else
         App (APrim Array, [elem], Node.location t)
     | Kind.TupleType ->
       let t = t :?> Ts.TupleTypeNode
-      readTupleTypeNode typrm ctx t (isReadOnly t.modifiers)
+      readTupleTypeNode typrm ctx t (t |> modifiers |> isReadOnly)
     // complex types
     | Kind.IntrinsicKeyword -> Intrinsic
     | Kind.ThisType -> PolymorphicThis
     | Kind.UnionType ->
       let t = t :?> Ts.UnionTypeNode
-      Union { types = t.types |> Seq.map (readTypeNode typrm ctx) |> List.ofSeq }
+      Union { types = t.types |> Array.map (readTypeNode typrm ctx) |> List.ofArray }
     | Kind.IntersectionType ->
       let t = t :?> Ts.IntersectionTypeNode
-      Intersection { types = t.types |> Seq.map (readTypeNode typrm ctx) |> List.ofSeq }
+      Intersection { types = t.types |> Array.map (readTypeNode typrm ctx) |> List.ofArray }
     | Kind.ParenthesizedType ->
       readTypeNode typrm ctx ((t :?> Ts.ParenthesizedTypeNode).``type``)
     // ident, possibly tyapp
@@ -387,12 +414,14 @@ module private ParserImpl =
         match t.kind with
         | Kind.TypeReference -> !!(t :?> Ts.TypeReferenceNode).typeName
         | Kind.ExpressionWithTypeArguments -> !!(t :?> Ts.ExpressionWithTypeArguments).expression
-        | _ -> failwith "impossible"
+        | _ -> impossible "readTypeNode_TypeReference"
+      let arity = getArityOfIdentType ctx lhs
       match readIdentOrTypeVar ctx typrm lhs with
       | Choice1Of2 lt ->
+        let lt = lt |> getArityOfIdentType ctx lhs
         match t.typeArguments with
         | None -> Ident lt
-        | Some args -> App (AIdent lt, args |> Seq.map (readTypeNode typrm ctx) |> List.ofSeq, Node.location t)
+        | Some args -> App (AIdent lt, args |> Array.map (readTypeNode typrm ctx) |> List.ofArray, Node.location t)
       | Choice2Of2 x -> TypeVar x
     | Kind.FunctionType ->
       let t = t :?> Ts.FunctionTypeNode
@@ -418,9 +447,9 @@ module private ParserImpl =
     // anonymous interface
     | Kind.TypeLiteral ->
       let t = t :?> Ts.TypeLiteralNode
-      if t.members.Count = 0 then Prim Object // treat {} as just object
+      if t.members.Length = 0 then Prim Object // treat {} as just object
       else
-        let members = t.members |> List.ofSeq |> List.map (readNamedDeclaration typrm ctx)
+        let members = t.members |> List.ofArray |> List.map (readNamedDeclaration typrm ctx)
         let temp =
           { name = Anonymous; isInterface = true; isExported = Exported.No
             comments = []; implements = []; typeParams = []; accessibility = Public
@@ -488,16 +517,16 @@ module private ParserImpl =
         {| value = readTypeNode typrm ctx x.``type``; name = Some x.name.text |}
       | _ ->
         {| value = readTypeNode typrm ctx (xNode :?> Ts.TypeNode); name = None |}
-    Tuple { types = Seq.map f tuple.elements |> List.ofSeq; isReadOnly = isReadOnly }
+    Tuple { types = Array.map f tuple.elements |> List.ofArray; isReadOnly = isReadOnly }
 
-  and readParameters<'retType> (typrm: Set<string>) (ctx: ParserContext) (ps: Ts.ParameterDeclaration seq) (parent: Ts.Node) (retType: 'retType) : FuncType<'retType> =
+  and readParameters<'retType> (typrm: Set<string>) (ctx: ParserContext) (ps: Ts.ParameterDeclaration[]) (parent: Ts.Node) (retType: 'retType) : FuncType<'retType> =
     let isVariadic =
-      ps |> Seq.exists (fun p -> p.dotDotDotToken |> Option.isSome)
+      ps |> Array.exists (fun p -> p.dotDotDotToken |> Option.isSome)
     let args =
       ps
-      |> Seq.mapi (fun i p ->
+      |> Array.mapi (fun i p ->
         let isOptional = p.questionToken |> Option.isSome
-        let nameOpt = p.name |> getBindingName ctx
+        let nameOpt = p.name |> getBindingName
         let ty =
           match p.``type`` with
           | Some t -> readTypeNode typrm ctx t
@@ -515,12 +544,13 @@ module private ParserImpl =
           assert (not isOptional);
           Choice2Of2 ty
       )
-      |> Seq.toList
+      |> Array.toList
     { args = args; isVariadic = isVariadic; returnType = retType; loc = Node.location parent }
 
   and readMemberAttribute (ctx: ParserContext) (nd: Ts.NamedDeclaration) : MemberAttribute =
-    let accessibility = getAccessibility nd.modifiers |> Option.defaultValue Public
-    let isStatic = hasModifier Kind.StaticKeyword nd.modifiers
+    let modifiers = modifiers nd
+    let accessibility = getAccessibility modifiers |? Public
+    let isStatic = hasModifier Kind.StaticKeyword modifiers
     let comments = readCommentsForNamedDeclaration ctx nd
     { accessibility = accessibility; isStatic = isStatic; comments = comments; loc = Node.location nd }
 
@@ -552,7 +582,7 @@ module private ParserImpl =
             match ty with
             | Choice1Of2 t -> { args = []; isVariadic = false; returnType = t; loc = Node.location nd }
             | Choice2Of2 ft -> ft
-          attr, SymbolIndexer (symbolName, ft, if isReadOnly nd.modifiers then ReadOnly else Mutable)
+          attr, SymbolIndexer (symbolName, ft, if isReadOnly (modifiers nd) then ReadOnly else Mutable)
         | _ -> fail ()
       | _ -> fail ()
 
@@ -566,22 +596,19 @@ module private ParserImpl =
         | Some t -> readTypeNode typrm ctx t
         | None -> UnknownType None
       match getPropertyName nd.name with
-      | Some name ->
+      | Ok name ->
         match ty with
         | UnknownType None ->
           nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
         | _ -> ()
         let isOptional = nd.questionToken |> Option.isSome
         let fl = { name = name; isOptional = isOptional; value = ty }
-        attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
-      | None ->
-        match getPropertyExpression nd.name with
-        | Some expr -> readSymbolIndexer expr (Choice1Of2 ty) fail
-        | None -> fail ()
+        attr, Field (fl, (if isReadOnly !!nd.modifiers then ReadOnly else Mutable))
+      | Error expr -> readSymbolIndexer expr (Choice1Of2 ty) fail
     | Kind.PropertyDeclaration ->
       let nd = nd :?> Ts.PropertyDeclaration
       match getPropertyName nd.name with
-      | Some name ->
+      | Ok name ->
         let ty =
           match nd.``type`` with
           | Some t -> readTypeNode typrm ctx t
@@ -593,8 +620,8 @@ module private ParserImpl =
         | _ -> ()
         let isOptional = nd.questionToken |> Option.isSome
         let fl = { name = name; isOptional = isOptional; value = ty }
-        attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
-      | None -> nodeWarn ctx nd "unsupported property name '%s' in PropertyDeclaration" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
+        attr, Field (fl, (if isReadOnly (modifiers nd) then ReadOnly else Mutable))
+      | Error _ -> nodeWarn ctx nd "unsupported property name '%s' in PropertyDeclaration" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     | Kind.CallSignature ->
       let nd = nd :?> Ts.CallSignatureDeclaration
       let localTyprm, ty = extractType nd
@@ -607,13 +634,10 @@ module private ParserImpl =
       let localTyprm, retTy = extractType sdb
       let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
       let func = readParameters typrm ctx sdb.parameters sdb retTy
-      match sdb.name |> Option.bind getPropertyName with
-      | Some name ->
+      match sdb.name |> Result.ofOption |> Result.bind getPropertyName with
+      | Ok name ->
         attr, Method (name, func, localTyprm)
-      | None ->
-        match sdb.name |> Option.bind getPropertyExpression with
-        | Some expr -> readSymbolIndexer expr (Choice2Of2 func) fail
-        | None -> fail ()
+      | Error expr -> readSymbolIndexer expr (Choice2Of2 func) fail
     | Kind.IndexSignature ->
       let nd = nd :?> Ts.IndexSignatureDeclaration
       let localTyprm, ty = extractType nd
@@ -639,17 +663,17 @@ module private ParserImpl =
     | Kind.GetAccessor ->
       let nd = nd :?> Ts.GetAccessorDeclaration
       match getPropertyName nd.name with
-      | Some name ->
+      | Ok name ->
         let localTyprm, ty = extractType nd
         if not (List.isEmpty localTyprm) then nodeWarn ctx nd "getter with type argument is not supported"
         let isOptional = nd.questionToken |> Option.isSome
         let fl = { name = name; isOptional = isOptional; value = ty }
         attr, Getter fl
-      | None -> nodeWarn ctx nd "unsupported property name '%s' in GetAccessor" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
+      | Error _ -> nodeWarn ctx nd "unsupported property name '%s' in GetAccessor" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     | Kind.SetAccessor ->
       let nd = nd :?> Ts.SetAccessorDeclaration
       match getPropertyName nd.name with
-      | Some name ->
+      | Ok name ->
         let localTyprm, retTy = extractType nd
         assert (match retTy with UnknownType _ -> true | _ -> false)
         if not (List.isEmpty localTyprm) then nodeWarn ctx nd "setter with type argument is not supported"
@@ -659,34 +683,35 @@ module private ParserImpl =
           | Choice1Of2 named ->
             attr, Setter { named with name = name }
           | Choice2Of2 ty ->
-            attr, Setter { name = name; isOptional = false; value = ty }
+            let isOptional = nd.questionToken |> Option.isSome
+            attr, Setter { name = name; isOptional = isOptional; value = ty }
         | _ ->
           nodeWarn ctx nd "invalid setter for '%s'" (getText nd.name)
           attr, UnknownMember (Some (getText nd))
-      | None -> nodeWarn ctx nd "unsupported property name '%s' in SetAccessor" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
+      | Error _ -> nodeWarn ctx nd "unsupported property name '%s' in SetAccessor" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     | _ ->
       nodeWarn ctx nd "unsupported NamedDeclaration kind: '%s'" (Enum.pp nd.kind)
       attr, UnknownMember (Some (getText nd))
 
-  and readTypeParameters (typrm: Set<string>) (ctx: ParserContext) (tps: Ts.TypeParameterDeclaration ResizeArray option) : TypeParam list =
+  and readTypeParameters (typrm: Set<string>) (ctx: ParserContext) (tps: Ts.TypeParameterDeclaration[] option) : TypeParam list =
     match tps with
     | None -> []
     | Some tps ->
-      let names = tps |> Seq.map (fun tp -> tp.name.text) |> Set.ofSeq |> Set.union typrm
+      let names = tps |> Array.map (fun tp -> tp.name.text) |> Set.ofArray |> Set.union typrm
       tps
-      |> Seq.map (fun tp ->
+      |> Array.map (fun tp ->
         let dt = tp.``default``    |> Option.map (readTypeNode names ctx)
         let et = tp.``constraint`` |> Option.map (readTypeNode names ctx)
         { name = tp.name.text; extends = et; defaultType = dt }
       )
-      |> Seq.toList
+      |> Array.toList
 
-  let readInherits (typrm: Set<string>) (ctx: ParserContext) (hcs: Ts.HeritageClause ResizeArray option) : Type list =
+  let readInherits (typrm: Set<string>) (ctx: ParserContext) (hcs: Ts.HeritageClause[] option) : Type list =
     match hcs with
     | None -> []
     | Some hcs ->
-      hcs |> Seq.collect (fun hc -> hc.types |> Seq.map (readTypeNode typrm ctx))
-          |> Seq.toList
+      hcs |> Array.collect (fun hc -> hc.types |> Array.map (readTypeNode typrm ctx))
+          |> Array.toList
 
   let readInterface (ctx: ParserContext) (i: Ts.InterfaceDeclaration) : Class<ClassName> =
     let name = i.name.getText()
@@ -695,35 +720,36 @@ module private ParserImpl =
     {
       comments = readCommentsForNamedDeclaration ctx i
       name = Name name
-      accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
+      accessibility = getAccessibility i.modifiers |? Public
       typeParams = typrms
       implements = readInherits typrmsSet ctx i.heritageClauses
       isInterface = true
       isExported = getExported i.modifiers
-      members = i.members |> List.ofSeq |> List.map (readNamedDeclaration typrmsSet ctx)
+      members = i.members |> Array.map (readNamedDeclaration typrmsSet ctx) |> List.ofArray
       loc = Node.location i
     }
 
   let readClass (ctx: ParserContext) (i: Ts.ClassDeclaration) : Class<ClassName> =
     let typrms = readTypeParameters Set.empty ctx i.typeParameters
     let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
+    let modifiers = modifiers i
     {
       comments = readCommentsForNamedDeclaration ctx i
-      name = i.name |> Option.map (fun id -> Name id.text) |> Option.defaultValue ExportDefaultUnnamedClass
-      accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
+      name = i.name |> Option.map (fun id -> Name id.text) |? ExportDefaultUnnamedClass
+      accessibility = getAccessibility modifiers |? Public
       typeParams = typrms
       implements = readInherits typrmsSet ctx i.heritageClauses
       isInterface = false
-      isExported = getExported i.modifiers
-      members = i.members |> List.ofSeq |> List.map (readNamedDeclaration typrmsSet ctx)
+      isExported = getExported modifiers
+      members = i.members |> Array.map (readNamedDeclaration typrmsSet ctx) |> List.ofArray
       loc = Node.location i
     }
 
   let readEnumCase (ctx: ParserContext) (em: Ts.EnumMember) : EnumCase option =
     match getPropertyName em.name with
-    | Some name ->
+    | Ok name ->
       let value =
-        let inline fallback () =
+        let fallback () =
           match ctx.checker.getConstantValue(!^em) with
           | None -> None
           | Some (U2.Case1 str) -> Some (LString str)
@@ -740,13 +766,13 @@ module private ParserImpl =
               nodeWarn ctx ep "enum value '%s' for case '%s' not supported" (ep.getText()) name)
       let comments = readCommentsForNamedDeclaration ctx em
       Some { comments = comments; loc = Node.location em; name = name; value = value }
-    | None -> nodeWarn ctx em "unsupported enum case name '%s'" (getText em.name); None
+    | Error _ -> nodeWarn ctx em "unsupported enum case name '%s'" (getText em.name); None
 
   let readEnum (ctx: ParserContext) (ed: Ts.EnumDeclaration) : Enum =
     {
       name = ed.name.text
       comments = readCommentsForNamedDeclaration ctx ed
-      cases = ed.members |> List.ofSeq |> List.choose (readEnumCase ctx)
+      cases = ed.members |> Array.choose (readEnumCase ctx) |> List.ofArray
       isExported = getExported ed.modifiers
       loc = Node.location ed
     }
@@ -758,9 +784,9 @@ module private ParserImpl =
     { name = a.name.text; typeParams = typrm; target = ty; comments = comments; isExported = getExported a.modifiers; loc = Node.location a }
 
   let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list =
-    v.declarationList.declarations |> List.ofSeq |> List.map (fun vd ->
+    v.declarationList.declarations |> Array.map (fun vd ->
       let comments = readCommentsForNamedDeclaration ctx vd
-      match getBindingName ctx vd.name with
+      match getBindingName vd.name with
       | None ->
         nodeWarn ctx vd "name is not defined for variable"
         UnknownStatement {| origText = Some (vd.getText()); loc = Node.location vd; comments = comments |}
@@ -783,10 +809,11 @@ module private ParserImpl =
               nodeWarn ctx vd "type missing for variable '%s'" name
               UnknownType None
         let isConst = (int vd.flags) ||| (int Ts.NodeFlags.Const) <> 0
-        let isExported = getExported vd.modifiers
-        let accessibility = getAccessibility vd.modifiers
+        let modifiers = modifiers vd
+        let isExported = getExported modifiers
+        let accessibility = getAccessibility modifiers
         Variable { comments = comments; loc = Node.location vd; name = name; typ = ty; isConst = isConst; isExported = isExported; accessibility = accessibility }
-    )
+    ) |> List.ofArray
 
   let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Function option =
     match f.name with
@@ -839,12 +866,12 @@ module private ParserImpl =
           let nes = bindings |> box :?> Ts.NamedExports
           let clauses =
             nes.elements
-            |> Seq.map (fun x ->
-              let inline ident (name: Ts.Identifier) = readIdent ctx name
+            |> Array.map (fun x ->
+              let ident (name: Ts.Identifier) = readIdent ctx name
               match x.propertyName with
               | None -> ES6ReExport {| target = ident x.name; renameAs = None |}
               | Some propertyName -> ES6ReExport {| target = ident propertyName; renameAs = Some x.name.text  |})
-            |> Seq.toList
+            |> List.ofArray
           Some clauses
         | _ -> nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
       clauses |> Option.map (fun clauses ->
@@ -863,12 +890,12 @@ module private ParserImpl =
         let nes = bindings |> box :?> Ts.NamedExports
         let clauses =
           nes.elements
-          |> Seq.map (fun x ->
-            let inline ident (name: Ts.Identifier) = readIdent ctx name
+          |> Array.map (fun x ->
+            let ident (name: Ts.Identifier) = readIdent ctx name
             match x.propertyName with
             | None -> ES6Export {| target = ident x.name; renameAs = None |}
             | Some propertyName -> ES6Export {| target = ident propertyName; renameAs = Some x.name.text  |})
-          |> Seq.toList
+          |> List.ofArray
         Some [Export { clauses = clauses; loc = Node.location nes; comments = comments; origText = e.getText() }]
       | _ -> nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
     | _, _ -> nodeWarn ctx e "this kind of export statement is not supported."; None
@@ -878,20 +905,18 @@ module private ParserImpl =
 
   let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclaration) : Statement option =
     let comments = readCommentsForNamedDeclaration ctx i
-    let moduleReference = !!i.moduleReference : Ts.Node
-    match moduleReference.kind with
-    | Kind.Identifier | Kind.QualifiedName ->
-      let kind = getKindFromName ctx moduleReference
+    match i.moduleReference with
+    | Ts.ModuleReference.Identifier _ | Ts.ModuleReference.QualifiedName _ ->
+      let kind = getKindFromName ctx !!i.moduleReference
       Import {
         comments = comments;
         loc = Node.location i;
         isTypeOnly = i.isTypeOnly;
         isExported = getExported i.modifiers;
-        clauses = [LocalImport {| name = i.name.text; kind = kind; target = readIdent ctx moduleReference |}]
+        clauses = [LocalImport {| name = i.name.text; kind = kind; target = readIdent ctx !!i.moduleReference |}]
         origText = i.getText()
       } |> Some
-    | Kind.ExternalModuleReference ->
-      let m : Ts.ExternalModuleReference = !!i.moduleReference
+    | Ts.ModuleReference.ExternalModuleReference m ->
       match (!!m.expression : Ts.Node).kind with
       | Kind.StringLiteral ->
         let moduleSpecifier = (!!m.expression : Ts.StringLiteral).text
@@ -906,8 +931,6 @@ module private ParserImpl =
         } |> Some
       | kind ->
         nodeWarn ctx i "invalid kind '%s' for module specifier" (Enum.pp kind); None
-    | kind ->
-      nodeWarn ctx i "invalid kind '%s' for import" (Enum.pp kind); None
 
   let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : Statement option =
     match i.importClause with
@@ -917,28 +940,26 @@ module private ParserImpl =
       | Kind.StringLiteral ->
         let comments = readCommentsForNamedDeclaration ctx c
         let moduleSpecifier = (!!i.moduleSpecifier : Ts.StringLiteral).text
-        let inline create clauses =
+        let create clauses =
           Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; clauses = clauses; origText = i.getText() })
         match c.name, c.namedBindings with
         | None, None -> create [ES6WildcardImport moduleSpecifier]
-        | None, Some b when (!!b : Ts.Node).kind = Kind.NamespaceImport ->
-          let n = (!!b : Ts.NamespaceImport)
+        | None, Some (Ts.NamedImportBindings.NamespaceImport n) ->
           let kind = getKindFromName ctx n.name
           create [NamespaceImport {| name = n.name.text; kind = kind; isES6Import = true; specifier = moduleSpecifier |}]
-        | _, Some b when (!!b : Ts.Node).kind = Kind.NamedImports ->
-          let n = (!!b : Ts.NamedImports)
+        | _, Some (Ts.NamedImportBindings.NamedImports n) ->
           let spec = {| specifier = moduleSpecifier |}
           let defaultImport = c.name |> Option.map (fun i -> ES6DefaultImport {| spec with name = i.text; kind = getKindFromName ctx i |})
           let bindings =
             n.elements
-            |> Seq.toList
-            |> List.map (fun e ->
+            |> Array.map (fun e ->
               let kind = getKindFromName ctx e.name
               let name, renameAs =
                 match e.propertyName with
                 | Some i -> i.text, Some e.name.text
                 | None -> e.name.text, None
               ES6Import {| spec with name = name; kind = kind; renameAs = renameAs |})
+            |> List.ofArray
           create (Option.toList defaultImport @ bindings)
         | Some i, None ->
           create [ES6DefaultImport {| name = i.text; kind = getKindFromName ctx i; specifier = moduleSpecifier |}]
@@ -951,11 +972,11 @@ module private ParserImpl =
     let desc =
       doc.comment
       |> Option.map (readCommentText >> Description >> List.singleton)
-      |> Option.defaultValue []
+      |? []
     let tags =
       doc.tags
-      |> Option.map (Seq.map readJSDocTag >> List.ofSeq)
-      |> Option.defaultValue []
+      |> Option.map (Array.map readJSDocTag >> List.ofArray)
+      |? []
     desc @ tags
 
   let readJSDoc (ctx: ParserContext) (doc: Ts.JSDoc) : Statement option =
@@ -964,27 +985,16 @@ module private ParserImpl =
     | xs -> FloatingComment {| comments = xs; loc = Node.location doc |} |> Some
 
   let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Statement =
-    let name =
-      match (!!md.name : Ts.Node).kind with
-      | Kind.GlobalKeyword -> None
-      | Kind.Identifier ->
-        match (!!md.name : Ts.Identifier).text with
-        | "global" -> None
-        | name -> Some name
-      | Kind.StringLiteral -> (!!md.name : Ts.StringLiteral).text |> Some
-      | _ -> nodeError ctx !!md.name "unsupported module name '%s'" (getText md.name)
     let check kind =
-      md.getChildren() |> Seq.exists (fun nd -> nd.kind = kind)
-    let isNamespace = check Kind.NamespaceKeyword
-    let isExported = getExported md.modifiers
-    let statements =
+      md.getChildren() |> Array.exists (fun nd -> nd.kind = kind)
+    let statements ctx =
       md.getChildren()
-      |> Seq.toList
+      |> Array.toList
       |> List.collect (fun nd ->
         match nd.kind with
         | Kind.ModuleBlock ->
           let mb = nd :?> Ts.ModuleBlock
-          mb.statements |> List.ofSeq |> List.collect (readStatement ctx)
+          mb.statements |> List.ofArray |> List.collect (readStatement ctx)
         | Kind.NamespaceKeyword | Kind.ExportKeyword | Kind.Identifier
         | Kind.DeclareKeyword | Kind.StringLiteral | Kind.DotToken | Kind.SyntaxList | Kind.ModuleKeyword -> []
         | Kind.JSDocComment -> []
@@ -995,14 +1005,20 @@ module private ParserImpl =
           [])
     let comments =
       md.getChildren()
-      |> Seq.filter (fun nd -> nd.kind = Kind.JSDocComment)
-      |> List.ofSeq
+      |> Array.filter (fun nd -> nd.kind = Kind.JSDocComment)
+      |> List.ofArray
       |> List.collect (fun nd -> nd :?> Ts.JSDoc |> readJSDocImpl ctx)
-    match name with
-    | Some name ->
-      Module { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = comments; loc = Node.location md }
-    | None ->
-      Global { isExported = isExported; isNamespace = isNamespace; name = (); statements = statements; comments = comments; loc = Node.location md }
+    let loc = Node.location md
+    match md.name with
+    | ModuleName.Identifier i ->
+      if i.text = "global" then
+        Global { name = (); isExported = (); statements = statements ctx; comments = comments; loc = loc }
+      else
+        let isExported = getExported md.modifiers
+        Namespace { name = i.text; isExported = isExported; statements = statements ctx; comments = comments; loc = loc }
+    | ModuleName.StringLiteral s ->
+      let orig = $"\"{s.text}\""
+      AmbientModule { name = { orig = orig; unquoted = s.text }; isExported = (); statements = statements ctx; comments = comments; loc = loc }
 
   and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
     let onError () =
@@ -1033,13 +1049,13 @@ module private ParserImpl =
 module Node = Node.Api
 
 /// works on NodeJS only.
-let private getAllLocalReferences (ctx: #IContext<#IOptions>) (sourceFiles: Ts.SourceFile seq) =
+let private getAllLocalReferences (ctx: #IContext<#IOptions>) (sourceFiles: Ts.SourceFile[]) =
   let sourceFilesMap = new MutableMap<_, _>()
   for sourceFile in sourceFiles do
     sourceFilesMap.Add(Path.absolute sourceFile.fileName, sourceFile)
 
   let createSourceFile path =
-    ts.createSourceFile(path, Node.fs.readFileSync(path, "utf-8"), Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS)
+    ts.createSourceFile(path, Node.fs.readFileSync(path, "utf-8"), !^Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS)
 
   let tryAdd (from: Ts.SourceFile) path =
     let path = Path.absolute path
@@ -1097,8 +1113,7 @@ let private getAllLocalReferences (ctx: #IContext<#IOptions>) (sourceFiles: Ts.S
 
 open DataTypes
 
-let createDependencyGraph (sourceFiles: Ts.SourceFile seq) =
-  let sourceFiles = Array.ofSeq sourceFiles
+let createDependencyGraph (sourceFiles: Ts.SourceFile[]) =
   let files = sourceFiles |> Array.map (fun sf -> sf.fileName, sf) |> Map.ofArray
   let mutable graph = Graph.empty
 
@@ -1116,7 +1131,7 @@ let createDependencyGraph (sourceFiles: Ts.SourceFile seq) =
         |> Option.iter (fun target ->
           graph <- graph |> Graph.add sourceFile.fileName target.fileName)
 
-  let go (sourceFile: Ts.SourceFile) (ns: Ts.Node seq) =
+  let go (sourceFile: Ts.SourceFile) (ns: Ts.Node[]) =
     for n in ns do
       match n.kind with
       | Ts.SyntaxKind.ImportEqualsDeclaration ->
@@ -1129,22 +1144,22 @@ let createDependencyGraph (sourceFiles: Ts.SourceFile seq) =
         n.moduleSpecifier
         |> handleModuleSpecifier sourceFile
       | _ -> ()
-    ns |> Seq.collect (fun n -> n.getChildren(sourceFile))
+    ns |> Array.collect (fun n -> n.getChildren(sourceFile))
 
   let goSourceFile (sourceFile: Ts.SourceFile) =
-    let mutable nodes : Ts.Node seq = !!sourceFile.statements
-    while not (nodes |> Seq.isEmpty) do
+    let mutable nodes : Ts.Node[] = !!sourceFile.statements
+    while not (nodes |> Array.isEmpty) do
       nodes <- go sourceFile nodes
 
   for source in sourceFiles do goSourceFile source
   graph
 
-let assertFileExistsAndHasCorrectExtension (fileName: string) =
+let assertFileExistsAndHasCorrectExtension (ctx: #IContext<#IOptions>) (fileName: string) =
   assertNode ()
   if not <| Node.fs.existsSync(!^fileName) then
-    failwithf "file '%s' does not exist" fileName
-  if fileName.EndsWith(".d.ts") |> not then
-    failwithf "file '%s' is not a TypeScript declaration file" fileName
+    ctx.logger.errorf "file '%s' does not exist" fileName
+  if fileName.EndsWith(".ts") |> not then
+    ctx.logger.errorf "file '%s' is not a TypeScript file" fileName
   fileName
 
 let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileNames: string[]) : ParserContext =
@@ -1154,14 +1169,14 @@ let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileName
       if not ctx.options.followRelativeReferences then
         fileNames
         |> Array.map Path.absolute
-        |> Array.map assertFileExistsAndHasCorrectExtension
+        |> Array.map (assertFileExistsAndHasCorrectExtension ctx)
       else
         fileNames
-        |> Seq.map Path.absolute
-        |> Seq.map assertFileExistsAndHasCorrectExtension
-        |> Seq.map (fun a -> a, Node.fs.readFileSync(a, "utf-8"))
-        |> Seq.map (fun (a, i) ->
-          ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
+        |> Array.map Path.absolute
+        |> Array.map (assertFileExistsAndHasCorrectExtension ctx)
+        |> Array.map (fun a -> a, Node.fs.readFileSync(a, "utf-8"))
+        |> Array.map (fun (a, i) ->
+          ts.createSourceFile (a, i, !^Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
         |> fun srcs ->
           ctx.logger.tracef "* following relative references..."
           getAllLocalReferences ctx srcs |> fst
@@ -1173,12 +1188,13 @@ let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileName
     checker = program.getTypeChecker()
     fileNames = fileNames
     currentSource = (null : Ts.SourceFile)
+    currentAmbientModule = (None : string option)
   |}
 
 let createContextFromString (ctx: #IContext<#IOptions>) compilerOptions (files: {| fileName: string; text: string |} seq) : ParserContext =
   let sourceFiles =
     files
-    |> Seq.map (fun x -> ts.createSourceFile (x.fileName, x.text, Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
+    |> Seq.map (fun x -> ts.createSourceFile (x.fileName, x.text, !^Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
     |> Seq.toArray
   let program = TypeScriptHelper.createProgramForBrowser sourceFiles compilerOptions
   !!{|
@@ -1188,34 +1204,35 @@ let createContextFromString (ctx: #IContext<#IOptions>) compilerOptions (files: 
     checker = program.getTypeChecker()
     fileNames = files |> Seq.map (fun x -> x.fileName) |> Seq.toArray
     currentSource = (null : Ts.SourceFile)
+    currentAmbientModule = (None : string option)
   |}
 
 let parse (ctx: ParserContext) : Input =
   let srcs =
     let targets = ctx.fileNames |> Set.ofArray
     ctx.program.getSourceFiles()
-    |> Seq.filter (fun sf -> targets |> Set.contains sf.fileName)
+    |> Array.filter (fun sf -> targets |> Set.contains sf.fileName)
   let sources =
     srcs
-    |> Seq.map (fun src ->
+    |> Array.map (fun src ->
       ctx.logger.tracef "* parsing %s..." src.fileName
       let references =
-        Seq.concat [
-          src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
-          src.typeReferenceDirectives |> Seq.map (fun x -> TypeReference x.fileName)
-          src.libReferenceDirectives |> Seq.map (fun x -> LibReference x.fileName)
-        ] |> Seq.toList
+        Array.concat [
+          src.referencedFiles |> Array.map (fun x -> FileReference x.fileName)
+          src.typeReferenceDirectives |> Array.map (fun x -> TypeReference x.fileName)
+          src.libReferenceDirectives |> Array.map (fun x -> LibReference x.fileName)
+        ] |> Array.toList
       let statements =
         src.statements
-        |> Seq.collect (
+        |> Array.toList
+        |> List.collect (
           ParserImpl.readStatement
             (ctx |> JS.cloneWith (fun ctx -> ctx.currentSource <- src)))
-        |> Seq.toList
       { statements = statements
         fileName = src.fileName
         hasNoDefaultLib = src.hasNoDefaultLib
         references = references })
-    |> List.ofSeq
+    |> List.ofArray
 
   let info =
     match sources with

@@ -16,30 +16,6 @@ with
   member this.IsOffOrDefault = match this with Off | Default -> true | _ -> false
 
 [<StringEnum; RequireQualifiedAccess>]
-type FeatureFlag =
-  | [<CompiledName("full")>] Full
-  | [<CompiledName("provide")>] Provide
-  | [<CompiledName("consume")>] Consume
-  | [<CompiledName("off")>] Off
-  | [<CompiledName("default")>] Default
-with
-  static member Values = [|Full; Provide; Consume; Off; Default|]
-
-  member this.HasProvide = match this with Full | Provide -> true | _ -> false
-  member this.HasConsume = match this with Full | Consume -> true | _ -> false
-  member this.IsOffOrDefault = match this with Off | Default -> true | _ -> false
-
-  member this.WithProvide(b: bool) =
-    match this with
-    | Provide | Off | Default -> if b then Provide else Off
-    | Full | Consume -> if b then Full else Consume
-
-  member this.WithConsume(b: bool) =
-    match this with
-    | Consume | Off | Default -> if b then Consume else Off
-    | Full | Provide -> if b then Full else Provide
-
-[<StringEnum; RequireQualifiedAccess>]
 type Simplify =
   | [<CompiledName("all")>] All
   | [<CompiledName("immediate-instance")>] ImmediateInstance
@@ -111,7 +87,6 @@ type Options =
   abstract subtyping: Subtyping list with get, set
   abstract inheritWithTags: FeatureFlag with get, set
   abstract recModule: RecModule with get, set
-  abstract safeArity: FeatureFlag with get, set
   abstract simplify: Simplify list with get, set
   abstract readableNames: bool with get, set
   abstract functor: Functor with get, set
@@ -139,8 +114,6 @@ module Options =
             opts.recModule <- RecModule.Optimized
 
         if p = Preset.Safe || p = Preset.Full then
-          if opts.safeArity = FeatureFlag.Default then
-            opts.safeArity <- FeatureFlag.Full
           if subtypingIsDefault then
             opts.subtyping <- Subtyping.CastFunction :: opts.subtyping
 
@@ -240,12 +213,6 @@ module Options =
         ],
         "Code Generator Options:")
       .addChoice(
-        "safe-arity",
-        FeatureFlag.Values,
-        (fun (o: Options) -> o.safeArity),
-        descr="Use `TypeName.t_n` type names to safely use overloaded types from other packages.",
-        defaultValue=FeatureFlag.Default)
-      .addChoice(
         "rec-module",
         RecModule.Values,
         (fun (o: Options) -> o.recModule),
@@ -271,6 +238,18 @@ module Options =
         descr="Emit functor for generic classes and interfaces.",
         defaultValue=Functor.On
       )
+
+      .group(
+        !^ResizeArray[
+          "safe-arity";
+        ],
+        "Deprecated Options:")
+      .addOption(
+        "safe-arity",
+        (fun (o: Options) -> ""),
+        descr="Use `TypeName.t_n` type names to safely use overloaded types from other packages.",
+        defaultValue="")
+      .addDeprecated("safe-arity", "now optimal by default.")
 
       .middleware(!^validate)
 

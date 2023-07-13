@@ -1,6 +1,17 @@
 [<AutoOpen>]
 module Ts2Ml.Extensions
 
+let inline (|?) (xo: 'a option) (y: 'a) : 'a = Option.defaultValue y xo
+
+/// Use when a certain code path is impossible or unreachable.
+let impossible fmt =
+  Printf.ksprintf (fun msg -> failwith ("impossible: " + msg)) fmt
+
+/// Repeatedly apply `f` until the same result is obtained.
+let rec repeatUntilEquilibrium<'a when 'a: equality> (f: 'a -> 'a) a =
+  let a' = f a
+  if (a = a') then a' else repeatUntilEquilibrium f a'
+
 open System
 
 module Enum =
@@ -42,7 +53,7 @@ module String =
   let escape (s: string) =
     s
      .Replace("\\", "\\\\")
-     .Replace("'", "\\'").Replace("\"", "\\\"")
+     .Replace("\"", "\\\"")
      .Replace("\b", "\\b").Replace("\n", "\\n").Replace("\r", "\\r")
      .Replace("\t", "\\t")
 
@@ -51,12 +62,18 @@ module String =
       state.Replace(e, "\\" + e)
     ) s
 
+  open Fable.Core
+  [<Emit("$0.normalize()")>]
+  let normalize (_: string) : string = jsNative
+
 module Option =
   let iterNone f = function
     | Some x -> Some x
     | None -> f (); None
 
 module Result =
+  let ofOption opt =
+    match opt with Some x -> Ok x | None -> Error (Unchecked.defaultof<_>)
   let toOption result =
     match result with Ok x -> Some x | Error _ -> None
 
@@ -69,9 +86,24 @@ module List =
       ) ([], [])
     List.rev xs1, List.rev xs2
 
+  let splitChoice3 (xs: Choice<'t1, 't2, 't3> list) : 't1 list * 't2 list * 't3 list =
+    let xs1, xs2, xs3 =
+      xs |> List.fold (fun (xs1, xs2, xs3) -> function
+        | Choice1Of3 x -> x :: xs1, xs2, xs3
+        | Choice2Of3 x -> xs1, x :: xs2, xs3
+        | Choice3Of3 x -> xs1, xs2, x :: xs3) ([], [], [])
+    List.rev xs1, List.rev xs2, List.rev xs3
+
 module Map =
   let addNoOverwrite k v m =
     m |> Map.change k (function None -> Some v | Some v -> Some v)
+
+  let mergeWith f m1 m2 =
+    m2 |> Map.fold (fun m1 k v2 ->
+      match m1 |> Map.tryFind k with
+      | None -> m1 |> Map.add k v2
+      | Some v1 -> m1 |> Map.add k (f v1 v2)
+    ) m1
 
 type MutableMap<'k, 'v> = Collections.Generic.Dictionary<'k, 'v>
 type MutableSet<'v> = Collections.Generic.HashSet<'v>
@@ -192,6 +224,11 @@ module Path =
   let absolute (path: string) : Absolute =
     if Node.path.isAbsolute(path) then path |> normalizeSlashes
     else Node.path.resolve(path) |> normalizeSlashes
+
+  let relativeToCwd (path: string) =
+    if Node.path.isAbsolute(path) then
+      Node.path.relative(Node.``process``.cwd(), path) |> normalizeSlashes
+    else path |> normalizeSlashes
 
   let diff (fromPath: Absolute) (toPath: Absolute) : string =
     let fromPath =

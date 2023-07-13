@@ -1,14 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
+    <Compile Include="BindingUpdater.fs" />
     <Compile Include="build.fs" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Fake.Core.Process" Version="6.0.0" />
     <PackageReference Include="Fake.Core.ReleaseNotes" Version="6.0.0" />
@@ -19,5 +17,4 @@
     <PackageReference Include="Fake.JavaScript.Yarn" Version="6.0.0" />
     <PackageReference Include="Fake.Tools.Git" Version="6.0.0" />
   </ItemGroup>
-
 </Project>

@@ -59,7 +59,7 @@ type Argv<'T> with
         :> Argv<'U>
   member this.addFlag (key: string, f: 'U -> bool, ?descr, ?defaultValue, ?defaultDescr, ?alias) =
     this.boolean(!^key)
-        .addImpl<bool>(key, descr, dv=(defaultValue |> Option.defaultValue false), ?dd=defaultDescr, ?alias=alias)
+        .addImpl<bool>(key, descr, dv=(defaultValue |? false), ?dd=defaultDescr, ?alias=alias)
         :> Argv<'U>
   member this.addCounter (key: string, f: 'U -> int, ?descr, ?alias) =
     this.count(!^key)
@@ -82,3 +82,5 @@ type Argv<'T> with
               | None -> failwithf "Unknown value '%s' for option '%s'" s key)
             |> Array.toList)
         :> Argv<'U>
+  member this.addDeprecated (key: string, ?msg) =
+    this.deprecateOption(key, ?msg=msg)

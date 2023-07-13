@@ -7,7 +7,7 @@ let defaultCompilerOptions =
   jsOptions<Ts.CompilerOptions>(fun o ->
     o.target <- Some Ts.ScriptTarget.Latest
     o.noEmit <- Some true
-    o.moduleResolution <- Some Ts.ModuleResolutionKind.Node12
+    o.moduleResolution <- Some Ts.ModuleResolutionKind.NodeNext
   )
 
 type IDummyCompilerHost =
@@ -43,12 +43,12 @@ let createDummyCompilerHost (fileNames: string[]) (sourceFiles: Ts.SourceFile[])
   !!host
 
 let createProgramForNode (fileNames: string[]) (options: Ts.CompilerOptions) =
-  ts.createProgram(ResizeArray fileNames, options, ts.createCompilerHost(options, true))
+  ts.createProgram(fileNames, options, ts.createCompilerHost(options, true))
 
 let createProgramForBrowser (sourceFiles: Ts.SourceFile[]) (options: Ts.CompilerOptions) =
   let fileNames = sourceFiles |> Array.map (fun s -> s.fileName)
   ts.createProgram(
-    ResizeArray (sourceFiles |> Array.map (fun s -> s.fileName)),
+    sourceFiles |> Array.map (fun s -> s.fileName),
     options,
     createDummyCompilerHost fileNames sourceFiles
   )

@@ -55,8 +55,8 @@ jobs:
       - name: Install OCaml Dependencies
         run: opam install . --deps-only
 
-      - name: Run build.fs
-        run: dotnet run target Test
+      - name: Build and test the project
+        run: bash fake test
 
   auto-merge:
     name: Auto-Merge PRs by Dependabot

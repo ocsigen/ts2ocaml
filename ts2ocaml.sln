@@ -7,7 +7,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ts2ocaml", "src\ts2ocaml.fs
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ts2ml", "lib\ts2ml.fsproj", "{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "build", "build.fsproj", "{CF67588E-3D8A-4208-ACAB-F66F7D79E236}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "build", "build\build.fsproj", "{CF67588E-3D8A-4208-ACAB-F66F7D79E236}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

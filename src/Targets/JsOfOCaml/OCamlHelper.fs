@@ -298,6 +298,20 @@ let external_ name tyarg tyret extName =
 
 // we don't sanitize names in OCamlHelper; callers should do it themselves
 module Naming =
+  let keywords =
+    Set.ofList [
+      "and"; "as"; "assert"; "asr"; "begin"; "class";
+      "constraint"; "do"; "done"; "downto"; "else"; "end";
+      "exception"; "external"; "false"; "for"; "fun"; "function";
+      "functor"; "if"; "in"; "include"; "inherit"; "initializer";
+      "land"; "lazy"; "let"; "lor"; "lsl"; "lsr";
+      "lxor"; "match"; "method"; "mod"; "module"; "mutable";
+      "new"; "nonrec"; "object"; "of"; "open"; "or";
+      "private"; "rec"; "sig"; "struct"; "then"; "to";
+      "true"; "try"; "type"; "val"; "virtual"; "when";
+      "while"; "with"
+    ]
+
   let ourReservedNames =
     set [
       "create"; "apply"; "invoke"; "get"; "set"; "cast_from"
@@ -305,12 +319,12 @@ module Naming =
 
   let reservedValueNames =
     Set.unionMany [
-      Naming.Keywords.keywords
+      keywords
       ourReservedNames
     ]
 
   let removeInvalidChars (s: string) =
-    s.ToCharArray()
+    s.Trim('"').ToCharArray()
     |> Array.map (fun c -> if Char.isAlphabetOrDigit c || c = '_' then c else '_')
     |> System.String
 
@@ -333,12 +347,12 @@ module Naming =
       else if Char.IsUpper name.[0] then
         sprintf "%c%s" (Char.ToLower name.[0]) name.[1..]
       else name
-    if Naming.Keywords.keywords |> Set.contains result then result + "_" else result
+    if keywords |> Set.contains result then result + "_" else result
 
   let reservedModuleNames =
     Set.ofList [
       "Export"; "Default"
-    ] |> Set.union Naming.Keywords.keywords
+    ] |> Set.union keywords
 
   let moduleNameReserved (name: string) =
     let name = removeInvalidChars name
@@ -358,7 +372,7 @@ module Naming =
       if Char.IsLower s.[0] then
         sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
       else s
-    if Naming.Keywords.keywords |> Set.contains result then result + "_" else result
+    if keywords |> Set.contains result then result + "_" else result
 
   let structured (baseName: string -> string) (name: string list) =
     let rec prettify = function
@@ -372,7 +386,7 @@ module Naming =
     let result =
       if Char.IsUpper s.[0] then "_" + s
       else s
-    if Naming.Keywords.keywords |> Set.contains result then result + "_" else result
+    if keywords |> Set.contains result then result + "_" else result
 
   let createTypeNameOfArity arity maxArityOpt name =
     match maxArityOpt with
@@ -406,11 +420,17 @@ module Kind =
     Set.intersect kind (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not
 
 let jsBuilder name (fields: {| isOptional: bool; name: string; value: text |} list) (thisType: text) =
+  let renamer = new OverloadRenamer(used=(fields |> List.map (fun x -> "arg", x.name) |> Set.ofList))
   let args =
     fields
+    |> List.distinctBy (fun x -> x.name)
     |> List.map (fun f ->
       let prefix = if f.isOptional then str "?" else empty
-      let name = Naming.valueName f.name
+      let name =
+        match Naming.valueName f.name with
+        | "_" -> renamer.Rename "arg" "__"
+        | s when not (Char.isAlphabet s[0] || s[0] = '_') -> renamer.Rename "arg" $"_{s}"
+        | name -> name
       let value =
         if name = f.name then f.value
         else

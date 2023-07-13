@@ -117,7 +117,49 @@ module Graph =
           ordering.[group] <- order; ordering
         ) (Array.zeroCreate (List.length groups))
 
-    xs
-    |> List.groupBy (fun s -> Map.find s cmps)
-    |> List.sortBy (fun (i, _) -> sortedGroups.[i])
-    |> List.map (snd >> List.sort)
+    let result =
+      xs
+      |> List.groupBy (fun s -> Map.find s cmps)
+      |> List.sortBy (fun (i, _) -> sortedGroups.[i])
+      |> List.map snd
+#if DEBUG
+    assert (Set.ofList xs = Set.ofList (List.concat result))
+#endif
+    result
+
+type DependencyTrie<'k when 'k: comparison> = Trie<'k, 'k list list>
+
+module DependencyTrie =
+  open Ts2Ml.Extensions
+
+  let ofTrie (getReferences: 'v -> WeakTrie<'k>) (trie: Trie<'k, 'v>) : DependencyTrie<'k> =
+    let refTrieMap = new MutableMap<'k list, WeakTrie<'k>>()
+    let rec getRefTrie nsRev (x: Trie<'k, 'v>) =
+      match refTrieMap.TryGetValue(nsRev) with
+      | true, wt -> wt
+      | false, _ ->
+        let wtCurrent =
+          x.value
+          |> Option.map getReferences
+          |? WeakTrie.empty
+        let wt =
+          x.children
+          |> Map.fold (fun state k child -> WeakTrie.union state (getRefTrie (k :: nsRev) child)) wtCurrent
+          |> WeakTrie.remove (List.rev nsRev)
+        refTrieMap[nsRev] <- wt
+        wt
+    let getDeps nsRev (x: Trie<'k, 'v>) : ('k * 'k) list =
+      x.children
+      |> Map.fold (fun state k child ->
+        let refs =
+          getRefTrie (k :: nsRev) child
+          |> WeakTrie.getSubTrie (List.rev nsRev) |? WeakTrie.empty
+          |> WeakTrie.ofDepth 1 |> WeakTrie.toList
+          |> List.choose (function [x] -> Some (k, x) | _ -> None (* should be impossible *))
+        refs :: state) []
+      |> List.rev |> List.concat
+    let rec go nsRev (x: Trie<'k, 'v>) : DependencyTrie<'k> =
+      let g = getDeps nsRev x |> Graph.ofEdges
+      let scc = Graph.stronglyConnectedComponents g (x.children |> Map.toList |> List.map fst)
+      { value = Some scc; children = x.children |> Map.map (fun k child -> go (k :: nsRev) child) }
+    go [] trie

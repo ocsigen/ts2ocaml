@@ -593,7 +593,7 @@ and StructuredTextItem =
   StructuredTextItemBase<
     {| name: string; tyargs: (TypeParam * text) list; isRec: bool; body: text option; shouldAssert: bool |},
     (OverloadRenamer -> CurrentScope -> Binding),
-    {| name: string; ty: text; comments: Comment list |}
+    {| name: string; comments: Comment list |}
   >
 
 and CurrentScope = {
@@ -1113,7 +1113,6 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           (Type.intf (str "'tags") +@ " constraint 'tags = " + tags |> Some)
         |> TypeAliasText |> Some
       else None
-    // " this resets the weird syntax highlighting
 
     let typeDefinition =
       let fallback = {| ty = None; isRec = false |}
@@ -1241,25 +1240,7 @@ and addAnonymousInterfaceExcluding emitTypeFlags (ctx: Context) knownTypes ais (
   ) current
 and addAnonymousInterface emitTypeFlags ctx knownTypes (current: StructuredText) = addAnonymousInterfaceExcluding emitTypeFlags ctx knownTypes [] current
 
-type EnumType =
-  /// Integer enum of which first case is `0` and (n+1)th case is `n`.
-  | CleanInt = 0
-  /// Integer enum but not 'clean' in the above sense.
-  | Int = 1
-  /// Float enum.
-  | Float = 2
-  /// Boolean enum.
-  | Boolean = 3
-  /// String enum.
-  | String = 4
-  /// Enum with integer and float cases.
-  | Number = 5
-  /// Enum with integer and string cases.
-  | PolyVariant = 6
-  /// Other heterogeneous enum.
-  | Heterogeneous = 7
-
-let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enum) =
+let emitEnum (ctx: Context) (current: StructuredText) (e: Enum) =
   let enumCaseToIdentifier (e: Enum) (c: EnumCase) =
     let duplicateCases =
       e.cases |> List.filter (fun c' -> c.value = c'.value)
@@ -1273,88 +1254,43 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
 
   let distinctCases =
     e.cases
-    |> List.map (fun c -> enumCaseToIdentifier e c, c.value)
-    |> List.distinctBy snd
-  let enumValues = distinctCases |> List.map snd
-  let enumType =
-    let types =
-      enumValues
-      |> List.map (function
-        | None -> EnumType.Heterogeneous
-        | Some (LString _) -> EnumType.String
-        | Some (LInt i) -> if i >= 0 then EnumType.Int else EnumType.Float
-        | Some (LFloat _) -> EnumType.Float
-        | Some (LBool _) -> EnumType.Boolean)
-      |> List.distinct
-      |> List.sort
-    match types with
-    | [EnumType.Int] ->
-      let isClean =
-        enumValues
-        |> List.map (function Some (LInt i) -> i | _ -> impossible "emitEnum_Int")
-        |> Seq.sort
-        |> Seq.mapi ((=))
-        |> Seq.forall id
-      if isClean then EnumType.CleanInt
-      else EnumType.Int
-    | [x] -> x
-    | [EnumType.Int; EnumType.Float] -> EnumType.Number
-    | [EnumType.Int; EnumType.String] -> EnumType.PolyVariant
-    | _ -> EnumType.Heterogeneous
+    |> List.map (fun c -> enumCaseToIdentifier e c, c.value, c)
+    |> List.distinctBy (fun (_, value, _) -> value)
+    |> List.map (fun (key, value, case) ->
+      key, value |> Option.defaultWith (fun () -> 
+        ctx.logger.errorf "error: the case '%s' of enum '%s' has an unknown value, which is not supported at %s"
+          case.name e.name case.loc.AsString
+      ))
 
-  let child (c: EnumCase) =
-    let ty =
-      match enumType with
-      | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
-        let case =
-          match c.value with
-          | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
-          | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
-          | _ -> impossible "emitEnum_child_PolyVariant"
-        Type.polyVariant [case]
-      | _ -> str "private t"
-    EnumCaseText {| name = c.name; ty = ty; comments = c.comments  |}
+  let childNode (c: EnumCase) =
+    EnumCaseText {| name = c.name; comments = c.comments  |}
 
   let parentNode =
-    let items =
-      match enumType with
-      | EnumType.CleanInt ->
-        let cases =
-          distinctCases
-          |> List.map (fun (n, v) -> n, match v with Some (LInt i) -> i | _ -> impossible "emitEnum_parentNode_CleanInt")
-          |> List.sortBy snd
-          |> List.map fst
-        let casesText =
-          if (cases |> List.sumBy (fun s -> s.Length)) > 80 then
-            newline + concat newline [
-              for case in cases do
-                yield indent (tprintf "| %s" case)
+    let casesText =
+      newline + concat newline [
+        for key, value in distinctCases do
+          yield indent (
+            concat (str " ") [
+              str "|"
+              Attr.as_ (Term.literal value)
+              str key
             ]
-          else cases |> String.concat " | " |> str
-        [TypeDefText {| name = "t"; tyargs = []; isRec = false; body = Some casesText; shouldAssert = true |}]
-      | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
-        let cases =
-          distinctCases
-          |> List.map snd
-          |> List.map (function
-            | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
-            | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
-            | _ -> impossible "emitEnum_parentNode_PolyVariant")
-        [TypeDefText {| name = "t"; tyargs = []; isRec = false; body = (Type.polyVariant cases |> Some); shouldAssert = false |}]
-      | EnumType.Boolean -> Statement.typeAlias false "t" [] (str "private bool" |> Some) |> TypeAliasText |> List.singleton
-      | EnumType.Float | EnumType.Number ->
-        ctx.logger.warnf "an enum type '%s' contains a case with float or negative value, which is not supported in ReScript at %s" e.name e.loc.AsString
-        let def = "private float " @+ commentStr (sprintf "FIXME: float/negative enum (at %s)" e.loc.AsString)
-        [TypeDefText {| name = "t"; tyargs = []; isRec = false; body = Some def; shouldAssert = false |}]
-      | EnumType.Heterogeneous | _ ->
-        ctx.logger.warnf "a heterogeneous enum '%s' is not supported at %s" e.name e.loc.AsString
-        let def = Type.object +@ " " + commentStr (sprintf "FIXME: heterogeneous enum (at %s)" e.loc.AsString)
-        [TypeDefText {| name = "t"; tyargs = []; isRec = false; body = Some def; shouldAssert = false |}]
-    let items = items @ List.map child e.cases
+          )
+      ]
+    let item =
+      TypeDefText {|
+        name = "t";
+        tyargs = [];
+        isRec = false;
+        body = Some casesText;
+        shouldAssert = true
+      |}
+    let items = item :: List.map childNode e.cases
     let comments = e.comments |> emitComments
     {| StructuredTextNode.empty with items = items; comments = comments |}
 
   let exports = getExportFromStatement ctx e.name Kind.OfEnum "enum" (Enum e)
+
   current
   |> add [e.name] parentNode
   |> set {| StructuredTextNode.empty with exports = Option.toList exports |}
@@ -1573,7 +1509,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | Class c ->
       emitClass emitTypeFlags OverrideFunc.noOverride ctx current (c.MapName Choice1Of2) ((fun _ _ _ -> []), Set.empty, None)
     | Enum e ->
-      emitEnum emitTypeFlags OverrideFunc.noOverride ctx current e
+      emitEnum ctx current e
     | TypeAlias ta ->
       let ctx = ctx |> Context.ofChildNamespace ta.name
       let knownTypes = knownTypes ()
@@ -1771,19 +1707,16 @@ let rec emitModule (dt: DependencyTrie<string>) flags (ctx: Context) st =
     let items =
       let currentScope : CurrentScope = !!flags
 
-      let emitEnumCase (e: {| name: string; ty: text; comments: Comment list |}) =
+      let emitEnumCase (e: {| name: string; comments: Comment list |}) =
         let moduleName = Naming.moduleName e.name
         let types =
-          tprintf "module %s : " moduleName +@ "{ type t = " + e.ty +@ " }"
-        let attrs = scopeToAttr currentScope [Attr.External.val_]
+          tprintf "module %s : " moduleName +@ "{ type nonrec t = t }"
         let intf = [
-          yield str $"type t = {e.ty}"
-          yield Statement.external attrs "value" (str "t") e.name
+          yield str $"type nonrec t = t"
         ]
         let impl = [
           yield Statement.open_ moduleName
-          yield str "type t = t"
-          yield Statement.external attrs "value" (str "t") e.name
+          yield str "type nonrec t = t"
         ]
         let m content = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
         {| types = types

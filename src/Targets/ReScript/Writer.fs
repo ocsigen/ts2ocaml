@@ -897,6 +897,7 @@ let emitTypeAliasesImpl
     (baseName: string)
     flags overrideFunc
     (ctx: Context)
+    loc
     (typrms: TypeParam list)
     (target: text option)
     (lines: {| name: string; tyargs:(TypeParam * text) list; target: text option; isOverload: bool |} -> 'a list) =
@@ -911,16 +912,26 @@ let emitTypeAliasesImpl
         let name = Naming.createTypeNameOfArity arity None baseName
         let tyargs' = List.take arity tyargs
         let typrms' = List.take arity typrms
+
+        let bindings =
+          createBindings (ctx.currentNamespace @ [name]) loc
+            (typrms |> List.skip arity)
+            (typrms |> List.skip arity |> List.map (fun t ->
+              match t.defaultType with
+              | None -> impossible "emitTypeAliases"
+              | Some t -> t
+            ))
+
         let target =
           Type.appOpt
             (str baseName)
             [
               for tyarg in tyargs' do yield tyarg
               for t in typrms |> List.skip arity do
-                match t.defaultType with
-                | None -> impossible "emitTypeAliases"
-                | Some t -> yield emitType_ ctx t
+                let t' = repeatUntilEquilibrium (substTypeVar bindings ctx) (TypeVar t.name)
+                yield emitType_ ctx t'
             ]
+
         yield! lines {| name = name; tyargs = List.zip typrms' tyargs'; target = Some target; isOverload = true |}
   ]
 
@@ -1084,7 +1095,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       if useTags && innerCtx.options.inheritWithTags.HasProvide then
         let alias =
           emitTypeAliasesImpl
-            "tags" flags overrideFunc innerCtx c.typeParams (Some emittedLabels)
+            "tags" flags overrideFunc innerCtx c.loc c.typeParams (Some emittedLabels)
             (fun x -> [Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target])
           |> concat newline
         alias |> TypeAliasText |> Some
@@ -1129,7 +1140,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         | ClassKind.ExportDefaultClass x -> getSelfTyText x.orig
         | ClassKind.AnonymousInterface _ -> fallback
 
-      emitTypeAliasesImpl "t" flags overrideFunc innerCtx c.typeParams selfTyText.ty (fun x ->
+      emitTypeAliasesImpl "t" flags overrideFunc innerCtx c.loc c.typeParams selfTyText.ty (fun x ->
         if not x.isOverload then
           [TypeDefText {| name = x.name; tyargs = x.tyargs; body = x.target; isRec = selfTyText.isRec; shouldAssert = false |}]
         else
@@ -1569,7 +1580,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       let isRec =
         knownTypes |> Set.contains (KnownType.Ident (ctx |> Context.getFullNameOfCurrentNamespace))
       let items =
-        emitTypeAliasesImpl "t" emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target |> Some) (fun x ->
+        emitTypeAliasesImpl "t" emitTypeFlags OverrideFunc.noOverride ctx ta.loc ta.typeParams (emitSelfType ctx ta.target |> Some) (fun x ->
           if not x.isOverload then
             [TypeDefText {| name = x.name; tyargs = x.tyargs; body = x.target; isRec = false; shouldAssert = false |}]
           else

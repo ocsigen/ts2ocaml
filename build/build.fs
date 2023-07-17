@@ -77,21 +77,25 @@ let setup () =
 
   Target.create "Test" ignore
 
-  "Clean" ?=> "Build"
+  Target.create "Publish" ignore
 
-  "Clean"
-    ?=> "YarnInstall"
+  "YarnInstall"
     ==> "Restore"
     ==> "Prepare"
-    ?=> "Build"
 
   "Prepare"
-    ?=> "BuildForTest"
-    ?=> "BuildForPublish"
+    ==> "BuildForTest"
     ==> "Build"
 
   "Prepare"
-    ?=> "Watch"
+    ==> "BuildForPublish"
+
+  "Prepare"
+    ==> "Watch"
+
+  "Clean"
+    ?=> "BuildForTest" ?=> "Build" ?=> "Test"
+    ?=> "BuildForPublish" ?=> "Publish"
 
 // Test targets
 
@@ -270,8 +274,6 @@ module Publish =
       inDirectory targetDir <| fun () -> dune "build"
 
   let setup () =
-    Target.create "Publish" <| fun _ -> ()
-
     Target.create "PublishNpm" <| fun _ ->
       Npm.updateVersion ()
 
@@ -284,10 +286,6 @@ module Publish =
       ==> "PublishNpm"
       ==> "PublishJsoo"
       ==> "Publish"
-
-    "TestJsoo" ==> "PublishJsoo"
-
-    "Build" ?=> "Test" ?=> "Publish"
 
 // Utility targets
 

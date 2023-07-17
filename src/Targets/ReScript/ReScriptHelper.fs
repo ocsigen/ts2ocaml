@@ -9,7 +9,7 @@ open DataTypes.Text
 
 module Source =
   open Fable.Core
-  let [<ImportDefault("rescript/lib/ocaml/dom.ml?raw")>] dom: string = jsNative
+  let [<ImportDefault("rescript/lib/ocaml/dom.res?raw")>] dom: string = jsNative
 
 let comment text =
   if text = empty then empty
@@ -240,7 +240,7 @@ module Type =
       Source.dom
       |> String.splitManyThenRemoveEmptyEntries ["\n"; "\r"]
       |> Array.filter (fun s -> s.StartsWith("type "))
-      |> Array.choose (fun s -> s |> String.replace "type " "" |> String.splitMany [" = "; " (*"] |> Array.tryHead)
+      |> Array.choose (fun s -> s |> String.replace "type " "" |> String.splitMany [" = "; " /*"] |> Array.tryHead)
       |> Array.filter (fun s -> s.Length > 0 && s.ToCharArray() |> Array.forall Char.isAlphabet)
       |> Array.map (fun s -> Naming.upperFirst s, "Dom." + s)
     let ignoreCase =

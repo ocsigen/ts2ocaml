@@ -240,4 +240,4 @@ type Output = {
   res: text
 }
 
-let [<ImportDefault("../../../dist_rescript/src/ts2ocaml.res?raw")>] stdlib: string = jsNative
+let [<ImportDefault("../../../dist/res/src/ts2ocaml.res?raw")>] stdlib: string = jsNative

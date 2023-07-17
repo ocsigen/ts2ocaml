@@ -12,6 +12,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "rescript": "*"
+    "rescript": "^11.0.0-beta.3"
   }
 }

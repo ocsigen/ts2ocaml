@@ -6,7 +6,7 @@ const webpack = require('webpack');
 
 var CONFIG = {
   fsharpEntry: './src/Main.fs.js',
-  outputDir: './dist',
+  outputDir: './dist/js',
 }
 
 var path = require("path");

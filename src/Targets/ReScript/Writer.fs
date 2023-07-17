@@ -750,10 +750,10 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
         | Choice2Of2 _ :: rest ->
           let name = sprintf "arg%d" index |> rename
           go (index+1) false ({| ml = str name; js = name; used = true |} :: acc) rest
-        | Choice1Of2 { name = name; isOptional = isOptional } :: rest ->
-          let ml = if isOptional then sprintf "~%s=?" name else "~" + name
+        | Choice1Of2 { name = name; isOptional = isOptional' } :: rest ->
+          let ml = if isOptional' then sprintf "~%s=?" name else "~" + name
           let js = name |> String.replace "'" "$p"
-          go (index+1) isOptional ({| ml = str ml; js = js; used = true |} :: acc) rest
+          go (index+1) (isOptional || isOptional') ({| ml = str ml; js = js; used = true |} :: acc) rest
       go 1 false [] args
     let body =
       let args =

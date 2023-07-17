@@ -46,7 +46,7 @@ let setup () =
   Target.create "Clean" <| fun _ ->
     !! "src/bin"
     ++ "src/obj"
-    ++ distDir
+    ++ (distDir </> "js") // clean ts2ocaml.js
     ++ "src/.fable"
     |> Seq.iter Shell.cleanDir
 
@@ -122,7 +122,7 @@ module Test =
 
       let packages = [
          // "full" package involving a lot of inheritance
-         "full", !! "node_modules/typescript/lib/typescript.d.ts", ["--safe-arity=off"];
+         "full", !! "node_modules/typescript/lib/typescript.d.ts", [];
 
          // "full" packages involving a lot of dependencies (which includes some "safe" packages)
          "safe", !! "node_modules/@types/scheduler/tracing.d.ts", [];
@@ -239,7 +239,7 @@ module Publish =
       Yarn.exec $"version --new-version {newVersion} --no-git-tag-version" id
 
   module Jsoo =
-    let targetDir = "./dist_jsoo"
+    let targetDir = distDir </> "jsoo"
     let duneProject = targetDir </> "dune-project"
 
     let copyArtifacts () =
@@ -262,10 +262,10 @@ module Publish =
         if result.Success then
           let oldVersion = result.Groups.[1].Value
           if oldVersion <> newVersion then
-            printfn $"* updating version in dist_jsoo/dune-project from '{oldVersion}' to '{newVersion}'."
+            printfn $"* updating version in dist/jsoo/dune-project from '{oldVersion}' to '{newVersion}'."
             content |> String.replace result.Value $"(version {newVersion})"
           else
-            printfn $"* version in dist_jsoo/dune-project not updated ('{newVersion}')."
+            printfn $"* version in dist/jsoo/dune-project not updated ('{newVersion}')."
             content
         else content
       )

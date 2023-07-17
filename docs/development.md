@@ -34,8 +34,9 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
   - `Main.fs` ... entry point
 - `test/`
   - `jsoo/` ... test for `js_of_ocaml` target
-- `dist/` ... output directory for NPM packaging
-- `dist_jsoo/` ... output directory for OPAM packaging
+- `dist/`
+  - `js/ `... output directory for NPM packaging
+  - `jsoo/` ... output directory for OPAM packaging
 - `output/` ... temporary output directory for automated testing, etc
 
 ## Requirements
@@ -54,7 +55,7 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
 ## Debugging
 
-`./fake watch` to live update `dist/ts2ocaml.js`.
+`./fake watch` to live update `dist/js/ts2ocaml.js`.
 
 It will be bundled by Webpack with the `development` mode.
 
@@ -64,9 +65,9 @@ It will be bundled by Webpack with the `development` mode.
 - `yarn install` to populate `node_modules`
 - `dotnet restore ts2ocaml.sln` to install required F# libraries
 - Compile F# source files into JS source files (through Fable)
-- Bundle the JS files into `dist/ts2ocaml.js` (through Webpack)
+- Bundle the JS files into `dist/js/ts2ocaml.js` (through Webpack)
 
-The resulting `dist/ts2ocaml.js` is then ready to run through `node`.
+The resulting `dist/js/ts2ocaml.js` is then ready to run through `node`.
 
 ## Testing
 
@@ -96,12 +97,12 @@ The resulting `dist/ts2ocaml.js` is then ready to run through `node`.
 
 ### Prepare for publishing the standard library for [`js_of_ocaml` target](js_of_ocaml.md) to the `jsoo-stdlib` branch
 
-- Copy `ts2ocaml_*.mli` from `output/test_jsoo/` to `dist_jsoo/src/`
-- Copy `ts2ocaml_*.ml`  from `test/jsoo/_build/default/src/` to `dist_jsoo/src/`
-- Set the correct `version` in `dist_jsoo/dune-project`
-- Perform `dune build` in `dist_jsoo/` to generate `.opam` file and check if it compiles
+- Copy `ts2ocaml_*.mli` from `output/test_jsoo/` to `dist/jsoo/src/`
+- Copy `ts2ocaml_*.ml`  from `test/jsoo/_build/default/src/` to `dist/jsoo/src/`
+- Set the correct `version` in `dist/jsoo/dune-project`
+- Perform `dune build` in `dist/jsoo/` to generate `.opam` file and check if it compiles
 
-GitHub Action `publish.yml` is configured to push the `dist_jsoo` directory to the `jsoo-stdlib` branch.
+GitHub Action `publish.yml` is configured to push the `dist/jsoo` directory to the `jsoo-stdlib` branch.
 
 ### Prepare for publishing the tool to NPM
 

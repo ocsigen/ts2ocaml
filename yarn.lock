@@ -11,9 +11,9 @@
     "@jridgewell/trace-mapping" "^0.3.9"
 
 "@angular/common@^16.0.1":
-  version "16.1.0"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-16.1.0.tgz#ca2a0f2fdc1e1d3ba3866f5166ede4b60c438dd1"
-  integrity sha512-DLcp1Y3HkLyK5G00XhMlvdT47fp3HRbSd5o8i5Nkh+B7UojllfpeERr1XVSuUQ5M6LuF0du1NIg6y/lVHDFBUg==
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-16.2.0.tgz#c28cfb431d8108ccfd83c40adc2bb3a3cd564d4c"
+  integrity sha512-ByrDLsTBarzqRmq4GS841Ku0lvB4L2wfOCfGEIw2ZuiNbZlDA5O/qohQgJnHR5d9meVJnu9NgdbeyMzk90xZNg==
   dependencies:
     tslib "^2.3.0"
 
@@ -3177,15 +3177,10 @@ ts2fable@0.8.0-build.723:
   dependencies:
     typescript "3.7.4"
 
-tslib@^2.1.0:
+tslib@^2.1.0, tslib@^2.3.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.0.tgz#b295854684dbda164e181d259a22cd779dcd7bc3"
   integrity sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==
-
-tslib@^2.3.0:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
-  integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
 
 type-fest@^0.21.3:
   version "0.21.3"

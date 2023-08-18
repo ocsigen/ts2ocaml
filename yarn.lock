@@ -1113,9 +1113,9 @@ cassandra-driver@^4.6.3:
     long "^2.2.0"
 
 cdk8s@^2.2.41:
-  version "2.46.0"
-  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.46.0.tgz#938ac15a9e8c5c492c326a89eff533e844bb005b"
-  integrity sha512-sEUnIh+UTcZMm0Ne9exnITAiivqg5RZ0NR3uosXqmu4R3uMWlKgzPy33m44USRhEaDYdn6ixxLGuT26NYBHGig==
+  version "2.48.0"
+  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.48.0.tgz#5119442ffe3cc750ae770c3e4f8c8e3bd026644a"
+  integrity sha512-Yr3WXEAMRiD9IjVXK8QYq5FNc6JPKgvyZZa+p8JQj0tUjtQyhI1FfGZV9G8JJVzxfqtWFZNGLAiyOekzzhdefw==
   dependencies:
     fast-json-patch "^3.1.1"
     follow-redirects "^1.15.2"

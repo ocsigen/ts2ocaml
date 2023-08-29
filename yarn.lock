@@ -1113,13 +1113,13 @@ cassandra-driver@^4.6.3:
     long "^2.2.0"
 
 cdk8s@^2.2.41:
-  version "2.60.0"
-  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.60.0.tgz#a299b8ffa7cb33c0c72bdbd99514d10ad7ef72cc"
-  integrity sha512-65hp3sjf61zvBo9r3pna/ed1wIodXa9FynOELwyTYBsVez4jfwI0B8gWNngB16GtklBJ/PKI0DWvJVB0IFE9Kw==
+  version "2.62.0"
+  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.62.0.tgz#0707e9c5dd6fe2658601d7491f53d93f2a1dd323"
+  integrity sha512-WM94ilUCwiiliAGATot9w1v1E87yF47tWBvgBGLTiYzb1QvKVuq+yq0uoJJQD3RGP/zbUQtcHgef2/o+6A9Jaw==
   dependencies:
     fast-json-patch "^3.1.1"
     follow-redirects "^1.15.2"
-    yaml "2.3.1"
+    yaml "2.3.2"
   optionalDependencies:
     backport "8.5.0"
 
@@ -3480,10 +3480,10 @@ yallist@^3.0.2:
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-3.1.1.tgz#dbb7daf9bfd8bac9ab45ebf602b8cbad0d5d08fd"
   integrity sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==
 
-yaml@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.3.1.tgz#02fe0975d23cd441242aa7204e09fc28ac2ac33b"
-  integrity sha512-2eHWfjaoXgTBC2jNM1LRef62VQa0umtvRiDSk6HSzW7RvS5YtkabJrwYLLEKWBc8a5U2PTSCs+dJjUTJdlHsWQ==
+yaml@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.3.2.tgz#f522db4313c671a0ca963a75670f1c12ea909144"
+  integrity sha512-N/lyzTPaJasoDmfV7YTrYCI0G/3ivm/9wdG0aHuheKowWQwGTsK0Eoiw6utmzAnI6pkJa0DUVygvp3spqqEKXg==
 
 yargs-parser@^21.0.1, yargs-parser@^21.1.1:
   version "21.1.1"

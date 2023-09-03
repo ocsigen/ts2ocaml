@@ -23,7 +23,6 @@ module Unknown = {
 type true_ = bool
 type false_ = bool
 type symbol = Js.Types.symbol
-type bigint = Js.Bigint.t
 type intrinsic = private string
 type untypedObject = any
 type untypedFunction = any
@@ -82,7 +81,7 @@ module Intersection = {
 type intf<-'tags>
 
 module Primitive = {
-  type cases<'other> = [ #Null | #Undefined | #String(string) | #Number(float) | #Boolean(bool) | #Symbol(symbol) | #BigInt(bigint) | #Other('other) ]
+  type cases<'other> = [ #Null | #Undefined | #String(string) | #Number(float) | #Boolean(bool) | #Symbol(symbol) | #Bigint(Js.Bigint.t) | #Other('other) ]
   type t<+'cases>
 
   let return: ([< cases<'other>] as 'cases) => t<'cases> = x =>
@@ -93,6 +92,15 @@ module Primitive = {
       default: return x.VAL;
     }
   })(x)`)
+
+  let null: t<[> #Null]> = %raw(`null`)
+  let undefined: t<[> #Undefined]> = %raw(`undefined`)
+  external string: string => t<[> #String(string)]> = "%identity"
+  external number: float => t<[> #Number(float)]> = "%identity"
+  external boolean: bool => t<[> #Boolean(bool)]> = "%identity"
+  external symbol: symbol => t<[> #Symbol(symbol)]> = "%identity"
+  external bigint: Js.Bigint.t => t<[> #Bigint(Js.Bigint.t)]> = "%identity"
+  external other: 'a => t<[> #Other('a)]> = "%identity"
 
   external fromNull: Js.null<'a> => t<[> #Null | #Other('a) ]> = "%identity"
   external toNull: t<[< #Null | #Other('a) ]> => Js.null<'a> = "%identity"
@@ -109,7 +117,7 @@ module Primitive = {
       | "number" => Obj.magic(#Number(Obj.magic(x)))
       | "boolean" => Obj.magic(#Boolean(Obj.magic(x)))
       | "symbol" => Obj.magic(#Symbol(Obj.magic(x)))
-      | "bigint" => Obj.magic(#BigInt(Obj.magic(x)))
+      | "bigint" => Obj.magic(#Bigint(Obj.magic(x)))
       | "undefined" => Obj.magic(#Undefined)
       | _ =>
         if (Js.testAny(x)) { Obj.magic(#Null) }

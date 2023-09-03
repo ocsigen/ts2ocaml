@@ -83,6 +83,14 @@ module Attr =
     /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#modeling-this-based-callbacks
     let this = str "@this"
 
+  module Variant =
+    /// https://rescript-lang.org/blog/improving-interop#tagged-variants
+    let tag name =
+      tprintf "@tag(\"%s\")" (String.escape name)
+
+    /// https://rescript-lang.org/blog/improving-interop#untagged-variants
+    let unboxed = str "@unboxed"
+
   module PolyVariant =
     /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#constrain-arguments-better
     let int = str "@int"
@@ -151,7 +159,9 @@ module Naming =
 
   let constructorName (name: string list) =
     let s = String.concat "_" name |> removeInvalidChars |> upperFirst
-    if keywords |> Set.contains s then s + "_" else s
+    if s.StartsWith("_") then "C" + s
+    else if keywords |> Set.contains s then s + "_"
+    else s
 
   let structured (baseName: string -> string) (name: string list) =
     let rec prettify = function
@@ -324,22 +334,34 @@ module Type =
   let object = str "untypedObject"
   let function_ = str "untypedFunction"
   let symbol = str "symbol"
-  let regexp = str "Js.Re.t"
+  let regexp = str "Re.t"
   // ES2020
-  let bigint = str "Js.Bigint.t"
+  let bigint = str "Bigint.t"
 
   // TS types
   let never = str "never"
   let any = str "any"
   let unknown = str "unknown"
-  let null_or t = app (str "Js.null") [t]
+  let null_or t = app (str "Null.t") [t]
   let undefined_or t = app (str "option") [t]
-  let null_or_undefined_or t = app (str "Js.nullable") [t]
-  let null_ = str "Js.null<never>"
+  let null_or_undefined_or t = app (str "Nullable.t") [t]
+  let null_ = str "Null.t<never>"
   let undefined = str "unit"
   let intrinsic = str "intrinsic"
   let true_ = str "true_"
   let false_ = str "false_"
+
+  let record isInline (fields: {| name: string; isOptional: bool; attrs: text list; ty: text |} list) =
+    let body =
+      fields
+      |> List.map (fun f ->
+        let attrs = f.attrs |> List.map (fun x -> x +@ " ") |> join
+        let name = tprintf "%s%s: " f.name (if f.isOptional then "?" else "")
+        attrs + name + f.ty)
+      |> List.map (fun f -> if isInline then f else indent f)
+      |> concat (if isInline then str ", " else str ",")
+    if isInline then "{ " @+ body +@ " }"
+    else "{" @+ newline + body + newline +@ "}"
 
   // our types
   let intf tags = app (str "intf") [tags]
@@ -521,3 +543,56 @@ module Statement =
         |> List.filter (fun x -> sccSet |> Set.contains x.origName |> not)
         |> emitNonRec
       sccModules @ otherModules
+
+type [<RequireQualifiedAccess>] Binding =
+  | Let of {| name: string; ty: text; body: text; attrs: text list; comments: text list |}
+  | Ext of {| name: string; ty: text; target: string; attrs: text list; comments: text list |}
+  | Unknown of {| msg:text option; comments: text list |}
+with
+  member this.comments =
+   match this with Let x -> x.comments | Ext x -> x.comments | Unknown x -> x.comments
+
+module Binding =
+  let let_ (attrs: text list) comments name ty body =
+    Binding.Let {| name = name; ty = ty; body = body; attrs = attrs; comments = comments |}
+
+  let ext (attrs: text list) comments name ty target =
+    Binding.Ext {| name = name; ty = ty; target = target; attrs = attrs; comments = comments |}
+
+  let unknown comments msg =
+    Binding.Unknown {| msg = msg; comments = comments |}
+
+  let cast comments name ty =
+    Binding.Ext {| name = name; ty = ty; target = "%identity"; attrs = []; comments = comments |}
+
+  let builder name (fields: {| isOptional: bool; name: string; value: text |} list) (thisType: text) =
+    let args =
+      fields
+      |> List.distinctBy (fun x -> x.name)
+      |> List.map (fun f ->
+        let name = f.name |> Naming.valueName
+        let suffix =
+          if f.isOptional then "=?" else ""
+        tprintf "~%s:" name + f.value +@ suffix)
+    let args =
+      match List.tryLast fields with
+      | None -> args
+      | Some last -> if last.isOptional then args @ [Type.void_] else args
+    let ty =
+      Type.curriedArrow args thisType
+    Binding.Ext {| name = name; ty = ty; target = ""; attrs = [Attr.External.obj]; comments = []|}
+
+  let emitForImplementation (b: Binding) = [
+    match b with
+    | Binding.Let x -> yield Statement.let_ x.attrs x.name x.ty x.body
+    | Binding.Ext x -> yield Statement.external x.attrs x.name x.ty x.target
+    | Binding.Unknown x -> match x.msg with Some msg -> yield comment msg | None -> ()
+  ]
+
+  let emitForInterface (b: Binding) = [
+    yield! b.comments
+    match b with
+    | Binding.Let x -> yield Statement.val_ x.attrs x.name x.ty
+    | Binding.Ext x -> yield Statement.external x.attrs x.name x.ty x.target
+    | Binding.Unknown x -> match x.msg with Some msg -> yield comment msg | None -> ()
+  ]

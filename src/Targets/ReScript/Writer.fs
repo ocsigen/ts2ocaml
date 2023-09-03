@@ -417,7 +417,7 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
           | Typeofable.Number -> yield case "Number" (Some (Type.number ctx.options))
           | Typeofable.Boolean -> yield case "Boolean" (Some Type.boolean)
           | Typeofable.Symbol -> yield case "Symbol" (Some Type.symbol)
-          | Typeofable.BigInt -> yield case "BigInt" (Some Type.bigint)
+          | Typeofable.BigInt -> yield case "Bigint" (Some Type.bigint)
 
         if u.caseNull then
           yield case "Null" (if unwrap then Some Type.null_ else None)
@@ -524,77 +524,41 @@ and getLabelOfFullName flags overrideFunc (ctx: Context) (fullName: FullName) (t
   let inheritingType = InheritingType.KnownIdent {| fullName = fullName; tyargs = typeParams |> List.map (fun tp -> TypeVar tp.name) |}
   getLabelsFromInheritingTypes flags overrideFunc ctx (Set.singleton inheritingType) |> Choice1Of2
 
-type [<RequireQualifiedAccess>] Binding =
-  | Let of {| name: string; ty: text; body: text; attrs: text list; comments: text list |}
-  | Ext of {| name: string; ty: text; target: string; attrs: text list; comments: text list |}
-  | Unknown of {| msg:text option; comments: text list |}
-with
-  member this.comments =
-   match this with Let x -> x.comments | Ext x -> x.comments | Unknown x -> x.comments
-
-let let_ (attrs: text list) comments name ty body =
-  Binding.Let {| name = name; ty = ty; body = body; attrs = attrs; comments = comments |}
-
-let ext (attrs: text list) comments name ty target =
-  Binding.Ext {| name = name; ty = ty; target = target; attrs = attrs; comments = comments |}
-
-let unknownBinding comments msg =
-  Binding.Unknown {| msg = msg; comments = comments |}
-
-let cast comments name ty =
-  Binding.Ext {| name = name; ty = ty; target = "%identity"; attrs = []; comments = comments |}
-
-module Binding =
-  let emitForImplementation (b: Binding) = [
-    match b with
-    | Binding.Let x -> yield Statement.let_ x.attrs x.name x.ty x.body
-    | Binding.Ext x -> yield Statement.external x.attrs x.name x.ty x.target
-    | Binding.Unknown x -> match x.msg with Some msg -> yield comment msg | None -> ()
-  ]
-
-  let emitForInterface (b: Binding) = [
-    yield! b.comments
-    match b with
-    | Binding.Let x -> yield Statement.val_ x.attrs x.name x.ty
-    | Binding.Ext x -> yield Statement.external x.attrs x.name x.ty x.target
-    | Binding.Unknown x -> match x.msg with Some msg -> yield comment msg | None -> ()
-  ]
-
-let builder name (fields: {| isOptional: bool; name: string; value: text |} list) (thisType: text) =
-  let args =
-    fields
-    |> List.distinctBy (fun x -> x.name)
-    |> List.map (fun f ->
-      let name = f.name |> Naming.valueName
-      let suffix =
-        if f.isOptional then "=?" else ""
-      tprintf "~%s:" name + f.value +@ suffix)
-  let args =
-    match List.tryLast fields with
-    | None -> args
-    | Some last -> if last.isOptional then args @ [Type.void_] else args
-  let ty =
-    Type.curriedArrow args thisType
-  Binding.Ext {| name = name; ty = ty; target = ""; attrs = [Attr.External.obj]; comments = []|}
-
-type StructuredTextItemBase<'TypeDef, 'Binding, 'EnumCase> =
+type StructuredTextItemBase<'TypeDefText, 'Binding, 'EnumCaseText> =
   /// Will always be emitted at the top of the module.
   | ImportText of text
   /// Will always be emitted at the next top of the module.
-  | TypeDefText of 'TypeDef
+  | TypeDefText of 'TypeDefText
   | TypeAliasText of text
   /// Will be emitted in `.res` and `.resi`, but not in the `Types` module
   | Comment of text
   /// Will only be emitted in `.res` (not in `.resi` or in the `Types` module)
   | Binding of 'Binding
-  | EnumCaseText of 'EnumCase
+  | EnumCaseText of 'EnumCaseText
 
-and StructuredTextItem =
-  StructuredTextItemBase<
-    {| name: string; tyargs: (TypeParam * text) list; isRec: bool; body: text option; shouldAssert: bool |},
-    (OverloadRenamer -> CurrentScope -> Binding),
-    {| name: string; comments: Comment list |}
-  >
+and StructuredTextItem = StructuredTextItemBase<
+  TypeDefText,
+  (OverloadRenamer -> CurrentScope -> Binding),
+  {| name: string; comments: Comment list |}
+>
+
+and TypeDefText = {
+  name: string
+  tyargs: (TypeParam * text) list
+  body: text option
+  isRec: bool
+  shouldAssert: bool
+  attrs: text list
+  comments: text list
+} with
+  static member Create(name, tyargs, body, ?attrs, ?comments, ?isRec, ?shouldAssert) =
+    TypeDefText {
+      name = name; tyargs = tyargs; body = body
+      attrs = attrs |? []
+      comments = comments |? []
+      isRec = isRec |? false
+      shouldAssert = shouldAssert |? false
+    }
 
 and CurrentScope = {
   jsModule: string option
@@ -615,7 +579,6 @@ and [<RequireQualifiedAccess>] ExportItem =
   | DefaultUnnamedClass of StructuredTextNode
 
 and StructuredTextNode = {|
-  /// By default, key is used as a scope. `Some scope` to override it.
   scope: Scope
   items: StructuredTextItem list
   comments: text list
@@ -798,21 +761,21 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
           | None -> impossible "emitMembers_Constructor(%s)" ma.loc.AsString
           | Some x -> x.self, x.attr
       let attrs = attrs |> List.rev
-      ext attrs comments (rename "make") ty target
+      Binding.ext attrs comments (rename "make") ty target
     )
   | Newable (ft, _typrm) ->
     let ty = func { ft with args = Choice2Of2 PolymorphicThis :: ft.args; isVariadic = false }
     let value = createRawCall None ft.isVariadic true ft.args
-    binding (fun rename _ -> let_ [] comments (rename "make") ty value)
+    binding (fun rename _ -> Binding.let_ [] comments (rename "make") ty value)
   | Callable (ft, _typrm) ->
     let ty = func { ft with args = Choice2Of2 PolymorphicThis :: ft.args; isVariadic = false }
     let value = createRawCall None ft.isVariadic false ft.args
-    binding (fun rename _ -> let_ [] comments (rename "apply") ty value)
+    binding (fun rename _ -> Binding.let_ [] comments (rename "apply") ty value)
   | Field ({ name = name; value = Func (ft, _typrm, _); isOptional = false }, _)
   | Method (name, ft, _typrm) ->
     let origName = name
     let ext ty attrs =
-      binding (fun rename s -> ext (scopeToAttrIf ma.isStatic s attrs) comments (rename name |> Naming.valueName) ty origName)
+      binding (fun rename s -> Binding.ext (scopeToAttrIf ma.isStatic s attrs) comments (rename name |> Naming.valueName) ty origName)
     if ma.isStatic then
       match extFunc ft with
       | ty, Some attr -> ext ty (Attr.External.val_ :: attr)
@@ -824,7 +787,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
       | _, None ->
         let ty = func { ft with args = Choice2Of2 PolymorphicThis :: ft.args; isVariadic = false }
         let value = createRawCall (Some name) ft.isVariadic false ft.args
-        binding (fun rename _ -> let_ [] comments (rename name |> Naming.valueName) ty value)
+        binding (fun rename _ -> Binding.let_ [] comments (rename name |> Naming.valueName) ty value)
   | Getter fl | Field (fl, ReadOnly) ->
     let origName = fl.name
     let name =
@@ -836,13 +799,13 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
       let ty, attrs =
         let ty, attrs = extValue ty
         ty, Attr.External.val_ :: attrs
-      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
+      binding (fun rename s -> Binding.ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
     else
       let ty, attrs =
         let args = [Choice2Of2 PolymorphicThis]
         let ty, attrs = extFunc { isVariadic = false; args = args; returnType = ty; loc = ma.loc }
         ty, Attr.External.get_ :: impossibleNone (fun () -> "emitMembers_Getter") attrs
-      binding (fun rename _ -> ext attrs comments (rename name |> Naming.valueName) ty origName)
+      binding (fun rename _ -> Binding.ext attrs comments (rename name |> Naming.valueName) ty origName)
   | Setter fl | Field (fl, WriteOnly) ->
     let origName = fl.name
     if ma.isStatic then
@@ -861,7 +824,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
         let ty, attrs =
           extFunc { isVariadic = false; args = args; returnType = Prim Void; loc = ma.loc }
         ty, Attr.External.set_ :: impossibleNone (fun () -> "emitMembers_Setter") attrs
-      binding (fun rename s -> ext (scopeToAttrIf ma.isStatic s attrs) comments (rename name |> Naming.valueName) ty origName)
+      binding (fun rename s -> Binding.ext (scopeToAttrIf ma.isStatic s attrs) comments (rename name |> Naming.valueName) ty origName)
   | Field (fl, Mutable) ->
     List.concat [
       emitMembers flags overrideFunc ctx selfTy isExportDefaultClass ma (Getter fl)
@@ -872,14 +835,14 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
       let args = Choice2Of2 PolymorphicThis :: removeLabels ft.args
       extFunc { ft with args = args; isVariadic = false }
     let attrs = Attr.External.get_index :: impossibleNone (fun () -> "emitMembers_Indexer_Read") attrs
-    binding (fun rename _ -> ext attrs comments (rename "get") ty "")
+    binding (fun rename _ -> Binding.ext attrs comments (rename "get") ty "")
   | Indexer (ft, WriteOnly) ->
     let ty, attrs =
       let args = Choice2Of2 PolymorphicThis :: removeLabels ft.args @ [Choice2Of2 ft.returnType]
       let ret = Prim Void
       extFunc { ft with args = args; returnType = ret; isVariadic = false }
     let attrs = Attr.External.set_index :: impossibleNone (fun () -> "emitMembers_Indexer_Write") attrs
-    binding (fun rename _ -> ext attrs comments (rename "set") ty "")
+    binding (fun rename _ -> Binding.ext attrs comments (rename "set") ty "")
   | Indexer (ft, Mutable) ->
     List.concat [
       emitMembers flags overrideFunc ctx selfTy isExportDefaultClass ma (Indexer (ft, ReadOnly))
@@ -889,9 +852,9 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
     let c =
       let ft = func ft
       tprintf "external [Symbol.%s]: " symbol + ft + tprintf " = \"[Symbol.%s]\"" symbol
-    binding (fun _ _ -> unknownBinding comments (Some c))
+    binding (fun _ _ -> Binding.unknown comments (Some c))
   | UnknownMember msgo ->
-    binding (fun _ _ -> unknownBinding comments (msgo |> Option.map str))
+    binding (fun _ _ -> Binding.unknown comments (msgo |> Option.map str))
 
 let emitTypeAliasesImpl
     (baseName: string)
@@ -960,6 +923,11 @@ let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kind
       | ES6DefaultExport _ -> "export default"
       | _ -> "export"
     Some (ExportItem.Export {| comments = []; clauses = [clause, Set.ofList kind]; loc = s.loc; origText = sprintf "%s %s %s" prefix kindString name |})
+
+let addExportFromStatement ctx name kind kindString s current =
+  match getExportFromStatement ctx name kind kindString s with
+  | None -> current
+  | Some e -> current |> set {| StructuredTextNode.empty with exports = [e] |}
 
 type [<RequireQualifiedAccess>] ClassKind<'a, 'b, 'c> =
   | NormalClass of 'a
@@ -1141,7 +1109,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
 
       emitTypeAliasesImpl "t" flags overrideFunc innerCtx c.loc c.typeParams selfTyText.ty (fun x ->
         if not x.isOverload then
-          [TypeDefText {| name = x.name; tyargs = x.tyargs; body = x.target; isRec = selfTyText.isRec; shouldAssert = false |}]
+          [TypeDefText.Create(x.name, x.tyargs, x.target, isRec=selfTyText.isRec, comments=emitComments c.comments)]
         else
           [TypeAliasText (Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target)]
       )
@@ -1151,13 +1119,13 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       if useTags then
         let castTy =
           Type.curriedArrow [polymorphicThis] selfTyText
-        yield! binding (fun _ _ -> cast [] "castFrom" castTy)
+        yield! binding (fun _ _ -> Binding.cast [] "castFrom" castTy)
 
       if innerCtx.options.subtyping |> List.contains Subtyping.CastFunction then
         for parent in c.implements do
           let ty = Type.curriedArrow [selfTyText] (emitType_ innerCtx parent)
           let parentName = getHumanReadableName innerCtx parent
-          yield! binding (fun rename _ -> cast [] (rename $"as{parentName}") ty)
+          yield! binding (fun rename _ -> Binding.cast [] (rename $"as{parentName}") ty)
     ]
 
     let builder =
@@ -1188,7 +1156,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
               Some {| isOptional = false; name = name; value = value |}
             *)
             | _ -> None)
-        binding (fun rename _ -> builder (rename "make") fields selfTyText)
+        binding (fun rename _ -> Binding.builder (rename "make") fields selfTyText)
 
     let items = [
       yield! typeDefinition
@@ -1240,51 +1208,49 @@ and addAnonymousInterfaceExcluding emitTypeFlags (ctx: Context) knownTypes ais (
   ) current
 and addAnonymousInterface emitTypeFlags ctx knownTypes (current: StructuredText) = addAnonymousInterfaceExcluding emitTypeFlags ctx knownTypes [] current
 
+let emitConstructor name attrs types =
+  concat (str " ") [
+    yield str "|"
+    yield! attrs
+    yield str name
+    if List.isEmpty types |> not then
+      yield between "(" ")" (concat (str ", ") types)
+  ]
+
+let getEnumCaseValue (ctx: Context) (e: Enum) (ec: EnumCase) =
+  ec.value |> Option.defaultWith (fun () ->
+    ctx.logger.errorf "error: the case '%s' of enum '%s' has an unknown value, which is not supported at %s"
+      ec.name e.name ec.loc.AsString
+  )
+
 let emitEnum (ctx: Context) (current: StructuredText) (e: Enum) =
-  let enumCaseToIdentifier (e: Enum) (c: EnumCase) =
+  let enumCaseToIdentifier (e: Enum) (ec: EnumCase) =
     let duplicateCases =
-      e.cases |> List.filter (fun c' -> c.value = c'.value)
+      e.cases |> List.filter (fun ec' -> ec.value = ec'.value)
     match duplicateCases with
     | [] -> impossible "enumCaseToIdentifier"
-    | [c'] ->
-      assert (c = c')
-      Naming.constructorName [c.name]
-    | cs ->
-      cs |> List.map (fun c -> c.name) |> Naming.constructorName
+    | [ec'] ->
+      assert (ec = ec')
+      Naming.constructorName [ec.name]
+    | ecs ->
+      ecs |> List.map (fun ec -> ec.name) |> Naming.constructorName
 
   let distinctCases =
     e.cases
-    |> List.map (fun c -> enumCaseToIdentifier e c, c.value, c)
-    |> List.distinctBy (fun (_, value, _) -> value)
-    |> List.map (fun (key, value, case) ->
-      key, value |> Option.defaultWith (fun () -> 
-        ctx.logger.errorf "error: the case '%s' of enum '%s' has an unknown value, which is not supported at %s"
-          case.name e.name case.loc.AsString
-      ))
+    |> List.map (fun ec -> enumCaseToIdentifier e ec, ec)
+    |> List.distinctBy (fun (_, ec) -> ec.value)
+    |> List.map (fun (key, ec) -> key, getEnumCaseValue ctx e ec)
 
-  let childNode (c: EnumCase) =
-    EnumCaseText {| name = c.name; comments = c.comments  |}
+  let childNode (ec: EnumCase) =
+    EnumCaseText {| name = ec.name; comments = ec.comments  |}
 
   let parentNode =
     let casesText =
       newline + concat newline [
         for key, value in distinctCases do
-          yield indent (
-            concat (str " ") [
-              str "|"
-              Attr.as_ (Term.literal value)
-              str key
-            ]
-          )
+          yield emitConstructor key [Attr.as_ (Term.literal value)] [] |> indent
       ]
-    let item =
-      TypeDefText {|
-        name = "t";
-        tyargs = [];
-        isRec = false;
-        body = Some casesText;
-        shouldAssert = true
-      |}
+    let item = TypeDefText.Create("t", [], Some casesText, shouldAssert=true, comments=emitComments e.comments)
     let items = item :: List.map childNode e.cases
     let comments = e.comments |> emitComments
     {| StructuredTextNode.empty with items = items; comments = comments |}
@@ -1295,9 +1261,107 @@ let emitEnum (ctx: Context) (current: StructuredText) (e: Enum) =
   |> add [e.name] parentNode
   |> set {| StructuredTextNode.empty with exports = Option.toList exports |}
 
+let emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (ta: TypeAlias) : StructuredText =
+  let emitType = emitTypeImpl flags overrideFunc
+
+  let comments = (ta :> ICommented<_>).getComments() |> emitComments
+  let knownTypes = Statement.getKnownTypes ctx [TypeAlias ta]
+
+  let items =
+    let ctx = ctx |> Context.ofChildNamespace ta.name
+    let isRec = knownTypes |> Set.contains (KnownType.Ident (ctx |> Context.getFullNameOfCurrentNamespace))
+    let emitTypeAliases attrs shouldAssert target =
+      emitTypeAliasesImpl "t" flags OverrideFunc.noOverride ctx ta.loc ta.typeParams (Some target) (fun x ->
+        if not x.isOverload then
+          [TypeDefText.Create (
+            x.name, x.tyargs, x.target,
+            isRec=isRec, attrs=attrs, shouldAssert=shouldAssert,
+            comments=emitComments ta.comments
+          )]
+        else
+          [TypeAliasText (Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target)]
+      )
+    let fallback () = emitTypeAliases [] false (emitType ctx ta.target)
+    let renamer = new OverloadRenamer()
+    let rename s = renamer.Rename "ctor" s
+    let nameFromType t =
+      Naming.constructorName [getHumanReadableName ctx t] |> rename
+
+    match ta.target with
+    | Union u -> // emit as variant if possible
+      let ru = ResolvedUnion.resolve ctx u
+      let isEnumOrUnboxed =
+        ru.satisfies(hasDU=false, hasOther=false)
+        && ru.typeofableTypes |> Set.contains Typeofable.BigInt |> not // not supported by res
+        && ru.typeofableTypes |> Set.contains Typeofable.Symbol |> not // not supported by res
+
+      let isTagged =
+        ru.satisfies(hasDU=true, hasTypeofable=false, hasArray=false, hasOther=false)
+        && Map.count ru.discriminatedUnions = 1
+        && ru.discriminatedUnions |> Map.forall (fun _ -> Map.forall (fun _ -> function AnonymousInterface _ -> true | _ -> false))
+
+      let commonCases () = [
+        if ru.caseNull then
+          yield emitConstructor (rename "Null") [Attr.as_ (str "null")] []
+        if ru.caseUndefined then
+          yield emitConstructor (rename "Undefined") [Attr.as_ (str "undefined")] []
+        for e in ru.caseEnum do
+          match e with
+          | Choice1Of2 (e, ec, _) ->
+            let value =
+              ec.value |> Option.defaultWith (fun () ->
+                ctx.logger.errorf "error: the case '%s' of enum '%s' has an unknown value, which is not supported at %s"
+                  ec.name e.name ec.loc.AsString
+              )
+            yield
+              emitConstructor
+                (Naming.constructorName [ec.name] |> rename)
+                [Attr.as_ (Term.literal value)]
+                []
+          | Choice2Of2 l ->
+            yield emitConstructor (nameFromType (TypeLiteral l)) [Attr.as_ (Term.literal l)] []
+      ]
+      if isEnumOrUnboxed then
+        let attrs =
+          if Set.isEmpty ru.typeofableTypes && Option.isNone ru.caseArray then []
+          else [Attr.Variant.unboxed]
+        emitTypeAliases attrs true (
+          newline + concat newline [
+            yield! commonCases ()
+
+            match ru.caseArray with
+            | None -> ()
+            | Some ts ->
+              yield emitConstructor (rename "Array") [] [
+                Type.app Type.array [emitType ctx (Union { types = Set.toList ts })]
+              ]
+
+            for t in ru.typeofableTypes do
+              match t with
+              | Typeofable.String  -> yield emitConstructor (rename "String") [] [Type.string]
+              | Typeofable.Number  -> yield emitConstructor (rename "Number") [] [Type.number ctx.options]
+              | Typeofable.Boolean -> yield emitConstructor (rename "Boolean") [] [Type.boolean]
+              | _ -> ()
+          ]
+        )
+      else if isTagged then
+        fallback () // TODO: special case, or just contribute to res compiler for unboxed tagged union?
+      else fallback ()
+    | TypeLiteral l -> // emit as single-case variant
+      emitTypeAliases [] true (
+        emitConstructor (nameFromType (TypeLiteral l)) [Attr.as_ (Term.literal l)] []
+      )
+    | _ -> fallback ()
+
+  let node = {| StructuredTextNode.empty with items = items; comments = comments; knownTypes = knownTypes |}
+  current
+  |> inTrie [ta.name] (set node)
+  |> addExportFromStatement ctx ta.name Kind.OfTypeAlias "type" (TypeAlias ta)
+  |> inTrie [ta.name] (addAnonymousInterface flags ctx knownTypes) 
+
 let private createExternalForValue (ctx: Context) (rename: string -> string) (s: CurrentScope) attr comments name ty =
   let fallback () =
-    ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty name
+    Binding.ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty name
   let jsModule () =
     match s.jsModule with
     | None -> impossible "createExternalForValue"
@@ -1305,11 +1369,11 @@ let private createExternalForValue (ctx: Context) (rename: string -> string) (s:
   match ctx |> Context.getExportTypeOfName [name] with
   | None | Some (ExportType.Child _) | Some (ExportType.ES6 None) -> fallback ()
   | Some ExportType.CommonJS ->
-    ext (Attr.External.module_ None :: attr) comments (rename name |> Naming.valueName) ty (jsModule ())
+    Binding.ext (Attr.External.module_ None :: attr) comments (rename name |> Naming.valueName) ty (jsModule ())
   | Some ExportType.ES6Default ->
-    ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty "default"
+    Binding.ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty "default"
   | Some (ExportType.ES6 (Some renameAs)) ->
-    ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty renameAs
+    Binding.ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty renameAs
 
 let rec emitFunction flags overrideFunc ctx (f: Function) =
   if functionNeedsWorkaround f.typ then
@@ -1397,10 +1461,6 @@ let emitImport (ctx: Context) (i: Import) : StructuredTextItem list =
     for c in i.clauses do
       yield! emitImportClause c]
 
-let emitTypeAliasToUnionFunctions flags overrideFunc ctx (u: UnionType) : StructuredTextItem list =
-  // TODO
-  []
-
 let createStructuredText (rootCtx: Context) (stmts: Statement list) : StructuredText =
   let emitTypeFlags = EmitTypeFlags.defaultValue
   let overrideFunc = OverrideFunc.noOverride
@@ -1446,7 +1506,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
                 | Some x -> x.self, x.attr
                 | None -> impossible "intfToStmts_Newable(%s)" ma.loc.AsString
               let attrs = attrs |> List.rev
-              ext attrs comments (rename "make") ty target
+              Binding.ext attrs comments (rename "make") ty target
             )
         | Callable (ft, _tps) ->
           let ty, attrs =
@@ -1460,14 +1520,14 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
                 | Some x -> x.self, x.attr
                 | None -> impossible "intfToStmts_Callable(%s)" ma.loc.AsString
               let attrs = attrs |> List.rev
-              ext attrs comments (rename "apply") ty target
+              Binding.ext attrs comments (rename "apply") ty target
             )
         | Constructor _ -> impossible "emitStructuredDefinition_Pattern_intfToModule_Constructor" // because interface!
         | Indexer (ft, _) ->
           let ty = func ft
-          yield! binding (fun _ _ -> unknownBinding comments (Some ("unsupported indexer of type: " @+ ty)))
+          yield! binding (fun _ _ -> Binding.unknown comments (Some ("unsupported indexer of type: " @+ ty)))
         | UnknownMember (Some msg) ->
-          yield! binding (fun _ _ -> unknownBinding comments (Some (str msg)))
+          yield! binding (fun _ _ -> Binding.unknown comments (Some (str msg)))
         | SymbolIndexer _ | UnknownMember None -> () ]
 
   let rec folder ctx (current: StructuredText) (s: Statement) : StructuredText =
@@ -1475,9 +1535,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
 
     let knownTypes () = Statement.getKnownTypes ctx [s]
     let addExport name kind kindString current =
-      match getExportFromStatement ctx name kind kindString s with
-      | None -> current
-      | Some e -> current |> set {| StructuredTextNode.empty with exports = [e] |}
+      addExportFromStatement ctx name kind kindString s current
     let addAnonymousInterfaceWithKnownTypes knownTypes current = addAnonymousInterface emitTypeFlags ctx knownTypes current
     let addAnonymousInterface current = addAnonymousInterfaceWithKnownTypes (knownTypes ()) current
     let addAnonymousInterfaceExcludingWithKnownTypes knownTypes ais current = addAnonymousInterfaceExcluding emitTypeFlags ctx knownTypes ais current
@@ -1511,28 +1569,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | Enum e ->
       emitEnum ctx current e
     | TypeAlias ta ->
-      let ctx = ctx |> Context.ofChildNamespace ta.name
-      let knownTypes = knownTypes ()
-      let isRec =
-        knownTypes |> Set.contains (KnownType.Ident (ctx |> Context.getFullNameOfCurrentNamespace))
-      let items =
-        emitTypeAliasesImpl "t" emitTypeFlags OverrideFunc.noOverride ctx ta.loc ta.typeParams (emitSelfType ctx ta.target |> Some) (fun x ->
-          if not x.isOverload then
-            [TypeDefText {| name = x.name; tyargs = x.tyargs; body = x.target; isRec = false; shouldAssert = false |}]
-          else
-            [TypeAliasText (Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target)]
-        )
-      let node = {| StructuredTextNode.empty with items = items; comments = comments; knownTypes = knownTypes |}
-      current
-      |> inTrie [ta.name] (set node)
-      |> addExport ta.name Kind.OfTypeAlias "type"
-      |> inTrie [ta.name] (
-        match ta.target with
-        | Union u ->
-          let functions = emitTypeAliasToUnionFunctions emitTypeFlags OverrideFunc.noOverride ctx u
-          set {| StructuredTextNode.empty with items = functions |}
-        | _ -> id)
-      |> inTrie [ta.name] addAnonymousInterface
+      emitTypeAlias emitTypeFlags overrideFunc ctx current ta
     | Pattern p ->
       let fallback current =
         p.underlyingStatements
@@ -1724,15 +1761,17 @@ let rec emitModule (dt: DependencyTrie<string>) flags (ctx: Context) st =
            impl = Statement.moduleVal (m (if isLinear then intf else impl))
         |}
 
-      let emitTypeDefText (e: {| name: string; tyargs:(TypeParam * text) list; isRec: bool; body: text option; shouldAssert: bool |}) =
-        let actual = Statement.typeAlias e.isRec e.name (e.tyargs |> List.map snd) e.body
+      let emitTypeDefText (e: TypeDefText) =
+        // TODO: emit comments
+        let attrs = e.attrs |> List.map (fun x -> x +@ " ") |> join
+        let actual = attrs + Statement.typeAlias e.isRec e.name (e.tyargs |> List.map snd) e.body
         let alias =
           let tmp =
             Statement.typeAlias false e.name (e.tyargs |> List.map snd)
               (Type.appOpt (str e.name) (e.tyargs |> List.map snd) |> Some)
           match e.body, e.shouldAssert with
           | _, false | None, _ -> tmp
-          | Some b, true -> tmp +@ " = " + b
+          | Some b, true -> attrs + tmp +@ " = " + b
         {| types = actual; intf = actual; impl = alias |}
 
       let rec f = function

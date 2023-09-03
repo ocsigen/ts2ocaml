@@ -230,7 +230,19 @@ and [<StructuralEquality; StructuralComparison>] FullName = {
 
 and FieldLike = { name:string; isOptional:bool; value:Type }
 
-and FuncType<'returnType> = { args:Choice<FieldLike, Type> list; isVariadic:bool; returnType:'returnType; loc: Location }
+and FuncType<'returnType> = {
+  args:Choice<FieldLike, Type> list
+  isVariadic:bool
+  returnType:'returnType
+  loc: Location
+} with
+  member this.map (f: 'returnType -> 'a) =
+    {
+      args = this.args
+      isVariadic = this.isVariadic
+      returnType = f this.returnType
+      loc = this.loc
+    }
 
 and Accessibility = Public | Protected | Private
 and Mutability = ReadOnly | WriteOnly | Mutable
@@ -317,43 +329,75 @@ and MemberAttribute = {
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
-and Variable = {
+and Variable<'Type> = {
   name: string
-  typ: Type
+  typ: 'Type
   isConst: bool
   isExported: Exported
   accessibility : Accessibility option
   comments: Comment list
   loc: Location
 } with
-  interface ICommented<Variable> with
+  member this.map (f: 'Type -> 'a) =
+    {
+      name = this.name
+      typ = f this.typ
+      isConst = this.isConst
+      isExported = this.isExported
+      accessibility = this.accessibility
+      comments = this.comments
+      loc = this.loc
+    }
+  interface ICommented<Variable<'Type>> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
+and Variable = Variable<Type>
 
-and Function = {
+and Function<'Type> = {
   name: string
-  typ: FuncType<Type>
+  typ: FuncType<'Type>
   typeParams: TypeParam list
   isExported: Exported
   accessibility : Accessibility option
   comments: Comment list
   loc: Location
 } with
-  interface ICommented<Function> with
+  member this.map (f: 'Type -> 'a) =
+    {
+      name = this.name
+      typ = this.typ.map f
+      typeParams = this.typeParams
+      isExported = this.isExported
+      accessibility = this.accessibility
+      comments = this.comments
+      loc = this.loc
+    }
+  interface ICommented<Function<'Type>> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
+and Function = Function<Type>
 
-and TypeAlias = {
+and TypeAlias<'Type> = {
   name: string
   typeParams: TypeParam list
-  target: Type
+  target: 'Type
   comments: Comment list
   isExported: Exported
   loc: Location
 } with
-  interface ICommented<TypeAlias> with
+  member this.map (f: 'Type -> 'a) =
+    {
+      name = this.name
+      typeParams = this.typeParams
+      target = f this.target
+      comments = this.comments
+      isExported = this.isExported
+      loc = this.loc
+    }
+  interface ICommented<TypeAlias<'Type>> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
+and TypeAlias = TypeAlias<Type>
 
 and Statement =
   /// ```ts
@@ -404,6 +448,9 @@ and Statement =
   /// export ...
   /// ```
   | Export of Export
+  /// ```ts
+  /// export ... from ...
+  /// ```
   | ReExport of ReExport
   | Pattern of Pattern
   | UnknownStatement of {| origText: string option; comments: Comment list; loc: Location |}

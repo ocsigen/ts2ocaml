@@ -1021,7 +1021,22 @@ module Type =
         |> String.replace "-" "minus"
         |> String.replace "." "_"
       match l with
-      | LString s -> formatString s
+      | LString s ->
+        match s with
+        | "\r" -> "cr" | "\n" -> "lf" | "\r\n" -> "crlf" | "\t" -> "tab"
+        | " " -> "whitespace"
+        | "/" -> "sol" | "\\" -> "bsol" | "|" -> "vert"
+        | "'" -> "apos" | "\"" -> "quot" | "`" -> "grave"
+        | "!" -> "excl" | "?" -> "quest"
+        | "," -> "comma" | "." -> "period" | ":" -> "colon" | ";" -> "semi"
+        | "+" -> "plus" | "-" -> "minus" | "*" -> "ast" | "^" -> "hat"
+        | "$" -> "dollar" | "&" -> "amp" | "%" -> "percnt" | "#" -> "num" | "@" -> "commat" | "_" -> "lowbar"
+        | "[" -> "lbrack" | "]" -> "rbrack" | "(" -> "lpar" | ")" -> "rpar" | "{" -> "lbrace" | "}" -> "rbrace"
+        | "<" -> "lt" | ">" -> "gt" | "=" -> "equals"
+        | _ ->
+          if System.String.IsNullOrEmpty s then "empty"
+          else if String.forall ((=) ' ') s then $"whitespace{s.Length}"
+          else formatString s
       | LInt i -> formatNumber i
       | LFloat f -> formatNumber f
       | LBool true -> "true" | LBool false -> "false"
@@ -1373,7 +1388,17 @@ type ResolvedUnion = {
   caseEnum: Set<Choice<Enum * EnumCase * Type, Literal>>
   discriminatedUnions: Map<string, Map<Literal, Type>>
   otherTypes: Set<Type>
-}
+} with
+  member this.satisfies(?hasNull, ?hasUndefined, ?hasTypeofable, ?hasArray, ?hasEnum, ?hasDU, ?hasOther) =
+    let check opt value =
+      opt |> Option.map (fun x -> x = value) |? true
+    check hasNull this.caseNull
+    && check hasUndefined this.caseUndefined
+    && check hasTypeofable (this.typeofableTypes |> Set.isEmpty |> not)
+    && check hasArray (this.caseArray |> Option.map (Set.isEmpty >> not) |? false)
+    && check hasEnum (this.caseEnum |> Set.isEmpty |> not)
+    && check hasDU (this.discriminatedUnions |> Map.isEmpty |> not)
+    && check hasOther (this.otherTypes |> Set.isEmpty |> not)
 
 module ResolvedUnion =
   let rec pp (ru: ResolvedUnion) =

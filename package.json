@@ -41,7 +41,7 @@
     "@types/yargs": "^17.0.10",
     "cassandra-driver": "^4.6.3",
     "cdk8s": "^2.2.41",
-    "monaco-editor": "0.43.0",
+    "monaco-editor": "0.44.0",
     "react-player": "2.13.0",
     "ts2fable": "0.8.0-build.723",
     "webpack": "5.88.0",

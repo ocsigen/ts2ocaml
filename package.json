@@ -32,7 +32,7 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@angular/common": "^16.0.1",
+    "@angular/common": "^17.0.2",
     "@babel/core": "7.23.0",
     "@types/babel__code-frame": "^7.0.3",
     "@types/react-modal": "3.16.0",

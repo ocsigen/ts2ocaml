@@ -44,7 +44,7 @@
     "monaco-editor": "0.45.0",
     "react-player": "2.14.0",
     "ts2fable": "0.8.0-build.723",
-    "webpack": "5.88.0",
+    "webpack": "5.90.0",
     "webpack-cli": "5.1.0",
     "webpack-dev-server": "4.15.0"
   }

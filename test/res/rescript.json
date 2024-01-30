@@ -9,5 +9,6 @@
     "module": "commonjs",
     "in-source": true
   },
-  "suffix": ".bs.js"
+  "suffix": ".bs.js",
+  "uncurried": true
 }

@@ -1,7 +1,13 @@
-open Ts2ocaml
+module Ts = Typescript.Export
 
-let tsVersion = Typescript.Ts.version
+let source = "let x: string = 'hello, world!'"
 
-let x = Prop_types.ElementStatic.isRequired
+let result = Ts.transpileModule(
+  ~input=source,
+  ~transpileOptions=Ts.TranspileOptions.make(
+    ~compilerOptions=Ts.CompilerOptions.make(~\"module"=CommonJS, ()),
+    (),
+  ),
+)
 
-let y = Scheduler__tracing.__interactionsRef
+Js.log(result->Ts.TranspileOutput.get_outputText)

@@ -32,8 +32,8 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@angular/common": "^16.0.1",
-    "@babel/core": "7.22.1",
+    "@angular/common": "^17.0.5",
+    "@babel/core": "7.23.0",
     "@types/babel__code-frame": "^7.0.3",
     "@types/react-modal": "3.16.0",
     "@types/semver": "7.5.0",
@@ -41,11 +41,11 @@
     "@types/yargs": "^17.0.10",
     "cassandra-driver": "^4.6.3",
     "cdk8s": "^2.2.41",
-    "monaco-editor": "0.40.0",
-    "react-player": "2.12.0",
+    "monaco-editor": "0.45.0",
+    "react-player": "2.14.0",
     "rescript": "^11.0.0-beta.3",
     "ts2fable": "0.8.0-build.723",
-    "webpack": "5.88.0",
+    "webpack": "5.90.0",
     "webpack-cli": "5.1.0",
     "webpack-dev-server": "4.15.0"
   }

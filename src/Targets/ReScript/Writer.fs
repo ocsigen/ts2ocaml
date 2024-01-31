@@ -360,14 +360,15 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
         | LInt i -> Choice1Of2 {| name = Choice2Of2 i; value = None; attr = attr |}
         | LFloat _ -> Choice2Of2 (ty |? Type.float)
         | LBool _ -> Choice2Of2 (ty |? Type.boolean)
-      let cases = [
-        for c in cases do
-          match c with
-          | Choice1Of2 (_, _, ty) ->
-            let ty = emitTypeImpl (EmitTypeFlags.noExternal flags) overrideFunc ctx ty
-            yield Choice2Of2 ty
-          | Choice2Of2 l -> yield handleLiteral l None None
-      ]
+      let cases =
+        List.distinct [
+          for c in cases do
+            match c with
+            | Choice1Of2 (_, _, ty) ->
+              let ty = emitTypeImpl (EmitTypeFlags.noExternal flags) overrideFunc ctx ty
+              yield Choice2Of2 ty
+            | Choice2Of2 l -> yield handleLiteral l None None
+        ]
       let cases, rest = List.splitChoice2 cases
       [
         if List.isEmpty cases |> not then

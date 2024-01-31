@@ -5,8 +5,7 @@ let source = "let x: string = 'hello, world!'"
 let result = Ts.transpileModule(
   ~input=source,
   ~transpileOptions=Ts.TranspileOptions.make(
-    ~compilerOptions=Ts.CompilerOptions.make(~\"module"=CommonJS, ()),
-    (),
+    ~compilerOptions=Ts.CompilerOptions.make(~\"module"=CommonJS),
   ),
 )
 

@@ -301,12 +301,12 @@ and emitFuncType (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Conte
         | Choice2Of2 t -> emitTypeImpl flags overrideFunc ctx t)
     Type.newable args retTy
   let args () =
-    let rec go optional acc (args: Choice<FieldLike, Type> list) =
+    let rec go acc (args: Choice<FieldLike, Type> list) =
       let flags = { flags with needParen = true } |> EmitTypeFlags.ofFuncArg false
       match args with
-      | [] -> if optional then Type.void_ :: acc else acc
+      | [] -> acc
       | Choice1Of2 x :: [] when acc = [] && not x.isOptional ->
-        go optional acc [Choice2Of2 x.value]
+        go acc [Choice2Of2 x.value]
       | Choice1Of2 x :: [] when f.isVariadic ->
         assert (not x.isOptional)
         let t = emitTypeImpl { flags with external = External.Argument true } overrideFunc ctx x.value
@@ -319,20 +319,20 @@ and emitFuncType (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Conte
         let arg =
           let tmp = tprintf "~%s:" (Naming.valueName x.name) + emitTypeImpl flags overrideFunc ctx x.value
           if x.isOptional then tmp +@ "=?" else tmp
-        go (optional || x.isOptional) (arg :: acc) rest
+        go (arg :: acc) rest
       | Choice2Of2 t :: rest ->
         let t = emitTypeImpl flags overrideFunc ctx t
-        go false (t :: acc) rest
-    go false [] f.args |> List.rev
+        go (t :: acc) rest
+    go [] f.args |> List.rev
   match flags.external with
   | _ when isNewable ->
     if f.isVariadic then variadicFallback () else newableFallback ()
-  | External.Root (true, _) -> Type.curriedArrow (args ()) (retTy flags)
+  | External.Root (true, _) -> Type.arrow (args ()) (retTy flags)
   | _ when f.isVariadic -> variadicFallback ()
-  | External.Root (_, _) -> Type.curriedArrow (args ()) (retTy flags)
-  | External.Argument _ -> paren ("@uncurry " @+ Type.curriedArrow (args ()) (retTy flags))
-  | External.Return _ -> Type.uncurriedArrow (args ()) (retTy flags)
-  | _ -> Type.curriedArrow (args ()) (retTy flags) |> paren
+  | External.Root (_, _)
+  | External.Argument _
+  | External.Return _ -> Type.arrow (args ()) (retTy flags)
+  | _ -> Type.arrow (args ()) (retTy flags) |> paren
 
 and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
   if flags.resolveUnion = false then
@@ -703,25 +703,20 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
       else rename (s + "_")
     let self = rename "t"
     let args =
-      let rec go index isOptional acc = function
-        | [] ->
-          if isOptional then
-            let name = rename "unit"
-            List.rev ({| ml = str name; js = name; used = false |} :: acc)
-          else
-            List.rev acc
+      let rec go index acc = function
+        | [] -> List.rev acc
         | Choice2Of2 _ :: rest ->
           let name = sprintf "arg%d" index |> rename
-          go (index+1) false ({| ml = str name; js = name; used = true |} :: acc) rest
+          go (index+1) ({| ml = str name; js = name |} :: acc) rest
         | Choice1Of2 { name = name; isOptional = isOptional' } :: rest ->
           let ml = if isOptional' then sprintf "~%s=?" name else "~" + name
           let js = name |> String.replace "'" "$p"
-          go (index+1) (isOptional || isOptional') ({| ml = str ml; js = js; used = true |} :: acc) rest
-      go 1 false [] args
+          go (index+1) ({| ml = str ml; js = js |} :: acc) rest
+      go 1 [] args
     let body =
       let args =
         let args =
-          args |> List.filter (fun arg -> arg.used) |> List.map (fun arg -> arg.js)
+          args |> List.map (fun arg -> arg.js)
         if not isVariadic then String.concat ", " args
         else
           match List.rev args with
@@ -736,7 +731,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
         | None -> sprintf "%s(%s)" self args
       if isNewable then "new " + body else body
     let args = str self :: (args |> List.map (fun arg -> arg.ml))
-    Term.curriedArrow args (Term.raw body)
+    Term.arrow args (Term.raw body)
 
   let scopeToAttrIf isStatic s attrs =
     if isStatic then scopeToAttr s attrs else attrs
@@ -1118,12 +1113,12 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       // add a generic cast function if tag is available
       if useTags then
         let castTy =
-          Type.curriedArrow [polymorphicThis] selfTyText
+          Type.arrow [polymorphicThis] selfTyText
         yield! binding (fun _ _ -> Binding.cast [] "castFrom" castTy)
 
       if innerCtx.options.subtyping |> List.contains Subtyping.CastFunction then
         for parent in c.implements do
-          let ty = Type.curriedArrow [selfTyText] (emitType_ innerCtx parent)
+          let ty = Type.arrow [selfTyText] (emitType_ innerCtx parent)
           let parentName = getHumanReadableName innerCtx parent
           yield! binding (fun rename _ -> Binding.cast [] (rename $"as{parentName}") ty)
     ]
@@ -1918,6 +1913,7 @@ and emitExportModule (ctx: Context) (exports: ExportItem list) : EmitModuleResul
   st |> emitModule Trie.empty {| isReservedModule = true; jsModule = None; scopeRev = [] |} ctx
 
 let header = [
+  str "@@uncurried"
   str "@@warning(\"-27-32-33-44\")"
 ]
 

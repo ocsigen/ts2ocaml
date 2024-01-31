@@ -272,20 +272,11 @@ module Type =
     | xs -> concat (str ", ") xs |> between "(" ")"
 
   /// `(t1, t2) => tr`
-  let curriedArrow args ret =
+  let arrow args ret =
     let lhs =
       match args with
       | [] -> str "()"
-      | [x] -> x
       | xs -> concat (str ", ") xs |> between "(" ")"
-    lhs +@ " => " + ret
-
-  /// `(.t1, t2) => tr`
-  let uncurriedArrow args ret =
-    let lhs =
-      match args with
-      | [] -> str "()"
-      | xs -> concat (str ", ") xs |> between "(. " ")"
     lhs +@ " => " + ret
 
   let app t args =
@@ -410,20 +401,12 @@ module Term =
   let appUncurried t us = t + (us |> concat (str ", ") |> between "(. " ")")
 
   /// `(arg1, arg2) => ret`
-  let curriedArrow args ret =
+  let arrow args ret =
     let lhs =
       match args with
       | [] -> failwith "0-ary function"
       | [x] -> x
       | xs -> concat (str ", ") xs |> between "(" ")"
-    lhs +@ " => " + ret
-
-  /// `(. arg1, arg2) => ret`
-  let uncurriedArrow args ret =
-    let lhs =
-      match args with
-      | [] -> failwith "0-ary function"
-      | xs -> concat (str ", ") xs |> between "(. " ")"
     lhs +@ " => " + ret
 
   let literal (l: Literal) =
@@ -574,12 +557,8 @@ module Binding =
         let suffix =
           if f.isOptional then "=?" else ""
         tprintf "~%s:" name + f.value +@ suffix)
-    let args =
-      match List.tryLast fields with
-      | None -> args
-      | Some last -> if last.isOptional then args @ [Type.void_] else args
     let ty =
-      Type.curriedArrow args thisType
+      Type.arrow args thisType
     Binding.Ext {| name = name; ty = ty; target = ""; attrs = [Attr.External.obj]; comments = []|}
 
   let emitForImplementation (b: Binding) = [

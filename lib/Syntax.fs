@@ -91,6 +91,21 @@ and [<CustomEquality; CustomComparison>] Comment =
   | See of name:string option * text:string list
   | ESVersion of Ts.ScriptTarget
   | Other of tag:string * text:string list * orig:Ts.JSDocTag
+  member x.ToJsDoc() =
+    let concat (lines: string list) = String.concat "\n" lines
+    match x with
+    | Description lines -> "@description " + concat lines
+    | Summary lines -> "@summary " + concat lines
+    | Param (name, lines) -> sprintf "@param %s " name + concat lines
+    | Return lines -> "@returns " + concat lines
+    | Deprecated lines -> "@deprecated " + concat lines
+    | Example lines -> "@example" + "\n" + concat lines
+    | See (Some name, []) -> sprintf "@see %s" name
+    | See (Some name, lines) -> sprintf "@see {@link %s} " name + concat lines
+    | See (None, lines) -> "@see " + concat lines
+    | ESVersion target -> sprintf "@since %s" (Enum.pp target)
+    | Other (_, _, orig) -> orig.getText()
+    
   override x.Equals(yo) =
     match yo with
     | :? Comment as y -> true

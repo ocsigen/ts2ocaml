@@ -20,6 +20,14 @@ let comment text =
     between "/*" "*/" inner
 let commentStr text = tprintf "/* %s */" text
 
+let docComment text =
+  if text = empty then empty
+  else
+    let inner =
+      if isMultiLine text then newline + indent text + newline
+      else between " " " " text
+    between "/**" "*/" inner
+
 module Attr =
   let as_ value = between "@as(" ")" value
 
@@ -438,7 +446,11 @@ let private moduleSigImplLines (prefix: string) (isRec: bool) (m: TextModule) =
       prefix
       (if isRec then "rec " else "")
       m.name
-  [ yield! m.comments
+  [
+    // FIXME: https://github.com/rescript-lang/rescript-compiler/issues/6598
+    if prefix <> "and" then
+      yield! m.comments
+
     yield! moduleSigImplBody head oneliner m ]
 
 let private moduleSigImpl (prefix: string) (isRec: bool) (m: TextModule) =
@@ -562,6 +574,7 @@ module Binding =
     Binding.Ext {| name = name; ty = ty; target = ""; attrs = [Attr.External.obj]; comments = []|}
 
   let emitForImplementation (b: Binding) = [
+    yield! b.comments
     match b with
     | Binding.Let x -> yield Statement.let_ x.attrs x.name x.ty x.body
     | Binding.Ext x -> yield Statement.external x.attrs x.name x.ty x.target

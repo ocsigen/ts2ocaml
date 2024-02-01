@@ -630,9 +630,19 @@ module StructuredText =
 let removeLabels (xs: Choice<FieldLike, Type> list) =
     xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
 
-let emitComments (comments: Comment list) : text list =
-  // TODO
-  []
+let emitComments (floating: bool) (comments: Comment list) : text list =
+  if List.isEmpty comments then []
+  else
+    let escape =
+      String.replace "/*" "/ *"
+      >> String.replace "*/" "* /"
+    let emit (c: Comment) =
+      match c with
+      | Description lines
+      | Summary lines -> lines |> List.map escape |> strLines
+      | c -> c.ToJsDoc() |> escape |> str
+    let body = comments |> List.map emit |> concat newline
+    if floating then [comment body] else [docComment body]
 
 let inline binding (f: (string -> string) -> CurrentScope -> Binding) : StructuredTextItem list =
   [Binding (fun renamer scope -> f (renamer.Rename "value") scope)]
@@ -688,7 +698,7 @@ let extValue flags overrideFunc ctx (t: Type) =
 let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass: bool) (ma: MemberAttribute) m =
   let emitType_ = emitTypeImpl flags overrideFunc
 
-  let comments = emitComments ma.comments
+  let comments = emitComments false ma.comments
 
   let inline extFunc ft = extFunc flags overrideFunc ctx ft
   let inline extValue t = extValue flags overrideFunc ctx t
@@ -845,11 +855,13 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
       emitMembers flags overrideFunc ctx selfTy isExportDefaultClass ma (Indexer (ft, WriteOnly))
     ]
   | SymbolIndexer (symbol, ft, _) ->
+    let comments = emitComments true ma.comments
     let c =
       let ft = func ft
       tprintf "external [Symbol.%s]: " symbol + ft + tprintf " = \"[Symbol.%s]\"" symbol
     binding (fun _ _ -> Binding.unknown comments (Some c))
   | UnknownMember msgo ->
+    let comments = emitComments true ma.comments
     binding (fun _ _ -> Binding.unknown comments (msgo |> Option.map str))
 
 let emitTypeAliasesImpl
@@ -1053,7 +1065,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       | ClassKind.NormalClass _ -> forceScope |> Option.defaultValue Scope.Default
       | _ -> Scope.Ignore
 
-    let comments = c.comments |> emitComments
+    let comments = c.comments |> emitComments false
 
     let tagsDefinition =
       if useTags && innerCtx.options.inheritWithTags.HasProvide then
@@ -1105,7 +1117,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
 
       emitTypeAliasesImpl "t" flags overrideFunc innerCtx c.loc c.typeParams selfTyText.ty (fun x ->
         if not x.isOverload then
-          [TypeDefText.Create(x.name, x.tyargs, x.target, isRec=selfTyText.isRec, comments=emitComments c.comments)]
+          [TypeDefText.Create(x.name, x.tyargs, x.target, isRec=selfTyText.isRec, comments=emitComments false c.comments)]
         else
           [TypeAliasText (Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target)]
       )
@@ -1246,9 +1258,9 @@ let emitEnum (ctx: Context) (current: StructuredText) (e: Enum) =
         for key, value in distinctCases do
           yield emitConstructor key [Attr.as_ (Term.literal value)] [] |> indent
       ]
-    let item = TypeDefText.Create("t", [], Some casesText, shouldAssert=true, comments=emitComments e.comments)
+    let item = TypeDefText.Create("t", [], Some casesText, shouldAssert=true, comments=emitComments false e.comments)
     let items = item :: List.map childNode e.cases
-    let comments = e.comments |> emitComments
+    let comments = e.comments |> emitComments false
     {| StructuredTextNode.empty with items = items; comments = comments |}
 
   let exports = getExportFromStatement ctx e.name Kind.OfEnum "enum" (Enum e)
@@ -1260,7 +1272,7 @@ let emitEnum (ctx: Context) (current: StructuredText) (e: Enum) =
 let emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (ta: TypeAlias) : StructuredText =
   let emitType = emitTypeImpl flags overrideFunc
 
-  let comments = (ta :> ICommented<_>).getComments() |> emitComments
+  let comments = (ta :> ICommented<_>).getComments() |> emitComments false
   let knownTypes = Statement.getKnownTypes ctx [TypeAlias ta]
 
   let items =
@@ -1272,7 +1284,7 @@ let emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (t
           [TypeDefText.Create (
             x.name, x.tyargs, x.target,
             isRec=isRec, attrs=attrs, shouldAssert=shouldAssert,
-            comments=emitComments ta.comments
+            comments=emitComments false ta.comments
           )]
         else
           [TypeAliasText (Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target)]
@@ -1380,7 +1392,7 @@ let rec emitFunction flags overrideFunc ctx (f: Function) =
     let inline extFunc ft = extFunc flags overrideFunc ctx ft
     let ty, attr = extFunc f.typ
     let attr = attr |> impossibleNone (fun () -> "emitFunction")
-    let comments = emitComments f.comments
+    let comments = emitComments false f.comments
     binding (fun rename s -> createExternalForValue ctx rename s (Attr.External.val_ :: attr) comments f.name ty)
 
 and emitVariable flags overrideFunc ctx (v: Variable) =
@@ -1393,7 +1405,7 @@ and emitVariable flags overrideFunc ctx (v: Variable) =
     let emitType = emitTypeImpl flags
     let emitType_ = emitType overrideFunc
     let ty, attr = emitType_ ctx v.typ, [Attr.External.val_]
-    let comments = emitComments v.comments
+    let comments = emitComments false v.comments
     binding (fun rename s -> createExternalForValue ctx rename s attr comments v.name ty)
 
 let emitImport (ctx: Context) (i: Import) : StructuredTextItem list =
@@ -1452,7 +1464,7 @@ let emitImport (ctx: Context) (i: Import) : StructuredTextItem list =
       |> Option.defaultValue []
     | NamespaceImport _ | ES6DefaultImport _ | ES6Import _ -> []
 
-  [ yield! emitComments i.comments |> List.map ImportText
+  [ yield! emitComments true i.comments |> List.map ImportText
     yield commentStr i.origText |> ImportText
     for c in i.clauses do
       yield! emitImportClause c]
@@ -1481,7 +1493,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           comments = memberAttr.comments; loc = memberAttr.loc }
       emitFunction flags overrideFunc ctx f
     [ for ma, m in moduleIntf.members do
-        let comments = emitComments ma.comments
+        let comments = emitComments false ma.comments
         match m with
         | Field (fl, mt) ->
           yield! emitAsVariable fl.name fl.value (mt = ReadOnly) ma
@@ -1527,7 +1539,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         | SymbolIndexer _ | UnknownMember None -> () ]
 
   let rec folder ctx (current: StructuredText) (s: Statement) : StructuredText =
-    let comments = (s :> ICommented<_>).getComments() |> emitComments
+    let comments = (s :> ICommented<_>).getComments() |> emitComments false
 
     let knownTypes () = Statement.getKnownTypes ctx [s]
     let addExport name kind kindString current =
@@ -1667,7 +1679,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         | Some s -> commentStr s | None -> commentStr "unknown statement"
       current |> set {| StructuredTextNode.empty with items = [Comment cmt] |}
     | FloatingComment c ->
-      let cmt = c.comments |> emitComments |> List.map Comment
+      let cmt = c.comments |> emitComments true |> List.map Comment
       current |> set {| StructuredTextNode.empty with items = Comment empty :: cmt |}
 
   stmts |> List.fold (folder rootCtx) Trie.empty
@@ -1751,7 +1763,7 @@ let rec emitModule (dt: DependencyTrie<string>) flags (ctx: Context) st =
           yield Statement.open_ moduleName
           yield str "type nonrec t = t"
         ]
-        let m content = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
+        let m content = {| name = moduleName; origName = e.name; content = content; comments = emitComments false e.comments |}
         {| types = types
            intf = Statement.moduleSig (m intf)
            impl = Statement.moduleVal (m (if isLinear then intf else impl))

@@ -66,12 +66,12 @@ type Options =
   // general options
   abstract preset: Preset option with get
   abstract createStdlib: bool with get
-  // JS options
-  abstract ``module``: ModuleKind with get
-  abstract name: string option with get
   // output options
   abstract outputDir: string option with get
   abstract resi: bool with get
+  // JS options
+  abstract ``module``: ModuleKind with get
+  abstract name: string option with get
   // typer options
   abstract numberAsInt: bool with get, set
   abstract subtyping: Subtyping list with get, set

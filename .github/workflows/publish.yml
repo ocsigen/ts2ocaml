@@ -57,7 +57,7 @@ jobs:
         env:
           REPO: self
           BRANCH: jsoo-stdlib
-          FOLDER: dist_jsoo
+          FOLDER: dist/jsoo
           TAG: jsoo-stdlib-${{ github.event.release.tag_name }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build ({sha}) {msg}"

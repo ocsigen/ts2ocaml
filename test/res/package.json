@@ -1,0 +1,20 @@
+{
+  "name": "rescript-project-template",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "rescript",
+    "clean": "rescript clean -with-deps",
+    "start": "rescript build -w"
+  },
+  "keywords": [
+    "rescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@ocsigen/ts2ocaml": "link:../../"
+  },
+  "dependencies": {
+    "rescript": "11.0.1"
+  }
+}

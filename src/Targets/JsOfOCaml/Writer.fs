@@ -161,11 +161,11 @@ module OverrideFunc =
       | Some text -> Some text
       | None -> f1 _flags _emitType _ctx ty
 
-let emitEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<Enum * EnumCase, Literal>>) =
+let emitEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<Enum * EnumCase * _, Literal>>) =
   let forceSkipAttr text = if flags.forceSkipAttributes then empty else text
   let usedValues =
     cases
-    |> Seq.choose (function Choice1Of2 (_, { value = v }) -> v | _ -> None)
+    |> Seq.choose (function Choice1Of2 (_, { value = v }, _) -> v | _ -> None)
     |> Set.ofSeq
   let cases =
     cases
@@ -173,7 +173,7 @@ let emitEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<Enum * EnumCase, Lite
     |> Set.filter (function Choice2Of2 l when usedValues |> Set.contains l -> false | _ -> true)
     // Convert to identifiers while merging duplicate enum cases
     |> Set.map (function
-      | Choice1Of2 (e, c) -> enumCaseToIdentifier e c |> str, c.value
+      | Choice1Of2 (e, c, _) -> enumCaseToIdentifier e c |> str, c.value
       | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l)
   between "[" "]" (concat (str " | ") [
     for name, value in Set.toSeq cases do
@@ -1575,7 +1575,7 @@ module ModuleEmitter =
   let nonRec _ctx modules = moduleSigNonRec modules
   let recAll _ctx modules = moduleSigRec modules
   let recOptimized dt (ctx: Context) =
-    let scc = dt |> Trie.tryFind ctx.currentNamespace |? []
+    let scc = dt |> Trie.tryFind ctx.currentNamespace |> Option.map (fun x -> x.scc) |? []
     let sccSet = scc |> List.concat |> Set.ofList
     fun (modules: TextModuleSig list) ->
       let modulesMap = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty

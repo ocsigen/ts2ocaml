@@ -127,10 +127,25 @@ module Graph =
 #endif
     result
 
-type DependencyTrie<'k when 'k: comparison> = Trie<'k, 'k list list>
+type DependencyTrieInfo<'k> = {
+  isRecursive: bool
+  scc: 'k list list
+}
+
+type DependencyTrie<'k when 'k: comparison> = Trie<'k, DependencyTrieInfo<'k>>
 
 module DependencyTrie =
   open Ts2Ml.Extensions
+
+  let rec isLinear (dt: DependencyTrie<'k>) =
+    let searchChildren () =
+      dt.children
+      |> Map.toSeq
+      |> Seq.map snd
+      |> Seq.forall isLinear
+    match dt.value with
+    | Some { isRecursive = true } -> false
+    | _ -> searchChildren ()
 
   let ofTrie (getReferences: 'v -> WeakTrie<'k>) (trie: Trie<'k, 'v>) : DependencyTrie<'k> =
     let refTrieMap = new MutableMap<'k list, WeakTrie<'k>>()
@@ -158,8 +173,17 @@ module DependencyTrie =
           |> List.choose (function [x] -> Some (k, x) | _ -> None (* should be impossible *))
         refs :: state) []
       |> List.rev |> List.concat
-    let rec go nsRev (x: Trie<'k, 'v>) : DependencyTrie<'k> =
+    let rec go isRecursive nsRev (x: Trie<'k, 'v>) : DependencyTrie<'k> =
       let g = getDeps nsRev x |> Graph.ofEdges
       let scc = Graph.stronglyConnectedComponents g (x.children |> Map.toList |> List.map fst)
-      { value = Some scc; children = x.children |> Map.map (fun k child -> go (k :: nsRev) child) }
-    go [] trie
+      let isRecursiveMap =
+        scc
+        |> List.collect (function
+          | [] -> []
+          | [k] -> [k, false]
+          | ks -> ks |> List.map (fun k -> k, true))
+        |> Map.ofList
+      { value = Some { scc = scc; isRecursive = isRecursive };
+        children = x.children |> Map.map (fun k child ->
+          go (isRecursiveMap |> Map.tryFind k |? false) (k :: nsRev) child) }
+    go false [] trie

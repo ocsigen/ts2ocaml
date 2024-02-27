@@ -27,8 +27,9 @@ let run cmd dir args =
     failwithf "Error while running '%s' with args: %s " cmd args
 
 let platformTool tool =
-  ProcessUtils.tryFindFileOnPath tool
-  |> function Some t -> t | _ -> failwithf "%s not found" tool
+  lazy
+    ProcessUtils.tryFindFileOnPath tool
+    |> function Some t -> t | _ -> failwithf "%s not found" tool
 
 let dotnetExec cmd args =
   let result = DotNet.exec id cmd args
@@ -36,8 +37,8 @@ let dotnetExec cmd args =
     failwithf "Error while running 'dotnet %s %s'" cmd args
 
 let opamTool = platformTool "opam"
-let opam args = run opamTool "./" args
-let dune args = run opamTool "./" (sprintf "exec -- dune %s" args)
+let opam args = run opamTool.Value "./" args
+let dune args = run opamTool.Value "./" (sprintf "exec -- dune %s" args)
 
 // Build targets
 
@@ -45,7 +46,7 @@ let setup () =
   Target.create "Clean" <| fun _ ->
     !! "src/bin"
     ++ "src/obj"
-    ++ distDir
+    ++ (distDir </> "js") // clean ts2ocaml.js
     ++ "src/.fable"
     |> Seq.iter Shell.cleanDir
 
@@ -74,24 +75,27 @@ let setup () =
   Target.create "Watch" <| fun _ ->
     dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w --mode=development"
 
-  Target.create "TestComplete" ignore
+  Target.create "Test" ignore
 
-  "Clean" ?=> "Build"
+  Target.create "Publish" ignore
 
-  "Clean"
-    ?=> "YarnInstall"
+  "YarnInstall"
     ==> "Restore"
     ==> "Prepare"
-    ?=> "Build"
 
   "Prepare"
-    ?=> "BuildForTest"
-    ?=> "TestComplete"
-    ?=> "BuildForPublish"
+    ==> "BuildForTest"
     ==> "Build"
 
   "Prepare"
-    ?=> "Watch"
+    ==> "BuildForPublish"
+
+  "Prepare"
+    ==> "Watch"
+
+  "Clean"
+    ?=> "BuildForTest" ?=> "Build" ?=> "Test"
+    ?=> "BuildForPublish" ?=> "Publish"
 
 // Test targets
 
@@ -145,6 +149,59 @@ module Test =
         printfn "* copied to %s" file
       inDirectory testDir <| fun () -> dune "build"
 
+  module Res =
+    let testDir = testDir </> "res"
+    let outputDir = outputDir </> "test_res"
+    let srcDir = testDir </> "src"
+    let srcGeneratedDir = srcDir </> "generated"
+
+    let clean () =
+      !! $"{outputDir}/*"
+      ++ $"{srcGeneratedDir}/*.res"
+      ++ $"{srcGeneratedDir}/*.resi"
+      ++ $"{srcGeneratedDir}/*.bs.js"
+      |> Seq.iter Shell.rm
+
+    let generateBindings () =
+      Directory.create outputDir
+
+      let ts2res args files =
+        Yarn.exec (sprintf "ts2ocaml res %s" (String.concat " " (Seq.append args files))) id
+
+      ts2res ["--create-stdlib"; $"-o {outputDir}"] []
+
+      let packages = [
+         // "full" package involving a lot of inheritance
+         "full", !! "node_modules/typescript/lib/typescript.d.ts", ["--experimental-tagged-union"];
+
+         // "full" packages involving a lot of dependencies (which includes some "safe" packages)
+         "safe", !! "node_modules/@types/scheduler/tracing.d.ts", [];
+         "full", !! "node_modules/csstype/index.d.ts", [];
+         "safe", !! "node_modules/@types/prop-types/index.d.ts", [];
+         "full", !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts", ["--readable-names"];
+         "full", !! "node_modules/@types/react-modal/index.d.ts", ["--readable-names"];
+
+         // "safe" package which depends on another "safe" package
+         "safe", !! "node_modules/@types/yargs-parser/index.d.ts", [];
+         "safe", !! "node_modules/@types/yargs/index.d.ts", [];
+
+         "minimal", !! "node_modules/@types/vscode/index.d.ts", ["--readable-names"];
+      ]
+
+      for preset, package, additionalOptions in packages do
+        ts2res
+          (["--verbose"; "--nowarn"; "--follow-relative-references";
+            $"--preset {preset}"; $"-o {outputDir}"] @ additionalOptions)
+          package
+
+    let build () =
+      Shell.mkdir srcGeneratedDir
+      for file in outputDir |> Shell.copyRecursiveTo true srcGeneratedDir do
+        printfn "* copied to %s" file
+      inDirectory testDir <| fun () ->
+        Yarn.install id
+        Yarn.exec "rescript" id
+
   let setup () =
     Target.create "TestJsooClean" <| fun _ -> Jsoo.clean ()
     Target.create "TestJsooGenerateBindings" <| fun _ -> Jsoo.generateBindings ()
@@ -156,13 +213,18 @@ module Test =
       ==> "TestJsooGenerateBindings"
       ==> "TestJsooBuild"
       ==> "TestJsoo"
+      ==> "Test"
 
-    Target.create "Test" ignore
-    Target.create "TestOnly" ignore
+    Target.create "TestResClean" <| fun _ -> Res.clean ()
+    Target.create "TestResGenerateBindings" <| fun _ -> Res.generateBindings ()
+    Target.create "TestResBuild" <| fun _ -> Res.build ()
+    Target.create "TestRes" ignore
 
-    "TestJsoo"
-      ==> "TestOnly"
-      ==> "TestComplete"
+    "BuildForTest"
+      ==> "TestResClean"
+      ==> "TestResGenerateBindings"
+      ==> "TestResBuild"
+      ==> "TestRes"
       ==> "Test"
 
 // Publish targets
@@ -177,7 +239,7 @@ module Publish =
       Yarn.exec $"version --new-version {newVersion} --no-git-tag-version" id
 
   module Jsoo =
-    let targetDir = "./dist_jsoo"
+    let targetDir = distDir </> "jsoo"
     let duneProject = targetDir </> "dune-project"
 
     let copyArtifacts () =
@@ -200,10 +262,10 @@ module Publish =
         if result.Success then
           let oldVersion = result.Groups.[1].Value
           if oldVersion <> newVersion then
-            printfn $"* updating version in dist_jsoo/dune-project from '{oldVersion}' to '{newVersion}'."
+            printfn $"* updating version in dist/jsoo/dune-project from '{oldVersion}' to '{newVersion}'."
             content |> String.replace result.Value $"(version {newVersion})"
           else
-            printfn $"* version in dist_jsoo/dune-project not updated ('{newVersion}')."
+            printfn $"* version in dist/jsoo/dune-project not updated ('{newVersion}')."
             content
         else content
       )
@@ -212,9 +274,6 @@ module Publish =
       inDirectory targetDir <| fun () -> dune "build"
 
   let setup () =
-    Target.create "Publish" <| fun _ -> ()
-    Target.create "PublishOnly" <| fun _ -> ()
-
     Target.create "PublishNpm" <| fun _ ->
       Npm.updateVersion ()
 
@@ -226,12 +285,7 @@ module Publish =
     "BuildForPublish"
       ==> "PublishNpm"
       ==> "PublishJsoo"
-      ==> "PublishOnly"
       ==> "Publish"
-
-    "TestJsoo" ==> "PublishJsoo"
-
-    "Build" ?=> "Test" ?=> "Publish"
 
 // Utility targets
 

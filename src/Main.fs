@@ -24,6 +24,7 @@ let main argv =
          .config()
     |> GlobalOptions.register
     |> Target.register parse Targets.JsOfOCaml.Target.target
+    |> Target.register parse Targets.ReScript.Target.target
     |> Target.register parse Targets.ParserTest.target
   yargs.demandCommand(1.0).scriptName("ts2ocaml").help().argv |> ignore
   0

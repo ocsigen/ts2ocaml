@@ -6,7 +6,7 @@ const webpack = require('webpack');
 
 var CONFIG = {
   fsharpEntry: './src/Main.fs.js',
-  outputDir: './dist',
+  outputDir: './dist/js',
 }
 
 var path = require("path");
@@ -38,6 +38,14 @@ module.exports = {
   output: {
     path: path.join(__dirname, CONFIG.outputDir),
     filename: 'ts2ocaml.js'
+  },
+  module: {
+    rules: [
+      {
+        resourceQuery: /raw/,
+        type: 'asset/source'
+      }
+    ]
   },
   plugins: [
     new webpack.BannerPlugin({

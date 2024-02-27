@@ -1,0 +1,20 @@
+{
+  "name": "ts2ocaml-rescript-stdlib",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "rescript",
+    "clean": "rescript clean -with-deps",
+    "start": "rescript build -w"
+  },
+  "keywords": [
+    "rescript"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "rescript": "11.0.1"
+  },
+  "peerDependencies": {
+    "rescript": "^11.0.1"
+  }
+}

@@ -13,6 +13,10 @@
     <Compile Include="Targets/JsOfOCaml/OCamlHelper.fs" />
     <Compile Include="Targets/JsOfOCaml/Writer.fs" />
     <Compile Include="Targets/JsOfOCaml/Target.fs" />
+    <Compile Include="Targets/ReScript/Common.fs" />
+    <Compile Include="Targets/ReScript/ReScriptHelper.fs" />
+    <Compile Include="Targets/ReScript/Writer.fs" />
+    <Compile Include="Targets/ReScript/Target.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>

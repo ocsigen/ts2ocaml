@@ -10416,6 +10416,22 @@ module[@js.scope "Promise"] Promise : sig
   val catch: ('tags, 'T) this -> ?onrejected:([`Null | `Undefined of undefined | `U1 of (any -> ([`U1 of 'TResult | `U2 of 'TResult PromiseLike.t] [@js.union]))] [@js.union]) -> unit -> ('T, 'TResult) union2 t [@@js.call "catch"]
   
   (**
+    language version: ES2021
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any: 'T -> (* FIXME: unknown type 'T[number]' *)any Awaited.t t [@@js.global "any"]
+  
+  (**
+    language version: ES2021
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any': ([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) Iterable.t -> 'T Awaited.t t [@@js.global "any"]
+  
+  (**
     language version: ES2020
     Creates a Promise that is resolved with an array of results when all
     of the provided Promises resolve or reject.
@@ -10432,22 +10448,6 @@ module[@js.scope "Promise"] Promise : sig
     @return A new Promise.
   *)
   val allSettled': ([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) Iterable.t -> 'T Awaited.t PromiseSettledResult.t list t [@@js.global "allSettled"]
-  
-  (**
-    language version: ES2021
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any: 'T -> (* FIXME: unknown type 'T[number]' *)any Awaited.t t [@@js.global "any"]
-  
-  (**
-    language version: ES2021
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any': ([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) Iterable.t -> 'T Awaited.t t [@@js.global "any"]
   
   (** A reference to the prototype. *)
   val prototype: unit -> any t [@@js.get "prototype"]
@@ -11968,6 +11968,22 @@ module[@js.scope "Promise"] Promise_Make (T : Ojs.T) : sig
   val catch: t -> ?onrejected:([`Null | `Undefined of undefined | `U1 of (any -> ([`U1 of 'TResult | `U2 of 'TResult PromiseLike.t] [@js.union]))] [@js.union]) -> unit -> (T.t, 'TResult) union2 parent [@@js.call "catch"]
   
   (**
+    language version: ES2021
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any: T.t -> (* FIXME: unknown type 'T[number]' *)any Awaited.t parent [@@js.global "any"]
+  
+  (**
+    language version: ES2021
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any: ([`U1 of T.t | `U2 of T.t PromiseLike.t] [@js.union]) Iterable.t -> T.t Awaited.t Awaited.t parent [@@js.global "any"]
+  
+  (**
     language version: ES2020
     Creates a Promise that is resolved with an array of results when all
     of the provided Promises resolve or reject.
@@ -11984,22 +12000,6 @@ module[@js.scope "Promise"] Promise_Make (T : Ojs.T) : sig
     @return A new Promise.
   *)
   val allSettled: ([`U1 of T.t | `U2 of T.t PromiseLike.t] [@js.union]) Iterable.t -> T.t Awaited.t PromiseSettledResult.t list Awaited.t PromiseSettledResult.t list parent [@@js.global "allSettled"]
-  
-  (**
-    language version: ES2021
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any: T.t -> (* FIXME: unknown type 'T[number]' *)any Awaited.t parent [@@js.global "any"]
-  
-  (**
-    language version: ES2021
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any: ([`U1 of T.t | `U2 of T.t PromiseLike.t] [@js.union]) Iterable.t -> T.t Awaited.t Awaited.t parent [@@js.global "any"]
   
   (** A reference to the prototype. *)
   val prototype: unit -> any parent [@@js.get "prototype"]
@@ -12189,6 +12189,17 @@ module AsyncIterator_Make (T : Ojs.T) (TReturn : Ojs.T) (TNext : Ojs.T) : sig
   val return: t -> ?value:([`U1 of TReturn.t | `U2 of TReturn.t PromiseLike.t] [@js.union]) -> unit -> (T.t, TReturn.t) IteratorResult.t Promise.t [@@js.call "return"]
   val throw: t -> ?e:any -> unit -> (T.t, TReturn.t) IteratorResult.t Promise.t [@@js.call "throw"]
 end
+module PromiseFulfilledResult_Make (T : Ojs.T) : sig
+  type 'T parent = 'T PromiseFulfilledResult.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_status: t -> ([`L_s62_fulfilled[@js "fulfilled"]] [@js.enum]) [@@js.get "status"]
+  val set_status: t -> ([`L_s62_fulfilled[@js "fulfilled"]] [@js.enum]) -> unit [@@js.set "status"]
+  val get_value: t -> T.t [@@js.get "value"]
+  val set_value: t -> T.t -> unit [@@js.set "value"]
+end
 module[@js.scope "WeakRef"] WeakRef_Make (T : Ojs.T) : sig
   type 'T parent = 'T WeakRef.t
   type t = T.t parent
@@ -12242,17 +12253,6 @@ module[@js.scope "FinalizationRegistry"] FinalizationRegistry_Make (T : Ojs.T) :
     @param cleanupCallback The callback to call after an object in the registry has been reclaimed.
   *)
   val create: (T.t -> unit) -> t [@@js.create]
-end
-module PromiseFulfilledResult_Make (T : Ojs.T) : sig
-  type 'T parent = 'T PromiseFulfilledResult.t
-  type t = T.t parent
-  val t_of_js: Ojs.t -> t
-  val t_to_js: t -> Ojs.t
-  
-  val get_status: t -> ([`L_s62_fulfilled[@js "fulfilled"]] [@js.enum]) [@@js.get "status"]
-  val set_status: t -> ([`L_s62_fulfilled[@js "fulfilled"]] [@js.enum]) -> unit [@@js.set "status"]
-  val get_value: t -> T.t [@@js.get "value"]
-  val set_value: t -> T.t -> unit [@@js.set "value"]
 end
 
 

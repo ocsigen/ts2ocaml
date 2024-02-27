@@ -2848,6 +2848,7 @@ module[@js.scope "DOMStringList"] DOMStringList : sig
   type 'tags this = 'tags intf constraint 'tags = [> `DOMStringList ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> string IterableIterator.t *)
   
   (**
     Returns the number of strings in strings.
@@ -2871,7 +2872,6 @@ module[@js.scope "DOMStringList"] DOMStringList : sig
   val item: 'tags this -> index:float -> string option [@@js.call "item"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
-  (* [Symbol.iterator]: unit -> string IterableIterator.t *)
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -3098,6 +3098,13 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
+    
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBDatabase/transaction)
+  *)
+  val transaction: 'tags this -> storeNames:([`U1 of string | `U2 of string Iterable.t] [@js.union]) -> ?mode:IDBTransactionMode.t -> ?options:IDBTransactionOptions.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
+  
+  (**
     Returns the name of the database.
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBDatabase/name)
@@ -3164,7 +3171,7 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBDatabase/transaction)
   *)
-  val transaction: 'tags this -> storeNames:([`U1 of string | `U2 of string list] [@js.union]) -> ?mode:IDBTransactionMode.t -> ?options:IDBTransactionOptions.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
+  val transaction': 'tags this -> storeNames:([`U1 of string | `U2 of string list] [@js.union]) -> ?mode:IDBTransactionMode.t -> ?options:IDBTransactionOptions.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -3217,13 +3224,6 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (**
-    Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
-    
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBDatabase/transaction)
-  *)
-  val transaction': 'tags this -> storeNames:([`U1 of string | `U2 of string Iterable.t] [@js.union]) -> ?mode:IDBTransactionMode.t -> ?options:IDBTransactionOptions.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -3361,6 +3361,15 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
+    
+    Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
+    
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/createIndex)
+  *)
+  val createIndex: 'tags this -> name:string -> keyPath:([`U1 of string | `U2 of string Iterable.t] [@js.union]) -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
+  
+  (**
     Returns true if the store has a key generator, and false otherwise.
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/autoIncrement)
@@ -3440,7 +3449,7 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/createIndex)
   *)
-  val createIndex: 'tags this -> name:string -> keyPath:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
+  val createIndex': 'tags this -> name:string -> keyPath:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
   
   (**
     Deletes records in store with the given key or in the given key range in query.
@@ -3529,15 +3538,6 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/put)
   *)
   val put: 'tags this -> value:any -> ?key:IDBValidKey.t -> unit -> IDBValidKey.t IDBRequest.t [@@js.call "put"]
-  
-  (**
-    Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
-    
-    Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
-    
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBObjectStore/createIndex)
-  *)
-  val createIndex': 'tags this -> name:string -> keyPath:([`U1 of string | `U2 of string Iterable.t] [@js.union]) -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -4788,6 +4788,27 @@ module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey) *)
+  val deriveKey: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> derivedKeyType:([`U1 of AlgorithmIdentifier.t | `U2 of AesDerivedKeyParams.t | `U3 of HmacImportParams.t | `U4 of HkdfParams.t | `U5 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "deriveKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
+  val generateKey: 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t [@@js.call "generateKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
+  val generateKey': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "generateKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
+  val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t [@@js.call "generateKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
+  val importKey: 'tags this -> format:([`L_s168_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
+  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s168_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "importKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/unwrapKey) *)
+  val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "unwrapKey"]
+  
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/decrypt) *)
   val decrypt: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t Promise.t [@@js.call "decrypt"]
   
@@ -4795,7 +4816,7 @@ module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val deriveBits: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> length:float -> ArrayBuffer.t Promise.t [@@js.call "deriveBits"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey) *)
-  val deriveKey: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> derivedKeyType:([`U1 of AlgorithmIdentifier.t | `U2 of AesDerivedKeyParams.t | `U3 of HmacImportParams.t | `U4 of HkdfParams.t | `U5 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "deriveKey"]
+  val deriveKey': 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> derivedKeyType:([`U1 of AlgorithmIdentifier.t | `U2 of AesDerivedKeyParams.t | `U3 of HmacImportParams.t | `U4 of HkdfParams.t | `U5 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "deriveKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/digest) *)
   val digest: 'tags this -> algorithm:AlgorithmIdentifier.t -> data:BufferSource.t -> ArrayBuffer.t Promise.t [@@js.call "digest"]
@@ -4810,52 +4831,31 @@ module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s168_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> key:CryptoKey.t -> ArrayBuffer.t Promise.t [@@js.call "exportKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
-  val generateKey: 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t [@@js.call "generateKey"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
-  val generateKey': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "generateKey"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
-  val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t [@@js.call "generateKey"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
-  val importKey: 'tags this -> format:([`L_s168_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
-  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s168_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/sign) *)
-  val sign: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t Promise.t [@@js.call "sign"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/unwrapKey) *)
-  val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "unwrapKey"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/verify) *)
-  val verify: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t [@@js.call "verify"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/wrapKey) *)
-  val wrapKey: 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> wrappingKey:CryptoKey.t -> wrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> ArrayBuffer.t Promise.t [@@js.call "wrapKey"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey) *)
-  val deriveKey': 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> derivedKeyType:([`U1 of AlgorithmIdentifier.t | `U2 of AesDerivedKeyParams.t | `U3 of HmacImportParams.t | `U4 of HkdfParams.t | `U5 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "deriveKey"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
   val generateKey''': 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t [@@js.call "generateKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
   val generateKey'''': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "generateKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
-  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t [@@js.call "generateKey"]
+  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t [@@js.call "generateKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
   val importKey'': 'tags this -> format:([`L_s168_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
-  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s168_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "importKey"]
+  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s168_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/sign) *)
+  val sign: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t Promise.t [@@js.call "sign"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/unwrapKey) *)
-  val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "unwrapKey"]
+  val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "unwrapKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/verify) *)
+  val verify: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t [@@js.call "verify"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/wrapKey) *)
+  val wrapKey: 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> wrappingKey:CryptoKey.t -> wrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> ArrayBuffer.t Promise.t [@@js.call "wrapKey"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -5002,6 +5002,16 @@ module[@js.scope "Headers"] rec Headers : sig
   type 'tags this = 'tags intf constraint 'tags = [> `Headers ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t *)
+  
+  (** Returns an iterator allowing to go through all key/value pairs contained in this object. *)
+  val entries: 'tags this -> (string * string) IterableIterator.t [@@js.call "entries"]
+  
+  (** Returns an iterator allowing to go through all keys of the key/value pairs contained in this object. *)
+  val keys: 'tags this -> string IterableIterator.t [@@js.call "keys"]
+  
+  (** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. *)
+  val values: 'tags this -> string IterableIterator.t [@@js.call "values"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Headers/append) *)
   val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
@@ -5018,16 +5028,6 @@ module[@js.scope "Headers"] rec Headers : sig
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Headers/set) *)
   val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t *)
-  
-  (** Returns an iterator allowing to go through all key/value pairs contained in this object. *)
-  val entries: 'tags this -> (string * string) IterableIterator.t [@@js.call "entries"]
-  
-  (** Returns an iterator allowing to go through all keys of the key/value pairs contained in this object. *)
-  val keys: 'tags this -> string IterableIterator.t [@@js.call "keys"]
-  
-  (** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. *)
-  val values: 'tags this -> string IterableIterator.t [@@js.call "values"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:HeadersInit.t -> unit -> t [@@js.create]
@@ -5076,6 +5076,16 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   type 'tags this = 'tags intf constraint 'tags = [> `URLSearchParams ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t *)
+  
+  (** Returns an array of key, value pairs for every entry in the search params. *)
+  val entries: 'tags this -> (string * string) IterableIterator.t [@@js.call "entries"]
+  
+  (** Returns a list of keys in the search params. *)
+  val keys: 'tags this -> string IterableIterator.t [@@js.call "keys"]
+  
+  (** Returns a list of values in the search params. *)
+  val values: 'tags this -> string IterableIterator.t [@@js.call "values"]
   
   (**
     Appends a specified key/value pair as a new search parameter.
@@ -5125,16 +5135,6 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   (** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. *)
   val toString: 'tags this -> string [@@js.call "toString"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t *)
-  
-  (** Returns an array of key, value pairs for every entry in the search params. *)
-  val entries: 'tags this -> (string * string) IterableIterator.t [@@js.call "entries"]
-  
-  (** Returns a list of keys in the search params. *)
-  val keys: 'tags this -> string IterableIterator.t [@@js.call "keys"]
-  
-  (** Returns a list of values in the search params. *)
-  val values: 'tags this -> string IterableIterator.t [@@js.call "values"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:([`U1 of string list list | `U2 of (string, string) Record.t | `U3 of string | `U4 of t] [@js.union]) -> unit -> t [@@js.create]
@@ -5262,6 +5262,16 @@ module[@js.scope "FormData"] FormData : sig
   type 'tags this = 'tags intf constraint 'tags = [> `FormData ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> (string * FormDataEntryValue.t) IterableIterator.t *)
+  
+  (** Returns an array of key, value pairs for every entry in the list. *)
+  val entries: 'tags this -> (string * FormDataEntryValue.t) IterableIterator.t [@@js.call "entries"]
+  
+  (** Returns a list of keys in the list. *)
+  val keys: 'tags this -> string IterableIterator.t [@@js.call "keys"]
+  
+  (** Returns a list of values in the list. *)
+  val values: 'tags this -> FormDataEntryValue.t IterableIterator.t [@@js.call "values"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FormData/append) *)
   val append: 'tags this -> name:string -> value:([`U1 of string | `U2 of Blob.t] [@js.union]) -> unit [@@js.call "append"]
@@ -5293,16 +5303,6 @@ module[@js.scope "FormData"] FormData : sig
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FormData/set) *)
   val set_'': 'tags this -> name:string -> blobValue:Blob.t -> ?filename:string -> unit -> unit [@@js.call "set"]
   val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  (* [Symbol.iterator]: unit -> (string * FormDataEntryValue.t) IterableIterator.t *)
-  
-  (** Returns an array of key, value pairs for every entry in the list. *)
-  val entries: 'tags this -> (string * FormDataEntryValue.t) IterableIterator.t [@@js.call "entries"]
-  
-  (** Returns a list of keys in the list. *)
-  val keys: 'tags this -> string IterableIterator.t [@@js.call "keys"]
-  
-  (** Returns a list of values in the list. *)
-  val values: 'tags this -> FormDataEntryValue.t IterableIterator.t [@@js.call "values"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -5663,11 +5663,14 @@ module[@js.scope "Cache"] Cache : sig
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Cache/addAll) *)
+  val addAll: 'tags this -> requests:RequestInfo.t Iterable.t -> unit Promise.t [@@js.call "addAll"]
+  
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Cache/add) *)
   val add: 'tags this -> request:([`U1 of RequestInfo.t | `U2 of URL.t] [@js.union]) -> unit Promise.t [@@js.call "add"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Cache/addAll) *)
-  val addAll: 'tags this -> requests:RequestInfo.t list -> unit Promise.t [@@js.call "addAll"]
+  val addAll': 'tags this -> requests:RequestInfo.t list -> unit Promise.t [@@js.call "addAll"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Cache/delete) *)
   val delete: 'tags this -> request:([`U1 of RequestInfo.t | `U2 of URL.t] [@js.union]) -> ?options:CacheQueryOptions.t -> unit -> bool Promise.t [@@js.call "delete"]
@@ -5683,9 +5686,6 @@ module[@js.scope "Cache"] Cache : sig
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Cache/put) *)
   val put: 'tags this -> request:([`U1 of RequestInfo.t | `U2 of URL.t] [@js.union]) -> response:Response.t -> unit Promise.t [@@js.call "put"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Cache/addAll) *)
-  val addAll': 'tags this -> requests:RequestInfo.t Iterable.t -> unit Promise.t [@@js.call "addAll"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -6532,28 +6532,28 @@ module WEBGL_multi_draw : sig
   val t_of_js: Ojs.t -> t
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysInstancedWEBGL) *)
-  val multiDrawArraysInstancedWEBGL: 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t | `U2 of GLint.t list] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysInstancedWEBGL"]
+  val multiDrawArraysInstancedWEBGL: 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t | `U2 of GLint.t Iterable.t] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> countsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysInstancedWEBGL"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysWEBGL) *)
-  val multiDrawArraysWEBGL: 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t | `U2 of GLint.t list] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysWEBGL"]
+  val multiDrawArraysWEBGL: 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t | `U2 of GLint.t Iterable.t] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> countsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysWEBGL"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsInstancedWEBGL) *)
-  val multiDrawElementsInstancedWEBGL: 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> offsetsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsInstancedWEBGL"]
+  val multiDrawElementsInstancedWEBGL: 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> offsetsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsInstancedWEBGL"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsWEBGL) *)
-  val multiDrawElementsWEBGL: 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> offsetsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsWEBGL"]
+  val multiDrawElementsWEBGL: 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> offsetsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsWEBGL"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysInstancedWEBGL) *)
-  val multiDrawArraysInstancedWEBGL': 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t | `U2 of GLint.t Iterable.t] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> countsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysInstancedWEBGL"]
+  val multiDrawArraysInstancedWEBGL': 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t | `U2 of GLint.t list] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysInstancedWEBGL"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysWEBGL) *)
-  val multiDrawArraysWEBGL': 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t | `U2 of GLint.t Iterable.t] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> countsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysWEBGL"]
+  val multiDrawArraysWEBGL': 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t | `U2 of GLint.t list] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysWEBGL"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsInstancedWEBGL) *)
-  val multiDrawElementsInstancedWEBGL': 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> offsetsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsInstancedWEBGL"]
+  val multiDrawElementsInstancedWEBGL': 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> offsetsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsInstancedWEBGL"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsWEBGL) *)
-  val multiDrawElementsWEBGL': 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t | `U2 of GLsizei.t Iterable.t] [@js.union]) -> offsetsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsWEBGL"]
+  val multiDrawElementsWEBGL': 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t | `U2 of GLsizei.t list] [@js.union]) -> offsetsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsWEBGL"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -6592,7 +6592,10 @@ module WEBGL_draw_buffers : sig
   val t_of_js: Ojs.t -> t
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_draw_buffers/drawBuffersWEBGL) *)
-  val drawBuffersWEBGL: 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffersWEBGL"]
+  val drawBuffersWEBGL: 'tags this -> buffers:GLenum.t Iterable.t -> unit [@@js.call "drawBuffersWEBGL"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_draw_buffers/drawBuffersWEBGL) *)
+  val drawBuffersWEBGL': 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffersWEBGL"]
   val get_COLOR_ATTACHMENT0_WEBGL: 'tags this -> ([`L_n_36064[@js 36064]] [@js.enum]) [@@js.get "COLOR_ATTACHMENT0_WEBGL"]
   val get_COLOR_ATTACHMENT1_WEBGL: 'tags this -> ([`L_n_36065[@js 36065]] [@js.enum]) [@@js.get "COLOR_ATTACHMENT1_WEBGL"]
   val get_COLOR_ATTACHMENT2_WEBGL: 'tags this -> ([`L_n_36066[@js 36066]] [@js.enum]) [@@js.get "COLOR_ATTACHMENT2_WEBGL"]
@@ -6627,9 +6630,6 @@ module WEBGL_draw_buffers : sig
   val get_DRAW_BUFFER15_WEBGL: 'tags this -> ([`L_n_34868[@js 34868]] [@js.enum]) [@@js.get "DRAW_BUFFER15_WEBGL"]
   val get_MAX_COLOR_ATTACHMENTS_WEBGL: 'tags this -> ([`L_n_36063[@js 36063]] [@js.enum]) [@@js.get "MAX_COLOR_ATTACHMENTS_WEBGL"]
   val get_MAX_DRAW_BUFFERS_WEBGL: 'tags this -> ([`L_n_34852[@js 34852]] [@js.enum]) [@@js.get "MAX_DRAW_BUFFERS_WEBGL"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WEBGL_draw_buffers/drawBuffersWEBGL) *)
-  val drawBuffersWEBGL': 'tags this -> buffers:GLenum.t Iterable.t -> unit [@@js.call "drawBuffersWEBGL"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -7475,6 +7475,18 @@ module WebGLRenderingContextBase : sig
   type 'tags this = 'tags intf constraint 'tags = [> `WebGLRenderingContextBase ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
+  val vertexAttrib1fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t -> unit [@@js.call "vertexAttrib1fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
+  val vertexAttrib2fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t -> unit [@@js.call "vertexAttrib2fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
+  val vertexAttrib3fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t -> unit [@@js.call "vertexAttrib3fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
+  val vertexAttrib4fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t -> unit [@@js.call "vertexAttrib4fv"]
   val get_drawingBufferColorSpace: 'tags this -> PredefinedColorSpace.t [@@js.get "drawingBufferColorSpace"]
   val set_drawingBufferColorSpace: 'tags this -> PredefinedColorSpace.t -> unit [@@js.set "drawingBufferColorSpace"]
   
@@ -7912,25 +7924,25 @@ module WebGLRenderingContextBase : sig
   val vertexAttrib1f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> unit [@@js.call "vertexAttrib1f"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
-  val vertexAttrib1fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib1fv"]
+  val vertexAttrib1fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib1fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
   val vertexAttrib2f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> unit [@@js.call "vertexAttrib2f"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
-  val vertexAttrib2fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib2fv"]
+  val vertexAttrib2fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib2fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
   val vertexAttrib3f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> unit [@@js.call "vertexAttrib3f"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
-  val vertexAttrib3fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib3fv"]
+  val vertexAttrib3fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib3fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
   val vertexAttrib4f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> w:GLfloat.t -> unit [@@js.call "vertexAttrib4f"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
-  val vertexAttrib4fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib4fv"]
+  val vertexAttrib4fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib4fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttribPointer) *)
   val vertexAttribPointer: 'tags this -> index:GLuint.t -> size:GLint.t -> type_:GLenum.t -> normalized:GLboolean.t -> stride:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "vertexAttribPointer"]
@@ -8233,18 +8245,6 @@ module WebGLRenderingContextBase : sig
   val get_CONTEXT_LOST_WEBGL: 'tags this -> ([`L_n_37442[@js 37442]] [@js.enum]) [@@js.get "CONTEXT_LOST_WEBGL"]
   val get_UNPACK_COLORSPACE_CONVERSION_WEBGL: 'tags this -> ([`L_n_37443[@js 37443]] [@js.enum]) [@@js.get "UNPACK_COLORSPACE_CONVERSION_WEBGL"]
   val get_BROWSER_DEFAULT_WEBGL: 'tags this -> ([`L_n_37444[@js 37444]] [@js.enum]) [@@js.get "BROWSER_DEFAULT_WEBGL"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
-  val vertexAttrib1fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t -> unit [@@js.call "vertexAttrib1fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
-  val vertexAttrib2fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t -> unit [@@js.call "vertexAttrib2fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
-  val vertexAttrib3fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t -> unit [@@js.call "vertexAttrib3fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/vertexAttrib) *)
-  val vertexAttrib4fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t -> unit [@@js.call "vertexAttrib4fv"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -9139,6 +9139,9 @@ module CanvasPathDrawingStyles : sig
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/setLineDash) *)
+  val setLineDash: 'tags this -> segments:float Iterable.t -> unit [@@js.call "setLineDash"]
+  
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/lineCap) *)
   val get_lineCap: 'tags this -> CanvasLineCap.t [@@js.get "lineCap"]
   
@@ -9173,10 +9176,7 @@ module CanvasPathDrawingStyles : sig
   val getLineDash: 'tags this -> float list [@@js.call "getLineDash"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/setLineDash) *)
-  val setLineDash: 'tags this -> segments:float list -> unit [@@js.call "setLineDash"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/setLineDash) *)
-  val setLineDash': 'tags this -> segments:float Iterable.t -> unit [@@js.call "setLineDash"]
+  val setLineDash': 'tags this -> segments:float list -> unit [@@js.call "setLineDash"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ImageSmoothingQuality : sig
@@ -9391,6 +9391,9 @@ module CanvasPath : sig
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/roundRect) *)
+  val roundRect: 'tags this -> x:float -> y:float -> w:float -> h:float -> ?radii:([`U1 of float | `U2 of DOMPointInit.t | `U3 of ([`U1 of float | `U2 of DOMPointInit.t] [@js.union]) Iterable.t] [@js.union]) -> unit -> unit [@@js.call "roundRect"]
+  
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/arc) *)
   val arc: 'tags this -> x:float -> y:float -> radius:float -> startAngle:float -> endAngle:float -> ?counterclockwise:bool -> unit -> unit [@@js.call "arc"]
   
@@ -9419,10 +9422,7 @@ module CanvasPath : sig
   val rect: 'tags this -> x:float -> y:float -> w:float -> h:float -> unit [@@js.call "rect"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/roundRect) *)
-  val roundRect: 'tags this -> x:float -> y:float -> w:float -> h:float -> ?radii:([`U1 of float | `U2 of DOMPointInit.t | `U3 of ([`U1 of float | `U2 of DOMPointInit.t] [@js.union]) list] [@js.union]) -> unit -> unit [@@js.call "roundRect"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/roundRect) *)
-  val roundRect': 'tags this -> x:float -> y:float -> w:float -> h:float -> ?radii:([`U1 of float | `U2 of DOMPointInit.t | `U3 of ([`U1 of float | `U2 of DOMPointInit.t] [@js.union]) Iterable.t] [@js.union]) -> unit -> unit [@@js.call "roundRect"]
+  val roundRect': 'tags this -> x:float -> y:float -> w:float -> h:float -> ?radii:([`U1 of float | `U2 of DOMPointInit.t | `U3 of ([`U1 of float | `U2 of DOMPointInit.t] [@js.union]) list] [@js.union]) -> unit -> unit [@@js.call "roundRect"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -10778,6 +10778,69 @@ and WebGL2RenderingContextBase : sig
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
+  val clearBufferfv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
+  val clearBufferiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
+  val clearBufferuiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/drawBuffers) *)
+  val drawBuffers: 'tags this -> buffers:GLenum.t Iterable.t -> unit [@@js.call "drawBuffers"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/getActiveUniforms) *)
+  val getActiveUniforms: 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t Iterable.t -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/getUniformIndices) *)
+  val getUniformIndices: 'tags this -> program:WebGLProgram.t -> uniformNames:string Iterable.t -> GLuint.t Iterable.t option [@@js.call "getUniformIndices"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/invalidateFramebuffer) *)
+  val invalidateFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t -> unit [@@js.call "invalidateFramebuffer"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/invalidateSubFramebuffer) *)
+  val invalidateSubFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings) *)
+  val transformFeedbackVaryings: 'tags this -> program:WebGLProgram.t -> varyings:string Iterable.t -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
+  val uniform1uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
+  val uniform2uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
+  val uniform3uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
+  val uniform4uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
+  val uniformMatrix2x3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
+  val uniformMatrix2x4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
+  val uniformMatrix3x2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
+  val uniformMatrix3x4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
+  val uniformMatrix4x2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
+  val uniformMatrix4x3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) *)
+  val vertexAttribI4iv: 'tags this -> index:GLuint.t -> values:GLint.t Iterable.t -> unit [@@js.call "vertexAttribI4iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) *)
+  val vertexAttribI4uiv: 'tags this -> index:GLuint.t -> values:GLuint.t Iterable.t -> unit [@@js.call "vertexAttribI4uiv"]
+  
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/beginQuery) *)
   val beginQuery: 'tags this -> target:GLenum.t -> query:WebGLQuery.t -> unit [@@js.call "beginQuery"]
   
@@ -10806,13 +10869,13 @@ and WebGL2RenderingContextBase : sig
   val clearBufferfi: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> depth:GLfloat.t -> stencil:GLint.t -> unit [@@js.call "clearBufferfi"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
-  val clearBufferfv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Float32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
+  val clearBufferfv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Float32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
-  val clearBufferiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Int32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
+  val clearBufferiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Int32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
-  val clearBufferuiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Uint32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
+  val clearBufferuiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Uint32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clientWaitSync) *)
   val clientWaitSync: 'tags this -> sync:WebGLSync.t -> flags:GLbitfield.t -> timeout:GLuint64.t -> GLenum.t [@@js.call "clientWaitSync"]
@@ -10866,7 +10929,7 @@ and WebGL2RenderingContextBase : sig
   val drawArraysInstanced: 'tags this -> mode:GLenum.t -> first:GLint.t -> count:GLsizei.t -> instanceCount:GLsizei.t -> unit [@@js.call "drawArraysInstanced"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/drawBuffers) *)
-  val drawBuffers: 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffers"]
+  val drawBuffers': 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffers"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/drawElementsInstanced) *)
   val drawElementsInstanced: 'tags this -> mode:GLenum.t -> count:GLsizei.t -> type_:GLenum.t -> offset:GLintptr.t -> instanceCount:GLsizei.t -> unit [@@js.call "drawElementsInstanced"]
@@ -10893,7 +10956,7 @@ and WebGL2RenderingContextBase : sig
   val getActiveUniformBlockParameter: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> pname:GLenum.t -> any [@@js.call "getActiveUniformBlockParameter"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/getActiveUniforms) *)
-  val getActiveUniforms: 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t list -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
+  val getActiveUniforms': 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t list -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/getBufferSubData) *)
   val getBufferSubData: 'tags this -> target:GLenum.t -> srcByteOffset:GLintptr.t -> dstBuffer:ArrayBufferView.t -> ?dstOffset:GLuint.t -> ?length:GLuint.t -> unit -> unit [@@js.call "getBufferSubData"]
@@ -10926,13 +10989,13 @@ and WebGL2RenderingContextBase : sig
   val getUniformBlockIndex: 'tags this -> program:WebGLProgram.t -> uniformBlockName:string -> GLuint.t [@@js.call "getUniformBlockIndex"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/getUniformIndices) *)
-  val getUniformIndices: 'tags this -> program:WebGLProgram.t -> uniformNames:string list -> GLuint.t list option [@@js.call "getUniformIndices"]
+  val getUniformIndices': 'tags this -> program:WebGLProgram.t -> uniformNames:string list -> GLuint.t list option [@@js.call "getUniformIndices"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/invalidateFramebuffer) *)
-  val invalidateFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> unit [@@js.call "invalidateFramebuffer"]
+  val invalidateFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> unit [@@js.call "invalidateFramebuffer"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/invalidateSubFramebuffer) *)
-  val invalidateSubFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
+  val invalidateSubFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/isQuery) *)
   val isQuery: 'tags this -> query:WebGLQuery.t option -> GLboolean.t [@@js.call "isQuery"]
@@ -10995,52 +11058,52 @@ and WebGL2RenderingContextBase : sig
   val texSubImage3D'': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t option -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "texSubImage3D"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings) *)
-  val transformFeedbackVaryings: 'tags this -> program:WebGLProgram.t -> varyings:string list -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
+  val transformFeedbackVaryings': 'tags this -> program:WebGLProgram.t -> varyings:string list -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
   val uniform1ui: 'tags this -> location:WebGLUniformLocation.t option -> v0:GLuint.t -> unit [@@js.call "uniform1ui"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
-  val uniform1uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
+  val uniform1uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
   val uniform2ui: 'tags this -> location:WebGLUniformLocation.t option -> v0:GLuint.t -> v1:GLuint.t -> unit [@@js.call "uniform2ui"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
-  val uniform2uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
+  val uniform2uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
   val uniform3ui: 'tags this -> location:WebGLUniformLocation.t option -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> unit [@@js.call "uniform3ui"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
-  val uniform3uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
+  val uniform3uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
   val uniform4ui: 'tags this -> location:WebGLUniformLocation.t option -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> v3:GLuint.t -> unit [@@js.call "uniform4ui"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
-  val uniform4uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
+  val uniform4uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformBlockBinding) *)
   val uniformBlockBinding: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> uniformBlockBinding:GLuint.t -> unit [@@js.call "uniformBlockBinding"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix2x3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
+  val uniformMatrix2x3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix2x4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
+  val uniformMatrix2x4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix3x2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
+  val uniformMatrix3x2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix3x4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
+  val uniformMatrix3x4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix4x2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
+  val uniformMatrix4x2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix4x3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
+  val uniformMatrix4x3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribDivisor) *)
   val vertexAttribDivisor: 'tags this -> index:GLuint.t -> divisor:GLuint.t -> unit [@@js.call "vertexAttribDivisor"]
@@ -11049,13 +11112,13 @@ and WebGL2RenderingContextBase : sig
   val vertexAttribI4i: 'tags this -> index:GLuint.t -> x:GLint.t -> y:GLint.t -> z:GLint.t -> w:GLint.t -> unit [@@js.call "vertexAttribI4i"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) *)
-  val vertexAttribI4iv: 'tags this -> index:GLuint.t -> values:Int32List.t -> unit [@@js.call "vertexAttribI4iv"]
+  val vertexAttribI4iv': 'tags this -> index:GLuint.t -> values:Int32List.t -> unit [@@js.call "vertexAttribI4iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) *)
   val vertexAttribI4ui: 'tags this -> index:GLuint.t -> x:GLuint.t -> y:GLuint.t -> z:GLuint.t -> w:GLuint.t -> unit [@@js.call "vertexAttribI4ui"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) *)
-  val vertexAttribI4uiv: 'tags this -> index:GLuint.t -> values:Uint32List.t -> unit [@@js.call "vertexAttribI4uiv"]
+  val vertexAttribI4uiv': 'tags this -> index:GLuint.t -> values:Uint32List.t -> unit [@@js.call "vertexAttribI4uiv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribIPointer) *)
   val vertexAttribIPointer: 'tags this -> index:GLuint.t -> size:GLint.t -> type_:GLenum.t -> stride:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "vertexAttribIPointer"]
@@ -11325,69 +11388,6 @@ and WebGL2RenderingContextBase : sig
   val get_TEXTURE_IMMUTABLE_LEVELS: 'tags this -> ([`L_n_33503[@js 33503]] [@js.enum]) [@@js.get "TEXTURE_IMMUTABLE_LEVELS"]
   val get_TIMEOUT_IGNORED: 'tags this -> ([`L_n_minus1[@js -1]] [@js.enum]) [@@js.get "TIMEOUT_IGNORED"]
   val get_MAX_CLIENT_WAIT_TIMEOUT_WEBGL: 'tags this -> ([`L_n_37447[@js 37447]] [@js.enum]) [@@js.get "MAX_CLIENT_WAIT_TIMEOUT_WEBGL"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
-  val clearBufferfv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
-  val clearBufferiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) *)
-  val clearBufferuiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/drawBuffers) *)
-  val drawBuffers': 'tags this -> buffers:GLenum.t Iterable.t -> unit [@@js.call "drawBuffers"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/getActiveUniforms) *)
-  val getActiveUniforms': 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t Iterable.t -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/getUniformIndices) *)
-  val getUniformIndices': 'tags this -> program:WebGLProgram.t -> uniformNames:string Iterable.t -> GLuint.t Iterable.t option [@@js.call "getUniformIndices"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/invalidateFramebuffer) *)
-  val invalidateFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t -> unit [@@js.call "invalidateFramebuffer"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/invalidateSubFramebuffer) *)
-  val invalidateSubFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings) *)
-  val transformFeedbackVaryings': 'tags this -> program:WebGLProgram.t -> varyings:string Iterable.t -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
-  val uniform1uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
-  val uniform2uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
-  val uniform3uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) *)
-  val uniform4uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix2x3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix2x4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix3x2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix3x4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix4x2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) *)
-  val uniformMatrix4x3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) *)
-  val vertexAttribI4iv': 'tags this -> index:GLuint.t -> values:GLint.t Iterable.t -> unit [@@js.call "vertexAttribI4iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) *)
-  val vertexAttribI4uiv': 'tags this -> index:GLuint.t -> values:GLuint.t Iterable.t -> unit [@@js.call "vertexAttribI4uiv"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and WebGL2RenderingContextOverloads : sig
@@ -11401,6 +11401,39 @@ and WebGL2RenderingContextOverloads : sig
   type 'tags this = 'tags intf constraint 'tags = [> `WebGL2RenderingContextOverloads ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
+  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
+  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
+  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/bufferData) *)
   val bufferData: 'tags this -> target:GLenum.t -> size:GLsizeiptr.t -> usage:GLenum.t -> unit [@@js.call "bufferData"]
@@ -11469,70 +11502,37 @@ and WebGL2RenderingContextOverloads : sig
   val texSubImage2D'''': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t -> srcOffset:GLuint.t -> unit [@@js.call "texSubImage2D"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
+  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
+  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
+  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
+  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
+  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
+  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
+  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
+  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
+  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -11864,6 +11864,39 @@ and WebGLRenderingContextOverloads : sig
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t -> unit [@@js.call "uniform1fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t -> unit [@@js.call "uniform1iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t -> unit [@@js.call "uniform2fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t -> unit [@@js.call "uniform2iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t -> unit [@@js.call "uniform3fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t -> unit [@@js.call "uniform3iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t -> unit [@@js.call "uniform4fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
+  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t -> unit [@@js.call "uniform4iv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
+  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t -> unit [@@js.call "uniformMatrix2fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
+  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t -> unit [@@js.call "uniformMatrix3fv"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
+  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t -> unit [@@js.call "uniformMatrix4fv"]
+  
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/bufferData) *)
   val bufferData: 'tags this -> target:GLenum.t -> size:GLsizeiptr.t -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   
@@ -11895,70 +11928,37 @@ and WebGLRenderingContextOverloads : sig
   val texSubImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage2D"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform1fv"]
+  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform1fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform1iv"]
+  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform1iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform2fv"]
+  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform2fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform2iv"]
+  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform2iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform3fv"]
+  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform3fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform3iv"]
+  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform3iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform4fv"]
+  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform4fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform4iv"]
+  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform4iv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t -> unit [@@js.call "uniform1fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t -> unit [@@js.call "uniform1iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t -> unit [@@js.call "uniform2fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t -> unit [@@js.call "uniform2iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t -> unit [@@js.call "uniform3fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t -> unit [@@js.call "uniform3iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t -> unit [@@js.call "uniform4fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) *)
-  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t -> unit [@@js.call "uniform4iv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t -> unit [@@js.call "uniformMatrix2fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t -> unit [@@js.call "uniformMatrix3fv"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) *)
-  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t -> unit [@@js.call "uniformMatrix4fv"]
+  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ErrorEventInit : sig
@@ -12068,6 +12068,9 @@ module[@js.scope "MessageEvent"] rec MessageEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (** @deprecated \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent) *)
+  val initMessageEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t Iterable.t -> unit -> unit [@@js.call "initMessageEvent"]
+  
   (**
     Returns the data of the message.
     
@@ -12104,10 +12107,7 @@ module[@js.scope "MessageEvent"] rec MessageEvent : sig
   val get_source: ('tags, 'T) this -> MessageEventSource.t option [@@js.get "source"]
   
   (** @deprecated \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent) *)
-  val initMessageEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
-  
-  (** @deprecated \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent) *)
-  val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t Iterable.t -> unit -> unit [@@js.call "initMessageEvent"]
+  val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T t [@@js.create]
@@ -14015,6 +14015,10 @@ module[@js.scope "StylePropertyMapReadOnly"] StylePropertyMapReadOnly : sig
   type 'tags this = 'tags intf constraint 'tags = [> `StylePropertyMapReadOnly ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> (string * CSSStyleValue.t Iterable.t) IterableIterator.t *)
+  val entries: 'tags this -> (string * CSSStyleValue.t Iterable.t) IterableIterator.t [@@js.call "entries"]
+  val keys: 'tags this -> string IterableIterator.t [@@js.call "keys"]
+  val values: 'tags this -> CSSStyleValue.t Iterable.t IterableIterator.t [@@js.call "values"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/StylePropertyMapReadOnly/size) *)
   val get_size: 'tags this -> float [@@js.get "size"]
@@ -14028,10 +14032,6 @@ module[@js.scope "StylePropertyMapReadOnly"] StylePropertyMapReadOnly : sig
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/StylePropertyMapReadOnly/has) *)
   val has: 'tags this -> property:string -> bool [@@js.call "has"]
   val forEach: 'tags this -> callbackfn:(value:CSSStyleValue.t list -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  (* [Symbol.iterator]: unit -> (string * CSSStyleValue.t Iterable.t) IterableIterator.t *)
-  val entries: 'tags this -> (string * CSSStyleValue.t Iterable.t) IterableIterator.t [@@js.call "entries"]
-  val keys: 'tags this -> string IterableIterator.t [@@js.call "keys"]
-  val values: 'tags this -> CSSStyleValue.t Iterable.t IterableIterator.t [@@js.call "values"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -17080,6 +17080,7 @@ module[@js.scope "FileList"] FileList : sig
   type 'tags this = 'tags intf constraint 'tags = [> `FileList ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> File.t IterableIterator.t *)
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FileList/length) *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -17088,7 +17089,6 @@ module[@js.scope "FileList"] FileList : sig
   val item: 'tags this -> index:float -> File.t option [@@js.call "item"]
   val get: 'tags this -> float -> File.t [@@js.index_get]
   val set: 'tags this -> float -> File.t -> unit [@@js.index_set]
-  (* [Symbol.iterator]: unit -> File.t IterableIterator.t *)
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -17819,16 +17819,16 @@ and[@js.scope "CSSUnparsedValue"] CSSUnparsedValue : sig
   type 'tags this = 'tags intf constraint 'tags = [> `CSSUnparsedValue ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> CSSUnparsedSegment.t IterableIterator.t *)
+  val entries: 'tags this -> (float * CSSUnparsedSegment.t) IterableIterator.t [@@js.call "entries"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  val values: 'tags this -> CSSUnparsedSegment.t IterableIterator.t [@@js.call "values"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CSSUnparsedValue/length) *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val forEach: 'tags this -> callbackfn:(value:CSSUnparsedSegment.t -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> CSSUnparsedSegment.t [@@js.index_get]
   val set: 'tags this -> float -> CSSUnparsedSegment.t -> unit [@@js.index_set]
-  (* [Symbol.iterator]: unit -> CSSUnparsedSegment.t IterableIterator.t *)
-  val entries: 'tags this -> (float * CSSUnparsedSegment.t) IterableIterator.t [@@js.call "entries"]
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  val values: 'tags this -> CSSUnparsedSegment.t IterableIterator.t [@@js.call "values"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: CSSUnparsedSegment.t list -> t [@@js.create]
@@ -17987,16 +17987,16 @@ and[@js.scope "CSSNumericArray"] CSSNumericArray : sig
   type 'tags this = 'tags intf constraint 'tags = [> `CSSNumericArray ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> CSSNumericValue.t IterableIterator.t *)
+  val entries: 'tags this -> (float * CSSNumericValue.t) IterableIterator.t [@@js.call "entries"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  val values: 'tags this -> CSSNumericValue.t IterableIterator.t [@@js.call "values"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CSSNumericArray/length) *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val forEach: 'tags this -> callbackfn:(value:CSSNumericValue.t -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> CSSNumericValue.t [@@js.index_get]
   val set: 'tags this -> float -> CSSNumericValue.t -> unit [@@js.index_set]
-  (* [Symbol.iterator]: unit -> CSSNumericValue.t IterableIterator.t *)
-  val entries: 'tags this -> (float * CSSNumericValue.t) IterableIterator.t [@@js.call "entries"]
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  val values: 'tags this -> CSSNumericValue.t IterableIterator.t [@@js.call "values"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -18124,6 +18124,10 @@ module[@js.scope "CSSTransformValue"] CSSTransformValue : sig
   type 'tags this = 'tags intf constraint 'tags = [> `CSSTransformValue ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.iterator]: unit -> CSSTransformComponent.t IterableIterator.t *)
+  val entries: 'tags this -> (float * CSSTransformComponent.t) IterableIterator.t [@@js.call "entries"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  val values: 'tags this -> CSSTransformComponent.t IterableIterator.t [@@js.call "values"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CSSTransformValue/is2D) *)
   val get_is2D: 'tags this -> bool [@@js.get "is2D"]
@@ -18136,10 +18140,6 @@ module[@js.scope "CSSTransformValue"] CSSTransformValue : sig
   val forEach: 'tags this -> callbackfn:(value:CSSTransformComponent.t -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> CSSTransformComponent.t [@@js.index_get]
   val set: 'tags this -> float -> CSSTransformComponent.t -> unit [@@js.index_set]
-  (* [Symbol.iterator]: unit -> CSSTransformComponent.t IterableIterator.t *)
-  val entries: 'tags this -> (float * CSSTransformComponent.t) IterableIterator.t [@@js.call "entries"]
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  val values: 'tags this -> CSSTransformComponent.t IterableIterator.t [@@js.call "values"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: CSSTransformComponent.t list -> t [@@js.create]
@@ -18745,54 +18745,6 @@ module[@js.scope "AbortController"] AbortController : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module MessageEvent_Make (T : Ojs.T) : sig
-  type 'T parent = 'T MessageEvent.t
-  type t = T.t parent
-  val t_of_js: Ojs.t -> t
-  val t_to_js: t -> Ojs.t
-  
-  
-  (**
-    Returns the data of the message.
-    
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/data)
-  *)
-  val get_data: t -> T.t [@@js.get "data"]
-  
-  (**
-    Returns the last event ID string, for server-sent events.
-    
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/lastEventId)
-  *)
-  val get_lastEventId: t -> string [@@js.get "lastEventId"]
-  
-  (**
-    Returns the origin of the message, for server-sent events and cross-document messaging.
-    
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/origin)
-  *)
-  val get_origin: t -> string [@@js.get "origin"]
-  
-  (**
-    Returns the MessagePort array sent with the message, for cross-document messaging and channel messaging.
-    
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/ports)
-  *)
-  val get_ports: t -> MessagePort.t list [@@js.get "ports"]
-  
-  (**
-    Returns the WindowProxy of the source window, for cross-document messaging, and the MessagePort being attached, in the connect event fired at SharedWorkerGlobalScope objects.
-    
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/source)
-  *)
-  val get_source: t -> MessageEventSource.t option [@@js.get "source"]
-  
-  (** @deprecated \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent) *)
-  val initMessageEvent: t -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
-  
-  (** @deprecated \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent) *)
-  val initMessageEvent: t -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t Iterable.t -> unit -> unit [@@js.call "initMessageEvent"]
-end
 module CustomEventInit_Make (T : Ojs.T) : sig
   type 'T parent = 'T CustomEventInit.t
   type t = T.t parent
@@ -19063,6 +19015,54 @@ module IDBRequest_Make (T : Ojs.T) : sig
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/EventTarget/removeEventListener)
   *)
   val removeEventListener: t -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+end
+module MessageEvent_Make (T : Ojs.T) : sig
+  type 'T parent = 'T MessageEvent.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  
+  (** @deprecated \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent) *)
+  val initMessageEvent: t -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t Iterable.t -> unit -> unit [@@js.call "initMessageEvent"]
+  
+  (**
+    Returns the data of the message.
+    
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/data)
+  *)
+  val get_data: t -> T.t [@@js.get "data"]
+  
+  (**
+    Returns the last event ID string, for server-sent events.
+    
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/lastEventId)
+  *)
+  val get_lastEventId: t -> string [@@js.get "lastEventId"]
+  
+  (**
+    Returns the origin of the message, for server-sent events and cross-document messaging.
+    
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/origin)
+  *)
+  val get_origin: t -> string [@@js.get "origin"]
+  
+  (**
+    Returns the MessagePort array sent with the message, for cross-document messaging and channel messaging.
+    
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/ports)
+  *)
+  val get_ports: t -> MessagePort.t list [@@js.get "ports"]
+  
+  (**
+    Returns the WindowProxy of the source window, for cross-document messaging, and the MessagePort being attached, in the connect event fired at SharedWorkerGlobalScope objects.
+    
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/source)
+  *)
+  val get_source: t -> MessageEventSource.t option [@@js.get "source"]
+  
+  (** @deprecated \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent) *)
+  val initMessageEvent: t -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
 end
 module ProgressEvent_Make (T : Ojs.T) : sig
   type 'T parent = 'T ProgressEvent.t

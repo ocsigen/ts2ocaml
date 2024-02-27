@@ -33313,47 +33313,47 @@ module Promise =
                                                         Obj.magic x9624)))|])
                             | None -> ());
                            x9618))|])
-    let (allSettled : 'T -> any t) =
+    let (any : 'T -> any Awaited.t t) =
       fun (x9633 : 'T) ->
+        t_of_js (fun (x9634 : Ojs.t) -> Awaited.t_of_js any_of_js x9634)
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
+             [|(Obj.magic x9633)|])
+    let (any' :
+      [ `U1 of 'T  | `U2 of 'T PromiseLike.t ] Iterable.t -> 'T Awaited.t t)
+      =
+      fun (x9636 : [ `U1 of 'T  | `U2 of 'T PromiseLike.t ] Iterable.t) ->
+        t_of_js (fun (x9641 : Ojs.t) -> Awaited.t_of_js Obj.magic x9641)
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
+             [|(Iterable.t_to_js
+                  (fun (x9637 : [ `U1 of 'T  | `U2 of 'T PromiseLike.t ]) ->
+                     match x9637 with
+                     | `U1 x9638 -> Obj.magic x9638
+                     | `U2 x9639 -> PromiseLike.t_to_js Obj.magic x9639)
+                  x9636)|])
+    let (allSettled : 'T -> any t) =
+      fun (x9643 : 'T) ->
         t_of_js any_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "allSettled"
-             [|(Obj.magic x9633)|])
+             [|(Obj.magic x9643)|])
     let (allSettled' :
       [ `U1 of 'T  | `U2 of 'T PromiseLike.t ] Iterable.t ->
         'T Awaited.t PromiseSettledResult.t list t)
       =
-      fun (x9635 : [ `U1 of 'T  | `U2 of 'T PromiseLike.t ] Iterable.t) ->
+      fun (x9645 : [ `U1 of 'T  | `U2 of 'T PromiseLike.t ] Iterable.t) ->
         t_of_js
-          (fun (x9640 : Ojs.t) ->
+          (fun (x9650 : Ojs.t) ->
              Ojs.list_of_js
-               (fun (x9641 : Ojs.t) ->
+               (fun (x9651 : Ojs.t) ->
                   PromiseSettledResult.t_of_js
-                    (fun (x9642 : Ojs.t) -> Awaited.t_of_js Obj.magic x9642)
-                    x9641) x9640)
+                    (fun (x9652 : Ojs.t) -> Awaited.t_of_js Obj.magic x9652)
+                    x9651) x9650)
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "allSettled"
              [|(Iterable.t_to_js
-                  (fun (x9636 : [ `U1 of 'T  | `U2 of 'T PromiseLike.t ]) ->
-                     match x9636 with
-                     | `U1 x9637 -> Obj.magic x9637
-                     | `U2 x9638 -> PromiseLike.t_to_js Obj.magic x9638)
-                  x9635)|])
-    let (any : 'T -> any Awaited.t t) =
-      fun (x9644 : 'T) ->
-        t_of_js (fun (x9645 : Ojs.t) -> Awaited.t_of_js any_of_js x9645)
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
-             [|(Obj.magic x9644)|])
-    let (any' :
-      [ `U1 of 'T  | `U2 of 'T PromiseLike.t ] Iterable.t -> 'T Awaited.t t)
-      =
-      fun (x9647 : [ `U1 of 'T  | `U2 of 'T PromiseLike.t ] Iterable.t) ->
-        t_of_js (fun (x9652 : Ojs.t) -> Awaited.t_of_js Obj.magic x9652)
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
-             [|(Iterable.t_to_js
-                  (fun (x9648 : [ `U1 of 'T  | `U2 of 'T PromiseLike.t ]) ->
-                     match x9648 with
-                     | `U1 x9649 -> Obj.magic x9649
-                     | `U2 x9650 -> PromiseLike.t_to_js Obj.magic x9650)
-                  x9647)|])
+                  (fun (x9646 : [ `U1 of 'T  | `U2 of 'T PromiseLike.t ]) ->
+                     match x9646 with
+                     | `U1 x9647 -> Obj.magic x9647
+                     | `U2 x9648 -> PromiseLike.t_to_js Obj.magic x9648)
+                  x9645)|])
     let (prototype : unit -> any t) =
       fun () ->
         t_of_js any_of_js
@@ -38563,63 +38563,63 @@ module Promise_Make(T:Ojs.T) =
                                                          Obj.magic x11290)))|])
                              | None -> ());
                             x11284))|])
-    let (allSettled : T.t -> any parent) =
+    let (any : T.t -> any Awaited.t parent) =
       fun (x11297 : T.t) ->
+        parent_of_js
+          (fun (x11298 : Ojs.t) -> Awaited.t_of_js any_of_js x11298)
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
+             [|(T.t_to_js x11297)|])
+    let (any :
+      [ `U1 of T.t  | `U2 of T.t PromiseLike.t ] Iterable.t ->
+        T.t Awaited.t Awaited.t parent)
+      =
+      fun (x11300 : [ `U1 of T.t  | `U2 of T.t PromiseLike.t ] Iterable.t) ->
+        parent_of_js
+          (fun (x11305 : Ojs.t) ->
+             Awaited.t_of_js
+               (fun (x11306 : Ojs.t) -> Awaited.t_of_js T.t_of_js x11306)
+               x11305)
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
+             [|(Iterable.t_to_js
+                  (fun (x11301 : [ `U1 of T.t  | `U2 of T.t PromiseLike.t ])
+                     ->
+                     match x11301 with
+                     | `U1 x11302 -> T.t_to_js x11302
+                     | `U2 x11303 -> PromiseLike.t_to_js T.t_to_js x11303)
+                  x11300)|])
+    let (allSettled : T.t -> any parent) =
+      fun (x11308 : T.t) ->
         parent_of_js any_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "allSettled"
-             [|(T.t_to_js x11297)|])
+             [|(T.t_to_js x11308)|])
     let (allSettled :
       [ `U1 of T.t  | `U2 of T.t PromiseLike.t ] Iterable.t ->
         T.t Awaited.t PromiseSettledResult.t list Awaited.t
           PromiseSettledResult.t list parent)
       =
-      fun (x11299 : [ `U1 of T.t  | `U2 of T.t PromiseLike.t ] Iterable.t) ->
+      fun (x11310 : [ `U1 of T.t  | `U2 of T.t PromiseLike.t ] Iterable.t) ->
         parent_of_js
-          (fun (x11304 : Ojs.t) ->
+          (fun (x11315 : Ojs.t) ->
              Ojs.list_of_js
-               (fun (x11305 : Ojs.t) ->
+               (fun (x11316 : Ojs.t) ->
                   PromiseSettledResult.t_of_js
-                    (fun (x11306 : Ojs.t) ->
+                    (fun (x11317 : Ojs.t) ->
                        Awaited.t_of_js
-                         (fun (x11307 : Ojs.t) ->
+                         (fun (x11318 : Ojs.t) ->
                             Ojs.list_of_js
-                              (fun (x11308 : Ojs.t) ->
+                              (fun (x11319 : Ojs.t) ->
                                  PromiseSettledResult.t_of_js
-                                   (fun (x11309 : Ojs.t) ->
-                                      Awaited.t_of_js T.t_of_js x11309)
-                                   x11308) x11307) x11306) x11305) x11304)
+                                   (fun (x11320 : Ojs.t) ->
+                                      Awaited.t_of_js T.t_of_js x11320)
+                                   x11319) x11318) x11317) x11316) x11315)
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "allSettled"
              [|(Iterable.t_to_js
-                  (fun (x11300 : [ `U1 of T.t  | `U2 of T.t PromiseLike.t ])
+                  (fun (x11311 : [ `U1 of T.t  | `U2 of T.t PromiseLike.t ])
                      ->
-                     match x11300 with
-                     | `U1 x11301 -> T.t_to_js x11301
-                     | `U2 x11302 -> PromiseLike.t_to_js T.t_to_js x11302)
-                  x11299)|])
-    let (any : T.t -> any Awaited.t parent) =
-      fun (x11311 : T.t) ->
-        parent_of_js
-          (fun (x11312 : Ojs.t) -> Awaited.t_of_js any_of_js x11312)
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
-             [|(T.t_to_js x11311)|])
-    let (any :
-      [ `U1 of T.t  | `U2 of T.t PromiseLike.t ] Iterable.t ->
-        T.t Awaited.t Awaited.t parent)
-      =
-      fun (x11314 : [ `U1 of T.t  | `U2 of T.t PromiseLike.t ] Iterable.t) ->
-        parent_of_js
-          (fun (x11319 : Ojs.t) ->
-             Awaited.t_of_js
-               (fun (x11320 : Ojs.t) -> Awaited.t_of_js T.t_of_js x11320)
-               x11319)
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
-             [|(Iterable.t_to_js
-                  (fun (x11315 : [ `U1 of T.t  | `U2 of T.t PromiseLike.t ])
-                     ->
-                     match x11315 with
-                     | `U1 x11316 -> T.t_to_js x11316
-                     | `U2 x11317 -> PromiseLike.t_to_js T.t_to_js x11317)
-                  x11314)|])
+                     match x11311 with
+                     | `U1 x11312 -> T.t_to_js x11312
+                     | `U2 x11313 -> PromiseLike.t_to_js T.t_to_js x11313)
+                  x11310)|])
     let (prototype : unit -> any parent) =
       fun () ->
         parent_of_js any_of_js
@@ -39148,35 +39148,73 @@ module AsyncIterator_Make(T:Ojs.T)(TReturn:Ojs.T)(TNext:Ojs.T) =
                              | None -> ());
                             x11514))|])
   end
+module PromiseFulfilledResult_Make(T:Ojs.T) =
+  struct
+    type 'T parent = 'T PromiseFulfilledResult.t
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x11523 : Ojs.t) ->
+            PromiseFulfilledResult.t_of_js __T_of_js x11523
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x11521 : __T PromiseFulfilledResult.t) ->
+            PromiseFulfilledResult.t_to_js __T_to_js x11521
+    type t = T.t parent
+    let rec t_of_js : Ojs.t -> t =
+      fun (x11527 : Ojs.t) -> parent_of_js T.t_of_js x11527
+    and t_to_js : t -> Ojs.t =
+      fun (x11525 : T.t parent) -> parent_to_js T.t_to_js x11525
+    let (get_status : t -> [ `L_s62_fulfilled ]) =
+      fun (x11529 : t) ->
+        let x11530 = Ojs.get_prop_ascii (t_to_js x11529) "status" in
+        match Ojs.string_of_js x11530 with
+        | "fulfilled" -> `L_s62_fulfilled
+        | _ -> assert false
+    let (set_status : t -> [ `L_s62_fulfilled ] -> unit) =
+      fun (x11531 : t) ->
+        fun (x11532 : [ `L_s62_fulfilled ]) ->
+          Ojs.set_prop_ascii (t_to_js x11531) "status"
+            (match x11532 with
+             | `L_s62_fulfilled -> Ojs.string_to_js "fulfilled")
+    let (get_value : t -> T.t) =
+      fun (x11533 : t) ->
+        T.t_of_js (Ojs.get_prop_ascii (t_to_js x11533) "value")
+    let (set_value : t -> T.t -> unit) =
+      fun (x11534 : t) ->
+        fun (x11535 : T.t) ->
+          Ojs.set_prop_ascii (t_to_js x11534) "value" (T.t_to_js x11535)
+  end
 module WeakRef_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T WeakRef.t
     let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
       fun (type __T) ->
         fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x11523 : Ojs.t) -> WeakRef.t_of_js __T_of_js x11523
+          fun (x11538 : Ojs.t) -> WeakRef.t_of_js __T_of_js x11538
     and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
       fun (type __T) ->
         fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x11521 : __T WeakRef.t) -> WeakRef.t_to_js __T_to_js x11521
+          fun (x11536 : __T WeakRef.t) -> WeakRef.t_to_js __T_to_js x11536
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
-      fun (x11527 : Ojs.t) -> parent_of_js T.t_of_js x11527
+      fun (x11542 : Ojs.t) -> parent_of_js T.t_of_js x11542
     and t_to_js : t -> Ojs.t =
-      fun (x11525 : T.t parent) -> parent_to_js T.t_to_js x11525
+      fun (x11540 : T.t parent) -> parent_to_js T.t_to_js x11540
     let (deref : t -> T.t option) =
-      fun (x11529 : t) ->
-        Ojs.option_of_js T.t_of_js (Ojs.call (t_to_js x11529) "deref" [||])
+      fun (x11544 : t) ->
+        Ojs.option_of_js T.t_of_js (Ojs.call (t_to_js x11544) "deref" [||])
     let (prototype : unit -> any parent) =
       fun () ->
         parent_of_js any_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "WeakRef")
              "prototype")
     let (create : T.t -> t) =
-      fun (x11532 : T.t) ->
+      fun (x11547 : T.t) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "WeakRef")
-             [|(T.t_to_js x11532)|])
+             [|(T.t_to_js x11547)|])
   end
 module FinalizationRegistry_Make(T:Ojs.T) =
   struct
@@ -39184,54 +39222,54 @@ module FinalizationRegistry_Make(T:Ojs.T) =
     let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
       fun (type __T) ->
         fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x11535 : Ojs.t) ->
-            FinalizationRegistry.t_of_js __T_of_js x11535
+          fun (x11550 : Ojs.t) ->
+            FinalizationRegistry.t_of_js __T_of_js x11550
     and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
       fun (type __T) ->
         fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x11533 : __T FinalizationRegistry.t) ->
-            FinalizationRegistry.t_to_js __T_to_js x11533
+          fun (x11548 : __T FinalizationRegistry.t) ->
+            FinalizationRegistry.t_to_js __T_to_js x11548
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
-      fun (x11539 : Ojs.t) -> parent_of_js T.t_of_js x11539
+      fun (x11554 : Ojs.t) -> parent_of_js T.t_of_js x11554
     and t_to_js : t -> Ojs.t =
-      fun (x11537 : T.t parent) -> parent_to_js T.t_to_js x11537
+      fun (x11552 : T.t parent) -> parent_to_js T.t_to_js x11552
     let (register :
       t ->
         target:untyped_object ->
           heldValue:T.t -> ?unregisterToken:untyped_object -> unit -> unit)
       =
-      fun (x11546 : t) ->
-        fun ~target:(x11541 : untyped_object) ->
-          fun ~heldValue:(x11542 : T.t) ->
-            fun ?unregisterToken:(x11543 : untyped_object option) ->
+      fun (x11561 : t) ->
+        fun ~target:(x11556 : untyped_object) ->
+          fun ~heldValue:(x11557 : T.t) ->
+            fun ?unregisterToken:(x11558 : untyped_object option) ->
               fun () ->
                 ignore
-                  (let x11547 = t_to_js x11546 in
-                   Ojs.call (Ojs.get_prop_ascii x11547 "register") "apply"
-                     [|x11547;((let x11544 =
+                  (let x11562 = t_to_js x11561 in
+                   Ojs.call (Ojs.get_prop_ascii x11562 "register") "apply"
+                     [|x11562;((let x11559 =
                                   Ojs.new_obj
                                     (Ojs.get_prop_ascii Ojs.global "Array")
                                     [||] in
                                 ignore
-                                  (Ojs.call x11544 "push"
-                                     [|(untyped_object_to_js x11541)|]);
+                                  (Ojs.call x11559 "push"
+                                     [|(untyped_object_to_js x11556)|]);
                                 ignore
-                                  (Ojs.call x11544 "push"
-                                     [|(T.t_to_js x11542)|]);
-                                (match x11543 with
-                                 | Some x11545 ->
+                                  (Ojs.call x11559 "push"
+                                     [|(T.t_to_js x11557)|]);
+                                (match x11558 with
+                                 | Some x11560 ->
                                      ignore
-                                       (Ojs.call x11544 "push"
-                                          [|(untyped_object_to_js x11545)|])
+                                       (Ojs.call x11559 "push"
+                                          [|(untyped_object_to_js x11560)|])
                                  | None -> ());
-                                x11544))|])
+                                x11559))|])
     let (unregister : t -> unregisterToken:untyped_object -> unit) =
-      fun (x11549 : t) ->
-        fun ~unregisterToken:(x11548 : untyped_object) ->
+      fun (x11564 : t) ->
+        fun ~unregisterToken:(x11563 : untyped_object) ->
           ignore
-            (Ojs.call (t_to_js x11549) "unregister"
-               [|(untyped_object_to_js x11548)|])
+            (Ojs.call (t_to_js x11564) "unregister"
+               [|(untyped_object_to_js x11563)|])
     let (prototype : unit -> any parent) =
       fun () ->
         parent_of_js any_of_js
@@ -39239,49 +39277,11 @@ module FinalizationRegistry_Make(T:Ojs.T) =
              (Ojs.get_prop_ascii Ojs.global "FinalizationRegistry")
              "prototype")
     let (create : (T.t -> unit) -> t) =
-      fun (x11551 : T.t -> unit) ->
+      fun (x11566 : T.t -> unit) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "FinalizationRegistry")
              [|(Ojs.fun_to_js 1
-                  (fun (x11552 : Ojs.t) -> x11551 (T.t_of_js x11552)))|])
-  end
-module PromiseFulfilledResult_Make(T:Ojs.T) =
-  struct
-    type 'T parent = 'T PromiseFulfilledResult.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
-      fun (type __T) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x11555 : Ojs.t) ->
-            PromiseFulfilledResult.t_of_js __T_of_js x11555
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
-      fun (type __T) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x11553 : __T PromiseFulfilledResult.t) ->
-            PromiseFulfilledResult.t_to_js __T_to_js x11553
-    type t = T.t parent
-    let rec t_of_js : Ojs.t -> t =
-      fun (x11559 : Ojs.t) -> parent_of_js T.t_of_js x11559
-    and t_to_js : t -> Ojs.t =
-      fun (x11557 : T.t parent) -> parent_to_js T.t_to_js x11557
-    let (get_status : t -> [ `L_s62_fulfilled ]) =
-      fun (x11561 : t) ->
-        let x11562 = Ojs.get_prop_ascii (t_to_js x11561) "status" in
-        match Ojs.string_of_js x11562 with
-        | "fulfilled" -> `L_s62_fulfilled
-        | _ -> assert false
-    let (set_status : t -> [ `L_s62_fulfilled ] -> unit) =
-      fun (x11563 : t) ->
-        fun (x11564 : [ `L_s62_fulfilled ]) ->
-          Ojs.set_prop_ascii (t_to_js x11563) "status"
-            (match x11564 with
-             | `L_s62_fulfilled -> Ojs.string_to_js "fulfilled")
-    let (get_value : t -> T.t) =
-      fun (x11565 : t) ->
-        T.t_of_js (Ojs.get_prop_ascii (t_to_js x11565) "value")
-    let (set_value : t -> T.t -> unit) =
-      fun (x11566 : t) ->
-        fun (x11567 : T.t) ->
-          Ojs.set_prop_ascii (t_to_js x11566) "value" (T.t_to_js x11567)
+                  (fun (x11567 : Ojs.t) -> x11566 (T.t_of_js x11567)))|])
   end
 let (nan : unit -> float) =
   fun () -> Ojs.float_of_js (Ojs.get_prop_ascii Ojs.global "NaN")

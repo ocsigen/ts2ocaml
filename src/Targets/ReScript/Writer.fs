@@ -2102,7 +2102,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
   let m = emitModule dt flags ctx st
 
   let opens = [
-    yield Statement.open_ "Js"
+    yield Statement.open_ "RescriptCore"
     yield Statement.open_ "Ts2ocaml"
     for src in sources do
       yield! emitReferenceTypeDirectives ctx src

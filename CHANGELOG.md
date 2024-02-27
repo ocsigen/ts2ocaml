@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-beta.0]
+
+- Add ReScript as a target (#32).
+  - Add a new subcommand `ts2ocaml res`.
+  - The documentation is available on [`docs/rescript.md`](docs/rescript.md).
+
 ## [2.0.0-alpha.0]
 - Upgrade TypeScript to v5.
 - Added an explicit support of ambient modules.

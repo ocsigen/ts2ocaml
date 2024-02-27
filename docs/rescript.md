@@ -768,3 +768,73 @@ TypeScript code often has mutually recursive definitions. ReScript support defin
 >
 > Also, you wouldn't need this unless you're using the [`--no-resi`](#--no-resi) option, as the `Types` module is hidden by the `.resi` file and won't show up in the editor autocompletion.
 
+# Experimental Options
+
+> **Warning:**
+> These features are experimental and may be subject to change.
+
+## `--experimental-tagged-union`
+
+Emit additional variant type for tagged union.
+
+Assume we have the following input:
+
+```typescript
+interface Foo {
+  kind: "foo";
+  ...
+}
+
+interface Bar {
+  kind: "bar";
+  ...
+}
+
+type FooBar = Foo | Bar;
+```
+
+Normally, `ts2ocaml` would generate the following code:
+
+```rescript
+module Foo = {
+  type t
+  @get external get_kind: (t) => string = "kind"
+  ...
+}
+
+module Bar = {
+  type t
+  @get external get_kind: (t) => string = "kind"
+  ...
+}
+
+module FooBar = {
+  type t = Union.t2<Foo.t, Bar.t>
+}
+```
+
+With this option, `ts2ocaml` will generate an additional type `FooBar.cases` and additional functions `FooBar.box` and `FooBar.unbox`:
+
+```rescript
+module FooBar = {
+  type t = Union.t2<Foo.t, Bar.t>
+
+  @tag("kind") type cases =
+    | @as("foo") Foo (Foo.t)
+    | @as("bar") Bar (Bar.t)
+
+  let box: (t) => cases = ...
+  let unbox: (cases) => t = ...
+}
+```
+
+Now you can match over the tagged union type by `box`ing it first:
+
+```rescript
+let x : FooBar.t = ...
+
+switch x->FooBar.box {
+  | Foo(foo) => ...
+  | Bar(bar) => ...
+}
+```

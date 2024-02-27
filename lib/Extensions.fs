@@ -105,6 +105,20 @@ module Map =
       | Some v1 -> m1 |> Map.add k (f v1 v2)
     ) m1
 
+  let intersectWith f m1 m2 =
+    let getKeys = Map.keys >> Set.ofSeq
+    Set.intersect (getKeys m1) (getKeys m2)
+    |> Set.toSeq
+    |> Seq.choose (fun key ->
+      let v1 = m1 |> Map.tryFind key
+      let v2 = m2 |> Map.tryFind key
+      match v1, v2 with
+      | None, None -> None
+      | Some v, None
+      | None, Some v -> Some (key, v)
+      | Some v1, Some v2 -> f v1 v2 |> Option.map (fun v -> key, v))
+    |> Map.ofSeq
+
 type MutableMap<'k, 'v> = Collections.Generic.Dictionary<'k, 'v>
 type MutableSet<'v> = Collections.Generic.HashSet<'v>
 

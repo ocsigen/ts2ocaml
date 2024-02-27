@@ -80,6 +80,8 @@ type Options =
   abstract simplify: Simplify list with get, set
   abstract readableNames: bool with get, set
   abstract noTypesModule: bool with get, set
+  // experimental options
+  abstract experimentalTaggedUnion: bool with get, set
 
 module Options =
   open Fable.Core.JsInterop
@@ -227,6 +229,19 @@ module Options =
         (fun (o: Options) -> o.noTypesModule),
         descr="Unsafe. Do not emit Types module even if there are recursive modules.",
         defaultValue = false
+      )
+
+      .group(
+        !^ResizeArray[
+          "experimental-tagged-union"
+        ],
+        "Experimental Options:"
+      )
+      .addFlag(
+        "experimental-tagged-union",
+        (fun (o: Options) -> o.experimentalTaggedUnion),
+        descr="Experimental. Emit additional variant type for tagged union.",
+        defaultValue=false
       )
 
       .middleware(!^validate)

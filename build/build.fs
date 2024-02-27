@@ -172,7 +172,7 @@ module Test =
 
       let packages = [
          // "full" package involving a lot of inheritance
-         "full", !! "node_modules/typescript/lib/typescript.d.ts", [];
+         "full", !! "node_modules/typescript/lib/typescript.d.ts", ["--experimental-tagged-union"];
 
          // "full" packages involving a lot of dependencies (which includes some "safe" packages)
          "safe", !! "node_modules/@types/scheduler/tracing.d.ts", [];

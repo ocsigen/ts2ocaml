@@ -35,6 +35,7 @@ type OverloadRenamer(?rename: string -> int -> string, ?used: Set<string * strin
   ///
   /// `category` can be arbitrary, but it is intended for something like `value`, `type`, `module`, etc.
   member __.Rename (category: string) (name: string) =
+    let name = String.normalize name
     match m.TryGetValue((category, name)) with
     | true, i ->
       m.[(category, name)] <- i + 1

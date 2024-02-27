@@ -125,14 +125,6 @@ module Primitive = {
     }
 }
 
-module Interop = {
-  module PolyVariant = {
-    let name  = (it: 'PolyVariant) : 'name => %raw(`it.NAME`)
-    let value = (it: 'PolyVariant) : 'value => %raw(`it.VAL`)
-    let make  = (name: 'name, value: 'value) : 'PolyVariant => %raw(`{ NAME: name, VAL: value }`)
-  }
-}
-
 module Newable = {
   type t0<'t>
   type t1<'arg1, 't>
@@ -223,3 +215,11 @@ module Uppercase = { type t<'s> = private intrinsic }
 module Lowercase = { type t<'s> = private intrinsic }
 module Capitalize = { type t<'s> = private intrinsic }
 module Uncapitalize = { type t<'s> = private intrinsic }
+
+// utilities for experimental features
+module Experimental = {
+  module Variant = {
+    let box = (it: 't, tag: string) : 'Variant => %raw(`{ [tag]: it[tag], _0: it }`)
+    let unbox = (it: 'Variant) : 't => %raw(`it._0`)
+  }
+}

@@ -405,15 +405,13 @@ module Term =
     | _ :: [] -> failwith "1-ary tuple"
     | xs -> concat (str ", ") xs |> between "(" ")"
 
-  let appCurried t us = t + (us |> concat (str ", ") |> between "(" ")")
-  let appUncurried t us = t + (us |> concat (str ", ") |> between "(. " ")")
+  let app t us = t + (us |> concat (str ", ") |> between "(" ")")
 
   /// `(arg1, arg2) => ret`
   let arrow args ret =
     let lhs =
       match args with
-      | [] -> failwith "0-ary function"
-      | [x] -> x
+      | [] -> str "()"
       | xs -> concat (str ", ") xs |> between "(" ")"
     lhs +@ " => " + ret
 

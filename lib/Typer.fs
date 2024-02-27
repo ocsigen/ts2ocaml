@@ -1071,6 +1071,69 @@ module Type =
         s1 + s2
     | UnknownType _ -> "unknown"
 
+  module GetAnonymousInterfaces =
+    let rec treatFuncType (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (ft: FuncType<Type>) tps =
+      seq {
+        for arg in ft.args do
+          let ty, origin =
+            match arg with
+            | Choice1Of2 fl -> fl.value, { state.origin with argName = Some fl.name }
+            | Choice2Of2 t -> t, state.origin
+          yield! findTypes typeFinder {| state with origin = origin |} ty
+        yield! findTypes typeFinder state ft.returnType
+        yield! treatTypeParameters state tps
+      }
+    and treatTypeParameters (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (tps: TypeParam list) =
+      seq {
+        for tp in tps do
+          yield! tp.extends |> Option.map (findTypes typeFinder state) |? Seq.empty
+          yield! tp.defaultType |> Option.map (findTypes typeFinder state) |? Seq.empty
+      }
+    and treatNamed (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) name value =
+      findTypes typeFinder {| state with origin = { state.origin with valueName = Some name } |} value
+    and typeFinder (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) ty =
+      let inline resultMany xs = Some [], state, xs
+      match ty with
+      | App (AAnonymousInterface i, _, _) | AnonymousInterface i ->
+        let inner =
+          let state = {| state with origin = AnonymousInterfaceOrigin.Empty |}
+          treatClassLike state (i.MapName(ignore))
+        None, {| state with origin = AnonymousInterfaceOrigin.Empty |}, Seq.append [i, state] inner
+      | Func (ft, tps, _) | NewableFunc (ft, tps, _) ->
+        treatFuncType state ft tps |> resultMany
+      | Union { types = types } | Intersection { types = types } ->
+        Some types, state, Seq.empty
+      | _ -> None, {| state with origin = AnonymousInterfaceOrigin.Empty |}, Seq.empty
+    and treatClassLike (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (c: Class<unit>) =
+      seq {
+        for _, m in c.members do
+          match m with
+          | Method (name, ft, tps) ->
+            yield! treatFuncType {| state with origin = { state.origin with valueName = Some name } |} ft tps
+          | Newable (ft, tps) | Callable (ft, tps) -> yield! treatFuncType state ft tps
+          | Field (fl, _) | Getter fl | Setter fl -> yield! treatNamed state fl.name fl.value
+          | Indexer (ft, _) -> yield! treatFuncType state ft []
+          | SymbolIndexer (name, ft, _) ->
+            yield! treatFuncType {| state with origin = { state.origin with valueName = Some name } |} ft []
+          | Constructor ft ->
+            for arg in ft.args do
+              let ty, origin =
+                match arg with
+                | Choice1Of2 fl -> fl.value, { state.origin with argName = Some fl.name }
+                | Choice2Of2 t -> t, state.origin
+              yield! findTypes typeFinder {| state with origin = origin |} ty
+          | UnknownMember _ -> ()
+        for t in c.implements do
+          yield! findTypes typeFinder state t
+        yield! treatTypeParameters state c.typeParams
+      }
+  let getAnonymousInterfaces ty =
+    let state = {|
+      origin = AnonymousInterfaceOrigin.Empty
+      namespace_ = []
+    |}
+    findTypes GetAnonymousInterfaces.typeFinder state ty
+
 module Statement =
   open Type
 
@@ -1145,62 +1208,6 @@ module Statement =
       () stmts |> Set.ofSeq
 
   let getAnonymousInterfaces stmts : Set<AnonymousInterface * {| origin: AnonymousInterfaceOrigin; namespace_: string list |}> =
-    let rec treatFuncType (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (ft: FuncType<Type>) tps =
-      seq {
-        for arg in ft.args do
-          let ty, origin =
-            match arg with
-            | Choice1Of2 fl -> fl.value, { state.origin with argName = Some fl.name }
-            | Choice2Of2 t -> t, state.origin
-          yield! findTypes typeFinder {| state with origin = origin |} ty
-        yield! findTypes typeFinder state ft.returnType
-        yield! treatTypeParameters state tps
-      }
-    and treatTypeParameters (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (tps: TypeParam list) =
-      seq {
-        for tp in tps do
-          yield! tp.extends |> Option.map (findTypes typeFinder state) |? Seq.empty
-          yield! tp.defaultType |> Option.map (findTypes typeFinder state) |? Seq.empty
-      }
-    and treatNamed (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) name value =
-      findTypes typeFinder {| state with origin = { state.origin with valueName = Some name } |} value
-    and typeFinder (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) ty =
-      let inline resultMany xs = Some [], state, xs
-      match ty with
-      | App (AAnonymousInterface i, _, _) | AnonymousInterface i ->
-        let inner =
-          let state = {| state with origin = AnonymousInterfaceOrigin.Empty |}
-          treatClassLike state (i.MapName(ignore))
-        None, {| state with origin = AnonymousInterfaceOrigin.Empty |}, Seq.append [i, state] inner
-      | Func (ft, tps, _) | NewableFunc (ft, tps, _) ->
-        treatFuncType state ft tps |> resultMany
-      | Union { types = types } | Intersection { types = types } ->
-        Some types, state, Seq.empty
-      | _ -> None, {| state with origin = AnonymousInterfaceOrigin.Empty |}, Seq.empty
-    and treatClassLike (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (c: Class<unit>) =
-      seq {
-        for _, m in c.members do
-          match m with
-          | Method (name, ft, tps) ->
-            yield! treatFuncType {| state with origin = { state.origin with valueName = Some name } |} ft tps
-          | Newable (ft, tps) | Callable (ft, tps) -> yield! treatFuncType state ft tps
-          | Field (fl, _) | Getter fl | Setter fl -> yield! treatNamed state fl.name fl.value
-          | Indexer (ft, _) -> yield! treatFuncType state ft []
-          | SymbolIndexer (name, ft, _) ->
-            yield! treatFuncType {| state with origin = { state.origin with valueName = Some name } |} ft []
-          | Constructor ft ->
-            for arg in ft.args do
-              let ty, origin =
-                match arg with
-                | Choice1Of2 fl -> fl.value, { state.origin with argName = Some fl.name }
-                | Choice2Of2 t -> t, state.origin
-              yield! findTypes typeFinder {| state with origin = origin |} ty
-          | UnknownMember _ -> ()
-        for t in c.implements do
-          yield! findTypes typeFinder state t
-        yield! treatTypeParameters state c.typeParams
-      }
-
     findStatements (fun currentNamespace state stmt ->
       let inline result_ x = Some [], state, x
       let state = {| origin = state; namespace_ = currentNamespace |}
@@ -1208,18 +1215,18 @@ module Statement =
       | TypeAlias ta ->
         let state = {| state with origin = { state.origin with typeName = Some ta.name } |}
         seq {
-          yield! findTypes typeFinder state ta.target
-          yield! treatTypeParameters state ta.typeParams
+          yield! findTypes GetAnonymousInterfaces.typeFinder state ta.target
+          yield! GetAnonymousInterfaces.treatTypeParameters state ta.typeParams
         } |> result_
       | Variable v ->
-        treatNamed state v.name v.typ |> result_
+        GetAnonymousInterfaces.treatNamed state v.name v.typ |> result_
       | Function f ->
-        treatFuncType {| state with origin = { state.origin with valueName = Some f.name } |} f.typ f.typeParams |> result_
+        GetAnonymousInterfaces.treatFuncType {| state with origin = { state.origin with valueName = Some f.name } |} f.typ f.typeParams |> result_
       | Class c ->
         let typeName =
           match c.name with Name n -> Some n | _ -> None
         let state = {| state with namespace_ = currentNamespace; origin = { state.origin with typeName = typeName } |}
-        treatClassLike state (c.MapName(ignore)) |> result_
+        GetAnonymousInterfaces.treatClassLike state (c.MapName(ignore)) |> result_
       | _ -> None, state.origin, Seq.empty
     ) AnonymousInterfaceOrigin.Empty stmts |> Set.ofSeq
 
@@ -1427,6 +1434,26 @@ module ResolvedUnion =
       for t in ru.otherTypes |> Set.toSeq do yield Type.pp t
     ]
     cases |> String.concat " | "
+
+  let expand ctx (u: UnionType) : UnionType =
+    let (|Dummy|) _ = []
+    let rec go (t: Type) =
+      match t with
+      | Union { types = types } ->
+        let types = types |> List.collect (fun ty -> go ty |? [ty])
+        if types |> List.exists (function AnonymousInterface _ -> true | _ -> false) then None
+        else Some types
+      | (Ident ({ loc = loc } & i) & Dummy tyargs)
+      | App (AIdent i, tyargs, loc) ->
+        let finder = function
+          | Definition.TypeAlias a ->
+            let bindings = Type.createBindings i.name loc a.typeParams tyargs
+            go (a.target |> Type.substTypeVar bindings ())
+          | _ -> None
+        i |> Ident.getDefinitions ctx
+          |> List.tryPick (finder)
+      | _ -> None
+    { u with types = u.types |> List.collect (fun ty -> go ty |? [ty]) |> List.distinct }
 
   let checkNullOrUndefined (u: UnionType) : {| hasNull: bool; hasUndefined: bool; rest: Type list |} =
     let u = Type.normalizeUnion u

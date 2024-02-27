@@ -1269,12 +1269,14 @@ let emitEnum (ctx: Context) (current: StructuredText) (e: Enum) =
   |> add [e.name] parentNode
   |> set {| StructuredTextNode.empty with exports = Option.toList exports |}
 
-let emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (ta: TypeAlias) : StructuredText =
+let rec emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (ta: TypeAlias) : StructuredText =
   let emitType = emitTypeImpl flags overrideFunc
 
   let comments = (ta :> ICommented<_>).getComments() |> emitComments false
   let knownTypes = Statement.getKnownTypes ctx [TypeAlias ta]
 
+  let renamer = new OverloadRenamer()
+  let inline rename s = renamer.Rename "ctor" s
   let items =
     let ctx = ctx |> Context.ofChildNamespace ta.name
     let isRec = knownTypes |> Set.contains (KnownType.Ident (ctx |> Context.getFullNameOfCurrentNamespace))
@@ -1284,20 +1286,18 @@ let emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (t
           [TypeDefText.Create (
             x.name, x.tyargs, x.target,
             isRec=isRec, attrs=attrs, shouldAssert=shouldAssert,
-            comments=emitComments false ta.comments
+            comments=comments
           )]
         else
           [TypeAliasText (Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target)]
       )
     let fallback () = emitTypeAliases [] false (emitType ctx ta.target)
-    let renamer = new OverloadRenamer()
-    let rename s = renamer.Rename "ctor" s
     let nameFromType t =
       Naming.constructorName [getHumanReadableName ctx t] |> rename
 
     match ta.target with
     | Union u -> // emit as variant if possible
-      let ru = ResolvedUnion.resolve ctx u
+      let ru = ResolvedUnion.resolve ctx (ResolvedUnion.expand ctx u)
       let isEnumOrUnboxed =
         ru.satisfies(hasDU=false, hasOther=false)
         && ru.typeofableTypes |> Set.contains Typeofable.BigInt |> not // not supported by res
@@ -1306,7 +1306,6 @@ let emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (t
       let isTagged =
         ru.satisfies(hasDU=true, hasTypeofable=false, hasArray=false, hasOther=false)
         && Map.count ru.discriminatedUnions = 1
-        && ru.discriminatedUnions |> Map.forall (fun _ -> Map.forall (fun _ -> function AnonymousInterface _ -> true | _ -> false))
 
       let commonCases () = [
         if ru.caseNull then
@@ -1334,16 +1333,14 @@ let emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (t
           if Set.isEmpty ru.typeofableTypes && Option.isNone ru.caseArray then []
           else [Attr.Variant.unboxed]
         emitTypeAliases attrs true (
-          newline + concat newline [
+          newline + indent (concat newline [
             yield! commonCases ()
-
             match ru.caseArray with
             | None -> ()
             | Some ts ->
               yield emitConstructor (rename "Array") [] [
                 Type.app Type.array [emitType ctx (Union { types = Set.toList ts })]
               ]
-
             for t in ru.typeofableTypes do
               match t with
               | Typeofable.String  -> yield emitConstructor (rename "String") [] [Type.string]
@@ -1351,14 +1348,68 @@ let emitTypeAlias flags overrideFunc (ctx: Context) (current: StructuredText) (t
               | Typeofable.Boolean -> yield emitConstructor (rename "Boolean") [] [Type.boolean]
               | _ -> ()
           ]
-        )
-      else if isTagged then
-        fallback () // TODO: special case, or just contribute to res compiler for unboxed tagged union?
+        ))
+
+      else if isTagged && ctx.options.experimentalTaggedUnion then
+        let tagName, cases = ru.discriminatedUnions |> Map.toSeq |> Seq.head
+        // skip if the result would contain anonymous interfaces
+        if cases |> Map.exists (fun _ t -> getAnonymousInterfaces t |> Seq.isEmpty |> not) then
+          fallback ()
+        else
+          let tps = ta.typeParams |> List.map (fun x -> x, tprintf "'%s" x.name)
+          let variant =
+            let body =
+              newline + indent (concat newline [
+                for i, (tag, t) in cases |> Map.toSeq |> Seq.indexed do
+                  let name =
+                    let rec go = function
+                      | Ident { name = name }
+                      | App (AIdent({ name = name }), _, _) ->
+                        List.last name |> Some
+                      | Union { types = types } ->
+                        let names = types |> List.choose go |> List.distinct
+                        match names with
+                        | [name] -> Some name
+                        | _ -> None
+                      | _ -> None
+                    match go t with
+                    | Some name -> Naming.constructorName [name]
+                    | None -> $"Case{i + 1}"
+                  yield emitConstructor
+                    (rename name)
+                    [Attr.as_ (Term.literal tag)]
+                    [emitType ctx t]
+              ])
+            TypeDefText.Create ("cases", tps, Some body, isRec=isRec, attrs=[Attr.Variant.tag tagName], comments=comments, shouldAssert=true)
+          [
+            yield! fallback ()
+            yield variant
+            yield!
+              binding (fun rename _ ->
+                Binding.let_ [] [] (rename "box")
+                  (Type.arrow
+                    [Type.appOpt (str "t") (tps |> List.map snd)]
+                    (Type.appOpt (str "cases") (tps |> List.map snd)))
+                  (Term.arrow [str "it"] (
+                    Term.app (str "Experimental.Variant.box") [str "it"; Term.literal (LString tagName)]))
+              )
+            yield!
+              binding (fun rename _ ->
+                Binding.let_ [] [] (rename "unbox")
+                  (Type.arrow
+                    [Type.appOpt (str "cases") (tps |> List.map snd)]
+                    (Type.appOpt (str "t") (tps |> List.map snd)))
+                  (Term.arrow [str "it"] (
+                    Term.app (str "Experimental.Variant.unbox") [str "it"]))
+              )
+          ]
       else fallback ()
+
     | TypeLiteral l -> // emit as single-case variant
       emitTypeAliases [] true (
         emitConstructor (nameFromType (TypeLiteral l)) [Attr.as_ (Term.literal l)] []
       )
+
     | _ -> fallback ()
 
   let node = {| StructuredTextNode.empty with items = items; comments = comments; knownTypes = knownTypes |}

@@ -220,16 +220,18 @@ module Type =
   /// non-primitive types defined in the standard library
   let predefinedTypes =
     let builtins = [
-      "RegExp", ("Re.t", 0)
+      "RegExp", ("RegExp.t", 0)
       "PromiseLike", ("Promise.t", 1)
       "Array", ("array", 1)
-      "ArrayLike", ("Array2.array_like", 1)
+      "ArrayLike", ("Js.Array2.array_like", 1)
+      "Iterable", ("Js.Array2.array_like", 1)
       "ReadonlyArray", ("array", 1)
-      "ArrayBuffer", ("TypedArray2.ArrayBuffer.t", 0)
-      "Error", ("Exn.t", 0)
+      "ArrayBuffer", ("ArrayBuffer.t", 0)
+      "Error", ("Error.t", 0)
+      "ReadonlyMap", ("Map.t", 2)
     ]
     let typedArrays =
-      let typedArray name = name, (sprintf "TypedArray2.%s.t" name, 0)
+      let typedArray name = name, (sprintf "%s.t" name, 0)
       [
         typedArray "DataView"
         typedArray "Int8Array"
@@ -330,12 +332,12 @@ module Type =
 
   // JS types
   // ES5
-  let object = str "untypedObject"
-  let function_ = str "untypedFunction"
-  let symbol = str "symbol"
-  let regexp = str "Re.t"
+  let object = str "object"
+  let function_ = str "function"
+  let symbol = str "Symbol.t"
+  let regexp = str "RegExp.t"
   // ES2020
-  let bigint = str "Bigint.t"
+  let bigint = str "BigInt.t"
 
   // TS types
   let never = str "never"

@@ -1,3 +1,5 @@
+open RescriptCore
+
 module Ts = Typescript.Export
 
 let source = "let x: string = 'hello, world!'"
@@ -9,4 +11,4 @@ let result = Ts.transpileModule(
   ),
 )
 
-Js.log(result->Ts.TranspileOutput.get_outputText)
+Console.log(result->Ts.TranspileOutput.get_outputText)

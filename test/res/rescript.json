@@ -10,5 +10,8 @@
     "in-source": true
   },
   "suffix": ".bs.js",
+  "bs-dependencies": [
+    "@rescript/core"
+  ],
   "uncurried": true
 }

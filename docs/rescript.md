@@ -1,3 +1,7 @@
+> **Note:** ReScript support is currently available in `2.0.0-beta.0` or later.
+> 
+> Please install it with `npm install -g @ocsigen/ts2ocaml@beta`.
+
 # ts2ocaml for ReScript
 
 Generates binding for ReScript.

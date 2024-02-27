@@ -5,6 +5,9 @@ Overview for Developers
 
 Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
+- `build/` ... build scripts
+  - `BindingUpdater.fs` ... a utility to update bindings in `lib/Bindings/`
+  - `build.fs` ... the main build script
 - `lib/` ... target-agnostic part of the tool (will be separated to a different repo in near future)
   - `Bindings/` ... bindings to JS libraries (typescript, browser-or-node)
   - `Extensions.fs` ... **\[\<AutoOpen\>\]** extensions for standard library and JS libraries
@@ -26,17 +29,19 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
   - `Target.fs` ... generic definitions for each targets (`ITarget<_>`)
   - `Targets/`  ... targets should be placed into here
     - `ParserTest.fs` ... debug target to test parser and typer
-    - `JsOfOCaml/` ... `js_of_ocaml` target specific codes
-      - `Common.fs` ... command line options for `js_of_ocaml` target
-      - `OCamlHelper.fs` ... helper functions to generate OCaml code
-      - `Writer.fs` ... functions for generating OCaml code from AST
-      - `Target.fs` ... `ITarget<_>` instance for `js_of_ocaml` target
+    - `{Target}/` ... target-specific codes
+      - `Common.fs` ... command line options for the target
+      - `{Target}Helper.fs` ... helper functions to generate code for the target language
+      - `Writer.fs` ... functions for generating the code from AST
+      - `Target.fs` ... `ITarget<_>` instance for the target
   - `Main.fs` ... entry point
 - `test/`
-  - `jsoo/` ... test for `js_of_ocaml` target
+  - `jsoo/` ... test for the `js_of_ocaml` target
+  - `res/` ... test for the `ReScript` target
 - `dist/`
   - `js/ `... output directory for NPM packaging
   - `jsoo/` ... output directory for OPAM packaging
+  - `jsoo/` ... output directory for NPM packaging of the stdlib for ReScript
 - `output/` ... temporary output directory for automated testing, etc
 
 ## Requirements
@@ -52,6 +57,15 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
 - Node 14.0 or higher
   - [yarn](https://yarnpkg.com/) is required.
+
+- ReScript 11.0.1 or higher
+  - Installed by `yarn`.
+
+## Updating TypeScript SDK
+
+- Run `yarn update --latest typescript`
+- Run `./fake UpdateBindings` to update the Fable binding (`lib/Bindings/TypeScript.fs`)
+- Run `./fake build` and fix type errors
 
 ## Debugging
 
@@ -88,6 +102,22 @@ The resulting `dist/js/ts2ocaml.js` is then ready to run through `node`.
 - The bindings will be placed into `output/test_jsoo/`
 - Copy the bindings to `test/jsoo/src/`
 - Perform `dune build` in `test/jsoo/`
+
+### Test the tool for [`ReScript` target](rescript.md)
+
+- Generate bindings for the following packages:
+  - TypeScript standard libraries (`node_modules/typescript/lib/lib.*.d.ts`)
+  - `typescript` with the `full` preset (involving a lot of inheritance)
+  - `react` with the `full` preset (depending on both `full` packages and `safe` packages)
+    - `scheduler/tracing` (`safe`)
+    - `csstype` (`full`)
+    - `prop-types` (`safe`)
+  - `react-modal` with the `full` preset (depending on a `full` package)
+  - `yargs` with the `safe` preset (depending on a `safe` package)
+    - `yargs-parser` (`safe`)
+- The bindings will be placed into `output/test_res/`
+- Copy the bindings to `test/res/src/generated/`
+- Perform `yarn build` in `test/res/`
 
 > Tests for other targets will be added here
 

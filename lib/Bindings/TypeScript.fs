@@ -9,14 +9,17 @@ open Fable.Core
 open Fable.Core.JS
 
 type Array<'T> = System.Collections.Generic.IList<'T>
+type Error = System.Exception
 type ReadonlyArray<'T> = System.Collections.Generic.IReadOnlyList<'T>
 type ReadonlyMap<'K, 'V> = Map<'K, 'V>
+type RegExp = System.Text.RegularExpressions.Regex
 type Symbol = obj
 
 let [<ImportAll("typescript")>] ts: Ts.IExports = jsNative
 
 module Ts =
-    let [<Import("ScriptSnapshot","typescript/ts")>] scriptSnapshot: ScriptSnapshot.IExports = jsNative
+    let [<Fable.Core.Import("server","typescript/ts")>] server: Server.IExports = jsNative
+    let [<Fable.Core.Import("ScriptSnapshot","typescript/ts")>] scriptSnapshot: ScriptSnapshot.IExports = jsNative
 
     type [<AllowNullLiteral>] IExports =
         abstract versionMajorMinor: obj
@@ -239,8 +242,8 @@ module Ts =
         abstract isTypeOnlyImportDeclaration: node: Node -> bool
         abstract isTypeOnlyExportDeclaration: node: Node -> bool
         abstract isTypeOnlyImportOrExportDeclaration: node: Node -> bool
-        abstract isAssertionKey: node: Node -> bool
         abstract isStringTextContainingNode: node: Node -> bool
+        abstract isImportAttributeName: node: Node -> bool
         abstract isModifier: node: Node -> bool
         abstract isEntityName: node: Node -> bool
         abstract isPropertyName: node: Node -> bool
@@ -296,7 +299,7 @@ module Ts =
         abstract isJSDocLinkLike: node: Node -> bool
         abstract hasRestParameter: s: U2<SignatureDeclaration, JSDocSignature> -> bool
         abstract isRestParameter: node: U2<ParameterDeclaration, JSDocParameterTag> -> bool
-        abstract unchangedTextChangeRange: TextChangeRange with get, set
+        abstract unchangedTextChangeRange: TextChangeRange
         /// <summary>
         /// This function checks multiple locations for JSDoc comments that apply to a host node.
         /// At each location, the whole comment may apply to the node, or only a specific tag in
@@ -492,8 +495,8 @@ module Ts =
         abstract isImportDeclaration: node: Node -> bool
         abstract isImportClause: node: Node -> bool
         abstract isImportTypeAssertionContainer: node: Node -> bool
-        abstract isAssertClause: node: Node -> bool
-        abstract isAssertEntry: node: Node -> bool
+        abstract isImportAttributes: node: Node -> bool
+        abstract isImportAttribute: node: Node -> bool
         abstract isNamespaceImport: node: Node -> bool
         abstract isNamespaceExport: node: Node -> bool
         abstract isNamedImports: node: Node -> bool
@@ -842,7 +845,7 @@ module Ts =
         abstract getDefaultFormatCodeSettings: ?newLineCharacter: string -> FormatCodeSettings
         /// The classifier is used for syntactic highlighting in editors via the TSServer
         abstract createClassifier: unit -> Classifier
-        abstract createDocumentRegistry: ?useCaseSensitiveFileNames: bool * ?currentDirectory: string -> DocumentRegistry
+        abstract createDocumentRegistry: ?useCaseSensitiveFileNames: bool * ?currentDirectory: string * ?jsDocParsingMode: JSDocParsingMode -> DocumentRegistry
         abstract preProcessFile: sourceText: string * ?readImportFiles: bool * ?detectJavaScriptImports: bool -> PreProcessedFileInfo
         abstract transpileModule: input: string * transpileOptions: TranspileOptions -> TranspileOutput
         abstract transpile: input: string * ?compilerOptions: CompilerOptions * ?fileName: string * ?diagnostics: Diagnostic[] * ?moduleName: string -> string
@@ -864,6 +867,3537 @@ module Ts =
         /// <param name="transformers">An array of <c>TransformerFactory</c> callbacks used to process the transformation.</param>
         /// <param name="compilerOptions">Optional compiler options.</param>
         abstract transform: source: U2<'T, 'T[]> * transformers: TransformerFactory<'T>[] * ?compilerOptions: CompilerOptions -> TransformationResult<'T> 
+
+    module Server =
+        let [<Fable.Core.Import("typingsInstaller","typescript/ts/server")>] typingsInstaller: TypingsInstaller.IExports = jsNative
+        let [<Fable.Core.Import("Errors","typescript/ts/server")>] errors: Errors.IExports = jsNative
+
+        type [<AllowNullLiteral>] IExports =
+            abstract createInstallTypingsRequest: project: Project * typeAcquisition: TypeAcquisition * unresolvedImports: SortedReadonlyArray<string> * ?cachePath: string -> DiscoverTypings
+            abstract toNormalizedPath: fileName: string -> NormalizedPath
+            abstract normalizedPathToPath: normalizedPath: NormalizedPath * currentDirectory: string * getCanonicalFileName: (string -> string) -> Path
+            abstract asNormalizedPath: fileName: string -> NormalizedPath
+            abstract createNormalizedPathMap: unit -> NormalizedPathMap<'T>
+            abstract isInferredProjectName: name: string -> bool
+            abstract makeInferredProjectName: counter: float -> string
+            abstract createSortedArray: unit -> SortedArray<'T>
+            abstract emptyArray: SortedReadonlyArray<obj>
+            abstract isDynamicFileName: fileName: NormalizedPath -> bool
+            abstract ScriptInfo: ScriptInfoStatic
+            abstract nullTypingsInstaller: ITypingsInstaller
+            abstract allRootFilesAreJsOrDts: project: Project -> bool
+            abstract allFilesAreJsOrDts: project: Project -> bool
+            abstract Project: ProjectStatic
+            /// If a file is opened and no tsconfig (or jsconfig) is found,
+            /// the file and its imports/references are put into an InferredProject.
+            abstract InferredProject: InferredProjectStatic
+            abstract AutoImportProviderProject: AutoImportProviderProjectStatic
+            /// If a file is opened, the server will look for a tsconfig (or jsconfig)
+            /// and if successful create a ConfiguredProject for it.
+            /// Otherwise it will create an InferredProject.
+            abstract ConfiguredProject: ConfiguredProjectStatic
+            /// <summary>
+            /// Project whose configuration is handled externally, such as in a '.csproj'.
+            /// These are created only if a host explicitly calls <c>openExternalProject</c>.
+            /// </summary>
+            abstract ExternalProject: ExternalProjectStatic
+            abstract convertFormatOptions: protocolOptions: Protocol.FormatCodeSettings -> FormatCodeSettings
+            abstract convertCompilerOptions: protocolOptions: Protocol.ExternalProjectCompilerOptions -> obj
+            abstract convertWatchOptions: protocolOptions: Protocol.ExternalProjectCompilerOptions * ?currentDirectory: string -> WatchOptionsAndErrors option
+            abstract convertTypeAcquisition: protocolOptions: Protocol.InferredProjectCompilerOptions -> TypeAcquisition option
+            abstract tryConvertScriptKindName: scriptKindName: U2<Protocol.ScriptKindName, ScriptKind> -> ScriptKind
+            abstract convertScriptKindName: scriptKindName: Protocol.ScriptKindName -> ScriptKind
+            abstract maxProgramSizeForNonTsFiles: float
+            abstract ProjectsUpdatedInBackgroundEvent: obj
+            abstract ProjectLoadingStartEvent: obj
+            abstract ProjectLoadingFinishEvent: obj
+            abstract LargeFileReferencedEvent: obj
+            abstract ConfigFileDiagEvent: obj
+            abstract ProjectLanguageServiceStateEvent: obj
+            /// This will be converted to the payload of a protocol.TelemetryEvent in session.defaultEventHandler.
+            abstract ProjectInfoTelemetryEvent: obj
+            /// Info that we may send about a file that was just opened.
+            /// Info about a file will only be sent once per session, even if the file changes in ways that might affect the info.
+            /// Currently this is only sent for '.js' files.
+            abstract OpenFileInfoTelemetryEvent: obj
+            abstract CreateFileWatcherEvent: Protocol.CreateFileWatcherEventName
+            abstract CreateDirectoryWatcherEvent: Protocol.CreateDirectoryWatcherEventName
+            abstract CloseFileWatcherEvent: Protocol.CloseFileWatcherEventName
+            abstract ProjectService: ProjectServiceStatic
+            abstract formatMessage: msg: 'T * logger: Logger * byteLength: (string -> BufferEncoding -> float) * newLine: string -> string 
+            abstract nullCancellationToken: ServerCancellationToken
+            abstract Session: SessionStatic
+
+        type ActionSet =
+            string
+
+        type ActionInvalidate =
+            string
+
+        type ActionPackageInstalled =
+            string
+
+        type EventTypesRegistry =
+            string
+
+        type EventBeginInstallTypes =
+            string
+
+        type EventEndInstallTypes =
+            string
+
+        type EventInitializationFailed =
+            string
+
+        type ActionWatchTypingLocations =
+            string
+
+        type [<AllowNullLiteral>] TypingInstallerResponse =
+            abstract kind: U8<ActionSet, ActionInvalidate, EventTypesRegistry, ActionPackageInstalled, EventBeginInstallTypes, EventEndInstallTypes, EventInitializationFailed, ActionWatchTypingLocations>
+
+        type [<AllowNullLiteral>] TypingInstallerRequestWithProjectName =
+            abstract projectName: string
+
+        type [<AllowNullLiteral>] DiscoverTypings =
+            inherit TypingInstallerRequestWithProjectName
+            abstract fileNames: string[]
+            abstract projectRootPath: Path
+            abstract compilerOptions: CompilerOptions
+            abstract typeAcquisition: TypeAcquisition
+            abstract unresolvedImports: SortedReadonlyArray<string>
+            abstract cachePath: string option
+            abstract kind: string
+
+        type [<AllowNullLiteral>] CloseProject =
+            inherit TypingInstallerRequestWithProjectName
+            abstract kind: string
+
+        type [<AllowNullLiteral>] TypesRegistryRequest =
+            abstract kind: string
+
+        type [<AllowNullLiteral>] InstallPackageRequest =
+            inherit TypingInstallerRequestWithProjectName
+            abstract kind: string
+            abstract fileName: Path
+            abstract packageName: string
+            abstract projectRootPath: Path
+
+        type [<AllowNullLiteral>] PackageInstalledResponse =
+            inherit ProjectResponse
+            abstract kind: ActionPackageInstalled
+            abstract success: bool
+            abstract message: string
+
+        type [<AllowNullLiteral>] InitializationFailedResponse =
+            inherit TypingInstallerResponse
+            abstract kind: EventInitializationFailed
+            abstract message: string
+            abstract stack: string option
+
+        type [<AllowNullLiteral>] ProjectResponse =
+            inherit TypingInstallerResponse
+            abstract projectName: string
+
+        type [<AllowNullLiteral>] InvalidateCachedTypings =
+            inherit ProjectResponse
+            abstract kind: ActionInvalidate
+
+        type [<AllowNullLiteral>] InstallTypes =
+            inherit ProjectResponse
+            abstract kind: U2<EventBeginInstallTypes, EventEndInstallTypes>
+            abstract eventId: float
+            abstract typingsInstallerVersion: string
+            abstract packagesToInstall: string[]
+
+        type [<AllowNullLiteral>] BeginInstallTypes =
+            inherit InstallTypes
+            abstract kind: EventBeginInstallTypes
+
+        type [<AllowNullLiteral>] EndInstallTypes =
+            inherit InstallTypes
+            abstract kind: EventEndInstallTypes
+            abstract installSuccess: bool
+
+        type [<AllowNullLiteral>] InstallTypingHost =
+            inherit JsTyping.TypingResolutionHost
+            abstract useCaseSensitiveFileNames: bool with get, set
+            abstract writeFile: path: string * content: string -> unit
+            abstract createDirectory: path: string -> unit
+            abstract getCurrentDirectory: unit -> string
+
+        type [<AllowNullLiteral>] SetTypings =
+            inherit ProjectResponse
+            abstract typeAcquisition: TypeAcquisition
+            abstract compilerOptions: CompilerOptions
+            abstract typings: string[]
+            abstract unresolvedImports: SortedReadonlyArray<string>
+            abstract kind: ActionSet
+
+        type [<AllowNullLiteral>] WatchTypingLocations =
+            inherit ProjectResponse
+            /// if files is undefined, retain same set of watchers
+            abstract files: string[] option
+            abstract kind: ActionWatchTypingLocations
+
+        module Protocol =
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] CommandTypes =
+                | JsxClosingTag
+                | LinkedEditingRange
+                | Brace
+                | BraceCompletion
+                | GetSpanOfEnclosingComment
+                | Change
+                | Close
+                /// <deprecated>Prefer CompletionInfo -- see comment on CompletionsResponse</deprecated>
+                | Completions
+                | CompletionInfo
+                | [<CompiledName("completionEntryDetails")>] CompletionDetails
+                | CompileOnSaveAffectedFileList
+                | CompileOnSaveEmitFile
+                | Configure
+                | Definition
+                | DefinitionAndBoundSpan
+                | Implementation
+                | Exit
+                | FileReferences
+                | Format
+                | Formatonkey
+                | Geterr
+                | GeterrForProject
+                | SemanticDiagnosticsSync
+                | SyntacticDiagnosticsSync
+                | SuggestionDiagnosticsSync
+                | [<CompiledName("navbar")>] NavBar
+                | Navto
+                | [<CompiledName("navtree")>] NavTree
+                | [<CompiledName("navtree-full")>] NavTreeFull
+                | DocumentHighlights
+                | Open
+                | Quickinfo
+                | References
+                | Reload
+                | Rename
+                | Saveto
+                | SignatureHelp
+                | FindSourceDefinition
+                | Status
+                | TypeDefinition
+                | ProjectInfo
+                | ReloadProjects
+                | Unknown
+                | OpenExternalProject
+                | OpenExternalProjects
+                | CloseExternalProject
+                | UpdateOpen
+                | GetOutliningSpans
+                | TodoComments
+                | Indentation
+                | DocCommentTemplate
+                | CompilerOptionsForInferredProjects
+                | GetCodeFixes
+                | GetCombinedCodeFix
+                | ApplyCodeActionCommand
+                | GetSupportedCodeFixes
+                | GetApplicableRefactors
+                | GetEditsForRefactor
+                | GetMoveToRefactoringFileSuggestions
+                | OrganizeImports
+                | GetEditsForFileRename
+                | ConfigurePlugin
+                | SelectionRange
+                | ToggleLineComment
+                | ToggleMultilineComment
+                | CommentSelection
+                | UncommentSelection
+                | PrepareCallHierarchy
+                | ProvideCallHierarchyIncomingCalls
+                | ProvideCallHierarchyOutgoingCalls
+                | ProvideInlayHints
+                | WatchChange
+
+            /// A TypeScript Server message
+            type [<AllowNullLiteral>] Message =
+                /// Sequence number of the message
+                abstract seq: float with get, set
+                /// One of "request", "response", or "event"
+                abstract ``type``: MessageType with get, set
+
+            /// Client-initiated request message
+            type [<AllowNullLiteral>] Request =
+                inherit Message
+                /// One of "request", "response", or "event"
+                abstract ``type``: string with get, set
+                /// The command to execute
+                abstract command: string with get, set
+                /// Object containing arguments for the command
+                abstract arguments: obj option with get, set
+
+            /// Request to reload the project structure for all the opened files
+            type [<AllowNullLiteral>] ReloadProjectsRequest =
+                inherit Message
+                abstract command: CommandTypes with get, set
+
+            /// Server-initiated event message
+            type [<AllowNullLiteral>] Event =
+                inherit Message
+                /// One of "request", "response", or "event"
+                abstract ``type``: string with get, set
+                /// Name of event
+                abstract ``event``: string with get, set
+                /// Event-specific information
+                abstract body: obj option with get, set
+
+            /// Response by server to client request message.
+            type [<AllowNullLiteral>] Response =
+                inherit Message
+                /// One of "request", "response", or "event"
+                abstract ``type``: string with get, set
+                /// Sequence number of the request message.
+                abstract request_seq: float with get, set
+                /// Outcome of the request.
+                abstract success: bool with get, set
+                /// The command requested.
+                abstract command: string with get, set
+                /// If success === false, this should always be provided.
+                /// Otherwise, may (or may not) contain a success message.
+                abstract message: string option with get, set
+                /// Contains message body if success === true.
+                abstract body: obj option with get, set
+                /// Contains extra information that plugin can include to be passed on
+                abstract metadata: obj option with get, set
+                /// Exposes information about the performance of this request-response pair.
+                abstract performanceData: PerformanceData option with get, set
+
+            type [<AllowNullLiteral>] PerformanceData =
+                /// Time spent updating the program graph, in milliseconds.
+                abstract updateGraphDurationMs: float option with get, set
+                /// The time spent creating or updating the auto-import program, in milliseconds.
+                abstract createAutoImportProviderProgramDurationMs: float option with get, set
+
+            /// Arguments for FileRequest messages.
+            type [<AllowNullLiteral>] FileRequestArgs =
+                /// The file for the request (absolute pathname required).
+                abstract file: string with get, set
+                abstract projectFileName: string option with get, set
+
+            type [<AllowNullLiteral>] StatusRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] StatusResponseBody =
+                /// <summary>The TypeScript version (<c>ts.version</c>).</summary>
+                abstract version: string with get, set
+
+            /// Response to StatusRequest
+            type [<AllowNullLiteral>] StatusResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: StatusResponseBody with get, set
+
+            /// Requests a JS Doc comment template for a given position
+            type [<AllowNullLiteral>] DocCommentTemplateRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            /// Response to DocCommentTemplateRequest
+            type [<AllowNullLiteral>] DocCommandTemplateResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: TextInsertion option with get, set
+
+            /// A request to get TODO comments from the file
+            type [<AllowNullLiteral>] TodoCommentRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: TodoCommentRequestArgs with get, set
+
+            /// Arguments for TodoCommentRequest request.
+            type [<AllowNullLiteral>] TodoCommentRequestArgs =
+                inherit FileRequestArgs
+                /// Array of target TodoCommentDescriptors that describes TODO comments to be found
+                abstract descriptors: TodoCommentDescriptor[] with get, set
+
+            /// Response for TodoCommentRequest request.
+            type [<AllowNullLiteral>] TodoCommentsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: TodoComment[] option with get, set
+
+            /// A request to determine if the caret is inside a comment.
+            type [<AllowNullLiteral>] SpanOfEnclosingCommentRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: SpanOfEnclosingCommentRequestArgs with get, set
+
+            type [<AllowNullLiteral>] SpanOfEnclosingCommentRequestArgs =
+                inherit FileLocationRequestArgs
+                /// Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+                abstract onlyMultiLine: bool with get, set
+
+            /// Request to obtain outlining spans in file.
+            type [<AllowNullLiteral>] OutliningSpansRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] OutliningSpan =
+                /// The span of the document to actually collapse.
+                abstract textSpan: TextSpan with get, set
+                /// The span of the document to display when the user hovers over the collapsed span.
+                abstract hintSpan: TextSpan with get, set
+                /// The text to display in the editor for the collapsed region.
+                abstract bannerText: string with get, set
+                /// Whether or not this region should be automatically collapsed when
+                /// the 'Collapse to Definitions' command is invoked.
+                abstract autoCollapse: bool with get, set
+                /// Classification of the contents of the span
+                abstract kind: OutliningSpanKind with get, set
+
+            /// Response to OutliningSpansRequest request.
+            type [<AllowNullLiteral>] OutliningSpansResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: OutliningSpan[] option with get, set
+
+            /// A request to get indentation for a location in file
+            type [<AllowNullLiteral>] IndentationRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: IndentationRequestArgs with get, set
+
+            /// Response for IndentationRequest request.
+            type [<AllowNullLiteral>] IndentationResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: IndentationResult option with get, set
+
+            /// Indentation result representing where indentation should be placed
+            type [<AllowNullLiteral>] IndentationResult =
+                /// The base position in the document that the indent should be relative to
+                abstract position: float with get, set
+                /// The number of columns the indent should be at relative to the position's column.
+                abstract indentation: float with get, set
+
+            /// Arguments for IndentationRequest request.
+            type [<AllowNullLiteral>] IndentationRequestArgs =
+                inherit FileLocationRequestArgs
+                /// An optional set of settings to be used when computing indentation.
+                /// If argument is omitted - then it will use settings for file that were previously set via 'configure' request or global settings.
+                abstract options: EditorSettings option with get, set
+
+            /// Arguments for ProjectInfoRequest request.
+            type [<AllowNullLiteral>] ProjectInfoRequestArgs =
+                inherit FileRequestArgs
+                /// Indicate if the file name list of the project is needed
+                abstract needFileNameList: bool with get, set
+
+            /// A request to get the project information of the current file.
+            type [<AllowNullLiteral>] ProjectInfoRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: ProjectInfoRequestArgs with get, set
+
+            /// A request to retrieve compiler options diagnostics for a project
+            type [<AllowNullLiteral>] CompilerOptionsDiagnosticsRequest =
+                inherit Request
+                /// Object containing arguments for the command
+                abstract arguments: CompilerOptionsDiagnosticsRequestArgs with get, set
+
+            /// Arguments for CompilerOptionsDiagnosticsRequest request.
+            type [<AllowNullLiteral>] CompilerOptionsDiagnosticsRequestArgs =
+                /// Name of the project to retrieve compiler options diagnostics.
+                abstract projectFileName: string with get, set
+
+            /// Response message body for "projectInfo" request
+            type [<AllowNullLiteral>] ProjectInfo =
+                /// For configured project, this is the normalized path of the 'tsconfig.json' file
+                /// For inferred project, this is undefined
+                abstract configFileName: string with get, set
+                /// The list of normalized file name in the project, including 'lib.d.ts'
+                abstract fileNames: string[] option with get, set
+                /// Indicates if the project has a active language service instance
+                abstract languageServiceDisabled: bool option with get, set
+
+            /// Represents diagnostic info that includes location of diagnostic in two forms
+            /// - start position and length of the error span
+            /// - startLocation and endLocation - a pair of Location objects that store start/end line and offset of the error span.
+            type [<AllowNullLiteral>] DiagnosticWithLinePosition =
+                abstract message: string with get, set
+                abstract start: float with get, set
+                abstract length: float with get, set
+                abstract startLocation: Location with get, set
+                abstract endLocation: Location with get, set
+                abstract category: string with get, set
+                abstract code: float with get, set
+                /// <summary>May store more in future. For now, this will simply be <c>true</c> to indicate when a diagnostic is an unused-identifier diagnostic.</summary>
+                abstract reportsUnnecessary: DiagnosticWithLinePositionReportsUnnecessary option with get, set
+                abstract reportsDeprecated: DiagnosticWithLinePositionReportsUnnecessary option with get, set
+                abstract relatedInformation: DiagnosticRelatedInformation[] option with get, set
+
+            /// Response message for "projectInfo" request
+            type [<AllowNullLiteral>] ProjectInfoResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: ProjectInfo option with get, set
+
+            /// Request whose sole parameter is a file name.
+            type [<AllowNullLiteral>] FileRequest =
+                inherit Request
+                /// Object containing arguments for the command
+                abstract arguments: FileRequestArgs with get, set
+
+            /// Instances of this interface specify a location in a source file:
+            /// (file, line, character offset), where line and character offset are 1-based.
+            type [<AllowNullLiteral>] FileLocationRequestArgs =
+                inherit FileRequestArgs
+                /// The line number for the request (1-based).
+                abstract line: float with get, set
+                /// The character offset (on the line) for the request (1-based).
+                abstract offset: float with get, set
+
+            type FileLocationOrRangeRequestArgs =
+                U2<FileLocationRequestArgs, FileRangeRequestArgs>
+
+            /// Request refactorings at a given position or selection area.
+            type [<AllowNullLiteral>] GetApplicableRefactorsRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: GetApplicableRefactorsRequestArgs with get, set
+
+            type [<AllowNullLiteral>] GetApplicableRefactorsRequestArgs =
+                interface end
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] RefactorTriggerReason =
+                | Implicit
+                | Invoked
+
+            /// Response is a list of available refactorings.
+            /// Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+            type [<AllowNullLiteral>] GetApplicableRefactorsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: ApplicableRefactorInfo[] option with get, set
+
+            /// Request refactorings at a given position or selection area to move to an existing file.
+            type [<AllowNullLiteral>] GetMoveToRefactoringFileSuggestionsRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: GetMoveToRefactoringFileSuggestionsRequestArgs with get, set
+
+            type [<AllowNullLiteral>] GetMoveToRefactoringFileSuggestionsRequestArgs =
+                interface end
+
+            /// Response is a list of available files.
+            /// Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+            type [<AllowNullLiteral>] GetMoveToRefactoringFileSuggestions =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: {| newFileName: string; files: string[] |} with get, set
+
+            /// A set of one or more available refactoring actions, grouped under a parent refactoring.
+            type [<AllowNullLiteral>] ApplicableRefactorInfo =
+                /// The programmatic name of the refactoring
+                abstract name: string with get, set
+                /// A description of this refactoring category to show to the user.
+                /// If the refactoring gets inlined (see below), this text will not be visible.
+                abstract description: string with get, set
+                /// Inlineable refactorings can have their actions hoisted out to the top level
+                /// of a context menu. Non-inlineanable refactorings should always be shown inside
+                /// their parent grouping.
+                /// 
+                /// If not specified, this value is assumed to be 'true'
+                abstract inlineable: bool option with get, set
+                abstract actions: RefactorActionInfo[] with get, set
+
+            /// Represents a single refactoring action - for example, the "Extract Method..." refactor might
+            /// offer several actions, each corresponding to a surround class or closure to extract into.
+            type [<AllowNullLiteral>] RefactorActionInfo =
+                /// The programmatic name of the refactoring action
+                abstract name: string with get, set
+                /// A description of this refactoring action to show to the user.
+                /// If the parent refactoring is inlined away, this will be the only text shown,
+                /// so this description should make sense by itself if the parent is inlineable=true
+                abstract description: string with get, set
+                /// A message to show to the user if the refactoring cannot be applied in
+                /// the current context.
+                abstract notApplicableReason: string option with get, set
+                /// The hierarchical dotted name of the refactor action.
+                abstract kind: string option with get, set
+                /// Indicates that the action requires additional arguments to be passed
+                /// when calling 'GetEditsForRefactor'.
+                abstract isInteractive: bool option with get, set
+
+            type [<AllowNullLiteral>] GetEditsForRefactorRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: GetEditsForRefactorRequestArgs with get, set
+
+            /// Request the edits that a particular refactoring action produces.
+            /// Callers must specify the name of the refactor and the name of the action.
+            type [<AllowNullLiteral>] GetEditsForRefactorRequestArgs =
+                interface end
+
+            type [<AllowNullLiteral>] GetEditsForRefactorResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: RefactorEditInfo option with get, set
+
+            type [<AllowNullLiteral>] RefactorEditInfo =
+                abstract edits: FileCodeEdits[] with get, set
+                /// An optional location where the editor should start a rename operation once
+                /// the refactoring edits have been applied
+                abstract renameLocation: Location option with get, set
+                abstract renameFilename: string option with get, set
+                abstract notApplicableReason: string option with get, set
+
+            /// Organize imports by:
+            ///    1) Removing unused imports
+            ///    2) Coalescing imports from the same module
+            ///    3) Sorting imports
+            type [<AllowNullLiteral>] OrganizeImportsRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: OrganizeImportsRequestArgs with get, set
+
+            type OrganizeImportsScope =
+                GetCombinedCodeFixScope
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] OrganizeImportsMode =
+                | [<CompiledName("All")>] All
+                | [<CompiledName("SortAndCombine")>] SortAndCombine
+                | [<CompiledName("RemoveUnused")>] RemoveUnused
+
+            type [<AllowNullLiteral>] OrganizeImportsRequestArgs =
+                abstract scope: OrganizeImportsScope with get, set
+                abstract mode: OrganizeImportsMode option with get, set
+
+            type [<AllowNullLiteral>] OrganizeImportsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: FileCodeEdits[] with get, set
+
+            type [<AllowNullLiteral>] GetEditsForFileRenameRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: GetEditsForFileRenameRequestArgs with get, set
+
+            /// Note: Paths may also be directories.
+            type [<AllowNullLiteral>] GetEditsForFileRenameRequestArgs =
+                abstract oldFilePath: string
+                abstract newFilePath: string
+
+            type [<AllowNullLiteral>] GetEditsForFileRenameResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: FileCodeEdits[] with get, set
+
+            /// Request for the available codefixes at a specific position.
+            type [<AllowNullLiteral>] CodeFixRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: CodeFixRequestArgs with get, set
+
+            type [<AllowNullLiteral>] GetCombinedCodeFixRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: GetCombinedCodeFixRequestArgs with get, set
+
+            type [<AllowNullLiteral>] GetCombinedCodeFixResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CombinedCodeActions with get, set
+
+            type [<AllowNullLiteral>] ApplyCodeActionCommandRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: ApplyCodeActionCommandRequestArgs with get, set
+
+            type [<AllowNullLiteral>] ApplyCodeActionCommandResponse =
+                inherit Response
+
+            type [<AllowNullLiteral>] FileRangeRequestArgs =
+                inherit FileRequestArgs
+                /// The line number for the request (1-based).
+                abstract startLine: float with get, set
+                /// The character offset (on the line) for the request (1-based).
+                abstract startOffset: float with get, set
+                /// The line number for the request (1-based).
+                abstract endLine: float with get, set
+                /// The character offset (on the line) for the request (1-based).
+                abstract endOffset: float with get, set
+
+            /// Instances of this interface specify errorcodes on a specific location in a sourcefile.
+            type [<AllowNullLiteral>] CodeFixRequestArgs =
+                inherit FileRangeRequestArgs
+                /// Errorcodes we want to get the fixes for.
+                abstract errorCodes: float[] with get, set
+
+            type [<AllowNullLiteral>] GetCombinedCodeFixRequestArgs =
+                abstract scope: GetCombinedCodeFixScope with get, set
+                abstract fixId: DiagnosticWithLinePositionReportsUnnecessary with get, set
+
+            type [<AllowNullLiteral>] GetCombinedCodeFixScope =
+                abstract ``type``: string with get, set
+                abstract args: FileRequestArgs with get, set
+
+            type [<AllowNullLiteral>] ApplyCodeActionCommandRequestArgs =
+                /// May also be an array of commands.
+                abstract command: DiagnosticWithLinePositionReportsUnnecessary with get, set
+
+            /// Response for GetCodeFixes request.
+            type [<AllowNullLiteral>] GetCodeFixesResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CodeAction[] option with get, set
+
+            /// A request whose arguments specify a file location (file, line, col).
+            type [<AllowNullLiteral>] FileLocationRequest =
+                inherit FileRequest
+                /// Object containing arguments for the command
+                abstract arguments: FileLocationRequestArgs with get, set
+
+            /// A request to get codes of supported code fixes.
+            type [<AllowNullLiteral>] GetSupportedCodeFixesRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: obj option with get, set
+
+            /// A response for GetSupportedCodeFixesRequest request.
+            type [<AllowNullLiteral>] GetSupportedCodeFixesResponse =
+                inherit Response
+                /// List of error codes supported by the server.
+                abstract body: string[] option with get, set
+
+            /// A request to get encoded semantic classifications for a span in the file
+            type [<AllowNullLiteral>] EncodedSemanticClassificationsRequest =
+                inherit FileRequest
+                /// Object containing arguments for the command
+                abstract arguments: EncodedSemanticClassificationsRequestArgs with get, set
+
+            /// Arguments for EncodedSemanticClassificationsRequest request.
+            type [<AllowNullLiteral>] EncodedSemanticClassificationsRequestArgs =
+                inherit FileRequestArgs
+                /// Start position of the span.
+                abstract start: float with get, set
+                /// Length of the span.
+                abstract length: float with get, set
+                /// Optional parameter for the semantic highlighting response, if absent it
+                /// defaults to "original".
+                abstract format: EncodedSemanticClassificationsRequestArgsFormat option with get, set
+
+            /// The response for a EncodedSemanticClassificationsRequest
+            type [<AllowNullLiteral>] EncodedSemanticClassificationsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: EncodedSemanticClassificationsResponseBody option with get, set
+
+            /// Implementation response message. Gives series of text spans depending on the format ar.
+            type [<AllowNullLiteral>] EncodedSemanticClassificationsResponseBody =
+                abstract endOfLineState: EndOfLineState with get, set
+                abstract spans: float[] with get, set
+
+            /// Arguments in document highlight request; include: filesToSearch, file,
+            /// line, offset.
+            type [<AllowNullLiteral>] DocumentHighlightsRequestArgs =
+                inherit FileLocationRequestArgs
+                /// List of files to search for document highlights.
+                abstract filesToSearch: string[] with get, set
+
+            /// Go to definition request; value of command field is
+            /// "definition". Return response giving the file locations that
+            /// define the symbol found in file at location line, col.
+            type [<AllowNullLiteral>] DefinitionRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] DefinitionAndBoundSpanRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes
+
+            type [<AllowNullLiteral>] FindSourceDefinitionRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes
+
+            type [<AllowNullLiteral>] DefinitionAndBoundSpanResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: DefinitionInfoAndBoundSpan
+
+            /// Go to type request; value of command field is
+            /// "typeDefinition". Return response giving the file locations that
+            /// define the type for the symbol found in file at location line, col.
+            type [<AllowNullLiteral>] TypeDefinitionRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            /// Go to implementation request; value of command field is
+            /// "implementation". Return response giving the file locations that
+            /// implement the symbol found in file at location line, col.
+            type [<AllowNullLiteral>] ImplementationRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            /// Location in source code expressed as (one-based) line and (one-based) column offset.
+            type [<AllowNullLiteral>] Location =
+                abstract line: float with get, set
+                abstract offset: float with get, set
+
+            /// Object found in response messages defining a span of text in source code.
+            type [<AllowNullLiteral>] TextSpan =
+                /// First character of the definition.
+                abstract start: Location with get, set
+                /// One character past last character of the definition.
+                abstract ``end``: Location with get, set
+
+            /// Object found in response messages defining a span of text in a specific source file.
+            type [<AllowNullLiteral>] FileSpan =
+                inherit TextSpan
+                /// File containing text span.
+                abstract file: string with get, set
+
+            type [<AllowNullLiteral>] JSDocTagInfo =
+                /// Name of the JSDoc tag
+                abstract name: string with get, set
+                /// Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment
+                /// Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+                abstract text: U2<string, SymbolDisplayPart[]> option with get, set
+
+            type [<AllowNullLiteral>] TextSpanWithContext =
+                inherit TextSpan
+                abstract contextStart: Location option with get, set
+                abstract contextEnd: Location option with get, set
+
+            type [<AllowNullLiteral>] FileSpanWithContext =
+                inherit FileSpan
+                inherit TextSpanWithContext
+
+            type [<AllowNullLiteral>] DefinitionInfo =
+                inherit FileSpanWithContext
+                /// When true, the file may or may not exist.
+                abstract unverified: bool option with get, set
+
+            type [<AllowNullLiteral>] DefinitionInfoAndBoundSpan =
+                abstract definitions: DefinitionInfo[] with get, set
+                abstract textSpan: TextSpan with get, set
+
+            /// Definition response message.  Gives text range for definition.
+            type [<AllowNullLiteral>] DefinitionResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: DefinitionInfo[] option with get, set
+
+            type [<AllowNullLiteral>] DefinitionInfoAndBoundSpanResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: DefinitionInfoAndBoundSpan option with get, set
+
+            [<Obsolete("Use `DefinitionInfoAndBoundSpanResponse` instead.")>]
+            type DefinitionInfoAndBoundSpanReponse =
+                DefinitionInfoAndBoundSpanResponse
+
+            /// Definition response message.  Gives text range for definition.
+            type [<AllowNullLiteral>] TypeDefinitionResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: FileSpanWithContext[] option with get, set
+
+            /// Implementation response message.  Gives text range for implementations.
+            type [<AllowNullLiteral>] ImplementationResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: FileSpanWithContext[] option with get, set
+
+            /// Request to get brace completion for a location in the file.
+            type [<AllowNullLiteral>] BraceCompletionRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: BraceCompletionRequestArgs with get, set
+
+            /// Argument for BraceCompletionRequest request.
+            type [<AllowNullLiteral>] BraceCompletionRequestArgs =
+                inherit FileLocationRequestArgs
+                /// Kind of opening brace
+                abstract openingBrace: string with get, set
+
+            type [<AllowNullLiteral>] JsxClosingTagRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes
+                /// Object containing arguments for the command
+                abstract arguments: JsxClosingTagRequestArgs
+
+            type [<AllowNullLiteral>] JsxClosingTagRequestArgs =
+                inherit FileLocationRequestArgs
+
+            type [<AllowNullLiteral>] JsxClosingTagResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: TextInsertion
+
+            type [<AllowNullLiteral>] LinkedEditingRangeRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes
+
+            type [<AllowNullLiteral>] LinkedEditingRangesBody =
+                abstract ranges: TextSpan[] with get, set
+                abstract wordPattern: string option with get, set
+
+            type [<AllowNullLiteral>] LinkedEditingRangeResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: LinkedEditingRangesBody
+
+            /// Get document highlights request; value of command field is
+            /// "documentHighlights". Return response giving spans that are relevant
+            /// in the file at a given line and column.
+            type [<AllowNullLiteral>] DocumentHighlightsRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: DocumentHighlightsRequestArgs with get, set
+
+            /// Span augmented with extra information that denotes the kind of the highlighting to be used for span.
+            type [<AllowNullLiteral>] HighlightSpan =
+                inherit TextSpanWithContext
+                abstract kind: HighlightSpanKind with get, set
+
+            /// Represents a set of highligh spans for a give name
+            type [<AllowNullLiteral>] DocumentHighlightsItem =
+                /// File containing highlight spans.
+                abstract file: string with get, set
+                /// Spans to highlight in file.
+                abstract highlightSpans: HighlightSpan[] with get, set
+
+            /// Response for a DocumentHighlightsRequest request.
+            type [<AllowNullLiteral>] DocumentHighlightsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: DocumentHighlightsItem[] option with get, set
+
+            /// Find references request; value of command field is
+            /// "references". Return response giving the file locations that
+            /// reference the symbol found in file at location line, col.
+            type [<AllowNullLiteral>] ReferencesRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] ReferencesResponseItem =
+                inherit FileSpanWithContext
+                /// <summary>
+                /// Text of line containing the reference. Including this
+                /// with the response avoids latency of editor loading files
+                /// to show text of reference line (the server already has loaded the referencing files).
+                /// 
+                /// If <see cref="UserPreferences.disableLineTextInReferences" /> is enabled, the property won't be filled
+                /// </summary>
+                abstract lineText: string option with get, set
+                /// True if reference is a write location, false otherwise.
+                abstract isWriteAccess: bool with get, set
+                /// Present only if the search was triggered from a declaration.
+                /// True indicates that the references refers to the same symbol
+                /// (i.e. has the same meaning) as the declaration that began the
+                /// search.
+                abstract isDefinition: bool option with get, set
+
+            /// The body of a "references" response message.
+            type [<AllowNullLiteral>] ReferencesResponseBody =
+                /// The file locations referencing the symbol.
+                abstract refs: ReferencesResponseItem[] with get, set
+                /// The name of the symbol.
+                abstract symbolName: string with get, set
+                /// The start character offset of the symbol (on the line provided by the references request).
+                abstract symbolStartOffset: float with get, set
+                /// The full display name of the symbol.
+                abstract symbolDisplayString: string with get, set
+
+            /// Response to "references" request.
+            type [<AllowNullLiteral>] ReferencesResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: ReferencesResponseBody option with get, set
+
+            type [<AllowNullLiteral>] FileReferencesRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] FileReferencesResponseBody =
+                /// The file locations referencing the symbol.
+                abstract refs: ReferencesResponseItem[] with get, set
+                /// The name of the symbol.
+                abstract symbolName: string with get, set
+
+            type [<AllowNullLiteral>] FileReferencesResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: FileReferencesResponseBody option with get, set
+
+            /// Argument for RenameRequest request.
+            type [<AllowNullLiteral>] RenameRequestArgs =
+                inherit FileLocationRequestArgs
+                /// Should text at specified location be found/changed in comments?
+                abstract findInComments: bool option with get, set
+                /// Should text at specified location be found/changed in strings?
+                abstract findInStrings: bool option with get, set
+
+            /// Rename request; value of command field is "rename". Return
+            /// response giving the file locations that reference the symbol
+            /// found in file at location line, col. Also return full display
+            /// name of the symbol so that client can print it unambiguously.
+            type [<AllowNullLiteral>] RenameRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: RenameRequestArgs with get, set
+
+            /// Information about the item to be renamed.
+            type [<TypeScriptTaggedUnion("canRename")>] [<RequireQualifiedAccess>] RenameInfo =
+                | [<CompiledValue(false)>] RenameInfoFailure of RenameInfoFailure
+                | [<CompiledValue(true)>] RenameInfoSuccess of RenameInfoSuccess
+                // static member inline op_ErasedCast(x: RenameInfoFailure) = RenameInfoFailure x
+                // static member inline op_ErasedCast(x: RenameInfoSuccess) = RenameInfoSuccess x
+
+            type [<AllowNullLiteral>] RenameInfoSuccess =
+                /// True if item can be renamed.
+                abstract canRename: bool with get, set
+                /// <summary>
+                /// File or directory to rename.
+                /// If set, <c>getEditsForFileRename</c> should be called instead of <c>findRenameLocations</c>.
+                /// </summary>
+                abstract fileToRename: string option with get, set
+                /// Display name of the item to be renamed.
+                abstract displayName: string with get, set
+                /// Full display name of item to be renamed.
+                abstract fullDisplayName: string with get, set
+                /// The items's kind (such as 'className' or 'parameterName' or plain 'text').
+                abstract kind: ScriptElementKind with get, set
+                /// Optional modifiers for the kind (such as 'public').
+                abstract kindModifiers: string with get, set
+                /// Span of text to rename.
+                abstract triggerSpan: TextSpan with get, set
+
+            type [<AllowNullLiteral>] RenameInfoFailure =
+                abstract canRename: bool with get, set
+                /// Error message if item can not be renamed.
+                abstract localizedErrorMessage: string with get, set
+
+            /// A group of text spans, all in 'file'.
+            type [<AllowNullLiteral>] SpanGroup =
+                /// The file to which the spans apply
+                abstract file: string with get, set
+                /// The text spans in this group
+                abstract locs: RenameTextSpan[] with get, set
+
+            type [<AllowNullLiteral>] RenameTextSpan =
+                inherit TextSpanWithContext
+                abstract prefixText: string option
+                abstract suffixText: string option
+
+            type [<AllowNullLiteral>] RenameResponseBody =
+                /// Information about the item to be renamed.
+                abstract info: RenameInfo with get, set
+                /// An array of span groups (one per file) that refer to the item to be renamed.
+                abstract locs: SpanGroup[] with get, set
+
+            /// Rename response message.
+            type [<AllowNullLiteral>] RenameResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: RenameResponseBody option with get, set
+
+            /// Represents a file in external project.
+            /// External project is project whose set of files, compilation options and open\close state
+            /// is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
+            /// External project will exist even if all files in it are closed and should be closed explicitly.
+            /// If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will
+            /// create configured project for every config file but will maintain a link that these projects were created
+            /// as a result of opening external project so they should be removed once external project is closed.
+            type [<AllowNullLiteral>] ExternalFile =
+                /// Name of file file
+                abstract fileName: string with get, set
+                /// Script kind of the file
+                abstract scriptKind: U2<ScriptKindName, ScriptKind> option with get, set
+                /// Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
+                abstract hasMixedContent: bool option with get, set
+                /// Content of the file
+                abstract content: string option with get, set
+
+            /// Represent an external project
+            type [<AllowNullLiteral>] ExternalProject =
+                /// Project name
+                abstract projectFileName: string with get, set
+                /// List of root files in project
+                abstract rootFiles: ExternalFile[] with get, set
+                /// Compiler options for the project
+                abstract options: ExternalProjectCompilerOptions with get, set
+                /// Explicitly specified type acquisition for the project
+                abstract typeAcquisition: TypeAcquisition option with get, set
+
+            type [<AllowNullLiteral>] CompileOnSaveMixin =
+                /// If compile on save is enabled for the project
+                abstract compileOnSave: bool option with get, set
+
+            /// For external projects, some of the project settings are sent together with
+            /// compiler settings.
+            type [<AllowNullLiteral>] ExternalProjectCompilerOptions =
+                interface end
+
+            type [<AllowNullLiteral>] FileWithProjectReferenceRedirectInfo =
+                /// Name of file
+                abstract fileName: string with get, set
+                /// True if the file is primarily included in a referenced project
+                abstract isSourceOfProjectReferenceRedirect: bool with get, set
+
+            /// Represents a set of changes that happen in project
+            type [<AllowNullLiteral>] ProjectChanges =
+                /// List of added files
+                abstract added: U2<string[], FileWithProjectReferenceRedirectInfo[]> with get, set
+                /// List of removed files
+                abstract removed: U2<string[], FileWithProjectReferenceRedirectInfo[]> with get, set
+                /// List of updated files
+                abstract updated: U2<string[], FileWithProjectReferenceRedirectInfo[]> with get, set
+                /// List of files that have had their project reference redirect status updated
+                /// Only provided when the synchronizeProjectList request has includeProjectReferenceRedirectInfo set to true
+                abstract updatedRedirects: FileWithProjectReferenceRedirectInfo[] option with get, set
+
+            /// Information found in a configure request.
+            type [<AllowNullLiteral>] ConfigureRequestArguments =
+                /// Information about the host, for example 'Emacs 24.4' or
+                /// 'Sublime Text version 3075'
+                abstract hostInfo: string option with get, set
+                /// If present, tab settings apply only to this file.
+                abstract file: string option with get, set
+                /// The format options to use during formatting and other code editing features.
+                abstract formatOptions: FormatCodeSettings option with get, set
+                abstract preferences: UserPreferences option with get, set
+                /// The host's additional supported .js file extensions
+                abstract extraFileExtensions: FileExtensionInfo[] option with get, set
+                abstract watchOptions: WatchOptions option with get, set
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] WatchFileKind =
+                | [<CompiledName("FixedPollingInterval")>] FixedPollingInterval
+                | [<CompiledName("PriorityPollingInterval")>] PriorityPollingInterval
+                | [<CompiledName("DynamicPriorityPolling")>] DynamicPriorityPolling
+                | [<CompiledName("FixedChunkSizePolling")>] FixedChunkSizePolling
+                | [<CompiledName("UseFsEvents")>] UseFsEvents
+                | [<CompiledName("UseFsEventsOnParentDirectory")>] UseFsEventsOnParentDirectory
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] WatchDirectoryKind =
+                | [<CompiledName("UseFsEvents")>] UseFsEvents
+                | [<CompiledName("FixedPollingInterval")>] FixedPollingInterval
+                | [<CompiledName("DynamicPriorityPolling")>] DynamicPriorityPolling
+                | [<CompiledName("FixedChunkSizePolling")>] FixedChunkSizePolling
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] PollingWatchKind =
+                | [<CompiledName("FixedInterval")>] FixedInterval
+                | [<CompiledName("PriorityInterval")>] PriorityInterval
+                | [<CompiledName("DynamicPriority")>] DynamicPriority
+                | [<CompiledName("FixedChunkSize")>] FixedChunkSize
+
+            type [<AllowNullLiteral>] WatchOptions =
+                abstract watchFile: U2<WatchFileKind, Ts.WatchFileKind> option with get, set
+                abstract watchDirectory: U2<WatchDirectoryKind, Ts.WatchDirectoryKind> option with get, set
+                abstract fallbackPolling: U2<PollingWatchKind, Ts.PollingWatchKind> option with get, set
+                abstract synchronousWatchDirectory: bool option with get, set
+                abstract excludeDirectories: string[] option with get, set
+                abstract excludeFiles: string[] option with get, set
+                [<EmitIndexer>] abstract Item: option: string -> CompilerOptionsValue option with get, set
+
+            /// Configure request; value of command field is "configure".  Specifies
+            /// host information, such as host type, tab size, and indent size.
+            type [<AllowNullLiteral>] ConfigureRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: ConfigureRequestArguments with get, set
+
+            /// Response to "configure" request.  This is just an acknowledgement, so
+            /// no body field is required.
+            type [<AllowNullLiteral>] ConfigureResponse =
+                inherit Response
+
+            type [<AllowNullLiteral>] ConfigurePluginRequestArguments =
+                abstract pluginName: string with get, set
+                abstract configuration: obj option with get, set
+
+            type [<AllowNullLiteral>] ConfigurePluginRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: ConfigurePluginRequestArguments with get, set
+
+            type [<AllowNullLiteral>] ConfigurePluginResponse =
+                inherit Response
+
+            type [<AllowNullLiteral>] SelectionRangeRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: SelectionRangeRequestArgs with get, set
+
+            type [<AllowNullLiteral>] SelectionRangeRequestArgs =
+                inherit FileRequestArgs
+                abstract locations: Location[] with get, set
+
+            type [<AllowNullLiteral>] SelectionRangeResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: SelectionRange[] option with get, set
+
+            type [<AllowNullLiteral>] SelectionRange =
+                abstract textSpan: TextSpan with get, set
+                abstract parent: SelectionRange option with get, set
+
+            type [<AllowNullLiteral>] ToggleLineCommentRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: FileRangeRequestArgs with get, set
+
+            type [<AllowNullLiteral>] ToggleMultilineCommentRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: FileRangeRequestArgs with get, set
+
+            type [<AllowNullLiteral>] CommentSelectionRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: FileRangeRequestArgs with get, set
+
+            type [<AllowNullLiteral>] UncommentSelectionRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: FileRangeRequestArgs with get, set
+
+            /// Information found in an "open" request.
+            type [<AllowNullLiteral>] OpenRequestArgs =
+                inherit FileRequestArgs
+                /// Used when a version of the file content is known to be more up to date than the one on disk.
+                /// Then the known content will be used upon opening instead of the disk copy
+                abstract fileContent: string option with get, set
+                /// Used to specify the script kind of the file explicitly. It could be one of the following:
+                ///       "TS", "JS", "TSX", "JSX"
+                abstract scriptKindName: ScriptKindName option with get, set
+                /// Used to limit the searching for project config file. If given the searching will stop at this
+                /// root path; otherwise it will go all the way up to the dist root path.
+                abstract projectRootPath: string option with get, set
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] ScriptKindName =
+                | [<CompiledName("TS")>] TS
+                | [<CompiledName("JS")>] JS
+                | [<CompiledName("TSX")>] TSX
+                | [<CompiledName("JSX")>] JSX
+
+            /// Open request; value of command field is "open". Notify the
+            /// server that the client has file open.  The server will not
+            /// monitor the filesystem for changes in this file and will assume
+            /// that the client is updating the server (using the change and/or
+            /// reload messages) when the file changes. Server does not currently
+            /// send a response to an open request.
+            type [<AllowNullLiteral>] OpenRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: OpenRequestArgs with get, set
+
+            /// Request to open or update external project
+            type [<AllowNullLiteral>] OpenExternalProjectRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: OpenExternalProjectArgs with get, set
+
+            /// Arguments to OpenExternalProjectRequest request
+            type OpenExternalProjectArgs =
+                ExternalProject
+
+            /// Request to open multiple external projects
+            type [<AllowNullLiteral>] OpenExternalProjectsRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: OpenExternalProjectsArgs with get, set
+
+            /// Arguments to OpenExternalProjectsRequest
+            type [<AllowNullLiteral>] OpenExternalProjectsArgs =
+                /// List of external projects to open or update
+                abstract projects: ExternalProject[] with get, set
+
+            /// Response to OpenExternalProjectRequest request. This is just an acknowledgement, so
+            /// no body field is required.
+            type [<AllowNullLiteral>] OpenExternalProjectResponse =
+                inherit Response
+
+            /// Response to OpenExternalProjectsRequest request. This is just an acknowledgement, so
+            /// no body field is required.
+            type [<AllowNullLiteral>] OpenExternalProjectsResponse =
+                inherit Response
+
+            /// Request to close external project.
+            type [<AllowNullLiteral>] CloseExternalProjectRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: CloseExternalProjectRequestArgs with get, set
+
+            /// Arguments to CloseExternalProjectRequest request
+            type [<AllowNullLiteral>] CloseExternalProjectRequestArgs =
+                /// Name of the project to close
+                abstract projectFileName: string with get, set
+
+            /// Response to CloseExternalProjectRequest request. This is just an acknowledgement, so
+            /// no body field is required.
+            type [<AllowNullLiteral>] CloseExternalProjectResponse =
+                inherit Response
+
+            /// Request to synchronize list of open files with the client
+            type [<AllowNullLiteral>] UpdateOpenRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: UpdateOpenRequestArgs with get, set
+
+            /// Arguments to UpdateOpenRequest
+            type [<AllowNullLiteral>] UpdateOpenRequestArgs =
+                /// List of newly open files
+                abstract openFiles: OpenRequestArgs[] option with get, set
+                /// List of open files files that were changes
+                abstract changedFiles: FileCodeEdits[] option with get, set
+                /// List of files that were closed
+                abstract closedFiles: string[] option with get, set
+
+            /// External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
+            type [<AllowNullLiteral>] InferredProjectCompilerOptions =
+                interface end
+
+            /// Request to set compiler options for inferred projects.
+            /// External projects are opened / closed explicitly.
+            /// Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
+            /// This configuration file will be used to obtain a list of files and configuration settings for the project.
+            /// Inferred projects are created when user opens a loose file that is not the part of external project
+            /// or configured project and will contain only open file and transitive closure of referenced files if 'useOneInferredProject' is false,
+            /// or all open loose files and its transitive closure of referenced files if 'useOneInferredProject' is true.
+            type [<AllowNullLiteral>] SetCompilerOptionsForInferredProjectsRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: SetCompilerOptionsForInferredProjectsArgs with get, set
+
+            /// Argument for SetCompilerOptionsForInferredProjectsRequest request.
+            type [<AllowNullLiteral>] SetCompilerOptionsForInferredProjectsArgs =
+                /// Compiler options to be used with inferred projects.
+                abstract options: InferredProjectCompilerOptions with get, set
+                /// <summary>
+                /// Specifies the project root path used to scope compiler options.
+                /// It is an error to provide this property if the server has not been started with
+                /// <c>useInferredProjectPerProjectRoot</c> enabled.
+                /// </summary>
+                abstract projectRootPath: string option with get, set
+
+            /// Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
+            /// no body field is required.
+            type [<AllowNullLiteral>] SetCompilerOptionsForInferredProjectsResponse =
+                inherit Response
+
+            /// Exit request; value of command field is "exit".  Ask the server process
+            /// to exit.
+            type [<AllowNullLiteral>] ExitRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            /// Close request; value of command field is "close". Notify the
+            /// server that the client has closed a previously open file.  If
+            /// file is still referenced by open files, the server will resume
+            /// monitoring the filesystem for changes to file.  Server does not
+            /// currently send a response to a close request.
+            type [<AllowNullLiteral>] CloseRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] WatchChangeRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: WatchChangeRequestArgs with get, set
+
+            type [<AllowNullLiteral>] WatchChangeRequestArgs =
+                abstract id: float with get, set
+                abstract path: string with get, set
+                abstract eventType: WatchChangeRequestArgsEventType with get, set
+
+            /// Request to obtain the list of files that should be regenerated if target file is recompiled.
+            /// NOTE: this us query-only operation and does not generate any output on disk.
+            type [<AllowNullLiteral>] CompileOnSaveAffectedFileListRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            /// Contains a list of files that should be regenerated in a project
+            type [<AllowNullLiteral>] CompileOnSaveAffectedFileListSingleProject =
+                /// Project name
+                abstract projectFileName: string with get, set
+                /// List of files names that should be recompiled
+                abstract fileNames: string[] with get, set
+                /// true if project uses outFile or out compiler option
+                abstract projectUsesOutFile: bool with get, set
+
+            /// Response for CompileOnSaveAffectedFileListRequest request;
+            type [<AllowNullLiteral>] CompileOnSaveAffectedFileListResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CompileOnSaveAffectedFileListSingleProject[] with get, set
+
+            /// Request to recompile the file. All generated outputs (.js, .d.ts or .js.map files) is written on disk.
+            type [<AllowNullLiteral>] CompileOnSaveEmitFileRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: CompileOnSaveEmitFileRequestArgs with get, set
+
+            /// Arguments for CompileOnSaveEmitFileRequest
+            type [<AllowNullLiteral>] CompileOnSaveEmitFileRequestArgs =
+                inherit FileRequestArgs
+                /// if true - then file should be recompiled even if it does not have any changes.
+                abstract forced: bool option with get, set
+                abstract includeLinePosition: bool option with get, set
+                /// if true - return response as object with emitSkipped and diagnostics
+                abstract richResponse: bool option with get, set
+
+            type [<AllowNullLiteral>] CompileOnSaveEmitFileResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: U2<bool, EmitResult> with get, set
+
+            type [<AllowNullLiteral>] EmitResult =
+                abstract emitSkipped: bool with get, set
+                abstract diagnostics: U2<Diagnostic[], DiagnosticWithLinePosition[]> with get, set
+
+            /// Quickinfo request; value of command field is
+            /// "quickinfo". Return response giving a quick type and
+            /// documentation string for the symbol found in file at location
+            /// line, col.
+            type [<AllowNullLiteral>] QuickInfoRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: FileLocationRequestArgs with get, set
+
+            /// Body of QuickInfoResponse.
+            type [<AllowNullLiteral>] QuickInfoResponseBody =
+                /// The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
+                abstract kind: ScriptElementKind with get, set
+                /// Optional modifiers for the kind (such as 'public').
+                abstract kindModifiers: string with get, set
+                /// Starting file location of symbol.
+                abstract start: Location with get, set
+                /// One past last character of symbol.
+                abstract ``end``: Location with get, set
+                /// Type and kind of symbol.
+                abstract displayString: string with get, set
+                /// Documentation associated with symbol.
+                /// Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+                abstract documentation: U2<string, SymbolDisplayPart[]> with get, set
+                /// JSDoc tags associated with symbol.
+                abstract tags: JSDocTagInfo[] with get, set
+
+            /// Quickinfo response message.
+            type [<AllowNullLiteral>] QuickInfoResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: QuickInfoResponseBody option with get, set
+
+            /// Arguments for format messages.
+            type [<AllowNullLiteral>] FormatRequestArgs =
+                inherit FileLocationRequestArgs
+                /// Last line of range for which to format text in file.
+                abstract endLine: float with get, set
+                /// Character offset on last line of range for which to format text in file.
+                abstract endOffset: float with get, set
+                /// Format options to be used.
+                abstract options: FormatCodeSettings option with get, set
+
+            /// Format request; value of command field is "format".  Return
+            /// response giving zero or more edit instructions.  The edit
+            /// instructions will be sorted in file order.  Applying the edit
+            /// instructions in reverse to file will result in correctly
+            /// reformatted text.
+            type [<AllowNullLiteral>] FormatRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: FormatRequestArgs with get, set
+
+            /// Object found in response messages defining an editing
+            /// instruction for a span of text in source code.  The effect of
+            /// this instruction is to replace the text starting at start and
+            /// ending one character before end with newText. For an insertion,
+            /// the text span is empty.  For a deletion, newText is empty.
+            type [<AllowNullLiteral>] CodeEdit =
+                /// First character of the text span to edit.
+                abstract start: Location with get, set
+                /// One character past last character of the text span to edit.
+                abstract ``end``: Location with get, set
+                /// Replace the span defined above with this string (may be
+                /// the empty string).
+                abstract newText: string with get, set
+
+            type [<AllowNullLiteral>] FileCodeEdits =
+                abstract fileName: string with get, set
+                abstract textChanges: CodeEdit[] with get, set
+
+            type [<AllowNullLiteral>] CodeFixResponse =
+                inherit Response
+                /// The code actions that are available
+                abstract body: CodeFixAction[] option with get, set
+
+            type [<AllowNullLiteral>] CodeAction =
+                /// Description of the code action to display in the UI of the editor
+                abstract description: string with get, set
+                /// Text changes to apply to each file as part of the code action
+                abstract changes: FileCodeEdits[] with get, set
+                /// <summary>A command is an opaque object that should be passed to <c>ApplyCodeActionCommandRequestArgs</c> without modification.</summary>
+                abstract commands: DiagnosticWithLinePositionReportsUnnecessary[] option with get, set
+
+            type [<AllowNullLiteral>] CombinedCodeActions =
+                abstract changes: FileCodeEdits[] with get, set
+                abstract commands: DiagnosticWithLinePositionReportsUnnecessary[] option with get, set
+
+            type [<AllowNullLiteral>] CodeFixAction =
+                inherit CodeAction
+                /// Short name to identify the fix, for use by telemetry.
+                abstract fixName: string with get, set
+                /// If present, one may call 'getCombinedCodeFix' with this fixId.
+                /// This may be omitted to indicate that the code fix can't be applied in a group.
+                abstract fixId: DiagnosticWithLinePositionReportsUnnecessary option with get, set
+                /// Should be present if and only if 'fixId' is.
+                abstract fixAllDescription: string option with get, set
+
+            /// Format and format on key response message.
+            type [<AllowNullLiteral>] FormatResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CodeEdit[] option with get, set
+
+            /// Arguments for format on key messages.
+            type [<AllowNullLiteral>] FormatOnKeyRequestArgs =
+                inherit FileLocationRequestArgs
+                /// Key pressed (';', '\n', or '}').
+                abstract key: string with get, set
+                abstract options: FormatCodeSettings option with get, set
+
+            /// Format on key request; value of command field is
+            /// "formatonkey". Given file location and key typed (as string),
+            /// return response giving zero or more edit instructions.  The
+            /// edit instructions will be sorted in file order.  Applying the
+            /// edit instructions in reverse to file will result in correctly
+            /// reformatted text.
+            type [<AllowNullLiteral>] FormatOnKeyRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: FormatOnKeyRequestArgs with get, set
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] CompletionsTriggerCharacter =
+                | [<CompiledName(".")>] DOT
+                | [<CompiledName("\"")>] QUOTATION
+                | [<CompiledName("'")>] ``'``
+                | [<CompiledName("`")>] BACKTICK
+                | [<CompiledName("/")>] SLASH
+                | [<CompiledName("@")>] AT
+                | [<CompiledName("<")>] ``<``
+                | [<CompiledName("#")>] ``#``
+                | [<CompiledName(" ")>] Empty
+
+            type [<RequireQualifiedAccess>] CompletionTriggerKind =
+                /// Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API.
+                | Invoked = 1
+                /// Completion was triggered by a trigger character.
+                | TriggerCharacter = 2
+                /// Completion was re-triggered as the current completion list is incomplete.
+                | TriggerForIncompleteCompletions = 3
+
+            /// Arguments for completions messages.
+            type [<AllowNullLiteral>] CompletionsRequestArgs =
+                inherit FileLocationRequestArgs
+                /// Optional prefix to apply to possible completions.
+                abstract prefix: string option with get, set
+                /// <summary>
+                /// Character that was responsible for triggering completion.
+                /// Should be <c>undefined</c> if a user manually requested completion.
+                /// </summary>
+                abstract triggerCharacter: CompletionsTriggerCharacter option with get, set
+                abstract triggerKind: CompletionTriggerKind option with get, set
+
+            /// Completions request; value of command field is "completions".
+            /// Given a file location (file, line, col) and a prefix (which may
+            /// be the empty string), return the possible completions that
+            /// begin with prefix.
+            type [<AllowNullLiteral>] CompletionsRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: CompletionsRequestArgs with get, set
+
+            /// Arguments for completion details request.
+            type [<AllowNullLiteral>] CompletionDetailsRequestArgs =
+                inherit FileLocationRequestArgs
+                /// Names of one or more entries for which to obtain details.
+                abstract entryNames: U2<string, CompletionEntryIdentifier>[] with get, set
+
+            type [<AllowNullLiteral>] CompletionEntryIdentifier =
+                abstract name: string with get, set
+                abstract source: string option with get, set
+                abstract data: obj option with get, set
+
+            /// Completion entry details request; value of command field is
+            /// "completionEntryDetails".  Given a file location (file, line,
+            /// col) and an array of completion entry names return more
+            /// detailed information for each completion entry.
+            type [<AllowNullLiteral>] CompletionDetailsRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: CompletionDetailsRequestArgs with get, set
+
+            /// Part of a symbol description.
+            type [<AllowNullLiteral>] SymbolDisplayPart =
+                /// Text of an item describing the symbol.
+                abstract text: string with get, set
+                /// The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
+                abstract kind: string with get, set
+
+            /// A part of a symbol description that links from a jsdoc @link tag to a declaration
+            type [<AllowNullLiteral>] JSDocLinkDisplayPart =
+                inherit SymbolDisplayPart
+                /// The location of the declaration that the @link tag links to.
+                abstract target: FileSpan with get, set
+
+            /// An item found in a completion response.
+            type [<AllowNullLiteral>] CompletionEntry =
+                /// The symbol's name.
+                abstract name: string with get, set
+                /// The symbol's kind (such as 'className' or 'parameterName').
+                abstract kind: ScriptElementKind with get, set
+                /// Optional modifiers for the kind (such as 'public').
+                abstract kindModifiers: string option with get, set
+                /// A string that is used for comparing completion items so that they can be ordered.  This
+                /// is often the same as the name but may be different in certain circumstances.
+                abstract sortText: string with get, set
+                /// <summary>
+                /// Text to insert instead of <c>name</c>.
+                /// This is used to support bracketed completions; If <c>name</c> might be "a-b" but <c>insertText</c> would be <c>["a-b"]</c>,
+                /// coupled with <c>replacementSpan</c> to replace a dotted access with a bracket access.
+                /// </summary>
+                abstract insertText: string option with get, set
+                /// A string that should be used when filtering a set of
+                /// completion items.
+                abstract filterText: string option with get, set
+                /// <summary><c>insertText</c> should be interpreted as a snippet if true.</summary>
+                abstract isSnippet: bool option with get, set
+                /// An optional span that indicates the text to be replaced by this completion item.
+                /// If present, this span should be used instead of the default one.
+                /// It will be set if the required span differs from the one generated by the default replacement behavior.
+                abstract replacementSpan: TextSpan option with get, set
+                /// Indicates whether commiting this completion entry will require additional code actions to be
+                /// made to avoid errors. The CompletionEntryDetails will have these actions.
+                abstract hasAction: bool option with get, set
+                /// Identifier (not necessarily human-readable) identifying where this completion came from.
+                abstract source: string option with get, set
+                /// <summary>Human-readable description of the <c>source</c>.</summary>
+                abstract sourceDisplay: SymbolDisplayPart[] option with get, set
+                /// Additional details for the label.
+                abstract labelDetails: CompletionEntryLabelDetails option with get, set
+                /// If true, this completion should be highlighted as recommended. There will only be one of these.
+                /// This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
+                /// Then either that enum/class or a namespace containing it will be the recommended symbol.
+                abstract isRecommended: bool option with get, set
+                /// If true, this completion was generated from traversing the name table of an unchecked JS file,
+                /// and therefore may not be accurate.
+                abstract isFromUncheckedFile: bool option with get, set
+                /// If true, this completion was for an auto-import of a module not yet in the program, but listed
+                /// in the project package.json. Used for telemetry reporting.
+                abstract isPackageJsonImport: bool option with get, set
+                /// If true, this completion was an auto-import-style completion of an import statement (i.e., the
+                /// module specifier was inserted along with the imported identifier). Used for telemetry reporting.
+                abstract isImportStatementCompletion: bool option with get, set
+                /// <summary>
+                /// A property to be sent back to TS Server in the CompletionDetailsRequest, along with <c>name</c>,
+                /// that allows TS Server to look up the symbol represented by the completion item, disambiguating
+                /// items with the same name.
+                /// </summary>
+                abstract data: obj option with get, set
+
+            type [<AllowNullLiteral>] CompletionEntryLabelDetails =
+                /// <summary>
+                /// An optional string which is rendered less prominently directly after
+                /// <see cref="CompletionEntry.name">name</see>, without any spacing. Should be
+                /// used for function signatures or type annotations.
+                /// </summary>
+                abstract detail: string option with get, set
+                /// <summary>
+                /// An optional string which is rendered less prominently after
+                /// <see cref="CompletionEntryLabelDetails.detail" />. Should be used for fully qualified
+                /// names or file path.
+                /// </summary>
+                abstract description: string option with get, set
+
+            /// Additional completion entry details, available on demand
+            type [<AllowNullLiteral>] CompletionEntryDetails =
+                /// The symbol's name.
+                abstract name: string with get, set
+                /// The symbol's kind (such as 'className' or 'parameterName').
+                abstract kind: ScriptElementKind with get, set
+                /// Optional modifiers for the kind (such as 'public').
+                abstract kindModifiers: string with get, set
+                /// Display parts of the symbol (similar to quick info).
+                abstract displayParts: SymbolDisplayPart[] with get, set
+                /// Documentation strings for the symbol.
+                abstract documentation: SymbolDisplayPart[] option with get, set
+                /// JSDoc tags for the symbol.
+                abstract tags: JSDocTagInfo[] option with get, set
+                /// The associated code actions for this entry
+                abstract codeActions: CodeAction[] option with get, set
+                /// <summary>Human-readable description of the <c>source</c> from the CompletionEntry.</summary>
+                abstract sourceDisplay: SymbolDisplayPart[] option with get, set
+
+            [<Obsolete("Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries.")>]
+            type [<AllowNullLiteral>] CompletionsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CompletionEntry[] option with get, set
+
+            type [<AllowNullLiteral>] CompletionInfoResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CompletionInfo option with get, set
+
+            type [<AllowNullLiteral>] CompletionInfo =
+                abstract flags: float option
+                abstract isGlobalCompletion: bool
+                abstract isMemberCompletion: bool
+                abstract isNewIdentifierLocation: bool
+                /// <summary>
+                /// In the absence of <c>CompletionEntry["replacementSpan"]</c>, the editor may choose whether to use
+                /// this span or its default one. If <c>CompletionEntry["replacementSpan"]</c> is defined, that span
+                /// must be used to commit that completion entry.
+                /// </summary>
+                abstract optionalReplacementSpan: TextSpan option
+                abstract isIncomplete: bool option
+                abstract entries: CompletionEntry[]
+
+            type [<AllowNullLiteral>] CompletionDetailsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CompletionEntryDetails[] option with get, set
+
+            /// Signature help information for a single parameter
+            type [<AllowNullLiteral>] SignatureHelpParameter =
+                /// The parameter's name
+                abstract name: string with get, set
+                /// Documentation of the parameter.
+                abstract documentation: SymbolDisplayPart[] with get, set
+                /// Display parts of the parameter.
+                abstract displayParts: SymbolDisplayPart[] with get, set
+                /// Whether the parameter is optional or not.
+                abstract isOptional: bool with get, set
+
+            /// Represents a single signature to show in signature help.
+            type [<AllowNullLiteral>] SignatureHelpItem =
+                /// Whether the signature accepts a variable number of arguments.
+                abstract isVariadic: bool with get, set
+                /// The prefix display parts.
+                abstract prefixDisplayParts: SymbolDisplayPart[] with get, set
+                /// The suffix display parts.
+                abstract suffixDisplayParts: SymbolDisplayPart[] with get, set
+                /// The separator display parts.
+                abstract separatorDisplayParts: SymbolDisplayPart[] with get, set
+                /// The signature helps items for the parameters.
+                abstract parameters: SignatureHelpParameter[] with get, set
+                /// The signature's documentation
+                abstract documentation: SymbolDisplayPart[] with get, set
+                /// The signature's JSDoc tags
+                abstract tags: JSDocTagInfo[] with get, set
+
+            /// Signature help items found in the response of a signature help request.
+            type [<AllowNullLiteral>] SignatureHelpItems =
+                /// The signature help items.
+                abstract items: SignatureHelpItem[] with get, set
+                /// The span for which signature help should appear on a signature
+                abstract applicableSpan: TextSpan with get, set
+                /// The item selected in the set of available help items.
+                abstract selectedItemIndex: float with get, set
+                /// The argument selected in the set of parameters.
+                abstract argumentIndex: float with get, set
+                /// The argument count
+                abstract argumentCount: float with get, set
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] SignatureHelpTriggerCharacter =
+                | [<CompiledName(",")>] ``,``
+                | [<CompiledName("(")>] ``(``
+                | [<CompiledName("<")>] ``<``
+
+            type SignatureHelpRetriggerCharacter =
+                U2<SignatureHelpTriggerCharacter, string>
+
+            /// Arguments of a signature help request.
+            type [<AllowNullLiteral>] SignatureHelpRequestArgs =
+                inherit FileLocationRequestArgs
+                /// Reason why signature help was invoked.
+                /// See each individual possible
+                abstract triggerReason: SignatureHelpTriggerReason option with get, set
+
+            type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] SignatureHelpTriggerReason =
+                | [<CompiledName("characterTyped")>] SignatureHelpCharacterTypedReason of SignatureHelpCharacterTypedReason
+                | [<CompiledName("invoked")>] SignatureHelpInvokedReason of SignatureHelpInvokedReason
+                | [<CompiledName("retrigger")>] SignatureHelpRetriggeredReason of SignatureHelpRetriggeredReason
+                // static member inline op_ErasedCast(x: SignatureHelpCharacterTypedReason) = SignatureHelpCharacterTypedReason x
+                // static member inline op_ErasedCast(x: SignatureHelpInvokedReason) = SignatureHelpInvokedReason x
+                // static member inline op_ErasedCast(x: SignatureHelpRetriggeredReason) = SignatureHelpRetriggeredReason x
+
+            /// Signals that the user manually requested signature help.
+            /// The language service will unconditionally attempt to provide a result.
+            type [<AllowNullLiteral>] SignatureHelpInvokedReason =
+                abstract kind: string with get, set
+                abstract triggerCharacter: obj option with get, set
+
+            /// Signals that the signature help request came from a user typing a character.
+            /// Depending on the character and the syntactic context, the request may or may not be served a result.
+            type [<AllowNullLiteral>] SignatureHelpCharacterTypedReason =
+                abstract kind: string with get, set
+                /// Character that was responsible for triggering signature help.
+                abstract triggerCharacter: SignatureHelpTriggerCharacter with get, set
+
+            /// <summary>
+            /// Signals that this signature help request came from typing a character or moving the cursor.
+            /// This should only occur if a signature help session was already active and the editor needs to see if it should adjust.
+            /// The language service will unconditionally attempt to provide a result.
+            /// <c>triggerCharacter</c> can be <c>undefined</c> for a retrigger caused by a cursor move.
+            /// </summary>
+            type [<AllowNullLiteral>] SignatureHelpRetriggeredReason =
+                abstract kind: string with get, set
+                /// Character that was responsible for triggering signature help.
+                abstract triggerCharacter: SignatureHelpRetriggerCharacter option with get, set
+
+            /// Signature help request; value of command field is "signatureHelp".
+            /// Given a file location (file, line, col), return the signature
+            /// help.
+            type [<AllowNullLiteral>] SignatureHelpRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: SignatureHelpRequestArgs with get, set
+
+            /// Response object for a SignatureHelpRequest.
+            type [<AllowNullLiteral>] SignatureHelpResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: SignatureHelpItems option with get, set
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] InlayHintKind =
+                | [<CompiledName("Type")>] Type
+                | [<CompiledName("Parameter")>] Parameter
+                | [<CompiledName("Enum")>] Enum
+
+            type [<AllowNullLiteral>] InlayHintsRequestArgs =
+                inherit FileRequestArgs
+                /// Start position of the span.
+                abstract start: float with get, set
+                /// Length of the span.
+                abstract length: float with get, set
+
+            type [<AllowNullLiteral>] InlayHintsRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: InlayHintsRequestArgs with get, set
+
+            type [<AllowNullLiteral>] InlayHintItem =
+                /// This property will be the empty string when displayParts is set.
+                abstract text: string with get, set
+                abstract position: Location with get, set
+                abstract kind: InlayHintKind with get, set
+                abstract whitespaceBefore: bool option with get, set
+                abstract whitespaceAfter: bool option with get, set
+                abstract displayParts: InlayHintItemDisplayPart[] option with get, set
+
+            type [<AllowNullLiteral>] InlayHintItemDisplayPart =
+                abstract text: string with get, set
+                abstract span: FileSpan option with get, set
+
+            type [<AllowNullLiteral>] InlayHintsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: InlayHintItem[] option with get, set
+
+            /// Synchronous request for semantic diagnostics of one file.
+            type [<AllowNullLiteral>] SemanticDiagnosticsSyncRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: SemanticDiagnosticsSyncRequestArgs with get, set
+
+            type [<AllowNullLiteral>] SemanticDiagnosticsSyncRequestArgs =
+                inherit FileRequestArgs
+                abstract includeLinePosition: bool option with get, set
+
+            /// Response object for synchronous sematic diagnostics request.
+            type [<AllowNullLiteral>] SemanticDiagnosticsSyncResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: U2<Diagnostic[], DiagnosticWithLinePosition[]> option with get, set
+
+            type [<AllowNullLiteral>] SuggestionDiagnosticsSyncRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: SuggestionDiagnosticsSyncRequestArgs with get, set
+
+            type SuggestionDiagnosticsSyncRequestArgs =
+                SemanticDiagnosticsSyncRequestArgs
+
+            type SuggestionDiagnosticsSyncResponse =
+                SemanticDiagnosticsSyncResponse
+
+            /// Synchronous request for syntactic diagnostics of one file.
+            type [<AllowNullLiteral>] SyntacticDiagnosticsSyncRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: SyntacticDiagnosticsSyncRequestArgs with get, set
+
+            type [<AllowNullLiteral>] SyntacticDiagnosticsSyncRequestArgs =
+                inherit FileRequestArgs
+                abstract includeLinePosition: bool option with get, set
+
+            /// Response object for synchronous syntactic diagnostics request.
+            type [<AllowNullLiteral>] SyntacticDiagnosticsSyncResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: U2<Diagnostic[], DiagnosticWithLinePosition[]> option with get, set
+
+            /// Arguments for GeterrForProject request.
+            type [<AllowNullLiteral>] GeterrForProjectRequestArgs =
+                /// the file requesting project error list
+                abstract file: string with get, set
+                /// Delay in milliseconds to wait before starting to compute
+                /// errors for the files in the file list
+                abstract delay: float with get, set
+
+            /// GeterrForProjectRequest request; value of command field is
+            /// "geterrForProject". It works similarly with 'Geterr', only
+            /// it request for every file in this project.
+            type [<AllowNullLiteral>] GeterrForProjectRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: GeterrForProjectRequestArgs with get, set
+
+            /// Arguments for geterr messages.
+            type [<AllowNullLiteral>] GeterrRequestArgs =
+                /// List of file names for which to compute compiler errors.
+                /// The files will be checked in list order.
+                abstract files: string[] with get, set
+                /// Delay in milliseconds to wait before starting to compute
+                /// errors for the files in the file list
+                abstract delay: float with get, set
+
+            /// Geterr request; value of command field is "geterr". Wait for
+            /// delay milliseconds and then, if during the wait no change or
+            /// reload messages have arrived for the first file in the files
+            /// list, get the syntactic errors for the file, field requests,
+            /// and then get the semantic errors for the file.  Repeat with a
+            /// smaller delay for each subsequent file on the files list.  Best
+            /// practice for an editor is to send a file list containing each
+            /// file that is currently visible, in most-recently-used order.
+            type [<AllowNullLiteral>] GeterrRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: GeterrRequestArgs with get, set
+
+            type RequestCompletedEventName =
+                string
+
+            /// Event that is sent when server have finished processing request with specified id.
+            type [<AllowNullLiteral>] RequestCompletedEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: RequestCompletedEventName with get, set
+                /// Event-specific information
+                abstract body: RequestCompletedEventBody with get, set
+
+            type [<AllowNullLiteral>] RequestCompletedEventBody =
+                abstract request_seq: float with get, set
+
+            /// Item of diagnostic information found in a DiagnosticEvent message.
+            type [<AllowNullLiteral>] Diagnostic =
+                /// Starting file location at which text applies.
+                abstract start: Location with get, set
+                /// The last file location at which the text applies.
+                abstract ``end``: Location with get, set
+                /// Text of diagnostic message.
+                abstract text: string with get, set
+                /// The category of the diagnostic message, e.g. "error", "warning", or "suggestion".
+                abstract category: string with get, set
+                abstract reportsUnnecessary: DiagnosticWithLinePositionReportsUnnecessary option with get, set
+                abstract reportsDeprecated: DiagnosticWithLinePositionReportsUnnecessary option with get, set
+                /// Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
+                abstract relatedInformation: DiagnosticRelatedInformation[] option with get, set
+                /// The error code of the diagnostic message.
+                abstract code: float option with get, set
+                /// The name of the plugin reporting the message.
+                abstract source: string option with get, set
+
+            type [<AllowNullLiteral>] DiagnosticWithFileName =
+                inherit Diagnostic
+                /// Name of the file the diagnostic is in
+                abstract fileName: string with get, set
+
+            /// Represents additional spans returned with a diagnostic which are relevant to it
+            type [<AllowNullLiteral>] DiagnosticRelatedInformation =
+                /// The category of the related information message, e.g. "error", "warning", or "suggestion".
+                abstract category: string with get, set
+                /// The code used ot identify the related information
+                abstract code: float with get, set
+                /// Text of related or additional information.
+                abstract message: string with get, set
+                /// Associated location
+                abstract span: FileSpan option with get, set
+
+            type [<AllowNullLiteral>] DiagnosticEventBody =
+                /// The file for which diagnostic information is reported.
+                abstract file: string with get, set
+                /// An array of diagnostic information items.
+                abstract diagnostics: Diagnostic[] with get, set
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] DiagnosticEventKind =
+                | SemanticDiag
+                | SyntaxDiag
+                | SuggestionDiag
+
+            /// Event message for DiagnosticEventKind event types.
+            /// These events provide syntactic and semantic errors for a file.
+            type [<AllowNullLiteral>] DiagnosticEvent =
+                inherit Event
+                /// Event-specific information
+                abstract body: DiagnosticEventBody option with get, set
+                /// Name of event
+                abstract ``event``: DiagnosticEventKind with get, set
+
+            type [<AllowNullLiteral>] ConfigFileDiagnosticEventBody =
+                /// The file which trigged the searching and error-checking of the config file
+                abstract triggerFile: string with get, set
+                /// The name of the found config file.
+                abstract configFile: string with get, set
+                /// An arry of diagnostic information items for the found config file.
+                abstract diagnostics: DiagnosticWithFileName[] with get, set
+
+            /// Event message for "configFileDiag" event type.
+            /// This event provides errors for a found config file.
+            type [<AllowNullLiteral>] ConfigFileDiagnosticEvent =
+                inherit Event
+                /// Event-specific information
+                abstract body: ConfigFileDiagnosticEventBody option with get, set
+                /// Name of event
+                abstract ``event``: string with get, set
+
+            type ProjectLanguageServiceStateEventName =
+                string
+
+            type [<AllowNullLiteral>] ProjectLanguageServiceStateEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: ProjectLanguageServiceStateEventName with get, set
+                /// Event-specific information
+                abstract body: ProjectLanguageServiceStateEventBody option with get, set
+
+            type [<AllowNullLiteral>] ProjectLanguageServiceStateEventBody =
+                /// Project name that has changes in the state of language service.
+                /// For configured projects this will be the config file path.
+                /// For external projects this will be the name of the projects specified when project was open.
+                /// For inferred projects this event is not raised.
+                abstract projectName: string with get, set
+                /// True if language service state switched from disabled to enabled
+                /// and false otherwise.
+                abstract languageServiceEnabled: bool with get, set
+
+            type ProjectsUpdatedInBackgroundEventName =
+                string
+
+            type [<AllowNullLiteral>] ProjectsUpdatedInBackgroundEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: ProjectsUpdatedInBackgroundEventName with get, set
+                /// Event-specific information
+                abstract body: ProjectsUpdatedInBackgroundEventBody with get, set
+
+            type [<AllowNullLiteral>] ProjectsUpdatedInBackgroundEventBody =
+                /// Current set of open files
+                abstract openFiles: string[] with get, set
+
+            type ProjectLoadingStartEventName =
+                string
+
+            type [<AllowNullLiteral>] ProjectLoadingStartEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: ProjectLoadingStartEventName with get, set
+                /// Event-specific information
+                abstract body: ProjectLoadingStartEventBody with get, set
+
+            type [<AllowNullLiteral>] ProjectLoadingStartEventBody =
+                /// name of the project
+                abstract projectName: string with get, set
+                /// reason for loading
+                abstract reason: string with get, set
+
+            type ProjectLoadingFinishEventName =
+                string
+
+            type [<AllowNullLiteral>] ProjectLoadingFinishEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: ProjectLoadingFinishEventName with get, set
+                /// Event-specific information
+                abstract body: ProjectLoadingFinishEventBody with get, set
+
+            type [<AllowNullLiteral>] ProjectLoadingFinishEventBody =
+                /// name of the project
+                abstract projectName: string with get, set
+
+            type SurveyReadyEventName =
+                string
+
+            type [<AllowNullLiteral>] SurveyReadyEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: SurveyReadyEventName with get, set
+                /// Event-specific information
+                abstract body: SurveyReadyEventBody with get, set
+
+            type [<AllowNullLiteral>] SurveyReadyEventBody =
+                /// Name of the survey. This is an internal machine- and programmer-friendly name
+                abstract surveyId: string with get, set
+
+            type LargeFileReferencedEventName =
+                string
+
+            type [<AllowNullLiteral>] LargeFileReferencedEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: LargeFileReferencedEventName with get, set
+                /// Event-specific information
+                abstract body: LargeFileReferencedEventBody with get, set
+
+            type [<AllowNullLiteral>] LargeFileReferencedEventBody =
+                /// name of the large file being loaded
+                abstract file: string with get, set
+                /// size of the file
+                abstract fileSize: float with get, set
+                /// max file size allowed on the server
+                abstract maxFileSize: float with get, set
+
+            type CreateFileWatcherEventName =
+                string
+
+            type [<AllowNullLiteral>] CreateFileWatcherEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: CreateFileWatcherEventName
+                /// Event-specific information
+                abstract body: CreateFileWatcherEventBody
+
+            type [<AllowNullLiteral>] CreateFileWatcherEventBody =
+                abstract id: float
+                abstract path: string
+
+            type CreateDirectoryWatcherEventName =
+                string
+
+            type [<AllowNullLiteral>] CreateDirectoryWatcherEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: CreateDirectoryWatcherEventName
+                /// Event-specific information
+                abstract body: CreateDirectoryWatcherEventBody
+
+            type [<AllowNullLiteral>] CreateDirectoryWatcherEventBody =
+                abstract id: float
+                abstract path: string
+                abstract recursive: bool
+
+            type CloseFileWatcherEventName =
+                string
+
+            type [<AllowNullLiteral>] CloseFileWatcherEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: CloseFileWatcherEventName
+                /// Event-specific information
+                abstract body: CloseFileWatcherEventBody
+
+            type [<AllowNullLiteral>] CloseFileWatcherEventBody =
+                abstract id: float
+
+            /// Arguments for reload request.
+            type [<AllowNullLiteral>] ReloadRequestArgs =
+                inherit FileRequestArgs
+                /// Name of temporary file from which to reload file
+                /// contents. May be same as file.
+                abstract tmpfile: string with get, set
+
+            /// Reload request message; value of command field is "reload".
+            /// Reload contents of file with name given by the 'file' argument
+            /// from temporary file with name given by the 'tmpfile' argument.
+            /// The two names can be identical.
+            type [<AllowNullLiteral>] ReloadRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: ReloadRequestArgs with get, set
+
+            /// Response to "reload" request. This is just an acknowledgement, so
+            /// no body field is required.
+            type [<AllowNullLiteral>] ReloadResponse =
+                inherit Response
+
+            /// Arguments for saveto request.
+            type [<AllowNullLiteral>] SavetoRequestArgs =
+                inherit FileRequestArgs
+                /// Name of temporary file into which to save server's view of
+                /// file contents.
+                abstract tmpfile: string with get, set
+
+            /// Saveto request message; value of command field is "saveto".
+            /// For debugging purposes, save to a temporaryfile (named by
+            /// argument 'tmpfile') the contents of file named by argument
+            /// 'file'.  The server does not currently send a response to a
+            /// "saveto" request.
+            type [<AllowNullLiteral>] SavetoRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: SavetoRequestArgs with get, set
+
+            /// Arguments for navto request message.
+            type [<AllowNullLiteral>] NavtoRequestArgs =
+                /// Search term to navigate to from current location; term can
+                /// be '.*' or an identifier prefix.
+                abstract searchValue: string with get, set
+                /// Optional limit on the number of items to return.
+                abstract maxResultCount: float option with get, set
+                /// The file for the request (absolute pathname required).
+                abstract file: string option with get, set
+                /// Optional flag to indicate we want results for just the current file
+                /// or the entire project.
+                abstract currentFileOnly: bool option with get, set
+                abstract projectFileName: string option with get, set
+
+            /// Navto request message; value of command field is "navto".
+            /// Return list of objects giving file locations and symbols that
+            /// match the search term given in argument 'searchTerm'.  The
+            /// context for the search is given by the named file.
+            type [<AllowNullLiteral>] NavtoRequest =
+                inherit Request
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: NavtoRequestArgs with get, set
+
+            /// An item found in a navto response.
+            type [<AllowNullLiteral>] NavtoItem =
+                inherit FileSpan
+                /// The symbol's name.
+                abstract name: string with get, set
+                /// The symbol's kind (such as 'className' or 'parameterName').
+                abstract kind: ScriptElementKind with get, set
+                /// exact, substring, or prefix.
+                abstract matchKind: string with get, set
+                /// If this was a case sensitive or insensitive match.
+                abstract isCaseSensitive: bool with get, set
+                /// Optional modifiers for the kind (such as 'public').
+                abstract kindModifiers: string option with get, set
+                /// Name of symbol's container symbol (if any); for example,
+                /// the class name if symbol is a class member.
+                abstract containerName: string option with get, set
+                /// Kind of symbol's container symbol (if any).
+                abstract containerKind: ScriptElementKind option with get, set
+
+            /// Navto response message. Body is an array of navto items.  Each
+            /// item gives a symbol that matched the search term.
+            type [<AllowNullLiteral>] NavtoResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: NavtoItem[] option with get, set
+
+            /// Arguments for change request message.
+            type [<AllowNullLiteral>] ChangeRequestArgs =
+                inherit FormatRequestArgs
+                /// Optional string to insert at location (file, line, offset).
+                abstract insertString: string option with get, set
+
+            /// Change request message; value of command field is "change".
+            /// Update the server's view of the file named by argument 'file'.
+            /// Server does not currently send a response to a change request.
+            type [<AllowNullLiteral>] ChangeRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+                /// Object containing arguments for the command
+                abstract arguments: ChangeRequestArgs with get, set
+
+            /// Response to "brace" request.
+            type [<AllowNullLiteral>] BraceResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: TextSpan[] option with get, set
+
+            /// Brace matching request; value of command field is "brace".
+            /// Return response giving the file locations of matching braces
+            /// found in file at location line, offset.
+            type [<AllowNullLiteral>] BraceRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            /// NavBar items request; value of command field is "navbar".
+            /// Return response giving the list of navigation bar entries
+            /// extracted from the requested file.
+            type [<AllowNullLiteral>] NavBarRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            /// NavTree request; value of command field is "navtree".
+            /// Return response giving the navigation tree of the requested file.
+            type [<AllowNullLiteral>] NavTreeRequest =
+                inherit FileRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] NavigationBarItem =
+                /// The item's display text.
+                abstract text: string with get, set
+                /// The symbol's kind (such as 'className' or 'parameterName').
+                abstract kind: ScriptElementKind with get, set
+                /// Optional modifiers for the kind (such as 'public').
+                abstract kindModifiers: string option with get, set
+                /// The definition locations of the item.
+                abstract spans: TextSpan[] with get, set
+                /// Optional children.
+                abstract childItems: NavigationBarItem[] option with get, set
+                /// Number of levels deep this item should appear.
+                abstract indent: float with get, set
+
+            /// protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan
+            type [<AllowNullLiteral>] NavigationTree =
+                abstract text: string with get, set
+                abstract kind: ScriptElementKind with get, set
+                abstract kindModifiers: string with get, set
+                abstract spans: TextSpan[] with get, set
+                abstract nameSpan: TextSpan option with get, set
+                abstract childItems: NavigationTree[] option with get, set
+
+            type TelemetryEventName =
+                string
+
+            type [<AllowNullLiteral>] TelemetryEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: TelemetryEventName with get, set
+                /// Event-specific information
+                abstract body: TelemetryEventBody with get, set
+
+            type [<AllowNullLiteral>] TelemetryEventBody =
+                abstract telemetryEventName: string with get, set
+                abstract payload: obj option with get, set
+
+            type TypesInstallerInitializationFailedEventName =
+                string
+
+            type [<AllowNullLiteral>] TypesInstallerInitializationFailedEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: TypesInstallerInitializationFailedEventName with get, set
+                /// Event-specific information
+                abstract body: TypesInstallerInitializationFailedEventBody with get, set
+
+            type [<AllowNullLiteral>] TypesInstallerInitializationFailedEventBody =
+                abstract message: string with get, set
+
+            type TypingsInstalledTelemetryEventName =
+                string
+
+            type [<AllowNullLiteral>] TypingsInstalledTelemetryEventBody =
+                inherit TelemetryEventBody
+                abstract telemetryEventName: TypingsInstalledTelemetryEventName with get, set
+                abstract payload: TypingsInstalledTelemetryEventPayload with get, set
+
+            type [<AllowNullLiteral>] TypingsInstalledTelemetryEventPayload =
+                /// Comma separated list of installed typing packages
+                abstract installedPackages: string with get, set
+                /// true if install request succeeded, otherwise - false
+                abstract installSuccess: bool with get, set
+                /// version of typings installer
+                abstract typingsInstallerVersion: string with get, set
+
+            type BeginInstallTypesEventName =
+                string
+
+            type EndInstallTypesEventName =
+                string
+
+            type [<AllowNullLiteral>] BeginInstallTypesEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: BeginInstallTypesEventName with get, set
+                /// Event-specific information
+                abstract body: BeginInstallTypesEventBody with get, set
+
+            type [<AllowNullLiteral>] EndInstallTypesEvent =
+                inherit Event
+                /// Name of event
+                abstract ``event``: EndInstallTypesEventName with get, set
+                /// Event-specific information
+                abstract body: EndInstallTypesEventBody with get, set
+
+            type [<AllowNullLiteral>] InstallTypesEventBody =
+                /// correlation id to match begin and end events
+                abstract eventId: float with get, set
+                /// list of packages to install
+                abstract packages: string[] with get, set
+
+            type [<AllowNullLiteral>] BeginInstallTypesEventBody =
+                inherit InstallTypesEventBody
+
+            type [<AllowNullLiteral>] EndInstallTypesEventBody =
+                inherit InstallTypesEventBody
+                /// true if installation succeeded, otherwise false
+                abstract success: bool with get, set
+
+            type [<AllowNullLiteral>] NavBarResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: NavigationBarItem[] option with get, set
+
+            type [<AllowNullLiteral>] NavTreeResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: NavigationTree option with get, set
+
+            type [<AllowNullLiteral>] CallHierarchyItem =
+                abstract name: string with get, set
+                abstract kind: ScriptElementKind with get, set
+                abstract kindModifiers: string option with get, set
+                abstract file: string with get, set
+                abstract span: TextSpan with get, set
+                abstract selectionSpan: TextSpan with get, set
+                abstract containerName: string option with get, set
+
+            type [<AllowNullLiteral>] CallHierarchyIncomingCall =
+                abstract from: CallHierarchyItem with get, set
+                abstract fromSpans: TextSpan[] with get, set
+
+            type [<AllowNullLiteral>] CallHierarchyOutgoingCall =
+                abstract ``to``: CallHierarchyItem with get, set
+                abstract fromSpans: TextSpan[] with get, set
+
+            type [<AllowNullLiteral>] PrepareCallHierarchyRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] PrepareCallHierarchyResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: U2<CallHierarchyItem, CallHierarchyItem[]>
+
+            type [<AllowNullLiteral>] ProvideCallHierarchyIncomingCallsRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] ProvideCallHierarchyIncomingCallsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CallHierarchyIncomingCall[]
+
+            type [<AllowNullLiteral>] ProvideCallHierarchyOutgoingCallsRequest =
+                inherit FileLocationRequest
+                /// The command to execute
+                abstract command: CommandTypes with get, set
+
+            type [<AllowNullLiteral>] ProvideCallHierarchyOutgoingCallsResponse =
+                inherit Response
+                /// Contains message body if success === true.
+                abstract body: CallHierarchyOutgoingCall[]
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] IndentStyle =
+                | [<CompiledName("None")>] None
+                | [<CompiledName("Block")>] Block
+                | [<CompiledName("Smart")>] Smart
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] SemicolonPreference =
+                | Ignore
+                | Insert
+                | Remove
+
+            type [<AllowNullLiteral>] EditorSettings =
+                abstract baseIndentSize: float option with get, set
+                abstract indentSize: float option with get, set
+                abstract tabSize: float option with get, set
+                abstract newLineCharacter: string option with get, set
+                abstract convertTabsToSpaces: bool option with get, set
+                abstract indentStyle: U2<IndentStyle, Ts.IndentStyle> option with get, set
+                abstract trimTrailingWhitespace: bool option with get, set
+
+            type [<AllowNullLiteral>] FormatCodeSettings =
+                inherit EditorSettings
+                abstract insertSpaceAfterCommaDelimiter: bool option with get, set
+                abstract insertSpaceAfterSemicolonInForStatements: bool option with get, set
+                abstract insertSpaceBeforeAndAfterBinaryOperators: bool option with get, set
+                abstract insertSpaceAfterConstructor: bool option with get, set
+                abstract insertSpaceAfterKeywordsInControlFlowStatements: bool option with get, set
+                abstract insertSpaceAfterFunctionKeywordForAnonymousFunctions: bool option with get, set
+                abstract insertSpaceAfterOpeningAndBeforeClosingEmptyBraces: bool option with get, set
+                abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: bool option with get, set
+                abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: bool option with get, set
+                abstract insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: bool option with get, set
+                abstract insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: bool option with get, set
+                abstract insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: bool option with get, set
+                abstract insertSpaceAfterTypeAssertion: bool option with get, set
+                abstract insertSpaceBeforeFunctionParenthesis: bool option with get, set
+                abstract placeOpenBraceOnNewLineForFunctions: bool option with get, set
+                abstract placeOpenBraceOnNewLineForControlBlocks: bool option with get, set
+                abstract insertSpaceBeforeTypeAnnotation: bool option with get, set
+                abstract semicolons: SemicolonPreference option with get, set
+                abstract indentSwitchCase: bool option with get, set
+
+            type [<AllowNullLiteral>] UserPreferences =
+                abstract disableSuggestions: bool option
+                abstract quotePreference: UserPreferencesQuotePreference option
+                /// <summary>
+                /// If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
+                /// This affects lone identifier completions but not completions on the right hand side of <c>obj.</c>.
+                /// </summary>
+                abstract includeCompletionsForModuleExports: bool option
+                /// <summary>
+                /// Enables auto-import-style completions on partially-typed import statements. E.g., allows
+                /// <c>import write|</c> to be completed to <c>import { writeFile } from "fs"</c>.
+                /// </summary>
+                abstract includeCompletionsForImportStatements: bool option
+                /// <summary>Allows completions to be formatted with snippet text, indicated by <c>CompletionItem["isSnippet"]</c>.</summary>
+                abstract includeCompletionsWithSnippetText: bool option
+                /// <summary>
+                /// If enabled, the completion list will include completions with invalid identifier names.
+                /// For those entries, The <c>insertText</c> and <c>replacementSpan</c> properties will be set to change from <c>.x</c> property access to <c>["x"]</c>.
+                /// </summary>
+                abstract includeCompletionsWithInsertText: bool option
+                /// <summary>
+                /// Unless this option is <c>false</c>, or <c>includeCompletionsWithInsertText</c> is not enabled,
+                /// member completion lists triggered with <c>.</c> will include entries on potentially-null and potentially-undefined
+                /// values, with insertion text to replace preceding <c>.</c> tokens with <c>?.</c>.
+                /// </summary>
+                abstract includeAutomaticOptionalChainCompletions: bool option
+                /// <summary>
+                /// If enabled, completions for class members (e.g. methods and properties) will include
+                /// a whole declaration for the member.
+                /// E.g., <c>class A { f| }</c> could be completed to <c>class A { foo(): number {} }</c>, instead of
+                /// <c>class A { foo }</c>.
+                /// </summary>
+                abstract includeCompletionsWithClassMemberSnippets: bool option
+                /// <summary>
+                /// If enabled, object literal methods will have a method declaration completion entry in addition
+                /// to the regular completion entry containing just the method name.
+                /// E.g., <c>const objectLiteral: T = { f| }</c> could be completed to <c>const objectLiteral: T = { foo(): void {} }</c>,
+                /// in addition to <c>const objectLiteral: T = { foo }</c>.
+                /// </summary>
+                abstract includeCompletionsWithObjectLiteralMethodSnippets: bool option
+                /// <summary>
+                /// Indicates whether <see cref="CompletionEntry.labelDetails">completion entry label details</see> are supported.
+                /// If not, contents of <c>labelDetails</c> may be included in the <see cref="CompletionEntry.name" /> property.
+                /// </summary>
+                abstract useLabelDetailsInCompletionEntries: bool option
+                abstract allowIncompleteCompletions: bool option
+                abstract importModuleSpecifierPreference: UserPreferencesImportModuleSpecifierPreference option
+                /// <summary>Determines whether we import <c>foo/index.ts</c> as "foo", "foo/index", or "foo/index.js"</summary>
+                abstract importModuleSpecifierEnding: UserPreferencesImportModuleSpecifierEnding option
+                abstract allowTextChangesInNewFiles: bool option
+                abstract lazyConfiguredProjectsFromExternalProject: bool option
+                abstract providePrefixAndSuffixTextForRename: bool option
+                abstract provideRefactorNotApplicableReason: bool option
+                abstract allowRenameOfImportPath: bool option
+                abstract includePackageJsonAutoImports: UserPreferencesIncludePackageJsonAutoImports option
+                abstract jsxAttributeCompletionStyle: UserPreferencesJsxAttributeCompletionStyle option
+                abstract displayPartsForJSDoc: bool option
+                abstract generateReturnInDocTemplate: bool option
+                abstract includeInlayParameterNameHints: UserPreferencesIncludeInlayParameterNameHints option
+                abstract includeInlayParameterNameHintsWhenArgumentMatchesName: bool option
+                abstract includeInlayFunctionParameterTypeHints: bool option
+                abstract includeInlayVariableTypeHints: bool option
+                abstract includeInlayVariableTypeHintsWhenTypeMatchesName: bool option
+                abstract includeInlayPropertyDeclarationTypeHints: bool option
+                abstract includeInlayFunctionLikeReturnTypeHints: bool option
+                abstract includeInlayEnumMemberValueHints: bool option
+                abstract interactiveInlayHints: bool option
+                abstract autoImportFileExcludePatterns: string[] option
+                /// Indicates whether imports should be organized in a case-insensitive manner.
+                abstract organizeImportsIgnoreCase: U2<bool, string> option
+                /// <summary>
+                /// Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value
+                /// of their code points, or via "unicode" collation (via the
+                /// <see href="https://unicode.org/reports/tr10/#Scope">Unicode Collation Algorithm</see>) using rules associated with the locale
+                /// specified in <see cref="organizeImportsCollationLocale" />.
+                /// 
+                /// Default: <c>"ordinal"</c>.
+                /// </summary>
+                abstract organizeImportsCollation: UserPreferencesOrganizeImportsCollation option
+                /// <summary>
+                /// Indicates the locale to use for "unicode" collation. If not specified, the locale <c>"en"</c> is used as an invariant
+                /// for the sake of consistent sorting. Use <c>"auto"</c> to use the detected UI locale.
+                /// 
+                /// This preference is ignored if <see cref="organizeImportsCollation" /> is not <c>"unicode"</c>.
+                /// 
+                /// Default: <c>"en"</c>
+                /// </summary>
+                abstract organizeImportsCollationLocale: string option
+                /// <summary>
+                /// Indicates whether numeric collation should be used for digit sequences in strings. When <c>true</c>, will collate
+                /// strings such that <c>a1z &lt; a2z &lt; a100z</c>. When <c>false</c>, will collate strings such that <c>a1z &lt; a100z &lt; a2z</c>.
+                /// 
+                /// This preference is ignored if <see cref="organizeImportsCollation" /> is not <c>"unicode"</c>.
+                /// 
+                /// Default: <c>false</c>
+                /// </summary>
+                abstract organizeImportsNumericCollation: bool option
+                /// <summary>
+                /// Indicates whether accents and other diacritic marks are considered unequal for the purpose of collation. When
+                /// <c>true</c>, characters with accents and other diacritics will be collated in the order defined by the locale specified
+                /// in <see cref="organizeImportsCollationLocale" />.
+                /// 
+                /// This preference is ignored if <see cref="organizeImportsCollation" /> is not <c>"unicode"</c>.
+                /// 
+                /// Default: <c>true</c>
+                /// </summary>
+                abstract organizeImportsAccentCollation: bool option
+                /// <summary>
+                /// Indicates whether upper case or lower case should sort first. When <c>false</c>, the default order for the locale
+                /// specified in <see cref="organizeImportsCollationLocale" /> is used.
+                /// 
+                /// This preference is ignored if <see cref="organizeImportsCollation" /> is not <c>"unicode"</c>. This preference is also
+                /// ignored if we are using case-insensitive sorting, which occurs when <see cref="organizeImportsIgnoreCase" /> is <c>true</c>,
+                /// or if <see cref="organizeImportsIgnoreCase" /> is <c>"auto"</c> and the auto-detected case sensitivity is determined to be
+                /// case-insensitive.
+                /// 
+                /// Default: <c>false</c>
+                /// </summary>
+                abstract organizeImportsCaseFirst: UserPreferencesOrganizeImportsCaseFirst option
+                /// <summary>Indicates whether <see cref="ReferencesResponseItem.lineText" /> is supported.</summary>
+                abstract disableLineTextInReferences: bool option
+                /// Indicates whether to exclude standard library and node_modules file symbols from navTo results.
+                abstract excludeLibrarySymbolsInNavTo: bool option
+
+            type [<AllowNullLiteral>] CompilerOptions =
+                abstract allowJs: bool option with get, set
+                abstract allowSyntheticDefaultImports: bool option with get, set
+                abstract allowUnreachableCode: bool option with get, set
+                abstract allowUnusedLabels: bool option with get, set
+                abstract alwaysStrict: bool option with get, set
+                abstract baseUrl: string option with get, set
+                abstract charset: string option with get, set
+                abstract checkJs: bool option with get, set
+                abstract declaration: bool option with get, set
+                abstract declarationDir: string option with get, set
+                abstract disableSizeLimit: bool option with get, set
+                abstract downlevelIteration: bool option with get, set
+                abstract emitBOM: bool option with get, set
+                abstract emitDecoratorMetadata: bool option with get, set
+                abstract experimentalDecorators: bool option with get, set
+                abstract forceConsistentCasingInFileNames: bool option with get, set
+                abstract importHelpers: bool option with get, set
+                abstract inlineSourceMap: bool option with get, set
+                abstract inlineSources: bool option with get, set
+                abstract isolatedModules: bool option with get, set
+                abstract jsx: U2<JsxEmit, Ts.JsxEmit> option with get, set
+                abstract lib: string[] option with get, set
+                abstract locale: string option with get, set
+                abstract mapRoot: string option with get, set
+                abstract maxNodeModuleJsDepth: float option with get, set
+                abstract ``module``: U2<ModuleKind, Ts.ModuleKind> option with get, set
+                abstract moduleResolution: U2<ModuleResolutionKind, Ts.ModuleResolutionKind> option with get, set
+                abstract newLine: U2<NewLineKind, Ts.NewLineKind> option with get, set
+                abstract noEmit: bool option with get, set
+                abstract noEmitHelpers: bool option with get, set
+                abstract noEmitOnError: bool option with get, set
+                abstract noErrorTruncation: bool option with get, set
+                abstract noFallthroughCasesInSwitch: bool option with get, set
+                abstract noImplicitAny: bool option with get, set
+                abstract noImplicitReturns: bool option with get, set
+                abstract noImplicitThis: bool option with get, set
+                abstract noUnusedLocals: bool option with get, set
+                abstract noUnusedParameters: bool option with get, set
+                abstract noImplicitUseStrict: bool option with get, set
+                abstract noLib: bool option with get, set
+                abstract noResolve: bool option with get, set
+                abstract out: string option with get, set
+                abstract outDir: string option with get, set
+                abstract outFile: string option with get, set
+                abstract paths: MapLike<string[]> option with get, set
+                abstract plugins: PluginImport[] option with get, set
+                abstract preserveConstEnums: bool option with get, set
+                abstract preserveSymlinks: bool option with get, set
+                abstract project: string option with get, set
+                abstract reactNamespace: string option with get, set
+                abstract removeComments: bool option with get, set
+                abstract references: ProjectReference[] option with get, set
+                abstract rootDir: string option with get, set
+                abstract rootDirs: string[] option with get, set
+                abstract skipLibCheck: bool option with get, set
+                abstract skipDefaultLibCheck: bool option with get, set
+                abstract sourceMap: bool option with get, set
+                abstract sourceRoot: string option with get, set
+                abstract strict: bool option with get, set
+                abstract strictNullChecks: bool option with get, set
+                abstract suppressExcessPropertyErrors: bool option with get, set
+                abstract suppressImplicitAnyIndexErrors: bool option with get, set
+                abstract useDefineForClassFields: bool option with get, set
+                abstract target: U2<ScriptTarget, Ts.ScriptTarget> option with get, set
+                abstract traceResolution: bool option with get, set
+                abstract resolveJsonModule: bool option with get, set
+                abstract types: string[] option with get, set
+                /// Paths used to used to compute primary types search locations
+                abstract typeRoots: string[] option with get, set
+                [<EmitIndexer>] abstract Item: option: string -> CompilerOptionsValue option with get, set
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] JsxEmit =
+                | [<CompiledName("None")>] None
+                | [<CompiledName("Preserve")>] Preserve
+                | [<CompiledName("ReactNative")>] ReactNative
+                | [<CompiledName("React")>] React
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] ModuleKind =
+                | [<CompiledName("None")>] None
+                | [<CompiledName("CommonJS")>] CommonJS
+                | [<CompiledName("AMD")>] AMD
+                | [<CompiledName("UMD")>] UMD
+                | [<CompiledName("System")>] System
+                | [<CompiledName("ES6")>] ES6
+                | [<CompiledName("ES2015")>] ES2015
+                | [<CompiledName("ESNext")>] ESNext
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] ModuleResolutionKind =
+                | [<CompiledName("Classic")>] Classic
+                | [<CompiledName("Node")>] Node
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] NewLineKind =
+                | [<CompiledName("Crlf")>] Crlf
+                | [<CompiledName("Lf")>] Lf
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] ScriptTarget =
+                | [<CompiledName("ES3")>] ES3
+                | [<CompiledName("ES5")>] ES5
+                | [<CompiledName("ES6")>] ES6
+                | [<CompiledName("ES2015")>] ES2015
+                | [<CompiledName("ES2016")>] ES2016
+                | [<CompiledName("ES2017")>] ES2017
+                | [<CompiledName("ES2018")>] ES2018
+                | [<CompiledName("ES2019")>] ES2019
+                | [<CompiledName("ES2020")>] ES2020
+                | [<CompiledName("ES2021")>] ES2021
+                | [<CompiledName("ES2022")>] ES2022
+                | [<CompiledName("ESNext")>] ESNext
+
+            type [<RequireQualifiedAccess>] ClassificationType =
+                | Comment = 1
+                | Identifier = 2
+                | Keyword = 3
+                | NumericLiteral = 4
+                | Operator = 5
+                | StringLiteral = 6
+                | RegularExpressionLiteral = 7
+                | WhiteSpace = 8
+                | Text = 9
+                | Punctuation = 10
+                | ClassName = 11
+                | EnumName = 12
+                | InterfaceName = 13
+                | ModuleName = 14
+                | TypeParameterName = 15
+                | TypeAliasName = 16
+                | ParameterName = 17
+                | DocCommentTagName = 18
+                | JsxOpenTagName = 19
+                | JsxCloseTagName = 20
+                | JsxSelfClosingTagName = 21
+                | JsxAttribute = 22
+                | JsxText = 23
+                | JsxAttributeStringLiteralValue = 24
+                | BigintLiteral = 25
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] MessageType =
+                | Request
+                | Response
+                | Event
+
+            type [<AllowNullLiteral>] DiagnosticWithLinePositionReportsUnnecessary =
+                interface end
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] EncodedSemanticClassificationsRequestArgsFormat =
+                | Original
+                | [<CompiledName("2020")>] N2020
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] WatchChangeRequestArgsEventType =
+                | Create
+                | Delete
+                | Update
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesQuotePreference =
+                | Auto
+                | Double
+                | Single
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesImportModuleSpecifierPreference =
+                | Shortest
+                | [<CompiledName("project-relative")>] ProjectRelative
+                | Relative
+                | [<CompiledName("non-relative")>] NonRelative
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesImportModuleSpecifierEnding =
+                | Auto
+                | Minimal
+                | Index
+                | Js
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesIncludePackageJsonAutoImports =
+                | Auto
+                | On
+                | Off
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesJsxAttributeCompletionStyle =
+                | Auto
+                | Braces
+                | None
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesIncludeInlayParameterNameHints =
+                | None
+                | Literals
+                | All
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesOrganizeImportsCollation =
+                | Ordinal
+                | Unicode
+
+            type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesOrganizeImportsCaseFirst =
+                | Upper
+                | Lower
+
+        module TypingsInstaller =
+
+            type [<AllowNullLiteral>] IExports =
+                abstract TypingsInstaller: TypingsInstallerStatic
+
+            type [<AllowNullLiteral>] Log =
+                abstract isEnabled: unit -> bool
+                abstract writeLine: text: string -> unit
+
+            type [<AllowNullLiteral>] RequestCompletedAction =
+                [<Emit("$0($1...)")>] abstract Invoke: success: bool -> unit
+
+            type [<AllowNullLiteral>] PendingRequest =
+                abstract requestId: float with get, set
+                abstract packageNames: string[] with get, set
+                abstract cwd: string with get, set
+                abstract onRequestCompleted: RequestCompletedAction with get, set
+
+            type [<AllowNullLiteral>] TypingsInstaller =
+                abstract installTypingHost: InstallTypingHost
+                abstract log: Log
+                abstract typesRegistry: Map<string, MapLike<string>>
+                abstract closeProject: req: CloseProject -> unit
+                abstract install: req: DiscoverTypings -> unit
+                abstract ensurePackageDirectoryExists: directory: string -> unit
+                abstract installWorker: requestId: float * packageNames: string[] * cwd: string * onRequestCompleted: RequestCompletedAction -> unit
+                abstract sendResponse: response: U5<SetTypings, InvalidateCachedTypings, BeginInstallTypes, EndInstallTypes, WatchTypingLocations> -> unit
+                abstract latestDistTag: obj
+
+            type [<AllowNullLiteral>] TypingsInstallerStatic =
+                [<EmitConstructor>] abstract Create: installTypingHost: InstallTypingHost * globalCachePath: string * safeListPath: Path * typesMapLocation: Path * throttleLimit: float * ?log: Log -> TypingsInstaller
+
+        type [<AllowNullLiteral>] CompressedData =
+            abstract length: float with get, set
+            abstract compressionKind: string with get, set
+            abstract data: obj option with get, set
+
+        type ModuleImportResult =
+            U2<{| ``module``: ModuleImportResultModule; error: obj |}, {| ``module``: obj; error: {| stack: string option; message: string option |} |}>
+
+        [<Obsolete("Use {@link ModuleImportResult} instead.")>]
+        type RequireResult =
+            ModuleImportResult
+
+        type [<AllowNullLiteral>] ServerHost =
+            inherit System
+            abstract watchFile: path: string * callback: FileWatcherCallback * ?pollingInterval: float * ?options: WatchOptions -> FileWatcher
+            abstract watchDirectory: path: string * callback: DirectoryWatcherCallback * ?recursive: bool * ?options: WatchOptions -> FileWatcher
+            abstract setTimeout: callback: (obj option[] -> unit) * ms: float * [<ParamArray>] args: obj option[] -> obj option
+            abstract clearTimeout: timeoutId: obj option -> unit
+            abstract setImmediate: callback: (obj option[] -> unit) * [<ParamArray>] args: obj option[] -> obj option
+            abstract clearImmediate: timeoutId: obj option -> unit
+            abstract gc: unit -> unit
+            abstract trace: s: string -> unit
+            abstract require: initialPath: string * moduleName: string -> ModuleImportResult
+
+        type [<RequireQualifiedAccess>] LogLevel =
+            | Terse = 0
+            | Normal = 1
+            | RequestTime = 2
+            | Verbose = 3
+
+        type [<AllowNullLiteral>] Logger =
+            abstract close: unit -> unit
+            abstract hasLevel: level: LogLevel -> bool
+            abstract loggingEnabled: unit -> bool
+            abstract perftrc: s: string -> unit
+            abstract info: s: string -> unit
+            abstract startGroup: unit -> unit
+            abstract endGroup: unit -> unit
+            abstract msg: s: string * ?``type``: Msg -> unit
+            abstract getLogFileName: unit -> string option
+
+        type [<StringEnum>] [<RequireQualifiedAccess>] Msg =
+            | [<CompiledName("Err")>] Err
+            | [<CompiledName("Info")>] Info
+            | [<CompiledName("Perf")>] Perf
+
+        module Errors =
+
+            type [<AllowNullLiteral>] IExports =
+                abstract ThrowNoProject: unit -> obj
+                abstract ThrowProjectLanguageServiceDisabled: unit -> obj
+                abstract ThrowProjectDoesNotContainDocument: fileName: string * project: Project -> obj
+
+        type [<AllowNullLiteral>] NormalizedPath =
+            interface end
+
+        type [<AllowNullLiteral>] NormalizedPathMap<'T> =
+            abstract get: path: NormalizedPath -> 'T option
+            abstract set: path: NormalizedPath * value: 'T -> unit
+            abstract contains: path: NormalizedPath -> bool
+            abstract remove: path: NormalizedPath -> unit
+
+        type [<AllowNullLiteral>] ScriptInfo =
+            abstract fileName: NormalizedPath
+            abstract scriptKind: ScriptKind
+            abstract hasMixedContent: bool
+            abstract path: Path
+            /// All projects that include this file
+            abstract containingProjects: Project[]
+            abstract isScriptOpen: unit -> bool
+            abstract ``open``: newText: string option -> unit
+            abstract close: ?fileExists: bool -> unit
+            abstract getSnapshot: unit -> IScriptSnapshot
+            abstract getFormatCodeSettings: unit -> FormatCodeSettings option
+            abstract getPreferences: unit -> Protocol.UserPreferences option
+            abstract attachToProject: project: Project -> bool
+            abstract isAttached: project: Project -> bool
+            abstract detachFromProject: project: Project -> unit
+            abstract detachAllProjects: unit -> unit
+            abstract getDefaultProject: unit -> Project
+            abstract registerFileUpdate: unit -> unit
+            abstract setOptions: formatSettings: FormatCodeSettings * preferences: Protocol.UserPreferences option -> unit
+            abstract getLatestVersion: unit -> string
+            abstract saveTo: fileName: string -> unit
+            abstract reloadFromFile: ?tempFileName: NormalizedPath -> bool
+            abstract editContent: start: float * ``end``: float * newText: string -> unit
+            abstract markContainingProjectsAsDirty: unit -> unit
+            abstract isOrphan: unit -> bool
+            /// <param name="line">1 based index</param>
+            abstract lineToTextSpan: line: float -> TextSpan
+            /// <param name="line">1 based index</param>
+            /// <param name="offset">1 based index</param>
+            abstract lineOffsetToPosition: line: float * offset: float -> float
+            abstract positionToLineOffset: position: float -> Protocol.Location
+            abstract isJavaScript: unit -> bool
+
+        type [<AllowNullLiteral>] ScriptInfoStatic =
+            [<EmitConstructor>] abstract Create: host: ServerHost * fileName: NormalizedPath * scriptKind: ScriptKind * hasMixedContent: bool * path: Path * ?initialVersion: float -> ScriptInfo
+
+        type [<AllowNullLiteral>] InstallPackageOptionsWithProject =
+            inherit InstallPackageOptions
+            abstract projectName: string with get, set
+            abstract projectRootPath: Path with get, set
+
+        type [<AllowNullLiteral>] ITypingsInstaller =
+            abstract isKnownTypesPackageName: name: string -> bool
+            abstract installPackage: options: InstallPackageOptionsWithProject -> Promise<ApplyCodeActionCommandResult>
+            abstract enqueueInstallTypingsRequest: p: Project * typeAcquisition: TypeAcquisition * unresolvedImports: SortedReadonlyArray<string> option -> unit
+            abstract attach: projectService: ProjectService -> unit
+            abstract onProjectClosed: p: Project -> unit
+            abstract globalTypingsCacheLocation: string option
+
+        type [<RequireQualifiedAccess>] ProjectKind =
+            | Inferred = 0
+            | Configured = 1
+            | External = 2
+            | AutoImportProvider = 3
+            | Auxiliary = 4
+
+        type [<AllowNullLiteral>] PluginCreateInfo =
+            abstract project: Project with get, set
+            abstract languageService: LanguageService with get, set
+            abstract languageServiceHost: LanguageServiceHost with get, set
+            abstract serverHost: ServerHost with get, set
+            abstract session: Session<obj> option with get, set
+            abstract config: obj option with get, set
+
+        type [<AllowNullLiteral>] PluginModule =
+            abstract create: createInfo: PluginCreateInfo -> LanguageService
+            abstract getExternalFiles: proj: Project * updateLevel: ProgramUpdateLevel -> string[]
+            abstract onConfigurationChanged: config: obj option -> unit
+
+        type [<AllowNullLiteral>] PluginModuleWithName =
+            abstract name: string with get, set
+            abstract ``module``: PluginModule with get, set
+
+        type [<AllowNullLiteral>] PluginModuleFactory =
+            [<Emit("$0($1...)")>] abstract Invoke: ``mod``: {| typescript: obj |} -> PluginModule
+
+        type [<AllowNullLiteral>] Project =
+            inherit LanguageServiceHost
+            inherit ModuleResolutionHost
+            abstract projectKind: ProjectKind
+            abstract projectService: ProjectService
+            abstract compileOnSaveEnabled: bool with get, set
+            abstract watchOptions: WatchOptions option with get, set
+            abstract languageService: LanguageService with get, set
+            abstract languageServiceEnabled: bool with get, set
+            abstract trace: s: string -> unit
+            /// Resolve a symbolic link.
+            abstract realpath: path: string -> string
+            abstract projectErrors: Diagnostic[] option with get, set
+            abstract isInitialLoadPending: unit -> bool
+            abstract isNonTsProject: unit -> bool
+            abstract isJsOnlyProject: unit -> bool
+            abstract jsDocParsingMode: JSDocParsingMode option
+            abstract isKnownTypesPackageName: name: string -> bool
+            abstract installPackage: options: InstallPackageOptions -> Promise<ApplyCodeActionCommandResult>
+            abstract getCompilationSettings: unit -> Ts.CompilerOptions
+            abstract getCompilerOptions: unit -> Ts.CompilerOptions
+            abstract getNewLine: unit -> string
+            abstract getProjectVersion: unit -> string
+            abstract getProjectReferences: unit -> ProjectReference[] option
+            abstract getScriptFileNames: unit -> string[]
+            abstract getScriptKind: fileName: string -> Ts.ScriptKind
+            abstract getScriptVersion: filename: string -> string
+            abstract getScriptSnapshot: filename: string -> IScriptSnapshot option
+            abstract getCancellationToken: unit -> HostCancellationToken
+            abstract getCurrentDirectory: unit -> string
+            abstract getDefaultLibFileName: unit -> string
+            abstract useCaseSensitiveFileNames: unit -> bool
+            abstract readDirectory: path: string * ?extensions: string[] * ?exclude: string[] * ?``include``: string[] * ?depth: float -> string[]
+            abstract readFile: fileName: string -> string option
+            abstract writeFile: fileName: string * content: string -> unit
+            abstract fileExists: file: string -> bool
+            abstract directoryExists: path: string -> bool
+            abstract getDirectories: path: string -> string[]
+            abstract log: s: string -> unit
+            abstract error: s: string -> unit
+            /// Get the errors that dont have any file name associated
+            abstract getGlobalProjectErrors: unit -> Diagnostic[]
+            /// Get all the project errors
+            abstract getAllProjectErrors: unit -> Diagnostic[]
+            abstract setProjectErrors: projectErrors: Diagnostic[] option -> unit
+            abstract getLanguageService: ?ensureSynchronized: bool -> LanguageService
+            abstract getCompileOnSaveAffectedFileList: scriptInfo: ScriptInfo -> string[]
+            /// Returns true if emit was conducted
+            abstract emitFile: scriptInfo: ScriptInfo * writeFile: (string -> string -> (bool) option -> unit) -> EmitResult
+            abstract enableLanguageService: unit -> unit
+            abstract disableLanguageService: ?lastFileExceededProgramSize: string -> unit
+            abstract getProjectName: unit -> string
+            abstract removeLocalTypingsFromTypeAcquisition: newTypeAcquisition: TypeAcquisition -> TypeAcquisition
+            abstract getExternalFiles: ?updateLevel: ProgramUpdateLevel -> SortedReadonlyArray<string>
+            abstract getSourceFile: path: Path -> Ts.SourceFile option
+            abstract close: unit -> unit
+            abstract isClosed: unit -> bool
+            abstract hasRoots: unit -> bool
+            abstract getRootFiles: unit -> Ts.Server.NormalizedPath[]
+            abstract getRootScriptInfos: unit -> Ts.Server.ScriptInfo[]
+            abstract getScriptInfos: unit -> ScriptInfo[]
+            abstract getExcludedFiles: unit -> NormalizedPath[]
+            abstract getFileNames: ?excludeFilesFromExternalLibraries: bool * ?excludeConfigFiles: bool -> Ts.Server.NormalizedPath[]
+            abstract hasConfigFile: configFilePath: NormalizedPath -> bool
+            abstract containsScriptInfo: info: ScriptInfo -> bool
+            abstract containsFile: filename: NormalizedPath * ?requireOpen: bool -> bool
+            abstract isRoot: info: ScriptInfo -> bool
+            abstract addRoot: info: ScriptInfo * ?fileName: NormalizedPath -> unit
+            abstract addMissingFileRoot: fileName: NormalizedPath -> unit
+            abstract removeFile: info: ScriptInfo * fileExists: bool * detachFromProject: bool -> unit
+            abstract registerFileUpdate: fileName: string -> unit
+            abstract markAsDirty: unit -> unit
+            /// <summary>Updates set of files that contribute to this project</summary>
+            /// <returns>: true if set of files in the project stays the same and false - otherwise.</returns>
+            abstract updateGraph: unit -> bool
+            abstract removeExistingTypings: ``include``: string[] -> string[]
+            abstract getScriptInfoForNormalizedPath: fileName: NormalizedPath -> ScriptInfo option
+            abstract getScriptInfo: uncheckedFileName: string -> Ts.Server.ScriptInfo option
+            abstract filesToString: writeProjectFileNames: bool -> string
+            abstract setCompilerOptions: compilerOptions: CompilerOptions -> unit
+            abstract setTypeAcquisition: newTypeAcquisition: TypeAcquisition option -> unit
+            abstract getTypeAcquisition: unit -> Ts.TypeAcquisition
+            abstract removeRoot: info: ScriptInfo -> unit
+            abstract enableGlobalPlugins: options: CompilerOptions -> unit
+            abstract enablePlugin: pluginConfigEntry: PluginImport * searchPaths: string[] -> unit
+            /// Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed.
+            abstract refreshDiagnostics: unit -> unit
+
+        type [<AllowNullLiteral>] ProjectStatic =
+            [<EmitConstructor>] abstract Create: unit -> Project
+            abstract resolveModule: moduleName: string * initialDir: string * host: ServerHost * log: (string -> unit) -> ModuleImportResultModule option
+
+        /// If a file is opened and no tsconfig (or jsconfig) is found,
+        /// the file and its imports/references are put into an InferredProject.
+        type [<AllowNullLiteral>] InferredProject =
+            inherit Project
+            abstract toggleJsInferredProject: isJsInferredProject: bool -> unit
+            abstract setCompilerOptions: ?options: CompilerOptions -> unit
+            /// this is canonical project root path
+            abstract projectRootPath: string option
+            abstract addRoot: info: ScriptInfo -> unit
+            abstract removeRoot: info: ScriptInfo -> unit
+            abstract isProjectWithSingleRoot: unit -> bool
+            abstract close: unit -> unit
+            abstract getTypeAcquisition: unit -> TypeAcquisition
+
+        /// If a file is opened and no tsconfig (or jsconfig) is found,
+        /// the file and its imports/references are put into an InferredProject.
+        type [<AllowNullLiteral>] InferredProjectStatic =
+            [<EmitConstructor>] abstract Create: unit -> InferredProject
+
+        type [<AllowNullLiteral>] AutoImportProviderProject =
+            inherit Project
+            abstract isOrphan: unit -> bool
+            /// Updates set of files that contribute to this project
+            abstract updateGraph: unit -> bool
+            abstract hasRoots: unit -> bool
+            abstract markAsDirty: unit -> unit
+            abstract getScriptFileNames: unit -> string[]
+            abstract getLanguageService: unit -> obj
+            abstract getHostForAutoImportProvider: unit -> obj
+            abstract getProjectReferences: unit -> Ts.ProjectReference[] option
+
+        type [<AllowNullLiteral>] AutoImportProviderProjectStatic =
+            [<EmitConstructor>] abstract Create: unit -> AutoImportProviderProject
+
+        /// If a file is opened, the server will look for a tsconfig (or jsconfig)
+        /// and if successful create a ConfiguredProject for it.
+        /// Otherwise it will create an InferredProject.
+        type [<AllowNullLiteral>] ConfiguredProject =
+            inherit Project
+            abstract canonicalConfigFilePath: NormalizedPath
+            /// <summary>If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph</summary>
+            /// <returns>: true if set of files in the project stays the same and false - otherwise.</returns>
+            abstract updateGraph: unit -> bool
+            abstract getConfigFilePath: unit -> Ts.Server.NormalizedPath
+            abstract getProjectReferences: unit -> ProjectReference[] option
+            abstract updateReferences: refs: ProjectReference[] option -> unit
+            /// Get the errors that dont have any file name associated
+            abstract getGlobalProjectErrors: unit -> Diagnostic[]
+            /// Get all the project errors
+            abstract getAllProjectErrors: unit -> Diagnostic[]
+            abstract setProjectErrors: projectErrors: Diagnostic[] -> unit
+            abstract close: unit -> unit
+            abstract getEffectiveTypeRoots: unit -> string[]
+
+        /// If a file is opened, the server will look for a tsconfig (or jsconfig)
+        /// and if successful create a ConfiguredProject for it.
+        /// Otherwise it will create an InferredProject.
+        type [<AllowNullLiteral>] ConfiguredProjectStatic =
+            [<EmitConstructor>] abstract Create: unit -> ConfiguredProject
+
+        /// <summary>
+        /// Project whose configuration is handled externally, such as in a '.csproj'.
+        /// These are created only if a host explicitly calls <c>openExternalProject</c>.
+        /// </summary>
+        type [<AllowNullLiteral>] ExternalProject =
+            inherit Project
+            abstract externalProjectName: string with get, set
+            abstract compileOnSaveEnabled: bool with get, set
+            abstract excludedFiles: NormalizedPath[] with get, set
+            /// Updates set of files that contribute to this project
+            abstract updateGraph: unit -> bool
+            abstract getExcludedFiles: unit -> Ts.Server.NormalizedPath[]
+
+        /// <summary>
+        /// Project whose configuration is handled externally, such as in a '.csproj'.
+        /// These are created only if a host explicitly calls <c>openExternalProject</c>.
+        /// </summary>
+        type [<AllowNullLiteral>] ExternalProjectStatic =
+            [<EmitConstructor>] abstract Create: unit -> ExternalProject
+
+        type [<AllowNullLiteral>] ProjectsUpdatedInBackgroundEvent =
+            abstract eventName: obj with get, set
+            abstract data: {| openFiles: string[] |} with get, set
+
+        type [<AllowNullLiteral>] ProjectLoadingStartEvent =
+            abstract eventName: obj with get, set
+            abstract data: {| project: Project; reason: string |} with get, set
+
+        type [<AllowNullLiteral>] ProjectLoadingFinishEvent =
+            abstract eventName: obj with get, set
+            abstract data: {| project: Project |} with get, set
+
+        type [<AllowNullLiteral>] LargeFileReferencedEvent =
+            abstract eventName: obj with get, set
+            abstract data: {| file: string; fileSize: float; maxFileSize: float |} with get, set
+
+        type [<AllowNullLiteral>] ConfigFileDiagEvent =
+            abstract eventName: obj with get, set
+            abstract data: {| triggerFile: string; configFileName: string; diagnostics: Diagnostic[] |} with get, set
+
+        type [<AllowNullLiteral>] ProjectLanguageServiceStateEvent =
+            abstract eventName: obj with get, set
+            abstract data: {| project: Project; languageServiceEnabled: bool |} with get, set
+
+        /// This will be converted to the payload of a protocol.TelemetryEvent in session.defaultEventHandler.
+        type [<AllowNullLiteral>] ProjectInfoTelemetryEvent =
+            abstract eventName: obj
+            abstract data: ProjectInfoTelemetryEventData
+
+        /// Info that we may send about a file that was just opened.
+        /// Info about a file will only be sent once per session, even if the file changes in ways that might affect the info.
+        /// Currently this is only sent for '.js' files.
+        type [<AllowNullLiteral>] OpenFileInfoTelemetryEvent =
+            abstract eventName: obj
+            abstract data: OpenFileInfoTelemetryEventData
+
+        type [<AllowNullLiteral>] CreateFileWatcherEvent =
+            abstract eventName: Protocol.CreateFileWatcherEventName
+            abstract data: Protocol.CreateFileWatcherEventBody
+
+        type [<AllowNullLiteral>] CreateDirectoryWatcherEvent =
+            abstract eventName: Protocol.CreateDirectoryWatcherEventName
+            abstract data: Protocol.CreateDirectoryWatcherEventBody
+
+        type [<AllowNullLiteral>] CloseFileWatcherEvent =
+            abstract eventName: Protocol.CloseFileWatcherEventName
+            abstract data: Protocol.CloseFileWatcherEventBody
+
+        type [<AllowNullLiteral>] ProjectInfoTelemetryEventData =
+            /// Cryptographically secure hash of project file location.
+            abstract projectId: string
+            /// Count of file extensions seen in the project.
+            abstract fileStats: FileStats
+            /// Any compiler options that might contain paths will be taken out.
+            /// Enum compiler options will be converted to strings.
+            abstract compilerOptions: CompilerOptions
+            abstract extends: bool option
+            abstract files: bool option
+            abstract ``include``: bool option
+            abstract exclude: bool option
+            abstract compileOnSave: bool
+            abstract typeAcquisition: ProjectInfoTypeAcquisitionData
+            abstract configFileName: ProjectInfoTelemetryEventDataConfigFileName
+            abstract projectType: ProjectInfoTelemetryEventDataProjectType
+            abstract languageServiceEnabled: bool
+            /// TypeScript version used by the server.
+            abstract version: string
+
+        type [<AllowNullLiteral>] OpenFileInfoTelemetryEventData =
+            abstract info: OpenFileInfo
+
+        type [<AllowNullLiteral>] ProjectInfoTypeAcquisitionData =
+            abstract enable: bool option
+            abstract ``include``: bool
+            abstract exclude: bool
+
+        type [<AllowNullLiteral>] FileStats =
+            abstract js: float
+            abstract jsSize: float option
+            abstract jsx: float
+            abstract jsxSize: float option
+            abstract ts: float
+            abstract tsSize: float option
+            abstract tsx: float
+            abstract tsxSize: float option
+            abstract dts: float
+            abstract dtsSize: float option
+            abstract deferred: float
+            abstract deferredSize: float option
+
+        type [<AllowNullLiteral>] OpenFileInfo =
+            abstract checkJs: bool
+
+        type ProjectServiceEvent =
+            obj
+
+        type [<AllowNullLiteral>] ProjectServiceEventHandler =
+            [<Emit("$0($1...)")>] abstract Invoke: ``event``: ProjectServiceEvent -> unit
+
+        type [<AllowNullLiteral>] SafeList =
+            [<EmitIndexer>] abstract Item: name: string -> {| ``match``: RegExp; exclude: U2<string, float>[][] option; types: string[] option |} with get, set
+
+        type [<AllowNullLiteral>] TypesMapFile =
+            abstract typesMap: SafeList with get, set
+            abstract simpleMap: TypesMapFileSimpleMap with get, set
+
+        type [<AllowNullLiteral>] HostConfiguration =
+            abstract formatCodeOptions: FormatCodeSettings with get, set
+            abstract preferences: Protocol.UserPreferences with get, set
+            abstract hostInfo: string with get, set
+            abstract extraFileExtensions: FileExtensionInfo[] option with get, set
+            abstract watchOptions: WatchOptions option with get, set
+
+        type [<AllowNullLiteral>] OpenConfiguredProjectResult =
+            abstract configFileName: NormalizedPath option with get, set
+            abstract configFileErrors: Diagnostic[] option with get, set
+
+        type [<AllowNullLiteral>] ProjectServiceOptions =
+            abstract host: ServerHost with get, set
+            abstract logger: Logger with get, set
+            abstract cancellationToken: HostCancellationToken with get, set
+            abstract useSingleInferredProject: bool with get, set
+            abstract useInferredProjectPerProjectRoot: bool with get, set
+            abstract typingsInstaller: ITypingsInstaller option with get, set
+            abstract eventHandler: ProjectServiceEventHandler option with get, set
+            abstract canUseWatchEvents: bool option with get, set
+            abstract suppressDiagnosticEvents: bool option with get, set
+            abstract throttleWaitMilliseconds: float option with get, set
+            abstract globalPlugins: string[] option with get, set
+            abstract pluginProbeLocations: string[] option with get, set
+            abstract allowLocalPluginLoads: bool option with get, set
+            abstract typesMapLocation: string option with get, set
+            abstract serverMode: LanguageServiceMode option with get, set
+            abstract session: Session<obj> option with get, set
+            abstract jsDocParsingMode: JSDocParsingMode option with get, set
+
+        type [<AllowNullLiteral>] WatchOptionsAndErrors =
+            abstract watchOptions: WatchOptions with get, set
+            abstract errors: Diagnostic[] option with get, set
+
+        type [<AllowNullLiteral>] ProjectService =
+            /// external projects (configuration and list of root files is not controlled by tsserver)
+            abstract externalProjects: ExternalProject[]
+            /// projects built from openFileRoots
+            abstract inferredProjects: InferredProject[]
+            /// projects specified by a tsconfig.json file
+            abstract configuredProjects: Map<string, ConfiguredProject>
+            /// Open files: with value being project root path, and key being Path of the file that is open
+            abstract openFiles: Map<string, NormalizedPath option>
+            abstract currentDirectory: NormalizedPath
+            abstract toCanonicalFileName: f: string -> string
+            abstract host: ServerHost
+            abstract logger: Logger
+            abstract cancellationToken: HostCancellationToken
+            abstract useSingleInferredProject: bool
+            abstract useInferredProjectPerProjectRoot: bool
+            abstract typingsInstaller: ITypingsInstaller
+            abstract throttleWaitMilliseconds: float option
+            abstract globalPlugins: string[]
+            abstract pluginProbeLocations: string[]
+            abstract allowLocalPluginLoads: bool
+            abstract typesMapLocation: string option
+            abstract serverMode: LanguageServiceMode
+            abstract jsDocParsingMode: JSDocParsingMode option
+            abstract toPath: fileName: string -> Path
+            abstract updateTypingsForProject: response: U3<SetTypings, InvalidateCachedTypings, PackageInstalledResponse> -> unit
+            abstract setCompilerOptionsForInferredProjects: projectCompilerOptions: Protocol.InferredProjectCompilerOptions * ?projectRootPath: string -> unit
+            abstract findProject: projectName: string -> Project option
+            abstract getDefaultProjectForFile: fileName: NormalizedPath * ensureProject: bool -> Project option
+            abstract getScriptInfoEnsuringProjectsUptoDate: uncheckedFileName: string -> ScriptInfo option
+            abstract getFormatCodeOptions: file: NormalizedPath -> FormatCodeSettings
+            abstract getPreferences: file: NormalizedPath -> Protocol.UserPreferences
+            abstract getHostFormatCodeOptions: unit -> FormatCodeSettings
+            abstract getHostPreferences: unit -> Protocol.UserPreferences
+            abstract getScriptInfo: uncheckedFileName: string -> ScriptInfo option
+            abstract getOrCreateScriptInfoForNormalizedPath: fileName: NormalizedPath * openedByClient: bool * ?fileContent: string * ?scriptKind: ScriptKind * ?hasMixedContent: bool * ?hostToQueryFileExistsOn: {| fileExists: string -> bool |} -> ScriptInfo option
+            /// This gets the script info for the normalized path. If the path is not rooted disk path then the open script info with project root context is preferred
+            abstract getScriptInfoForNormalizedPath: fileName: NormalizedPath -> ScriptInfo option
+            abstract getScriptInfoForPath: fileName: Path -> ScriptInfo option
+            abstract setHostConfiguration: args: Protocol.ConfigureRequestArguments -> unit
+            abstract closeLog: unit -> unit
+            /// This function rebuilds the project for every file opened by the client
+            /// This does not reload contents of open files from disk. But we could do that if needed
+            abstract reloadProjects: unit -> unit
+            /// <summary>Open file whose contents is managed by the client</summary>
+            /// <param name="filename">is absolute pathname</param>
+            /// <param name="fileContent">is a known version of the file content that is more up to date than the one on disk</param>
+            abstract openClientFile: fileName: string * ?fileContent: string * ?scriptKind: ScriptKind * ?projectRootPath: string -> OpenConfiguredProjectResult
+            abstract openClientFileWithNormalizedPath: fileName: NormalizedPath * ?fileContent: string * ?scriptKind: ScriptKind * ?hasMixedContent: bool * ?projectRootPath: NormalizedPath -> OpenConfiguredProjectResult
+            /// <summary>Close file whose contents is managed by the client</summary>
+            /// <param name="filename">is absolute pathname</param>
+            abstract closeClientFile: uncheckedFileName: string -> unit
+            abstract closeExternalProject: uncheckedFileName: string -> unit
+            abstract openExternalProjects: projects: Protocol.ExternalProject[] -> unit
+            abstract resetSafeList: unit -> unit
+            abstract applySafeList: proj: Protocol.ExternalProject -> NormalizedPath[]
+            abstract openExternalProject: proj: Protocol.ExternalProject -> unit
+            abstract hasDeferredExtension: unit -> bool
+            abstract configurePlugin: args: Protocol.ConfigurePluginRequestArguments -> unit
+
+        type [<AllowNullLiteral>] ProjectServiceStatic =
+            [<EmitConstructor>] abstract Create: opts: ProjectServiceOptions -> ProjectService
+
+        type [<AllowNullLiteral>] ServerCancellationToken =
+            inherit HostCancellationToken
+            abstract setRequest: requestId: float -> unit
+            abstract resetRequest: requestId: float -> unit
+
+        type [<AllowNullLiteral>] PendingErrorCheck =
+            abstract fileName: NormalizedPath with get, set
+            abstract project: Project with get, set
+
+        [<Obsolete("use ts.server.protocol.CommandTypes")>]
+        type CommandNames =
+            Protocol.CommandTypes
+
+        type [<AllowNullLiteral>] Event =
+            [<Emit("$0($1...)")>] abstract Invoke: body: 'T * eventName: string -> unit 
+
+        type [<AllowNullLiteral>] EventSender =
+            abstract ``event``: Event with get, set
+
+        type [<AllowNullLiteral>] SessionOptions =
+            abstract host: ServerHost with get, set
+            abstract cancellationToken: ServerCancellationToken with get, set
+            abstract useSingleInferredProject: bool with get, set
+            abstract useInferredProjectPerProjectRoot: bool with get, set
+            abstract typingsInstaller: ITypingsInstaller option with get, set
+            abstract byteLength: buf: string * ?encoding: BufferEncoding -> float
+            abstract hrtime: ?start: float * float -> float * float
+            abstract logger: Logger with get, set
+            /// If falsy, all events are suppressed.
+            abstract canUseEvents: bool with get, set
+            abstract canUseWatchEvents: bool option with get, set
+            abstract eventHandler: ProjectServiceEventHandler option with get, set
+            /// Has no effect if eventHandler is also specified.
+            abstract suppressDiagnosticEvents: bool option with get, set
+            abstract serverMode: LanguageServiceMode option with get, set
+            abstract throttleWaitMilliseconds: float option with get, set
+            abstract noGetErrOnBackgroundUpdate: bool option with get, set
+            abstract globalPlugins: string[] option with get, set
+            abstract pluginProbeLocations: string[] option with get, set
+            abstract allowLocalPluginLoads: bool option with get, set
+            abstract typesMapLocation: string option with get, set
+
+        type Session =
+            Session<string>
+
+        type [<AllowNullLiteral>] Session<'TMessage> =
+            inherit EventSender
+            abstract projectService: ProjectService with get, set
+            abstract host: ServerHost with get, set
+            abstract typingsInstaller: ITypingsInstaller
+            abstract byteLength: buf: string * ?encoding: BufferEncoding -> float
+            abstract logger: Logger with get, set
+            abstract canUseEvents: bool with get, set
+            abstract logError: err: Error * cmd: string -> unit
+            abstract send: msg: Protocol.Message -> unit
+            abstract writeMessage: msg: Protocol.Message -> unit
+            abstract ``event``: body: 'T * eventName: string -> unit 
+            abstract getCanonicalFileName: fileName: string -> string
+            abstract exit: unit -> unit
+            abstract addProtocolHandler: command: string * handler: (Protocol.Request -> HandlerResponse) -> unit
+            abstract executeWithRequestId: requestId: float * f: (unit -> 'T) -> 'T
+            abstract executeCommand: request: Protocol.Request -> HandlerResponse
+            abstract onMessage: message: 'TMessage -> unit
+            abstract parseMessage: message: 'TMessage -> Protocol.Request
+            abstract toStringMessage: message: 'TMessage -> string
+
+        type [<AllowNullLiteral>] SessionStatic =
+            [<EmitConstructor>] abstract Create: opts: SessionOptions -> Session<'TMessage>
+
+        type [<AllowNullLiteral>] HandlerResponse =
+            abstract response: ModuleImportResultModule option with get, set
+            abstract responseRequired: bool option with get, set
+
+        type [<AllowNullLiteral>] ModuleImportResultModule =
+            interface end
+
+        type [<StringEnum>] [<RequireQualifiedAccess>] ProjectInfoTelemetryEventDataConfigFileName =
+            | [<CompiledName("tsconfig.json")>] Tsconfig_json
+            | [<CompiledName("jsconfig.json")>] Jsconfig_json
+            | Other
+
+        type [<StringEnum>] [<RequireQualifiedAccess>] ProjectInfoTelemetryEventDataProjectType =
+            | External
+            | Configured
+
+        type [<AllowNullLiteral>] TypesMapFileSimpleMap =
+            [<EmitIndexer>] abstract Item: libName: string -> string with get, set
 
     /// <summary>
     /// Type of objects whose values are all of the same type.
@@ -1054,218 +4588,224 @@ module Ts =
         | UndefinedKeyword = 157
         | UniqueKeyword = 158
         | UnknownKeyword = 159
-        | FromKeyword = 160
-        | GlobalKeyword = 161
-        | BigIntKeyword = 162
-        | OverrideKeyword = 163
-        | OfKeyword = 164
-        | QualifiedName = 165
-        | ComputedPropertyName = 166
-        | TypeParameter = 167
-        | Parameter = 168
-        | Decorator = 169
-        | PropertySignature = 170
-        | PropertyDeclaration = 171
-        | MethodSignature = 172
-        | MethodDeclaration = 173
-        | ClassStaticBlockDeclaration = 174
-        | Constructor = 175
-        | GetAccessor = 176
-        | SetAccessor = 177
-        | CallSignature = 178
-        | ConstructSignature = 179
-        | IndexSignature = 180
-        | TypePredicate = 181
-        | TypeReference = 182
-        | FunctionType = 183
-        | ConstructorType = 184
-        | TypeQuery = 185
-        | TypeLiteral = 186
-        | ArrayType = 187
-        | TupleType = 188
-        | OptionalType = 189
-        | RestType = 190
-        | UnionType = 191
-        | IntersectionType = 192
-        | ConditionalType = 193
-        | InferType = 194
-        | ParenthesizedType = 195
-        | ThisType = 196
-        | TypeOperator = 197
-        | IndexedAccessType = 198
-        | MappedType = 199
-        | LiteralType = 200
-        | NamedTupleMember = 201
-        | TemplateLiteralType = 202
-        | TemplateLiteralTypeSpan = 203
-        | ImportType = 204
-        | ObjectBindingPattern = 205
-        | ArrayBindingPattern = 206
-        | BindingElement = 207
-        | ArrayLiteralExpression = 208
-        | ObjectLiteralExpression = 209
-        | PropertyAccessExpression = 210
-        | ElementAccessExpression = 211
-        | CallExpression = 212
-        | NewExpression = 213
-        | TaggedTemplateExpression = 214
-        | TypeAssertionExpression = 215
-        | ParenthesizedExpression = 216
-        | FunctionExpression = 217
-        | ArrowFunction = 218
-        | DeleteExpression = 219
-        | TypeOfExpression = 220
-        | VoidExpression = 221
-        | AwaitExpression = 222
-        | PrefixUnaryExpression = 223
-        | PostfixUnaryExpression = 224
-        | BinaryExpression = 225
-        | ConditionalExpression = 226
-        | TemplateExpression = 227
-        | YieldExpression = 228
-        | SpreadElement = 229
-        | ClassExpression = 230
-        | OmittedExpression = 231
-        | ExpressionWithTypeArguments = 232
-        | AsExpression = 233
-        | NonNullExpression = 234
-        | MetaProperty = 235
-        | SyntheticExpression = 236
-        | SatisfiesExpression = 237
-        | TemplateSpan = 238
-        | SemicolonClassElement = 239
-        | Block = 240
-        | EmptyStatement = 241
-        | VariableStatement = 242
-        | ExpressionStatement = 243
-        | IfStatement = 244
-        | DoStatement = 245
-        | WhileStatement = 246
-        | ForStatement = 247
-        | ForInStatement = 248
-        | ForOfStatement = 249
-        | ContinueStatement = 250
-        | BreakStatement = 251
-        | ReturnStatement = 252
-        | WithStatement = 253
-        | SwitchStatement = 254
-        | LabeledStatement = 255
-        | ThrowStatement = 256
-        | TryStatement = 257
-        | DebuggerStatement = 258
-        | VariableDeclaration = 259
-        | VariableDeclarationList = 260
-        | FunctionDeclaration = 261
-        | ClassDeclaration = 262
-        | InterfaceDeclaration = 263
-        | TypeAliasDeclaration = 264
-        | EnumDeclaration = 265
-        | ModuleDeclaration = 266
-        | ModuleBlock = 267
-        | CaseBlock = 268
-        | NamespaceExportDeclaration = 269
-        | ImportEqualsDeclaration = 270
-        | ImportDeclaration = 271
-        | ImportClause = 272
-        | NamespaceImport = 273
-        | NamedImports = 274
-        | ImportSpecifier = 275
-        | ExportAssignment = 276
-        | ExportDeclaration = 277
-        | NamedExports = 278
-        | NamespaceExport = 279
-        | ExportSpecifier = 280
-        | MissingDeclaration = 281
-        | ExternalModuleReference = 282
-        | JsxElement = 283
-        | JsxSelfClosingElement = 284
-        | JsxOpeningElement = 285
-        | JsxClosingElement = 286
-        | JsxFragment = 287
-        | JsxOpeningFragment = 288
-        | JsxClosingFragment = 289
-        | JsxAttribute = 290
-        | JsxAttributes = 291
-        | JsxSpreadAttribute = 292
-        | JsxExpression = 293
-        | JsxNamespacedName = 294
-        | CaseClause = 295
-        | DefaultClause = 296
-        | HeritageClause = 297
-        | CatchClause = 298
-        | AssertClause = 299
-        | AssertEntry = 300
-        | ImportTypeAssertionContainer = 301
-        | PropertyAssignment = 302
-        | ShorthandPropertyAssignment = 303
-        | SpreadAssignment = 304
-        | EnumMember = 305
+        | UsingKeyword = 160
+        | FromKeyword = 161
+        | GlobalKeyword = 162
+        | BigIntKeyword = 163
+        | OverrideKeyword = 164
+        | OfKeyword = 165
+        | QualifiedName = 166
+        | ComputedPropertyName = 167
+        | TypeParameter = 168
+        | Parameter = 169
+        | Decorator = 170
+        | PropertySignature = 171
+        | PropertyDeclaration = 172
+        | MethodSignature = 173
+        | MethodDeclaration = 174
+        | ClassStaticBlockDeclaration = 175
+        | Constructor = 176
+        | GetAccessor = 177
+        | SetAccessor = 178
+        | CallSignature = 179
+        | ConstructSignature = 180
+        | IndexSignature = 181
+        | TypePredicate = 182
+        | TypeReference = 183
+        | FunctionType = 184
+        | ConstructorType = 185
+        | TypeQuery = 186
+        | TypeLiteral = 187
+        | ArrayType = 188
+        | TupleType = 189
+        | OptionalType = 190
+        | RestType = 191
+        | UnionType = 192
+        | IntersectionType = 193
+        | ConditionalType = 194
+        | InferType = 195
+        | ParenthesizedType = 196
+        | ThisType = 197
+        | TypeOperator = 198
+        | IndexedAccessType = 199
+        | MappedType = 200
+        | LiteralType = 201
+        | NamedTupleMember = 202
+        | TemplateLiteralType = 203
+        | TemplateLiteralTypeSpan = 204
+        | ImportType = 205
+        | ObjectBindingPattern = 206
+        | ArrayBindingPattern = 207
+        | BindingElement = 208
+        | ArrayLiteralExpression = 209
+        | ObjectLiteralExpression = 210
+        | PropertyAccessExpression = 211
+        | ElementAccessExpression = 212
+        | CallExpression = 213
+        | NewExpression = 214
+        | TaggedTemplateExpression = 215
+        | TypeAssertionExpression = 216
+        | ParenthesizedExpression = 217
+        | FunctionExpression = 218
+        | ArrowFunction = 219
+        | DeleteExpression = 220
+        | TypeOfExpression = 221
+        | VoidExpression = 222
+        | AwaitExpression = 223
+        | PrefixUnaryExpression = 224
+        | PostfixUnaryExpression = 225
+        | BinaryExpression = 226
+        | ConditionalExpression = 227
+        | TemplateExpression = 228
+        | YieldExpression = 229
+        | SpreadElement = 230
+        | ClassExpression = 231
+        | OmittedExpression = 232
+        | ExpressionWithTypeArguments = 233
+        | AsExpression = 234
+        | NonNullExpression = 235
+        | MetaProperty = 236
+        | SyntheticExpression = 237
+        | SatisfiesExpression = 238
+        | TemplateSpan = 239
+        | SemicolonClassElement = 240
+        | Block = 241
+        | EmptyStatement = 242
+        | VariableStatement = 243
+        | ExpressionStatement = 244
+        | IfStatement = 245
+        | DoStatement = 246
+        | WhileStatement = 247
+        | ForStatement = 248
+        | ForInStatement = 249
+        | ForOfStatement = 250
+        | ContinueStatement = 251
+        | BreakStatement = 252
+        | ReturnStatement = 253
+        | WithStatement = 254
+        | SwitchStatement = 255
+        | LabeledStatement = 256
+        | ThrowStatement = 257
+        | TryStatement = 258
+        | DebuggerStatement = 259
+        | VariableDeclaration = 260
+        | VariableDeclarationList = 261
+        | FunctionDeclaration = 262
+        | ClassDeclaration = 263
+        | InterfaceDeclaration = 264
+        | TypeAliasDeclaration = 265
+        | EnumDeclaration = 266
+        | ModuleDeclaration = 267
+        | ModuleBlock = 268
+        | CaseBlock = 269
+        | NamespaceExportDeclaration = 270
+        | ImportEqualsDeclaration = 271
+        | ImportDeclaration = 272
+        | ImportClause = 273
+        | NamespaceImport = 274
+        | NamedImports = 275
+        | ImportSpecifier = 276
+        | ExportAssignment = 277
+        | ExportDeclaration = 278
+        | NamedExports = 279
+        | NamespaceExport = 280
+        | ExportSpecifier = 281
+        | MissingDeclaration = 282
+        | ExternalModuleReference = 283
+        | JsxElement = 284
+        | JsxSelfClosingElement = 285
+        | JsxOpeningElement = 286
+        | JsxClosingElement = 287
+        | JsxFragment = 288
+        | JsxOpeningFragment = 289
+        | JsxClosingFragment = 290
+        | JsxAttribute = 291
+        | JsxAttributes = 292
+        | JsxSpreadAttribute = 293
+        | JsxExpression = 294
+        | JsxNamespacedName = 295
+        | CaseClause = 296
+        | DefaultClause = 297
+        | HeritageClause = 298
+        | CatchClause = 299
+        | ImportAttributes = 300
+        | ImportAttribute = 301
         /// <deprecated />
-        | UnparsedPrologue = 306
+        | AssertClause = 300
         /// <deprecated />
-        | UnparsedPrepend = 307
+        | AssertEntry = 301
         /// <deprecated />
-        | UnparsedText = 308
+        | ImportTypeAssertionContainer = 302
+        | PropertyAssignment = 303
+        | ShorthandPropertyAssignment = 304
+        | SpreadAssignment = 305
+        | EnumMember = 306
         /// <deprecated />
-        | UnparsedInternalText = 309
+        | UnparsedPrologue = 307
         /// <deprecated />
-        | UnparsedSyntheticReference = 310
-        | SourceFile = 311
-        | Bundle = 312
+        | UnparsedPrepend = 308
         /// <deprecated />
-        | UnparsedSource = 313
+        | UnparsedText = 309
         /// <deprecated />
-        | InputFiles = 314
-        | JSDocTypeExpression = 315
-        | JSDocNameReference = 316
-        | JSDocMemberName = 317
-        | JSDocAllType = 318
-        | JSDocUnknownType = 319
-        | JSDocNullableType = 320
-        | JSDocNonNullableType = 321
-        | JSDocOptionalType = 322
-        | JSDocFunctionType = 323
-        | JSDocVariadicType = 324
-        | JSDocNamepathType = 325
-        | JSDoc = 326
+        | UnparsedInternalText = 310
+        /// <deprecated />
+        | UnparsedSyntheticReference = 311
+        | SourceFile = 312
+        | Bundle = 313
+        /// <deprecated />
+        | UnparsedSource = 314
+        /// <deprecated />
+        | InputFiles = 315
+        | JSDocTypeExpression = 316
+        | JSDocNameReference = 317
+        | JSDocMemberName = 318
+        | JSDocAllType = 319
+        | JSDocUnknownType = 320
+        | JSDocNullableType = 321
+        | JSDocNonNullableType = 322
+        | JSDocOptionalType = 323
+        | JSDocFunctionType = 324
+        | JSDocVariadicType = 325
+        | JSDocNamepathType = 326
+        | JSDoc = 327
         /// <deprecated>Use SyntaxKind.JSDoc</deprecated>
-        | JSDocComment = 326
-        | JSDocText = 327
-        | JSDocTypeLiteral = 328
-        | JSDocSignature = 329
-        | JSDocLink = 330
-        | JSDocLinkCode = 331
-        | JSDocLinkPlain = 332
-        | JSDocTag = 333
-        | JSDocAugmentsTag = 334
-        | JSDocImplementsTag = 335
-        | JSDocAuthorTag = 336
-        | JSDocDeprecatedTag = 337
-        | JSDocClassTag = 338
-        | JSDocPublicTag = 339
-        | JSDocPrivateTag = 340
-        | JSDocProtectedTag = 341
-        | JSDocReadonlyTag = 342
-        | JSDocOverrideTag = 343
-        | JSDocCallbackTag = 344
-        | JSDocOverloadTag = 345
-        | JSDocEnumTag = 346
-        | JSDocParameterTag = 347
-        | JSDocReturnTag = 348
-        | JSDocThisTag = 349
-        | JSDocTypeTag = 350
-        | JSDocTemplateTag = 351
-        | JSDocTypedefTag = 352
-        | JSDocSeeTag = 353
-        | JSDocPropertyTag = 354
-        | JSDocThrowsTag = 355
-        | JSDocSatisfiesTag = 356
-        | SyntaxList = 357
-        | NotEmittedStatement = 358
-        | PartiallyEmittedExpression = 359
-        | CommaListExpression = 360
-        | SyntheticReferenceExpression = 361
-        | Count = 362
+        | JSDocComment = 327
+        | JSDocText = 328
+        | JSDocTypeLiteral = 329
+        | JSDocSignature = 330
+        | JSDocLink = 331
+        | JSDocLinkCode = 332
+        | JSDocLinkPlain = 333
+        | JSDocTag = 334
+        | JSDocAugmentsTag = 335
+        | JSDocImplementsTag = 336
+        | JSDocAuthorTag = 337
+        | JSDocDeprecatedTag = 338
+        | JSDocClassTag = 339
+        | JSDocPublicTag = 340
+        | JSDocPrivateTag = 341
+        | JSDocProtectedTag = 342
+        | JSDocReadonlyTag = 343
+        | JSDocOverrideTag = 344
+        | JSDocCallbackTag = 345
+        | JSDocOverloadTag = 346
+        | JSDocEnumTag = 347
+        | JSDocParameterTag = 348
+        | JSDocReturnTag = 349
+        | JSDocThisTag = 350
+        | JSDocTypeTag = 351
+        | JSDocTemplateTag = 352
+        | JSDocTypedefTag = 353
+        | JSDocSeeTag = 354
+        | JSDocPropertyTag = 355
+        | JSDocThrowsTag = 356
+        | JSDocSatisfiesTag = 357
+        | SyntaxList = 358
+        | NotEmittedStatement = 359
+        | PartiallyEmittedExpression = 360
+        | CommaListExpression = 361
+        | SyntheticReferenceExpression = 362
+        | Count = 363
         | FirstAssignment = 64
         | LastAssignment = 79
         | FirstCompoundAssignment = 65
@@ -1273,15 +4813,15 @@ module Ts =
         | FirstReservedWord = 83
         | LastReservedWord = 118
         | FirstKeyword = 83
-        | LastKeyword = 164
+        | LastKeyword = 165
         | FirstFutureReservedWord = 119
         | LastFutureReservedWord = 127
-        | FirstTypeNode = 181
-        | LastTypeNode = 204
+        | FirstTypeNode = 182
+        | LastTypeNode = 205
         | FirstPunctuation = 19
         | LastPunctuation = 79
         | FirstToken = 0
-        | LastToken = 164
+        | LastToken = 165
         | FirstTriviaToken = 2
         | LastTriviaToken = 7
         | FirstLiteralToken = 9
@@ -1290,13 +4830,13 @@ module Ts =
         | LastTemplateToken = 18
         | FirstBinaryOperator = 30
         | LastBinaryOperator = 79
-        | FirstStatement = 242
-        | LastStatement = 258
-        | FirstNode = 165
-        | FirstJSDocNode = 315
-        | LastJSDocNode = 356
-        | FirstJSDocTagNode = 333
-        | LastJSDocTagNode = 356
+        | FirstStatement = 243
+        | LastStatement = 259
+        | FirstNode = 166
+        | FirstJSDocNode = 316
+        | LastJSDocNode = 357
+        | FirstJSDocTagNode = 334
+        | LastJSDocTagNode = 357
 
     /// <remarks>
     /// Original in TypeScript:  
@@ -1328,7 +4868,67 @@ module Ts =
     /// <remarks>
     /// Original in TypeScript:  
     /// <code lang="typescript">
-    /// SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.QuestionDotToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionToken | SyntaxKind.QuestionQuestionEqualsToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken
+    /// | SyntaxKind.OpenBraceToken
+    ///         | SyntaxKind.CloseBraceToken
+    ///         | SyntaxKind.OpenParenToken
+    ///         | SyntaxKind.CloseParenToken
+    ///         | SyntaxKind.OpenBracketToken
+    ///         | SyntaxKind.CloseBracketToken
+    ///         | SyntaxKind.DotToken
+    ///         | SyntaxKind.DotDotDotToken
+    ///         | SyntaxKind.SemicolonToken
+    ///         | SyntaxKind.CommaToken
+    ///         | SyntaxKind.QuestionDotToken
+    ///         | SyntaxKind.LessThanToken
+    ///         | SyntaxKind.LessThanSlashToken
+    ///         | SyntaxKind.GreaterThanToken
+    ///         | SyntaxKind.LessThanEqualsToken
+    ///         | SyntaxKind.GreaterThanEqualsToken
+    ///         | SyntaxKind.EqualsEqualsToken
+    ///         | SyntaxKind.ExclamationEqualsToken
+    ///         | SyntaxKind.EqualsEqualsEqualsToken
+    ///         | SyntaxKind.ExclamationEqualsEqualsToken
+    ///         | SyntaxKind.EqualsGreaterThanToken
+    ///         | SyntaxKind.PlusToken
+    ///         | SyntaxKind.MinusToken
+    ///         | SyntaxKind.AsteriskToken
+    ///         | SyntaxKind.AsteriskAsteriskToken
+    ///         | SyntaxKind.SlashToken
+    ///         | SyntaxKind.PercentToken
+    ///         | SyntaxKind.PlusPlusToken
+    ///         | SyntaxKind.MinusMinusToken
+    ///         | SyntaxKind.LessThanLessThanToken
+    ///         | SyntaxKind.GreaterThanGreaterThanToken
+    ///         | SyntaxKind.GreaterThanGreaterThanGreaterThanToken
+    ///         | SyntaxKind.AmpersandToken
+    ///         | SyntaxKind.BarToken
+    ///         | SyntaxKind.CaretToken
+    ///         | SyntaxKind.ExclamationToken
+    ///         | SyntaxKind.TildeToken
+    ///         | SyntaxKind.AmpersandAmpersandToken
+    ///         | SyntaxKind.AmpersandAmpersandEqualsToken
+    ///         | SyntaxKind.BarBarToken
+    ///         | SyntaxKind.BarBarEqualsToken
+    ///         | SyntaxKind.QuestionQuestionToken
+    ///         | SyntaxKind.QuestionQuestionEqualsToken
+    ///         | SyntaxKind.QuestionToken
+    ///         | SyntaxKind.ColonToken
+    ///         | SyntaxKind.AtToken
+    ///         | SyntaxKind.BacktickToken
+    ///         | SyntaxKind.HashToken
+    ///         | SyntaxKind.EqualsToken
+    ///         | SyntaxKind.PlusEqualsToken
+    ///         | SyntaxKind.MinusEqualsToken
+    ///         | SyntaxKind.AsteriskEqualsToken
+    ///         | SyntaxKind.AsteriskAsteriskEqualsToken
+    ///         | SyntaxKind.SlashEqualsToken
+    ///         | SyntaxKind.PercentEqualsToken
+    ///         | SyntaxKind.LessThanLessThanEqualsToken
+    ///         | SyntaxKind.GreaterThanGreaterThanEqualsToken
+    ///         | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
+    ///         | SyntaxKind.AmpersandEqualsToken
+    ///         | SyntaxKind.BarEqualsToken
+    ///         | SyntaxKind.CaretEqualsToken
     /// </code>
     /// </remarks>
     type PunctuationSyntaxKind =
@@ -1337,7 +4937,89 @@ module Ts =
     /// <remarks>
     /// Original in TypeScript:  
     /// <code lang="typescript">
-    /// SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AssertKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SatisfiesKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword
+    /// | SyntaxKind.AbstractKeyword
+    ///         | SyntaxKind.AccessorKeyword
+    ///         | SyntaxKind.AnyKeyword
+    ///         | SyntaxKind.AsKeyword
+    ///         | SyntaxKind.AssertsKeyword
+    ///         | SyntaxKind.AssertKeyword
+    ///         | SyntaxKind.AsyncKeyword
+    ///         | SyntaxKind.AwaitKeyword
+    ///         | SyntaxKind.BigIntKeyword
+    ///         | SyntaxKind.BooleanKeyword
+    ///         | SyntaxKind.BreakKeyword
+    ///         | SyntaxKind.CaseKeyword
+    ///         | SyntaxKind.CatchKeyword
+    ///         | SyntaxKind.ClassKeyword
+    ///         | SyntaxKind.ConstKeyword
+    ///         | SyntaxKind.ConstructorKeyword
+    ///         | SyntaxKind.ContinueKeyword
+    ///         | SyntaxKind.DebuggerKeyword
+    ///         | SyntaxKind.DeclareKeyword
+    ///         | SyntaxKind.DefaultKeyword
+    ///         | SyntaxKind.DeleteKeyword
+    ///         | SyntaxKind.DoKeyword
+    ///         | SyntaxKind.ElseKeyword
+    ///         | SyntaxKind.EnumKeyword
+    ///         | SyntaxKind.ExportKeyword
+    ///         | SyntaxKind.ExtendsKeyword
+    ///         | SyntaxKind.FalseKeyword
+    ///         | SyntaxKind.FinallyKeyword
+    ///         | SyntaxKind.ForKeyword
+    ///         | SyntaxKind.FromKeyword
+    ///         | SyntaxKind.FunctionKeyword
+    ///         | SyntaxKind.GetKeyword
+    ///         | SyntaxKind.GlobalKeyword
+    ///         | SyntaxKind.IfKeyword
+    ///         | SyntaxKind.ImplementsKeyword
+    ///         | SyntaxKind.ImportKeyword
+    ///         | SyntaxKind.InferKeyword
+    ///         | SyntaxKind.InKeyword
+    ///         | SyntaxKind.InstanceOfKeyword
+    ///         | SyntaxKind.InterfaceKeyword
+    ///         | SyntaxKind.IntrinsicKeyword
+    ///         | SyntaxKind.IsKeyword
+    ///         | SyntaxKind.KeyOfKeyword
+    ///         | SyntaxKind.LetKeyword
+    ///         | SyntaxKind.ModuleKeyword
+    ///         | SyntaxKind.NamespaceKeyword
+    ///         | SyntaxKind.NeverKeyword
+    ///         | SyntaxKind.NewKeyword
+    ///         | SyntaxKind.NullKeyword
+    ///         | SyntaxKind.NumberKeyword
+    ///         | SyntaxKind.ObjectKeyword
+    ///         | SyntaxKind.OfKeyword
+    ///         | SyntaxKind.PackageKeyword
+    ///         | SyntaxKind.PrivateKeyword
+    ///         | SyntaxKind.ProtectedKeyword
+    ///         | SyntaxKind.PublicKeyword
+    ///         | SyntaxKind.ReadonlyKeyword
+    ///         | SyntaxKind.OutKeyword
+    ///         | SyntaxKind.OverrideKeyword
+    ///         | SyntaxKind.RequireKeyword
+    ///         | SyntaxKind.ReturnKeyword
+    ///         | SyntaxKind.SatisfiesKeyword
+    ///         | SyntaxKind.SetKeyword
+    ///         | SyntaxKind.StaticKeyword
+    ///         | SyntaxKind.StringKeyword
+    ///         | SyntaxKind.SuperKeyword
+    ///         | SyntaxKind.SwitchKeyword
+    ///         | SyntaxKind.SymbolKeyword
+    ///         | SyntaxKind.ThisKeyword
+    ///         | SyntaxKind.ThrowKeyword
+    ///         | SyntaxKind.TrueKeyword
+    ///         | SyntaxKind.TryKeyword
+    ///         | SyntaxKind.TypeKeyword
+    ///         | SyntaxKind.TypeOfKeyword
+    ///         | SyntaxKind.UndefinedKeyword
+    ///         | SyntaxKind.UniqueKeyword
+    ///         | SyntaxKind.UnknownKeyword
+    ///         | SyntaxKind.UsingKeyword
+    ///         | SyntaxKind.VarKeyword
+    ///         | SyntaxKind.VoidKeyword
+    ///         | SyntaxKind.WhileKeyword
+    ///         | SyntaxKind.WithKeyword
+    ///         | SyntaxKind.YieldKeyword
     /// </code>
     /// </remarks>
     type KeywordSyntaxKind =
@@ -1392,61 +5074,64 @@ module Ts =
         | None = 0
         | Let = 1
         | Const = 2
-        | NestedNamespace = 4
-        | Synthesized = 8
-        | Namespace = 16
-        | OptionalChain = 32
-        | ExportContext = 64
-        | ContainsThis = 128
-        | HasImplicitReturn = 256
-        | HasExplicitReturn = 512
-        | GlobalAugmentation = 1024
-        | HasAsyncFunctions = 2048
-        | DisallowInContext = 4096
-        | YieldContext = 8192
-        | DecoratorContext = 16384
-        | AwaitContext = 32768
-        | DisallowConditionalTypesContext = 65536
-        | ThisNodeHasError = 131072
-        | JavaScriptFile = 262144
-        | ThisNodeOrAnySubNodesHasError = 524288
-        | HasAggregatedChildData = 1048576
-        | JSDoc = 8388608
-        | JsonFile = 67108864
-        | BlockScoped = 3
-        | ReachabilityCheckFlags = 768
-        | ReachabilityAndEmitFlags = 2816
-        | ContextFlags = 50720768
-        | TypeExcludesFlags = 40960
+        | Using = 4
+        | AwaitUsing = 6
+        | NestedNamespace = 8
+        | Synthesized = 16
+        | Namespace = 32
+        | OptionalChain = 64
+        | ExportContext = 128
+        | ContainsThis = 256
+        | HasImplicitReturn = 512
+        | HasExplicitReturn = 1024
+        | GlobalAugmentation = 2048
+        | HasAsyncFunctions = 4096
+        | DisallowInContext = 8192
+        | YieldContext = 16384
+        | DecoratorContext = 32768
+        | AwaitContext = 65536
+        | DisallowConditionalTypesContext = 131072
+        | ThisNodeHasError = 262144
+        | JavaScriptFile = 524288
+        | ThisNodeOrAnySubNodesHasError = 1048576
+        | HasAggregatedChildData = 2097152
+        | JSDoc = 16777216
+        | JsonFile = 134217728
+        | BlockScoped = 7
+        | Constant = 6
+        | ReachabilityCheckFlags = 1536
+        | ReachabilityAndEmitFlags = 5632
+        | ContextFlags = 101441536
+        | TypeExcludesFlags = 81920
 
     type [<RequireQualifiedAccess>] ModifierFlags =
         | None = 0
-        | Export = 1
-        | Ambient = 2
-        | Public = 4
-        | Private = 8
-        | Protected = 16
-        | Static = 32
-        | Readonly = 64
-        | Accessor = 128
-        | Abstract = 256
-        | Async = 512
-        | Default = 1024
-        | Const = 2048
-        | HasComputedJSDocModifiers = 4096
-        | Deprecated = 8192
-        | Override = 16384
-        | In = 32768
-        | Out = 65536
-        | Decorator = 131072
+        | Public = 1
+        | Private = 2
+        | Protected = 4
+        | Readonly = 8
+        | Override = 16
+        | Export = 32
+        | Abstract = 64
+        | Ambient = 128
+        | Static = 256
+        | Accessor = 512
+        | Async = 1024
+        | Default = 2048
+        | Const = 4096
+        | In = 8192
+        | Out = 16384
+        | Decorator = 32768
+        | Deprecated = 65536
+        | HasComputedJSDocModifiers = 268435456
         | HasComputedFlags = 536870912
-        | AccessibilityModifier = 28
-        | ParameterPropertyModifier = 16476
-        | NonPublicAccessibilityModifier = 24
-        | TypeScriptModifier = 117086
-        | ExportDefault = 1025
-        | All = 258047
-        | Modifier = 126975
+        | AccessibilityModifier = 7
+        | ParameterPropertyModifier = 31
+        | NonPublicAccessibilityModifier = 6
+        | TypeScriptModifier = 28895
+        | ExportDefault = 2080
+        | All = 131071
+        | Modifier = 98303
 
     type [<RequireQualifiedAccess>] JsxFlags =
         | None = 0
@@ -1493,36 +5178,36 @@ module Ts =
         obj
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasType =
-        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(233)>] AsExpression of AsExpression
-        | [<CompiledValue(178)>] CallSignatureDeclaration of CallSignatureDeclaration
-        | [<CompiledValue(179)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
-        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(323)>] JSDocFunctionType of JSDocFunctionType
-        | [<CompiledValue(321)>] JSDocNonNullableType of JSDocNonNullableType
-        | [<CompiledValue(320)>] JSDocNullableType of JSDocNullableType
-        | [<CompiledValue(322)>] JSDocOptionalType of JSDocOptionalType
-        | [<CompiledValue(315)>] JSDocTypeExpression of JSDocTypeExpression
-        | [<CompiledValue(324)>] JSDocVariadicType of JSDocVariadicType
-        | [<CompiledValue(199)>] MappedTypeNode of MappedTypeNode
-        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(172)>] MethodSignature of MethodSignature
-        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(195)>] ParenthesizedTypeNode of ParenthesizedTypeNode
-        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(170)>] PropertySignature of PropertySignature
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(264)>] TypeAliasDeclaration of TypeAliasDeclaration
-        | [<CompiledValue(215)>] TypeAssertion of TypeAssertion
-        | [<CompiledValue(197)>] TypeOperatorNode of TypeOperatorNode
-        | [<CompiledValue(181)>] TypePredicateNode of TypePredicateNode
-        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        | [<CompiledValue(219)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(234)>] AsExpression of AsExpression
+        | [<CompiledValue(179)>] CallSignatureDeclaration of CallSignatureDeclaration
+        | [<CompiledValue(180)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
+        | [<CompiledValue(176)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(185)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(262)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(218)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(184)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(181)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(324)>] JSDocFunctionType of JSDocFunctionType
+        | [<CompiledValue(322)>] JSDocNonNullableType of JSDocNonNullableType
+        | [<CompiledValue(321)>] JSDocNullableType of JSDocNullableType
+        | [<CompiledValue(323)>] JSDocOptionalType of JSDocOptionalType
+        | [<CompiledValue(316)>] JSDocTypeExpression of JSDocTypeExpression
+        | [<CompiledValue(325)>] JSDocVariadicType of JSDocVariadicType
+        | [<CompiledValue(200)>] MappedTypeNode of MappedTypeNode
+        | [<CompiledValue(174)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(173)>] MethodSignature of MethodSignature
+        | [<CompiledValue(169)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(196)>] ParenthesizedTypeNode of ParenthesizedTypeNode
+        | [<CompiledValue(172)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(171)>] PropertySignature of PropertySignature
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(265)>] TypeAliasDeclaration of TypeAliasDeclaration
+        | [<CompiledValue(216)>] TypeAssertion of TypeAssertion
+        | [<CompiledValue(198)>] TypeOperatorNode of TypeOperatorNode
+        | [<CompiledValue(182)>] TypePredicateNode of TypePredicateNode
+        | [<CompiledValue(260)>] VariableDeclaration of VariableDeclaration
         // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
         // static member inline op_ErasedCast(x: AsExpression) = AsExpression x
         // static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
@@ -1555,11 +5240,11 @@ module Ts =
         // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasTypeArguments =
-        | [<CompiledValue(212)>] CallExpression of CallExpression
-        | [<CompiledValue(285)>] JsxOpeningElement of JsxOpeningElement
-        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
-        | [<CompiledValue(213)>] NewExpression of NewExpression
-        | [<CompiledValue(214)>] TaggedTemplateExpression of TaggedTemplateExpression
+        | [<CompiledValue(213)>] CallExpression of CallExpression
+        | [<CompiledValue(286)>] JsxOpeningElement of JsxOpeningElement
+        | [<CompiledValue(285)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(214)>] NewExpression of NewExpression
+        | [<CompiledValue(215)>] TaggedTemplateExpression of TaggedTemplateExpression
         // static member inline op_ErasedCast(x: CallExpression) = CallExpression x
         // static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
         // static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
@@ -1567,16 +5252,16 @@ module Ts =
         // static member inline op_ErasedCast(x: TaggedTemplateExpression) = TaggedTemplateExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasInitializer =
-        | [<CompiledValue(207)>] BindingElement of BindingElement
-        | [<CompiledValue(305)>] EnumMember of EnumMember
-        | [<CompiledValue(248)>] ForInStatement of ForInStatement
-        | [<CompiledValue(249)>] ForOfStatement of ForOfStatement
-        | [<CompiledValue(247)>] ForStatement of ForStatement
-        | [<CompiledValue(290)>] JsxAttribute of JsxAttribute
-        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        | [<CompiledValue(208)>] BindingElement of BindingElement
+        | [<CompiledValue(306)>] EnumMember of EnumMember
+        | [<CompiledValue(249)>] ForInStatement of ForInStatement
+        | [<CompiledValue(250)>] ForOfStatement of ForOfStatement
+        | [<CompiledValue(248)>] ForStatement of ForStatement
+        | [<CompiledValue(291)>] JsxAttribute of JsxAttribute
+        | [<CompiledValue(169)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(303)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(172)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(260)>] VariableDeclaration of VariableDeclaration
         // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
         // static member inline op_ErasedCast(x: EnumMember) = EnumMember x
         // static member inline op_ErasedCast(x: ForInStatement) = ForInStatement x
@@ -1589,12 +5274,12 @@ module Ts =
         // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasExpressionInitializer =
-        | [<CompiledValue(207)>] BindingElement of BindingElement
-        | [<CompiledValue(305)>] EnumMember of EnumMember
-        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        | [<CompiledValue(208)>] BindingElement of BindingElement
+        | [<CompiledValue(306)>] EnumMember of EnumMember
+        | [<CompiledValue(169)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(303)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(172)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(260)>] VariableDeclaration of VariableDeclaration
         // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
         // static member inline op_ErasedCast(x: EnumMember) = EnumMember x
         // static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
@@ -1603,13 +5288,13 @@ module Ts =
         // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasDecorators =
-        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(230)>] ClassExpression of ClassExpression
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(263)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(231)>] ClassExpression of ClassExpression
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(174)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(169)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(172)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
         // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
         // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
         // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
@@ -1619,31 +5304,31 @@ module Ts =
         // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasModifiers =
-        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(230)>] ClassExpression of ClassExpression
-        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(265)>] EnumDeclaration of EnumDeclaration
-        | [<CompiledValue(276)>] ExportAssignment of ExportAssignment
-        | [<CompiledValue(277)>] ExportDeclaration of ExportDeclaration
-        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(271)>] ImportDeclaration of ImportDeclaration
-        | [<CompiledValue(270)>] ImportEqualsDeclaration of ImportEqualsDeclaration
-        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(263)>] InterfaceDeclaration of InterfaceDeclaration
-        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(172)>] MethodSignature of MethodSignature
-        | [<CompiledValue(266)>] ModuleDeclaration of ModuleDeclaration
-        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(170)>] PropertySignature of PropertySignature
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(264)>] TypeAliasDeclaration of TypeAliasDeclaration
-        | [<CompiledValue(167)>] TypeParameterDeclaration of TypeParameterDeclaration
-        | [<CompiledValue(242)>] VariableStatement of VariableStatement
+        | [<CompiledValue(219)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(263)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(231)>] ClassExpression of ClassExpression
+        | [<CompiledValue(176)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(185)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(266)>] EnumDeclaration of EnumDeclaration
+        | [<CompiledValue(277)>] ExportAssignment of ExportAssignment
+        | [<CompiledValue(278)>] ExportDeclaration of ExportDeclaration
+        | [<CompiledValue(262)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(218)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(272)>] ImportDeclaration of ImportDeclaration
+        | [<CompiledValue(271)>] ImportEqualsDeclaration of ImportEqualsDeclaration
+        | [<CompiledValue(181)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(264)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(174)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(173)>] MethodSignature of MethodSignature
+        | [<CompiledValue(267)>] ModuleDeclaration of ModuleDeclaration
+        | [<CompiledValue(169)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(172)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(171)>] PropertySignature of PropertySignature
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(265)>] TypeAliasDeclaration of TypeAliasDeclaration
+        | [<CompiledValue(168)>] TypeParameterDeclaration of TypeParameterDeclaration
+        | [<CompiledValue(243)>] VariableStatement of VariableStatement
         // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
         // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
         // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
@@ -1998,7 +5683,7 @@ module Ts =
         | [<CompiledValue(95)>] ExportKeyword of ExportKeyword
         | [<CompiledValue(103)>] InKeyword of InKeyword
         | [<CompiledValue(147)>] OutKeyword of OutKeyword
-        | [<CompiledValue(163)>] OverrideKeyword of OverrideKeyword
+        | [<CompiledValue(164)>] OverrideKeyword of OverrideKeyword
         | [<CompiledValue(123)>] PrivateKeyword of PrivateKeyword
         | [<CompiledValue(124)>] ProtectedKeyword of ProtectedKeyword
         | [<CompiledValue(125)>] PublicKeyword of PublicKeyword
@@ -2026,12 +5711,12 @@ module Ts =
         | [<CompiledValue(134)>] AsyncKeyword of AsyncKeyword
         | [<CompiledValue(87)>] ConstKeyword of ConstKeyword
         | [<CompiledValue(138)>] DeclareKeyword of DeclareKeyword
-        | [<CompiledValue(169)>] Decorator of Decorator
+        | [<CompiledValue(170)>] Decorator of Decorator
         | [<CompiledValue(90)>] DefaultKeyword of DefaultKeyword
         | [<CompiledValue(95)>] ExportKeyword of ExportKeyword
         | [<CompiledValue(103)>] InKeyword of InKeyword
         | [<CompiledValue(147)>] OutKeyword of OutKeyword
-        | [<CompiledValue(163)>] OverrideKeyword of OverrideKeyword
+        | [<CompiledValue(164)>] OverrideKeyword of OverrideKeyword
         | [<CompiledValue(123)>] PrivateKeyword of PrivateKeyword
         | [<CompiledValue(124)>] ProtectedKeyword of ProtectedKeyword
         | [<CompiledValue(125)>] PublicKeyword of PublicKeyword
@@ -2122,18 +5807,20 @@ module Ts =
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] EntityName =
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(165)>] QualifiedName of QualifiedName
+        | [<CompiledValue(166)>] QualifiedName of QualifiedName
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] PropertyName =
-        | [<CompiledValue(166)>] ComputedPropertyName of ComputedPropertyName
+        | [<CompiledValue(167)>] ComputedPropertyName of ComputedPropertyName
         | [<CompiledValue(80)>] Identifier of Identifier
+        | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
         | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
         | [<CompiledValue(81)>] PrivateIdentifier of PrivateIdentifier
         | [<CompiledValue(11)>] StringLiteral of StringLiteral
         // static member inline op_ErasedCast(x: ComputedPropertyName) = ComputedPropertyName x
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
+        // static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
         // static member inline op_ErasedCast(x: NumericLiteral) = NumericLiteral x
         // static member inline op_ErasedCast(x: PrivateIdentifier) = PrivateIdentifier x
         // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
@@ -2145,16 +5832,16 @@ module Ts =
         // static member inline op_ErasedCast(x: PrivateIdentifier) = PrivateIdentifier x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] DeclarationName =
-        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(166)>] ComputedPropertyName of ComputedPropertyName
-        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(207)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(167)>] ComputedPropertyName of ComputedPropertyName
+        | [<CompiledValue(212)>] ElementAccessExpression of ElementAccessExpression
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(294)>] JsxNamespacedName of JsxNamespacedName
+        | [<CompiledValue(295)>] JsxNamespacedName of JsxNamespacedName
         | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
         | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
-        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(206)>] ObjectBindingPattern of ObjectBindingPattern
         | [<CompiledValue(81)>] PrivateIdentifier of PrivateIdentifier
-        | [<CompiledValue(210)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
+        | [<CompiledValue(211)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
         | [<CompiledValue(11)>] StringLiteral of StringLiteral
         // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
         // static member inline op_ErasedCast(x: ComputedPropertyName) = ComputedPropertyName x
@@ -2221,20 +5908,20 @@ module Ts =
         abstract ``type``: TypeNode option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] SignatureDeclaration =
-        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(178)>] CallSignatureDeclaration of CallSignatureDeclaration
-        | [<CompiledValue(179)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
-        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(323)>] JSDocFunctionType of JSDocFunctionType
-        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(172)>] MethodSignature of MethodSignature
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(219)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(179)>] CallSignatureDeclaration of CallSignatureDeclaration
+        | [<CompiledValue(180)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
+        | [<CompiledValue(176)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(185)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(262)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(218)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(184)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(181)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(324)>] JSDocFunctionType of JSDocFunctionType
+        | [<CompiledValue(174)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(173)>] MethodSignature of MethodSignature
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
         // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
         // static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
         // static member inline op_ErasedCast(x: ConstructSignatureDeclaration) = ConstructSignatureDeclaration x
@@ -2263,9 +5950,9 @@ module Ts =
         abstract kind: SyntaxKind
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingName =
-        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(207)>] ArrayBindingPattern of ArrayBindingPattern
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(206)>] ObjectBindingPattern of ObjectBindingPattern
         // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
@@ -2341,12 +6028,12 @@ module Ts =
 
     /// Unlike ObjectLiteralElement, excludes JSXAttribute and JSXSpreadAttribute.
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ObjectLiteralElementLike =
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(303)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
-        | [<CompiledValue(304)>] SpreadAssignment of SpreadAssignment
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(174)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(303)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(304)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
+        | [<CompiledValue(305)>] SpreadAssignment of SpreadAssignment
         // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
         // static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
         // static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
@@ -2379,17 +6066,17 @@ module Ts =
         abstract expression: Expression
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] VariableLikeDeclaration =
-        | [<CompiledValue(207)>] BindingElement of BindingElement
-        | [<CompiledValue(305)>] EnumMember of EnumMember
-        | [<CompiledValue(347)>] JSDocParameterTag of JSDocParameterTag
-        | [<CompiledValue(354)>] JSDocPropertyTag of JSDocPropertyTag
-        | [<CompiledValue(290)>] JsxAttribute of JsxAttribute
-        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(171)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(170)>] PropertySignature of PropertySignature
-        | [<CompiledValue(303)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
-        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        | [<CompiledValue(208)>] BindingElement of BindingElement
+        | [<CompiledValue(306)>] EnumMember of EnumMember
+        | [<CompiledValue(348)>] JSDocParameterTag of JSDocParameterTag
+        | [<CompiledValue(355)>] JSDocPropertyTag of JSDocPropertyTag
+        | [<CompiledValue(291)>] JsxAttribute of JsxAttribute
+        | [<CompiledValue(169)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(303)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(172)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(171)>] PropertySignature of PropertySignature
+        | [<CompiledValue(304)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
+        | [<CompiledValue(260)>] VariableDeclaration of VariableDeclaration
         // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
         // static member inline op_ErasedCast(x: EnumMember) = EnumMember x
         // static member inline op_ErasedCast(x: JSDocParameterTag) = JSDocParameterTag x
@@ -2415,14 +6102,14 @@ module Ts =
         abstract elements: ArrayBindingElement[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingPattern =
-        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(207)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(206)>] ObjectBindingPattern of ObjectBindingPattern
         // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
         // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ArrayBindingElement =
-        | [<CompiledValue(207)>] BindingElement of BindingElement
-        | [<CompiledValue(231)>] OmittedExpression of OmittedExpression
+        | [<CompiledValue(208)>] BindingElement of BindingElement
+        | [<CompiledValue(232)>] OmittedExpression of OmittedExpression
         // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
         // static member inline op_ErasedCast(x: OmittedExpression) = OmittedExpression x
 
@@ -2441,13 +6128,13 @@ module Ts =
         abstract body: U2<Block, Expression> option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] FunctionLikeDeclaration =
-        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(219)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(176)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(262)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(218)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(174)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
         // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
         // static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
         // static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
@@ -2537,8 +6224,8 @@ module Ts =
         abstract body: FunctionBody option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AccessorDeclaration =
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
         // static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
         // static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
 
@@ -2572,11 +6259,11 @@ module Ts =
         inherit TypeNode
         abstract kind: 'TKind
 
+    [<Obsolete("")>]
     type [<AllowNullLiteral>] ImportTypeAssertionContainer =
         inherit Node
         abstract kind: SyntaxKind
         abstract parent: ImportTypeNode
-        abstract assertClause: AssertClause
         abstract multiLine: bool option
 
     type [<AllowNullLiteral>] ImportTypeNode =
@@ -2584,7 +6271,7 @@ module Ts =
         abstract kind: SyntaxKind
         abstract isTypeOf: bool
         abstract argument: TypeNode
-        abstract assertions: ImportTypeAssertionContainer option
+        abstract attributes: ImportAttributes option
         abstract qualifier: EntityName option
 
     type [<AllowNullLiteral>] ThisTypeNode =
@@ -2592,8 +6279,8 @@ module Ts =
         abstract kind: SyntaxKind
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] FunctionOrConstructorTypeNode =
-        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(185)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(184)>] FunctionTypeNode of FunctionTypeNode
         // static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
         // static member inline op_ErasedCast(x: FunctionTypeNode) = FunctionTypeNode x
 
@@ -2619,8 +6306,8 @@ module Ts =
         abstract typeArguments: TypeNode[] option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] TypeReferenceType =
-        | [<CompiledValue(232)>] ExpressionWithTypeArguments of ExpressionWithTypeArguments
-        | [<CompiledValue(182)>] TypeReferenceNode of TypeReferenceNode
+        | [<CompiledValue(233)>] ExpressionWithTypeArguments of ExpressionWithTypeArguments
+        | [<CompiledValue(183)>] TypeReferenceNode of TypeReferenceNode
         // static member inline op_ErasedCast(x: ExpressionWithTypeArguments) = ExpressionWithTypeArguments x
         // static member inline op_ErasedCast(x: TypeReferenceNode) = TypeReferenceNode x
 
@@ -2679,8 +6366,8 @@ module Ts =
         abstract ``type``: TypeNode
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] UnionOrIntersectionTypeNode =
-        | [<CompiledValue(192)>] IntersectionTypeNode of IntersectionTypeNode
-        | [<CompiledValue(191)>] UnionTypeNode of UnionTypeNode
+        | [<CompiledValue(193)>] IntersectionTypeNode of IntersectionTypeNode
+        | [<CompiledValue(192)>] UnionTypeNode of UnionTypeNode
         // static member inline op_ErasedCast(x: IntersectionTypeNode) = IntersectionTypeNode x
         // static member inline op_ErasedCast(x: UnionTypeNode) = UnionTypeNode x
 
@@ -2756,7 +6443,7 @@ module Ts =
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] PropertyNameLiteral =
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(294)>] JsxNamespacedName of JsxNamespacedName
+        | [<CompiledValue(295)>] JsxNamespacedName of JsxNamespacedName
         | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
         | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
         | [<CompiledValue(11)>] StringLiteral of StringLiteral
@@ -3123,20 +6810,20 @@ module Ts =
         U2<ObjectDestructuringAssignment, ArrayDestructuringAssignment>
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingOrAssignmentElement =
-        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(225)>] AssignmentExpression of AssignmentExpression<EqualsToken>
-        | [<CompiledValue(207)>] BindingElement of BindingElement
-        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(209)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(226)>] AssignmentExpression of AssignmentExpression<EqualsToken>
+        | [<CompiledValue(208)>] BindingElement of BindingElement
+        | [<CompiledValue(212)>] ElementAccessExpression of ElementAccessExpression
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
-        | [<CompiledValue(231)>] OmittedExpression of OmittedExpression
-        | [<CompiledValue(168)>] ParameterDeclaration of ParameterDeclaration
-        | [<CompiledValue(210)>] PropertyAccessExpression of PropertyAccessExpression
-        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(303)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
-        | [<CompiledValue(304)>] SpreadAssignment of SpreadAssignment
-        | [<CompiledValue(229)>] SpreadElement of SpreadElement
-        | [<CompiledValue(259)>] VariableDeclaration of VariableDeclaration
+        | [<CompiledValue(210)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(232)>] OmittedExpression of OmittedExpression
+        | [<CompiledValue(169)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(211)>] PropertyAccessExpression of PropertyAccessExpression
+        | [<CompiledValue(303)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(304)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
+        | [<CompiledValue(305)>] SpreadAssignment of SpreadAssignment
+        | [<CompiledValue(230)>] SpreadElement of SpreadElement
+        | [<CompiledValue(260)>] VariableDeclaration of VariableDeclaration
         // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
         // static member inline op_ErasedCast(x: AssignmentExpression<EqualsToken>) = AssignmentExpression x
         // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
@@ -3153,25 +6840,25 @@ module Ts =
         // static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ObjectBindingOrAssignmentElement =
-        | [<CompiledValue(207)>] BindingElement of BindingElement
-        | [<CompiledValue(302)>] PropertyAssignment of PropertyAssignment
-        | [<CompiledValue(303)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
-        | [<CompiledValue(304)>] SpreadAssignment of SpreadAssignment
+        | [<CompiledValue(208)>] BindingElement of BindingElement
+        | [<CompiledValue(303)>] PropertyAssignment of PropertyAssignment
+        | [<CompiledValue(304)>] ShorthandPropertyAssignment of ShorthandPropertyAssignment
+        | [<CompiledValue(305)>] SpreadAssignment of SpreadAssignment
         // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
         // static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
         // static member inline op_ErasedCast(x: ShorthandPropertyAssignment) = ShorthandPropertyAssignment x
         // static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ArrayBindingOrAssignmentElement =
-        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(225)>] AssignmentExpression of AssignmentExpression<EqualsToken>
-        | [<CompiledValue(207)>] BindingElement of BindingElement
-        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(209)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(226)>] AssignmentExpression of AssignmentExpression<EqualsToken>
+        | [<CompiledValue(208)>] BindingElement of BindingElement
+        | [<CompiledValue(212)>] ElementAccessExpression of ElementAccessExpression
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
-        | [<CompiledValue(231)>] OmittedExpression of OmittedExpression
-        | [<CompiledValue(210)>] PropertyAccessExpression of PropertyAccessExpression
-        | [<CompiledValue(229)>] SpreadElement of SpreadElement
+        | [<CompiledValue(210)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(232)>] OmittedExpression of OmittedExpression
+        | [<CompiledValue(211)>] PropertyAccessExpression of PropertyAccessExpression
+        | [<CompiledValue(230)>] SpreadElement of SpreadElement
         // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
         // static member inline op_ErasedCast(x: AssignmentExpression<EqualsToken>) = AssignmentExpression x
         // static member inline op_ErasedCast(x: BindingElement) = BindingElement x
@@ -3184,21 +6871,21 @@ module Ts =
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingOrAssignmentElementRestIndicator =
         | [<CompiledValue(26)>] DotDotDotToken of DotDotDotToken
-        | [<CompiledValue(304)>] SpreadAssignment of SpreadAssignment
-        | [<CompiledValue(229)>] SpreadElement of SpreadElement
+        | [<CompiledValue(305)>] SpreadAssignment of SpreadAssignment
+        | [<CompiledValue(230)>] SpreadElement of SpreadElement
         // static member inline op_ErasedCast(x: DotDotDotToken) = DotDotDotToken x
         // static member inline op_ErasedCast(x: SpreadAssignment) = SpreadAssignment x
         // static member inline op_ErasedCast(x: SpreadElement) = SpreadElement x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingOrAssignmentElementTarget =
-        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(207)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(209)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(212)>] ElementAccessExpression of ElementAccessExpression
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
-        | [<CompiledValue(231)>] OmittedExpression of OmittedExpression
-        | [<CompiledValue(210)>] PropertyAccessExpression of PropertyAccessExpression
+        | [<CompiledValue(206)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(210)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(232)>] OmittedExpression of OmittedExpression
+        | [<CompiledValue(211)>] PropertyAccessExpression of PropertyAccessExpression
         // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
         // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
         // static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
@@ -3209,28 +6896,28 @@ module Ts =
         // static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ObjectBindingOrAssignmentPattern =
-        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(206)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(210)>] ObjectLiteralExpression of ObjectLiteralExpression
         // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
         // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ArrayBindingOrAssignmentPattern =
-        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(207)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(209)>] ArrayLiteralExpression of ArrayLiteralExpression
         // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
         // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AssignmentPattern =
-        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(209)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(210)>] ObjectLiteralExpression of ObjectLiteralExpression
         // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
         // static member inline op_ErasedCast(x: ObjectLiteralExpression) = ObjectLiteralExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BindingOrAssignmentPattern =
-        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(207)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(209)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(206)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(210)>] ObjectLiteralExpression of ObjectLiteralExpression
         // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
         // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
         // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
@@ -3371,7 +7058,7 @@ module Ts =
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] TemplateLiteral =
         | [<CompiledValue(15)>] NoSubstitutionTemplateLiteral of NoSubstitutionTemplateLiteral
-        | [<CompiledValue(227)>] TemplateExpression of TemplateExpression
+        | [<CompiledValue(228)>] TemplateExpression of TemplateExpression
         // static member inline op_ErasedCast(x: NoSubstitutionTemplateLiteral) = NoSubstitutionTemplateLiteral x
         // static member inline op_ErasedCast(x: TemplateExpression) = TemplateExpression x
 
@@ -3415,21 +7102,21 @@ module Ts =
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] EntityNameExpression =
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(210)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
+        | [<CompiledValue(211)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: PropertyAccessEntityNameExpression) = PropertyAccessEntityNameExpression x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] EntityNameOrEntityNameExpression =
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(210)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
-        | [<CompiledValue(165)>] QualifiedName of QualifiedName
+        | [<CompiledValue(211)>] PropertyAccessEntityNameExpression of PropertyAccessEntityNameExpression
+        | [<CompiledValue(166)>] QualifiedName of QualifiedName
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: PropertyAccessEntityNameExpression) = PropertyAccessEntityNameExpression x
         // static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AccessExpression =
-        | [<CompiledValue(211)>] ElementAccessExpression of ElementAccessExpression
-        | [<CompiledValue(210)>] PropertyAccessExpression of PropertyAccessExpression
+        | [<CompiledValue(212)>] ElementAccessExpression of ElementAccessExpression
+        | [<CompiledValue(211)>] PropertyAccessExpression of PropertyAccessExpression
         // static member inline op_ErasedCast(x: ElementAccessExpression) = ElementAccessExpression x
         // static member inline op_ErasedCast(x: PropertyAccessExpression) = PropertyAccessExpression x
 
@@ -3478,8 +7165,8 @@ module Ts =
         abstract expression: SuperExpression
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] SuperProperty =
-        | [<CompiledValue(211)>] SuperElementAccessExpression of SuperElementAccessExpression
-        | [<CompiledValue(210)>] SuperPropertyAccessExpression of SuperPropertyAccessExpression
+        | [<CompiledValue(212)>] SuperElementAccessExpression of SuperElementAccessExpression
+        | [<CompiledValue(211)>] SuperPropertyAccessExpression of SuperPropertyAccessExpression
         // static member inline op_ErasedCast(x: SuperElementAccessExpression) = SuperElementAccessExpression x
         // static member inline op_ErasedCast(x: SuperPropertyAccessExpression) = SuperPropertyAccessExpression x
 
@@ -3497,10 +7184,10 @@ module Ts =
         abstract _optionalChainBrand: obj option with get, set
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] OptionalChain =
-        | [<CompiledValue(212)>] CallChain of CallChain
-        | [<CompiledValue(211)>] ElementAccessChain of ElementAccessChain
-        | [<CompiledValue(234)>] NonNullChain of NonNullChain
-        | [<CompiledValue(210)>] PropertyAccessChain of PropertyAccessChain
+        | [<CompiledValue(213)>] CallChain of CallChain
+        | [<CompiledValue(212)>] ElementAccessChain of ElementAccessChain
+        | [<CompiledValue(235)>] NonNullChain of NonNullChain
+        | [<CompiledValue(211)>] PropertyAccessChain of PropertyAccessChain
         // static member inline op_ErasedCast(x: CallChain) = CallChain x
         // static member inline op_ErasedCast(x: ElementAccessChain) = ElementAccessChain x
         // static member inline op_ErasedCast(x: NonNullChain) = NonNullChain x
@@ -3535,13 +7222,19 @@ module Ts =
         abstract typeArguments: TypeNode[] option
         abstract template: TemplateLiteral
 
+    type [<AllowNullLiteral>] InstanceofExpression =
+        inherit BinaryExpression
+        abstract operatorToken: Token<SyntaxKind>
+
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] CallLikeExpression =
-        | [<CompiledValue(212)>] CallExpression of CallExpression
-        | [<CompiledValue(169)>] Decorator of Decorator
-        | [<CompiledValue(285)>] JsxOpeningElement of JsxOpeningElement
-        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
-        | [<CompiledValue(213)>] NewExpression of NewExpression
-        | [<CompiledValue(214)>] TaggedTemplateExpression of TaggedTemplateExpression
+        | [<CompiledValue(226)>] InstanceofExpression of InstanceofExpression
+        | [<CompiledValue(213)>] CallExpression of CallExpression
+        | [<CompiledValue(170)>] Decorator of Decorator
+        | [<CompiledValue(286)>] JsxOpeningElement of JsxOpeningElement
+        | [<CompiledValue(285)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(214)>] NewExpression of NewExpression
+        | [<CompiledValue(215)>] TaggedTemplateExpression of TaggedTemplateExpression
+        // static member inline op_ErasedCast(x: InstanceofExpression) = InstanceofExpression x
         // static member inline op_ErasedCast(x: CallExpression) = CallExpression x
         // static member inline op_ErasedCast(x: Decorator) = Decorator x
         // static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
@@ -3568,8 +7261,8 @@ module Ts =
         abstract ``type``: TypeNode
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AssertionExpression =
-        | [<CompiledValue(233)>] AsExpression of AsExpression
-        | [<CompiledValue(215)>] TypeAssertion of TypeAssertion
+        | [<CompiledValue(234)>] AsExpression of AsExpression
+        | [<CompiledValue(216)>] TypeAssertion of TypeAssertion
         // static member inline op_ErasedCast(x: AsExpression) = AsExpression x
         // static member inline op_ErasedCast(x: TypeAssertion) = TypeAssertion x
 
@@ -3597,27 +7290,27 @@ module Ts =
         abstract closingElement: JsxClosingElement
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxOpeningLikeElement =
-        | [<CompiledValue(285)>] JsxOpeningElement of JsxOpeningElement
-        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(286)>] JsxOpeningElement of JsxOpeningElement
+        | [<CompiledValue(285)>] JsxSelfClosingElement of JsxSelfClosingElement
         // static member inline op_ErasedCast(x: JsxOpeningElement) = JsxOpeningElement x
         // static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxAttributeLike =
-        | [<CompiledValue(290)>] JsxAttribute of JsxAttribute
-        | [<CompiledValue(292)>] JsxSpreadAttribute of JsxSpreadAttribute
+        | [<CompiledValue(291)>] JsxAttribute of JsxAttribute
+        | [<CompiledValue(293)>] JsxSpreadAttribute of JsxSpreadAttribute
         // static member inline op_ErasedCast(x: JsxAttribute) = JsxAttribute x
         // static member inline op_ErasedCast(x: JsxSpreadAttribute) = JsxSpreadAttribute x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxAttributeName =
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(294)>] JsxNamespacedName of JsxNamespacedName
+        | [<CompiledValue(295)>] JsxNamespacedName of JsxNamespacedName
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: JsxNamespacedName) = JsxNamespacedName x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxTagNameExpression =
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(294)>] JsxNamespacedName of JsxNamespacedName
-        | [<CompiledValue(210)>] JsxTagNamePropertyAccess of JsxTagNamePropertyAccess
+        | [<CompiledValue(295)>] JsxNamespacedName of JsxNamespacedName
+        | [<CompiledValue(211)>] JsxTagNamePropertyAccess of JsxTagNamePropertyAccess
         | [<CompiledValue(110)>] ThisExpression of ThisExpression
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: JsxNamespacedName) = JsxNamespacedName x
@@ -3681,10 +7374,10 @@ module Ts =
         abstract initializer: JsxAttributeValue option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxAttributeValue =
-        | [<CompiledValue(283)>] JsxElement of JsxElement
-        | [<CompiledValue(293)>] JsxExpression of JsxExpression
-        | [<CompiledValue(287)>] JsxFragment of JsxFragment
-        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(284)>] JsxElement of JsxElement
+        | [<CompiledValue(294)>] JsxExpression of JsxExpression
+        | [<CompiledValue(288)>] JsxFragment of JsxFragment
+        | [<CompiledValue(285)>] JsxSelfClosingElement of JsxSelfClosingElement
         | [<CompiledValue(11)>] StringLiteral of StringLiteral
         // static member inline op_ErasedCast(x: JsxElement) = JsxElement x
         // static member inline op_ErasedCast(x: JsxExpression) = JsxExpression x
@@ -3718,10 +7411,10 @@ module Ts =
         abstract containsOnlyTriviaWhiteSpaces: bool
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxChild =
-        | [<CompiledValue(283)>] JsxElement of JsxElement
-        | [<CompiledValue(293)>] JsxExpression of JsxExpression
-        | [<CompiledValue(287)>] JsxFragment of JsxFragment
-        | [<CompiledValue(284)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(284)>] JsxElement of JsxElement
+        | [<CompiledValue(294)>] JsxExpression of JsxExpression
+        | [<CompiledValue(288)>] JsxFragment of JsxFragment
+        | [<CompiledValue(285)>] JsxSelfClosingElement of JsxSelfClosingElement
         | [<CompiledValue(12)>] JsxText of JsxText
         // static member inline op_ErasedCast(x: JsxElement) = JsxElement x
         // static member inline op_ErasedCast(x: JsxExpression) = JsxExpression x
@@ -3760,11 +7453,11 @@ module Ts =
         abstract name: Identifier option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BlockLike =
-        | [<CompiledValue(240)>] Block of Block
-        | [<CompiledValue(295)>] CaseClause of CaseClause
-        | [<CompiledValue(296)>] DefaultClause of DefaultClause
-        | [<CompiledValue(267)>] ModuleBlock of ModuleBlock
-        | [<CompiledValue(311)>] SourceFile of SourceFile
+        | [<CompiledValue(241)>] Block of Block
+        | [<CompiledValue(296)>] CaseClause of CaseClause
+        | [<CompiledValue(297)>] DefaultClause of DefaultClause
+        | [<CompiledValue(268)>] ModuleBlock of ModuleBlock
+        | [<CompiledValue(312)>] SourceFile of SourceFile
         // static member inline op_ErasedCast(x: Block) = Block x
         // static member inline op_ErasedCast(x: CaseClause) = CaseClause x
         // static member inline op_ErasedCast(x: DefaultClause) = DefaultClause x
@@ -3827,8 +7520,8 @@ module Ts =
         abstract incrementor: Expression option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ForInOrOfStatement =
-        | [<CompiledValue(248)>] ForInStatement of ForInStatement
-        | [<CompiledValue(249)>] ForOfStatement of ForOfStatement
+        | [<CompiledValue(249)>] ForInStatement of ForInStatement
+        | [<CompiledValue(250)>] ForOfStatement of ForOfStatement
         // static member inline op_ErasedCast(x: ForInStatement) = ForInStatement x
         // static member inline op_ErasedCast(x: ForOfStatement) = ForOfStatement x
 
@@ -3862,8 +7555,8 @@ module Ts =
         abstract label: Identifier option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] BreakOrContinueStatement =
-        | [<CompiledValue(251)>] BreakStatement of BreakStatement
-        | [<CompiledValue(250)>] ContinueStatement of ContinueStatement
+        | [<CompiledValue(252)>] BreakStatement of BreakStatement
+        | [<CompiledValue(251)>] ContinueStatement of ContinueStatement
         // static member inline op_ErasedCast(x: BreakStatement) = BreakStatement x
         // static member inline op_ErasedCast(x: ContinueStatement) = ContinueStatement x
 
@@ -3910,8 +7603,8 @@ module Ts =
         abstract statements: Statement[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] CaseOrDefaultClause =
-        | [<CompiledValue(295)>] CaseClause of CaseClause
-        | [<CompiledValue(296)>] DefaultClause of DefaultClause
+        | [<CompiledValue(296)>] CaseClause of CaseClause
+        | [<CompiledValue(297)>] DefaultClause of DefaultClause
         // static member inline op_ErasedCast(x: CaseClause) = CaseClause x
         // static member inline op_ErasedCast(x: DefaultClause) = DefaultClause x
 
@@ -3945,38 +7638,38 @@ module Ts =
         abstract block: Block
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ObjectTypeDeclaration =
-        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(230)>] ClassExpression of ClassExpression
-        | [<CompiledValue(263)>] InterfaceDeclaration of InterfaceDeclaration
-        | [<CompiledValue(186)>] TypeLiteralNode of TypeLiteralNode
+        | [<CompiledValue(263)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(231)>] ClassExpression of ClassExpression
+        | [<CompiledValue(264)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(187)>] TypeLiteralNode of TypeLiteralNode
         // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
         // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
         // static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
         // static member inline op_ErasedCast(x: TypeLiteralNode) = TypeLiteralNode x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] DeclarationWithTypeParameters =
-        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(178)>] CallSignatureDeclaration of CallSignatureDeclaration
-        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(230)>] ClassExpression of ClassExpression
-        | [<CompiledValue(179)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
-        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(263)>] InterfaceDeclaration of InterfaceDeclaration
-        | [<CompiledValue(344)>] JSDocCallbackTag of JSDocCallbackTag
-        | [<CompiledValue(323)>] JSDocFunctionType of JSDocFunctionType
-        | [<CompiledValue(329)>] JSDocSignature of JSDocSignature
-        | [<CompiledValue(351)>] JSDocTemplateTag of JSDocTemplateTag
-        | [<CompiledValue(352)>] JSDocTypedefTag of JSDocTypedefTag
-        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(172)>] MethodSignature of MethodSignature
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(264)>] TypeAliasDeclaration of TypeAliasDeclaration
+        | [<CompiledValue(219)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(179)>] CallSignatureDeclaration of CallSignatureDeclaration
+        | [<CompiledValue(263)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(231)>] ClassExpression of ClassExpression
+        | [<CompiledValue(180)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
+        | [<CompiledValue(176)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(185)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(262)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(218)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(184)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(181)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(264)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(345)>] JSDocCallbackTag of JSDocCallbackTag
+        | [<CompiledValue(324)>] JSDocFunctionType of JSDocFunctionType
+        | [<CompiledValue(330)>] JSDocSignature of JSDocSignature
+        | [<CompiledValue(352)>] JSDocTemplateTag of JSDocTemplateTag
+        | [<CompiledValue(353)>] JSDocTypedefTag of JSDocTypedefTag
+        | [<CompiledValue(174)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(173)>] MethodSignature of MethodSignature
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(265)>] TypeAliasDeclaration of TypeAliasDeclaration
         // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
         // static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
         // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
@@ -4001,25 +7694,25 @@ module Ts =
         // static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] DeclarationWithTypeParameterChildren =
-        | [<CompiledValue(218)>] ArrowFunction of ArrowFunction
-        | [<CompiledValue(178)>] CallSignatureDeclaration of CallSignatureDeclaration
-        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(230)>] ClassExpression of ClassExpression
-        | [<CompiledValue(179)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
-        | [<CompiledValue(175)>] ConstructorDeclaration of ConstructorDeclaration
-        | [<CompiledValue(184)>] ConstructorTypeNode of ConstructorTypeNode
-        | [<CompiledValue(261)>] FunctionDeclaration of FunctionDeclaration
-        | [<CompiledValue(217)>] FunctionExpression of FunctionExpression
-        | [<CompiledValue(183)>] FunctionTypeNode of FunctionTypeNode
-        | [<CompiledValue(176)>] GetAccessorDeclaration of GetAccessorDeclaration
-        | [<CompiledValue(180)>] IndexSignatureDeclaration of IndexSignatureDeclaration
-        | [<CompiledValue(263)>] InterfaceDeclaration of InterfaceDeclaration
-        | [<CompiledValue(323)>] JSDocFunctionType of JSDocFunctionType
-        | [<CompiledValue(351)>] JSDocTemplateTag of JSDocTemplateTag
-        | [<CompiledValue(173)>] MethodDeclaration of MethodDeclaration
-        | [<CompiledValue(172)>] MethodSignature of MethodSignature
-        | [<CompiledValue(177)>] SetAccessorDeclaration of SetAccessorDeclaration
-        | [<CompiledValue(264)>] TypeAliasDeclaration of TypeAliasDeclaration
+        | [<CompiledValue(219)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(179)>] CallSignatureDeclaration of CallSignatureDeclaration
+        | [<CompiledValue(263)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(231)>] ClassExpression of ClassExpression
+        | [<CompiledValue(180)>] ConstructSignatureDeclaration of ConstructSignatureDeclaration
+        | [<CompiledValue(176)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(185)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(262)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(218)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(184)>] FunctionTypeNode of FunctionTypeNode
+        | [<CompiledValue(177)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(181)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(264)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(324)>] JSDocFunctionType of JSDocFunctionType
+        | [<CompiledValue(352)>] JSDocTemplateTag of JSDocTemplateTag
+        | [<CompiledValue(174)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(173)>] MethodSignature of MethodSignature
+        | [<CompiledValue(178)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(265)>] TypeAliasDeclaration of TypeAliasDeclaration
         // static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
         // static member inline op_ErasedCast(x: CallSignatureDeclaration) = CallSignatureDeclaration x
         // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
@@ -4064,8 +7757,8 @@ module Ts =
         abstract modifiers: ModifierLike[] option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ClassLikeDeclaration =
-        | [<CompiledValue(262)>] ClassDeclaration of ClassDeclaration
-        | [<CompiledValue(230)>] ClassExpression of ClassExpression
+        | [<CompiledValue(263)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(231)>] ClassExpression of ClassExpression
         // static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
         // static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
 
@@ -4131,8 +7824,8 @@ module Ts =
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ModuleBody =
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(267)>] ModuleBlock of ModuleBlock
-        | [<CompiledValue(266)>] ModuleDeclaration of U2<NamespaceDeclaration, JSDocNamespaceDeclaration>
+        | [<CompiledValue(268)>] ModuleBlock of ModuleBlock
+        | [<CompiledValue(267)>] ModuleDeclaration of U2<NamespaceDeclaration, JSDocNamespaceDeclaration>
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: ModuleBlock) = ModuleBlock x
         // static member inline op_ErasedCast(x: U2<NamespaceDeclaration, JSDocNamespaceDeclaration>) = ModuleDeclaration x
@@ -4148,8 +7841,8 @@ module Ts =
         abstract body: U2<ModuleBody, JSDocNamespaceDeclaration> option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] NamespaceBody =
-        | [<CompiledValue(267)>] ModuleBlock of ModuleBlock
-        | [<CompiledValue(266)>] NamespaceDeclaration of NamespaceDeclaration
+        | [<CompiledValue(268)>] ModuleBlock of ModuleBlock
+        | [<CompiledValue(267)>] NamespaceDeclaration of NamespaceDeclaration
         // static member inline op_ErasedCast(x: ModuleBlock) = ModuleBlock x
         // static member inline op_ErasedCast(x: NamespaceDeclaration) = NamespaceDeclaration x
 
@@ -4160,7 +7853,7 @@ module Ts =
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JSDocNamespaceBody =
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(266)>] JSDocNamespaceDeclaration of JSDocNamespaceDeclaration
+        | [<CompiledValue(267)>] JSDocNamespaceDeclaration of JSDocNamespaceDeclaration
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: JSDocNamespaceDeclaration) = JSDocNamespaceDeclaration x
 
@@ -4177,9 +7870,9 @@ module Ts =
         abstract statements: Statement[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ModuleReference =
-        | [<CompiledValue(282)>] ExternalModuleReference of ExternalModuleReference
+        | [<CompiledValue(283)>] ExternalModuleReference of ExternalModuleReference
         | [<CompiledValue(80)>] Identifier of Identifier
-        | [<CompiledValue(165)>] QualifiedName of QualifiedName
+        | [<CompiledValue(166)>] QualifiedName of QualifiedName
         // static member inline op_ErasedCast(x: ExternalModuleReference) = ExternalModuleReference x
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: QualifiedName) = QualifiedName x
@@ -4211,17 +7904,17 @@ module Ts =
         abstract importClause: ImportClause option
         /// If this is not a StringLiteral it will be a grammar error.
         abstract moduleSpecifier: Expression
-        abstract assertClause: AssertClause option
+        abstract attributes: ImportAttributes option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] NamedImportBindings =
-        | [<CompiledValue(274)>] NamedImports of NamedImports
-        | [<CompiledValue(273)>] NamespaceImport of NamespaceImport
+        | [<CompiledValue(275)>] NamedImports of NamedImports
+        | [<CompiledValue(274)>] NamespaceImport of NamespaceImport
         // static member inline op_ErasedCast(x: NamedImports) = NamedImports x
         // static member inline op_ErasedCast(x: NamespaceImport) = NamespaceImport x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] NamedExportBindings =
-        | [<CompiledValue(278)>] NamedExports of NamedExports
-        | [<CompiledValue(279)>] NamespaceExport of NamespaceExport
+        | [<CompiledValue(279)>] NamedExports of NamedExports
+        | [<CompiledValue(280)>] NamespaceExport of NamespaceExport
         // static member inline op_ErasedCast(x: NamedExports) = NamedExports x
         // static member inline op_ErasedCast(x: NamespaceExport) = NamespaceExport x
 
@@ -4233,24 +7926,37 @@ module Ts =
         abstract name: Identifier option
         abstract namedBindings: NamedImportBindings option
 
-    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AssertionKey =
+    [<Obsolete("")>]
+    type AssertionKey =
+        ImportAttributeName
+
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] AssertEntry =
+        inherit ImportAttribute
+
+    [<Obsolete("")>]
+    type [<AllowNullLiteral>] AssertClause =
+        inherit ImportAttributes
+
+    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ImportAttributeName =
         | [<CompiledValue(80)>] Identifier of Identifier
         | [<CompiledValue(11)>] StringLiteral of StringLiteral
         // static member inline op_ErasedCast(x: Identifier) = Identifier x
         // static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
-    type [<AllowNullLiteral>] AssertEntry =
+    type [<AllowNullLiteral>] ImportAttribute =
         inherit Node
         abstract kind: SyntaxKind
-        abstract parent: AssertClause
-        abstract name: AssertionKey
+        abstract parent: ImportAttributes
+        abstract name: ImportAttributeName
         abstract value: Expression
 
-    type [<AllowNullLiteral>] AssertClause =
+    type [<AllowNullLiteral>] ImportAttributes =
         inherit Node
+        abstract token: SyntaxKind
         abstract kind: SyntaxKind
         abstract parent: U2<ImportDeclaration, ExportDeclaration>
-        abstract elements: AssertEntry[]
+        abstract elements: ImportAttribute[]
         abstract multiLine: bool option
 
     type [<AllowNullLiteral>] NamespaceImport =
@@ -4282,7 +7988,7 @@ module Ts =
         abstract exportClause: NamedExportBindings option
         /// If this is not a StringLiteral it will be a grammar error.
         abstract moduleSpecifier: Expression option
-        abstract assertClause: AssertClause option
+        abstract attributes: ImportAttributes option
 
     type [<AllowNullLiteral>] NamedImports =
         inherit Node
@@ -4297,8 +8003,8 @@ module Ts =
         abstract elements: ExportSpecifier[]
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] NamedImportsOrExports =
-        | [<CompiledValue(278)>] NamedExports of NamedExports
-        | [<CompiledValue(274)>] NamedImports of NamedImports
+        | [<CompiledValue(279)>] NamedExports of NamedExports
+        | [<CompiledValue(275)>] NamedImports of NamedImports
         // static member inline op_ErasedCast(x: NamedExports) = NamedExports x
         // static member inline op_ErasedCast(x: NamedImports) = NamedImports x
 
@@ -4320,19 +8026,19 @@ module Ts =
         abstract name: Identifier
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ImportOrExportSpecifier =
-        | [<CompiledValue(280)>] ExportSpecifier of ExportSpecifier
-        | [<CompiledValue(275)>] ImportSpecifier of ImportSpecifier
+        | [<CompiledValue(281)>] ExportSpecifier of ExportSpecifier
+        | [<CompiledValue(276)>] ImportSpecifier of ImportSpecifier
         // static member inline op_ErasedCast(x: ExportSpecifier) = ExportSpecifier x
         // static member inline op_ErasedCast(x: ImportSpecifier) = ImportSpecifier x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] TypeOnlyCompatibleAliasDeclaration =
-        | [<CompiledValue(277)>] ExportDeclaration of ExportDeclaration
-        | [<CompiledValue(280)>] ExportSpecifier of ExportSpecifier
-        | [<CompiledValue(272)>] ImportClause of ImportClause
-        | [<CompiledValue(270)>] ImportEqualsDeclaration of ImportEqualsDeclaration
-        | [<CompiledValue(275)>] ImportSpecifier of ImportSpecifier
-        | [<CompiledValue(279)>] NamespaceExport of NamespaceExport
-        | [<CompiledValue(273)>] NamespaceImport of NamespaceImport
+        | [<CompiledValue(278)>] ExportDeclaration of ExportDeclaration
+        | [<CompiledValue(281)>] ExportSpecifier of ExportSpecifier
+        | [<CompiledValue(273)>] ImportClause of ImportClause
+        | [<CompiledValue(271)>] ImportEqualsDeclaration of ImportEqualsDeclaration
+        | [<CompiledValue(276)>] ImportSpecifier of ImportSpecifier
+        | [<CompiledValue(280)>] NamespaceExport of NamespaceExport
+        | [<CompiledValue(274)>] NamespaceImport of NamespaceImport
         // static member inline op_ErasedCast(x: ExportDeclaration) = ExportDeclaration x
         // static member inline op_ErasedCast(x: ExportSpecifier) = ExportSpecifier x
         // static member inline op_ErasedCast(x: ImportClause) = ImportClause x
@@ -4456,10 +8162,10 @@ module Ts =
         abstract ``type``: TypeNode
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JSDocTypeReferencingNode =
-        | [<CompiledValue(321)>] JSDocNonNullableType of JSDocNonNullableType
-        | [<CompiledValue(320)>] JSDocNullableType of JSDocNullableType
-        | [<CompiledValue(322)>] JSDocOptionalType of JSDocOptionalType
-        | [<CompiledValue(324)>] JSDocVariadicType of JSDocVariadicType
+        | [<CompiledValue(322)>] JSDocNonNullableType of JSDocNonNullableType
+        | [<CompiledValue(321)>] JSDocNullableType of JSDocNullableType
+        | [<CompiledValue(323)>] JSDocOptionalType of JSDocOptionalType
+        | [<CompiledValue(325)>] JSDocVariadicType of JSDocVariadicType
         // static member inline op_ErasedCast(x: JSDocNonNullableType) = JSDocNonNullableType x
         // static member inline op_ErasedCast(x: JSDocNullableType) = JSDocNullableType x
         // static member inline op_ErasedCast(x: JSDocOptionalType) = JSDocOptionalType x
@@ -4497,10 +8203,10 @@ module Ts =
         abstract text: string with get, set
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JSDocComment =
-        | [<CompiledValue(330)>] JSDocLink of JSDocLink
-        | [<CompiledValue(331)>] JSDocLinkCode of JSDocLinkCode
-        | [<CompiledValue(332)>] JSDocLinkPlain of JSDocLinkPlain
-        | [<CompiledValue(327)>] JSDocText of JSDocText
+        | [<CompiledValue(331)>] JSDocLink of JSDocLink
+        | [<CompiledValue(332)>] JSDocLinkCode of JSDocLinkCode
+        | [<CompiledValue(333)>] JSDocLinkPlain of JSDocLinkPlain
+        | [<CompiledValue(328)>] JSDocText of JSDocText
         // static member inline op_ErasedCast(x: JSDocLink) = JSDocLink x
         // static member inline op_ErasedCast(x: JSDocLinkCode) = JSDocLinkCode x
         // static member inline op_ErasedCast(x: JSDocLinkPlain) = JSDocLinkPlain x
@@ -4841,20 +8547,20 @@ module Ts =
 
     /// <deprecated />
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] UnparsedSourceText =
-        | [<CompiledValue(309)>] UnparsedTextLike of UnparsedTextLike
-        | [<CompiledValue(307)>] UnparsedPrepend of UnparsedPrepend
-        | [<CompiledValue(308)>] UnparsedTextLike' of UnparsedTextLike
+        | [<CompiledValue(310)>] UnparsedTextLike of UnparsedTextLike
+        | [<CompiledValue(308)>] UnparsedPrepend of UnparsedPrepend
+        | [<CompiledValue(309)>] UnparsedTextLike' of UnparsedTextLike
         // static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike x
         // static member inline op_ErasedCast(x: UnparsedPrepend) = UnparsedPrepend x
         // static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike' x
 
     /// <deprecated />
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] UnparsedNode =
-        | [<CompiledValue(309)>] UnparsedTextLike of UnparsedTextLike
-        | [<CompiledValue(307)>] UnparsedPrepend of UnparsedPrepend
-        | [<CompiledValue(306)>] UnparsedPrologue of UnparsedPrologue
-        | [<CompiledValue(310)>] UnparsedSyntheticReference of UnparsedSyntheticReference
-        | [<CompiledValue(308)>] UnparsedTextLike' of UnparsedTextLike
+        | [<CompiledValue(310)>] UnparsedTextLike of UnparsedTextLike
+        | [<CompiledValue(308)>] UnparsedPrepend of UnparsedPrepend
+        | [<CompiledValue(307)>] UnparsedPrologue of UnparsedPrologue
+        | [<CompiledValue(311)>] UnparsedSyntheticReference of UnparsedSyntheticReference
+        | [<CompiledValue(309)>] UnparsedTextLike' of UnparsedTextLike
         // static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike x
         // static member inline op_ErasedCast(x: UnparsedPrepend) = UnparsedPrepend x
         // static member inline op_ErasedCast(x: UnparsedPrologue) = UnparsedPrologue x
@@ -4910,12 +8616,12 @@ module Ts =
         abstract operand: NumericLiteral
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsonObjectExpression =
-        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(209)>] ArrayLiteralExpression of ArrayLiteralExpression
         | [<CompiledValue(97)>] FalseLiteral of FalseLiteral
         | [<CompiledValue(106)>] NullLiteral of NullLiteral
         | [<CompiledValue(9)>] NumericLiteral of NumericLiteral
-        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
-        | [<CompiledValue(223)>] JsonMinusNumericLiteral of JsonMinusNumericLiteral
+        | [<CompiledValue(210)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(224)>] JsonMinusNumericLiteral of JsonMinusNumericLiteral
         | [<CompiledValue(11)>] StringLiteral of StringLiteral
         | [<CompiledValue(112)>] TrueLiteral of TrueLiteral
         // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
@@ -4938,6 +8644,7 @@ module Ts =
         abstract getCurrentDirectory: unit -> string
 
     type [<AllowNullLiteral>] ParseConfigHost =
+        inherit ModuleResolutionHost
         abstract useCaseSensitiveFileNames: bool with get, set
         abstract readDirectory: rootDir: string * extensions: string[] * excludes: string[] option * includes: string[] * ?depth: float -> string[]
         /// <summary>Gets a value indicating whether the specified path exists and is a file.</summary>
@@ -5128,6 +8835,7 @@ module Ts =
         abstract isUndefinedSymbol: symbol: Symbol -> bool
         abstract isArgumentsSymbol: symbol: Symbol -> bool
         abstract isUnknownSymbol: symbol: Symbol -> bool
+        abstract getMergedSymbol: symbol: Symbol -> Symbol
         abstract getConstantValue: node: U3<EnumMember, PropertyAccessExpression, ElementAccessExpression> -> U2<string, float> option
         abstract isValidPropertyAccess: node: U3<PropertyAccessExpression, QualifiedName, ImportTypeNode> * propertyName: string -> bool
         /// Follow all aliases to get the original symbol.
@@ -5476,10 +9184,10 @@ module Ts =
         | Narrowable = 536624127
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] DestructuringPattern =
-        | [<CompiledValue(206)>] ArrayBindingPattern of ArrayBindingPattern
-        | [<CompiledValue(208)>] ArrayLiteralExpression of ArrayLiteralExpression
-        | [<CompiledValue(205)>] ObjectBindingPattern of ObjectBindingPattern
-        | [<CompiledValue(209)>] ObjectLiteralExpression of ObjectLiteralExpression
+        | [<CompiledValue(207)>] ArrayBindingPattern of ArrayBindingPattern
+        | [<CompiledValue(209)>] ArrayLiteralExpression of ArrayLiteralExpression
+        | [<CompiledValue(206)>] ObjectBindingPattern of ObjectBindingPattern
+        | [<CompiledValue(210)>] ObjectLiteralExpression of ObjectLiteralExpression
         // static member inline op_ErasedCast(x: ArrayBindingPattern) = ArrayBindingPattern x
         // static member inline op_ErasedCast(x: ArrayLiteralExpression) = ArrayLiteralExpression x
         // static member inline op_ErasedCast(x: ObjectBindingPattern) = ObjectBindingPattern x
@@ -5630,7 +9338,7 @@ module Ts =
         abstract hasRestElement: bool with get, set
         abstract combinedFlags: ElementFlags with get, set
         abstract readonly: bool with get, set
-        abstract labeledElementDeclarations: U2<NamedTupleMember, ParameterDeclaration>[] option with get, set
+        abstract labeledElementDeclarations: U2<NamedTupleMember, ParameterDeclaration> option[] option with get, set
 
     type [<AllowNullLiteral>] TupleTypeReference =
         inherit TypeReference
@@ -5718,6 +9426,7 @@ module Ts =
         abstract declaration: U2<SignatureDeclaration, JSDocSignature> option with get, set
         abstract typeParameters: TypeParameter[] option with get, set
         abstract parameters: Symbol[] with get, set
+        abstract thisParameter: Symbol option with get, set
         abstract getDeclaration: unit -> SignatureDeclaration
         abstract getTypeParameters: unit -> TypeParameter[] option
         abstract getParameters: unit -> Symbol[]
@@ -6185,6 +9894,7 @@ module Ts =
         abstract hasInvalidatedResolutions: filePath: Path -> bool
         abstract createHash: data: string -> string
         abstract getParsedCommandLine: fileName: string -> ParsedCommandLine option
+        abstract jsDocParsingMode: JSDocParsingMode option with get, set
 
     type [<AllowNullLiteral>] SourceMapRange =
         inherit TextRange
@@ -6270,15 +9980,11 @@ module Ts =
         | All = 15
         | ExcludeJSDocTypeAssertion = 16
 
-    type [<StringEnum>] [<RequireQualifiedAccess>] TypeOfTag =
-        | Undefined
-        | Number
-        | Bigint
-        | Boolean
-        | String
-        | Symbol
-        | Object
-        | Function
+    type [<AllowNullLiteral>] ImmediatelyInvokedFunctionExpression =
+        interface end
+
+    type [<AllowNullLiteral>] ImmediatelyInvokedArrowFunction =
+        interface end
 
     type [<AllowNullLiteral>] NodeFactory =
         abstract createNodeArray: ?elements: 'T[] * ?hasTrailingComma: bool -> 'T[] 
@@ -6388,8 +10094,8 @@ module Ts =
         abstract updateConditionalTypeNode: node: ConditionalTypeNode * checkType: TypeNode * extendsType: TypeNode * trueType: TypeNode * falseType: TypeNode -> ConditionalTypeNode
         abstract createInferTypeNode: typeParameter: TypeParameterDeclaration -> InferTypeNode
         abstract updateInferTypeNode: node: InferTypeNode * typeParameter: TypeParameterDeclaration -> InferTypeNode
-        abstract createImportTypeNode: argument: TypeNode * ?assertions: ImportTypeAssertionContainer * ?qualifier: EntityName * ?typeArguments: TypeNode[] * ?isTypeOf: bool -> ImportTypeNode
-        abstract updateImportTypeNode: node: ImportTypeNode * argument: TypeNode * assertions: ImportTypeAssertionContainer option * qualifier: EntityName option * typeArguments: TypeNode[] option * ?isTypeOf: bool -> ImportTypeNode
+        abstract createImportTypeNode: argument: TypeNode * ?attributes: ImportAttributes * ?qualifier: EntityName * ?typeArguments: TypeNode[] * ?isTypeOf: bool -> ImportTypeNode
+        abstract updateImportTypeNode: node: ImportTypeNode * argument: TypeNode * attributes: ImportAttributes option * qualifier: EntityName option * typeArguments: TypeNode[] option * ?isTypeOf: bool -> ImportTypeNode
         abstract createParenthesizedType: ``type``: TypeNode -> ParenthesizedTypeNode
         abstract updateParenthesizedType: node: ParenthesizedTypeNode * ``type``: TypeNode -> ParenthesizedTypeNode
         abstract createThisTypeNode: unit -> ThisTypeNode
@@ -6546,16 +10252,14 @@ module Ts =
         abstract updateNamespaceExportDeclaration: node: NamespaceExportDeclaration * name: Identifier -> NamespaceExportDeclaration
         abstract createImportEqualsDeclaration: modifiers: ModifierLike[] option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
         abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * modifiers: ModifierLike[] option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
-        abstract createImportDeclaration: modifiers: ModifierLike[] option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
-        abstract updateImportDeclaration: node: ImportDeclaration * modifiers: ModifierLike[] option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
+        abstract createImportDeclaration: modifiers: ModifierLike[] option * importClause: ImportClause option * moduleSpecifier: Expression * ?attributes: ImportAttributes -> ImportDeclaration
+        abstract updateImportDeclaration: node: ImportDeclaration * modifiers: ModifierLike[] option * importClause: ImportClause option * moduleSpecifier: Expression * attributes: ImportAttributes option -> ImportDeclaration
         abstract createImportClause: isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
         abstract updateImportClause: node: ImportClause * isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
-        abstract createAssertClause: elements: AssertEntry[] * ?multiLine: bool -> AssertClause
-        abstract updateAssertClause: node: AssertClause * elements: AssertEntry[] * ?multiLine: bool -> AssertClause
-        abstract createAssertEntry: name: AssertionKey * value: Expression -> AssertEntry
-        abstract updateAssertEntry: node: AssertEntry * name: AssertionKey * value: Expression -> AssertEntry
-        abstract createImportTypeAssertionContainer: clause: AssertClause * ?multiLine: bool -> ImportTypeAssertionContainer
-        abstract updateImportTypeAssertionContainer: node: ImportTypeAssertionContainer * clause: AssertClause * ?multiLine: bool -> ImportTypeAssertionContainer
+        abstract createImportAttributes: elements: ImportAttribute[] * ?multiLine: bool -> ImportAttributes
+        abstract updateImportAttributes: node: ImportAttributes * elements: ImportAttribute[] * ?multiLine: bool -> ImportAttributes
+        abstract createImportAttribute: name: ImportAttributeName * value: Expression -> ImportAttribute
+        abstract updateImportAttribute: node: ImportAttribute * name: ImportAttributeName * value: Expression -> ImportAttribute
         abstract createNamespaceImport: name: Identifier -> NamespaceImport
         abstract updateNamespaceImport: node: NamespaceImport * name: Identifier -> NamespaceImport
         abstract createNamespaceExport: name: Identifier -> NamespaceExport
@@ -6566,8 +10270,8 @@ module Ts =
         abstract updateImportSpecifier: node: ImportSpecifier * isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
         abstract createExportAssignment: modifiers: ModifierLike[] option * isExportEquals: bool option * expression: Expression -> ExportAssignment
         abstract updateExportAssignment: node: ExportAssignment * modifiers: ModifierLike[] option * expression: Expression -> ExportAssignment
-        abstract createExportDeclaration: modifiers: ModifierLike[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
-        abstract updateExportDeclaration: node: ExportDeclaration * modifiers: ModifierLike[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
+        abstract createExportDeclaration: modifiers: ModifierLike[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?attributes: ImportAttributes -> ExportDeclaration
+        abstract updateExportDeclaration: node: ExportDeclaration * modifiers: ModifierLike[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * attributes: ImportAttributes option -> ExportDeclaration
         abstract createNamedExports: elements: ExportSpecifier[] -> NamedExports
         abstract updateNamedExports: node: NamedExports * elements: ExportSpecifier[] -> NamedExports
         abstract createExportSpecifier: isTypeOnly: bool * propertyName: U2<string, Identifier> option * name: U2<string, Identifier> -> ExportSpecifier
@@ -6740,12 +10444,18 @@ module Ts =
         abstract createPostfixDecrement: operand: Expression -> PostfixUnaryExpression
         abstract createImmediatelyInvokedFunctionExpression: statements: Statement[] -> CallExpression
         abstract createImmediatelyInvokedFunctionExpression: statements: Statement[] * param: ParameterDeclaration * paramValue: Expression -> CallExpression
-        abstract createImmediatelyInvokedArrowFunction: statements: Statement[] -> CallExpression
-        abstract createImmediatelyInvokedArrowFunction: statements: Statement[] * param: ParameterDeclaration * paramValue: Expression -> CallExpression
+        abstract createImmediatelyInvokedArrowFunction: statements: Statement[] -> ImmediatelyInvokedArrowFunction
+        abstract createImmediatelyInvokedArrowFunction: statements: Statement[] * param: ParameterDeclaration * paramValue: Expression -> ImmediatelyInvokedArrowFunction
         abstract createVoidZero: unit -> VoidExpression
         abstract createExportDefault: expression: Expression -> ExportAssignment
         abstract createExternalModuleExport: exportName: Identifier -> ExportDeclaration
         abstract restoreOuterExpressions: outerExpression: Expression option * innerExpression: Expression * ?kinds: OuterExpressionKinds -> Expression
+        /// Updates a node that may contain modifiers, replacing only the modifiers of the node.
+        abstract replaceModifiers: node: 'T * modifiers: U2<Modifier[], ModifierFlags> option -> 'T 
+        /// Updates a node that may contain decorators or modifiers, replacing only the decorators and modifiers of the node.
+        abstract replaceDecoratorsAndModifiers: node: 'T * modifiers: ModifierLike[] option -> 'T 
+        /// Updates a node that contains a property name, replacing only the name of the node.
+        abstract replacePropertyName: node: 'T * name: obj -> 'T
 
     type [<AllowNullLiteral>] CoreTransformationContext =
         abstract factory: NodeFactory
@@ -7015,6 +10725,8 @@ module Ts =
         | ObjectBindingPatternElements = 525136
         | ArrayBindingPatternElements = 524880
         | ObjectLiteralExpressionProperties = 526226
+        | ImportAttributes = 526226
+        /// <deprecated />
         | ImportClauseEntries = 526226
         | ArrayLiteralExpressionElements = 8914
         | CommaListElements = 528
@@ -7044,6 +10756,29 @@ module Ts =
         | IndexSignatureParameters = 8848
         | JSDocComment = 33
 
+    type [<RequireQualifiedAccess>] JSDocParsingMode =
+        /// Always parse JSDoc comments and include them in the AST.
+        /// 
+        /// This is the default if no mode is provided.
+        | ParseAll = 0
+        /// Never parse JSDoc comments, mo matter the file type.
+        | ParseNone = 1
+        /// <summary>
+        /// Parse only JSDoc comments which are needed to provide correct type errors.
+        /// 
+        /// This will always parse JSDoc in non-TS files, but only parse JSDoc comments
+        /// containing <c>@see</c> and <c>@link</c> in TS files.
+        /// </summary>
+        | ParseForTypeErrors = 2
+        /// <summary>
+        /// Parse only JSDoc comments which are needed to provide correct type info.
+        /// 
+        /// This will always parse JSDoc in non-TS files, but never in TS files.
+        /// 
+        /// Note: Do not use this mode if you require accurate type errors; use <see cref="ParseForTypeErrors" /> instead.
+        /// </summary>
+        | ParseForTypeInfo = 3
+
     type [<AllowNullLiteral>] UserPreferences =
         abstract disableSuggestions: bool option
         abstract quotePreference: UserPreferencesQuotePreference option
@@ -7072,14 +10807,17 @@ module Ts =
         abstract includeInlayPropertyDeclarationTypeHints: bool option
         abstract includeInlayFunctionLikeReturnTypeHints: bool option
         abstract includeInlayEnumMemberValueHints: bool option
+        abstract interactiveInlayHints: bool option
         abstract allowRenameOfImportPath: bool option
         abstract autoImportFileExcludePatterns: string[] option
+        abstract preferTypeOnlyAutoImports: bool option
         abstract organizeImportsIgnoreCase: U2<bool, string> option
         abstract organizeImportsCollation: UserPreferencesOrganizeImportsCollation option
         abstract organizeImportsLocale: string option
         abstract organizeImportsNumericCollation: bool option
         abstract organizeImportsAccentCollation: bool option
         abstract organizeImportsCaseFirst: UserPreferencesOrganizeImportsCaseFirst option
+        abstract excludeLibrarySymbolsInNavTo: bool option
 
     /// Represents a bigint literal value without requiring bigint support
     type [<AllowNullLiteral>] PseudoBigInt =
@@ -7184,6 +10922,8 @@ module Ts =
         abstract setOnError: onError: ErrorCallback option -> unit
         abstract setScriptTarget: scriptTarget: ScriptTarget -> unit
         abstract setLanguageVariant: variant: LanguageVariant -> unit
+        abstract setScriptKind: scriptKind: ScriptKind -> unit
+        abstract setJSDocParsingMode: kind: JSDocParsingMode -> unit
         abstract resetTokenState: pos: float -> unit
         abstract lookAhead: callback: (unit -> 'T) -> 'T
         abstract scanRange: start: float * length: float * callback: (unit -> 'T) -> 'T
@@ -7206,6 +10946,7 @@ module Ts =
         /// check specified by <c>isFileProbablyExternalModule</c> will be used to set the field.
         /// </summary>
         abstract setExternalModuleIndicator: file: SourceFile -> unit
+        abstract jsDocParsingMode: JSDocParsingMode option with get, set
 
     type [<AllowNullLiteral>] DiagnosticReporter =
         [<Emit("$0($1...)")>] abstract Invoke: diagnostic: Diagnostic -> unit
@@ -7285,6 +11026,17 @@ module Ts =
 
     type PerModuleNameCache =
         PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>
+
+    type [<RequireQualifiedAccess>] ProgramUpdateLevel =
+        /// Program is updated with same root file names and options
+        | Update = 0
+        /// Loads program after updating root file names from the disk
+        | RootNamesAndUpdate = 1
+        /// Loads program completely, including:
+        ///   - re-reading contents of config file from disk
+        ///   - calculating root file names for the program
+        ///   - Updating the program
+        | Full = 2
 
     type [<AllowNullLiteral>] FormatDiagnosticsHost =
         abstract getCurrentDirectory: unit -> string
@@ -7435,6 +11187,7 @@ module Ts =
         abstract hasInvalidatedResolutions: filePath: Path -> bool
         /// <summary>Returns the module resolution cache used by a provided <c>resolveModuleNames</c> implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it</summary>
         abstract getModuleResolutionCache: unit -> ModuleResolutionCache option
+        abstract jsDocParsingMode: JSDocParsingMode option with get, set
 
     type [<AllowNullLiteral>] WatchCompilerHost<'T > =
         inherit ProgramHost<'T>
@@ -7595,119 +11348,6 @@ module Ts =
             abstract readFile: path: string * ?encoding: string -> string option
             abstract readDirectory: rootDir: string * extensions: string[] * excludes: string[] option * includes: string[] option * ?depth: float -> string[]
 
-    module Server =
-
-        type ActionSet =
-            string
-
-        type ActionInvalidate =
-            string
-
-        type ActionPackageInstalled =
-            string
-
-        type EventTypesRegistry =
-            string
-
-        type EventBeginInstallTypes =
-            string
-
-        type EventEndInstallTypes =
-            string
-
-        type EventInitializationFailed =
-            string
-
-        type ActionWatchTypingLocations =
-            string
-
-        type [<AllowNullLiteral>] TypingInstallerResponse =
-            abstract kind: U8<ActionSet, ActionInvalidate, EventTypesRegistry, ActionPackageInstalled, EventBeginInstallTypes, EventEndInstallTypes, EventInitializationFailed, ActionWatchTypingLocations>
-
-        type [<AllowNullLiteral>] TypingInstallerRequestWithProjectName =
-            abstract projectName: string
-
-        type [<AllowNullLiteral>] DiscoverTypings =
-            inherit TypingInstallerRequestWithProjectName
-            abstract fileNames: string[]
-            abstract projectRootPath: Path
-            abstract compilerOptions: CompilerOptions
-            abstract typeAcquisition: TypeAcquisition
-            abstract unresolvedImports: SortedReadonlyArray<string>
-            abstract cachePath: string option
-            abstract kind: string
-
-        type [<AllowNullLiteral>] CloseProject =
-            inherit TypingInstallerRequestWithProjectName
-            abstract kind: string
-
-        type [<AllowNullLiteral>] TypesRegistryRequest =
-            abstract kind: string
-
-        type [<AllowNullLiteral>] InstallPackageRequest =
-            inherit TypingInstallerRequestWithProjectName
-            abstract kind: string
-            abstract fileName: Path
-            abstract packageName: string
-            abstract projectRootPath: Path
-
-        type [<AllowNullLiteral>] PackageInstalledResponse =
-            inherit ProjectResponse
-            abstract kind: ActionPackageInstalled
-            abstract success: bool
-            abstract message: string
-
-        type [<AllowNullLiteral>] InitializationFailedResponse =
-            inherit TypingInstallerResponse
-            abstract kind: EventInitializationFailed
-            abstract message: string
-            abstract stack: string option
-
-        type [<AllowNullLiteral>] ProjectResponse =
-            inherit TypingInstallerResponse
-            abstract projectName: string
-
-        type [<AllowNullLiteral>] InvalidateCachedTypings =
-            inherit ProjectResponse
-            abstract kind: ActionInvalidate
-
-        type [<AllowNullLiteral>] InstallTypes =
-            inherit ProjectResponse
-            abstract kind: U2<EventBeginInstallTypes, EventEndInstallTypes>
-            abstract eventId: float
-            abstract typingsInstallerVersion: string
-            abstract packagesToInstall: string[]
-
-        type [<AllowNullLiteral>] BeginInstallTypes =
-            inherit InstallTypes
-            abstract kind: EventBeginInstallTypes
-
-        type [<AllowNullLiteral>] EndInstallTypes =
-            inherit InstallTypes
-            abstract kind: EventEndInstallTypes
-            abstract installSuccess: bool
-
-        type [<AllowNullLiteral>] InstallTypingHost =
-            inherit JsTyping.TypingResolutionHost
-            abstract useCaseSensitiveFileNames: bool with get, set
-            abstract writeFile: path: string * content: string -> unit
-            abstract createDirectory: path: string -> unit
-            abstract getCurrentDirectory: unit -> string
-
-        type [<AllowNullLiteral>] SetTypings =
-            inherit ProjectResponse
-            abstract typeAcquisition: TypeAcquisition
-            abstract compilerOptions: CompilerOptions
-            abstract typings: string[]
-            abstract unresolvedImports: SortedReadonlyArray<string>
-            abstract kind: ActionSet
-
-        type [<AllowNullLiteral>] WatchTypingLocations =
-            inherit ProjectResponse
-            /// if files is undefined, retain same set of watchers
-            abstract files: string[] option
-            abstract kind: ActionWatchTypingLocations
-
     /// Represents an immutable snapshot of a script at a specified time.Once acquired, the
     /// snapshot is observably immutable. i.e. the same calls with the same parameters will return
     /// the same values.
@@ -7794,6 +11434,7 @@ module Ts =
         abstract installPackage: options: InstallPackageOptions -> Promise<ApplyCodeActionCommandResult>
         abstract writeFile: fileName: string * content: string -> unit
         abstract getParsedCommandLine: fileName: string -> ParsedCommandLine option
+        abstract jsDocParsingMode: JSDocParsingMode option with get, set
 
     type [<AllowNullLiteral>] WithMetadata<'T> =
         interface end
@@ -7899,7 +11540,7 @@ module Ts =
         abstract findReferences: fileName: string * position: float -> ReferencedSymbol[] option
         abstract getDocumentHighlights: fileName: string * position: float * filesToSearch: string[] -> DocumentHighlights[] option
         abstract getFileReferences: fileName: string -> ReferenceEntry[]
-        abstract getNavigateToItems: searchValue: string * ?maxResultCount: float * ?fileName: string * ?excludeDtsFiles: bool -> NavigateToItem[]
+        abstract getNavigateToItems: searchValue: string * ?maxResultCount: float * ?fileName: string * ?excludeDtsFiles: bool * ?excludeLibFiles: bool -> NavigateToItem[]
         abstract getNavigationBarItems: fileName: string -> NavigationBarItem[]
         abstract getNavigationTree: fileName: string -> NavigationTree
         abstract prepareCallHierarchy: fileName: string * position: float -> U2<CallHierarchyItem, CallHierarchyItem[]> option
@@ -8116,11 +11757,18 @@ module Ts =
         | [<CompiledName("Enum")>] Enum
 
     type [<AllowNullLiteral>] InlayHint =
+        /// This property will be the empty string when displayParts is set.
         abstract text: string with get, set
         abstract position: float with get, set
         abstract kind: InlayHintKind with get, set
         abstract whitespaceBefore: bool option with get, set
         abstract whitespaceAfter: bool option with get, set
+        abstract displayParts: InlayHintDisplayPart[] option with get, set
+
+    type [<AllowNullLiteral>] InlayHintDisplayPart =
+        abstract text: string with get, set
+        abstract span: TextSpan option with get, set
+        abstract file: string option with get, set
 
     type [<AllowNullLiteral>] TodoCommentDescriptor =
         abstract text: string with get, set
@@ -8513,7 +12161,7 @@ module Ts =
         /// The name of the property or export in the module's symbol table. Differs from the completion name
         /// in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
         abstract exportName: string with get, set
-        abstract exportMapKey: string option with get, set
+        abstract exportMapKey: ExportMapInfoKey option with get, set
         abstract moduleSpecifier: string option with get, set
         /// The file name declaring the export's module symbol, if it was an external module
         abstract fileName: string option with get, set
@@ -8524,7 +12172,7 @@ module Ts =
 
     type [<AllowNullLiteral>] CompletionEntryDataUnresolved =
         inherit CompletionEntryDataAutoImport
-        abstract exportMapKey: string with get, set
+        abstract exportMapKey: ExportMapInfoKey with get, set
 
     type [<AllowNullLiteral>] CompletionEntryDataResolved =
         inherit CompletionEntryDataAutoImport
@@ -8539,6 +12187,7 @@ module Ts =
         abstract kindModifiers: string option with get, set
         abstract sortText: string with get, set
         abstract insertText: string option with get, set
+        abstract filterText: string option with get, set
         abstract isSnippet: bool option with get, set
         /// An optional span that indicates the text to be replaced by this completion item.
         /// If present, this span should be used instead of the default one.
@@ -8667,6 +12316,10 @@ module Ts =
         | [<CompiledName("var")>] VariableElement
         /// Inside function
         | [<CompiledName("local var")>] LocalVariableElement
+        /// using foo = ...
+        | [<CompiledName("using")>] VariableUsingElement
+        /// await using foo = ...
+        | [<CompiledName("await using")>] VariableAwaitUsingElement
         /// Inside module and script only
         /// function f() { }
         | [<CompiledName("function")>] FunctionElement
@@ -8798,6 +12451,9 @@ module Ts =
         abstract span: TextSpan with get, set
         abstract preferences: UserPreferences with get, set
 
+    type [<AllowNullLiteral>] ExportMapInfoKey =
+        interface end
+
     type [<AllowNullLiteral>] DocumentHighlights =
         abstract fileName: string with get, set
         abstract highlightSpans: HighlightSpan[] with get, set
@@ -8883,6 +12539,7 @@ module Ts =
         abstract moduleName: string option with get, set
         abstract renamedDependencies: MapLike<string> option with get, set
         abstract transformers: CustomTransformers option with get, set
+        abstract jsDocParsingMode: JSDocParsingMode option with get, set
 
     type [<AllowNullLiteral>] TranspileOutput =
         abstract outputText: string with get, set

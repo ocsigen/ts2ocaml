@@ -7,8 +7,9 @@ open Ts2Ml.Naming
 
 open Fable.Core
 open Fable.Core.JsInterop
-open TypeScript
 
+module Ts = TypeScript.Ts
+let ts = TypeScript.ts
 type Node = Ts.Node
 type TypeChecker = Ts.TypeChecker
 type Kind = Ts.SyntaxKind
@@ -97,6 +98,7 @@ module private ParserImpl =
     | Ts.PropertyName.PrivateIdentifier i -> Ok i.text
     | Ts.PropertyName.StringLiteral s -> Ok s.text
     | Ts.PropertyName.NumericLiteral n -> Ok n.text
+    | Ts.PropertyName.NoSubstitutionTemplateLiteral l -> Ok l.text
     | Ts.PropertyName.ComputedPropertyName c -> Error c.expression
 
   let getBindingName (bn: Ts.BindingName): string option =

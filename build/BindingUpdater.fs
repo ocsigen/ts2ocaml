@@ -13,10 +13,13 @@ let ts2fable (srcs: string list) (dest: string) =
   )
 
 let typeParamConstraints =
-  new Regex("""when '\w+ :> \w+(?: and '\w+ :> \w+)*""", RegexOptions.Compiled)
+  new Regex("""when '\w+ :> [\w\.]+(?: and '\w+ :> [\w\.]+)*""", RegexOptions.Compiled)
 
 let erasedCast =
   new Regex("""static member inline op_ErasedCast.+$""", RegexOptions.Compiled ||| RegexOptions.Multiline)
+
+let importAttribute =
+  new Regex("""\[<Import\(""", RegexOptions.Compiled)
 
 let replace (regex: Regex) (replacement: string) (s: string) =
   printfn $"{regex.ToString()} ==> {replacement}"
@@ -28,6 +31,7 @@ let typescript () =
   File.readAsString dest
   |> replace typeParamConstraints ""
   |> replace erasedCast "// $&"
+  |> replace importAttribute "[<Fable.Core.Import("
   |> File.writeString false dest
 
 let run () =

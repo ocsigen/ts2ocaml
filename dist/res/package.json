@@ -1,6 +1,6 @@
 {
   "name": "ts2ocaml-rescript-stdlib",
-  "version": "0.0.0",
+  "version": "2.0.0-beta.2",
   "scripts": {
     "build": "rescript",
     "clean": "rescript clean -with-deps",

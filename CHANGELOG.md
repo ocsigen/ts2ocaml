@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-beta.2]
+
+- Update and fix TypeScript version to `5.3.3`.
+
 ## [2.0.0-beta.1]
 
 - ReScript: changed the standard library from `Js` to `Core` (#387).

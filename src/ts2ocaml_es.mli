@@ -5,6 +5,13 @@
 open Ts2ocaml_min
 
 
+
+module WeakKey : sig
+  type t = ([`Symbol of symbol | `Other of untyped_object] [@js.union on_field "dummy"]) Primitive.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+end
+
 (** language version: ES2015 *)
 module IteratorYieldResult : sig
   type 'TYield t = [`IteratorYieldResult of 'TYield] intf [@@js.custom { of_js=(fun _TYield -> Obj.magic); to_js=(fun _TYield -> Obj.magic) }]
@@ -113,7 +120,7 @@ module[@js.scope "WeakSet"] WeakSet : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   (* [Symbol.toStringTag]: unit -> string *)
   
-  (** Appends a new object to the end of the WeakSet. *)
+  (** Appends a new value to the end of the WeakSet. *)
   val add: ('tags, 'T) this -> value:'T -> ('tags, 'T) this [@@js.call "add"]
   
   (**
@@ -122,11 +129,11 @@ module[@js.scope "WeakSet"] WeakSet : sig
   *)
   val delete: ('tags, 'T) this -> value:'T -> bool [@@js.call "delete"]
   
-  (** @return a boolean indicating whether an object exists in the WeakSet or not. *)
+  (** @return a boolean indicating whether a value exists in the WeakSet or not. *)
   val has: ('tags, 'T) this -> value:'T -> bool [@@js.call "has"]
   val create: 'T Iterable.t -> 'T t [@@js.create]
   val create': ?values:'T list option -> unit -> 'T t [@@js.create]
-  val prototype: unit -> untyped_object t [@@js.get "prototype"]
+  val prototype: unit -> WeakKey.t t [@@js.get "prototype"]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -145,15 +152,17 @@ module[@js.scope "WeakRef"] WeakRef : sig
   (* [Symbol.toStringTag]: unit -> ([`L_s20_WeakRef[@js "WeakRef"]] [@js.enum]) *)
   
   (**
-    Returns the WeakRef instance's target object, or undefined if the target object has been
+    Returns the WeakRef instance's target value, or undefined if the target value has been
     reclaimed.
+    In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
   *)
   val deref: ('tags, 'T) this -> 'T option [@@js.call "deref"]
   val prototype: unit -> any t [@@js.get "prototype"]
   
   (**
-    Creates a WeakRef instance for the given target object.
-    @param target The target object for the WeakRef instance.
+    Creates a WeakRef instance for the given target value.
+    In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
+    @param target The target value for the WeakRef instance.
   *)
   val create: 'T -> 'T t [@@js.create]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
@@ -187,13 +196,33 @@ module[@js.scope "WeakMap"] WeakMap : sig
   
   (**
     Adds a new element with a specified key and value.
-    @param key Must be an object.
+    @param key Must be an object or symbol.
   *)
   val set_: ('tags, 'K, 'V) this -> key:'K -> value:'V -> ('tags, 'K, 'V) this [@@js.call "set"]
   val create: ('K * 'V) Iterable.t -> ('K, 'V) t [@@js.create]
   val create': ?entries:('K * 'V) list option -> unit -> ('K, 'V) t [@@js.create]
-  val prototype: unit -> (untyped_object, any) t [@@js.get "prototype"]
+  val prototype: unit -> (WeakKey.t, any) t [@@js.get "prototype"]
   val cast_from: ('tags, 'K, 'V) this -> ('K, 'V) t [@@js.custom let cast_from = Obj.magic]
+end
+
+
+module WeakKeyTypes : sig
+  type t = [`WeakKeyTypes] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WeakKeyTypes]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WeakKeyTypes]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WeakKeyTypes ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_symbol: 'tags this -> symbol [@@js.get "symbol"]
+  val set_symbol: 'tags this -> symbol -> unit [@@js.set "symbol"]
+  val get_object: 'tags this -> untyped_object [@@js.get "object"]
+  val set_object: 'tags this -> untyped_object -> unit [@@js.set "object"]
+  val create: symbol:symbol -> object_:(untyped_object[@js "object"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 
@@ -344,6 +373,30 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
   *)
   val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Uint8ClampedArray.from(\[11, 2, 22, 1\]);
+    myNums.toSorted((a, b) => a - b) // Uint8ClampedArray(4) \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -397,10 +450,10 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (**
     Determines whether all the members of an array satisfy the specified test.
@@ -767,10 +820,9 @@ end
 (** language version: ES2019 *)
 module FlatArray : sig
   type ('Arr, 'Depth) t = (* FIXME: unknown type '{
-      "done": Arr,
-      "recur": Arr extends ReadonlyArray<infer InnerArr>
-          ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
-          : Arr
+      done: Arr;
+      recur: Arr extends ReadonlyArray<infer InnerArr> ? FlatArray<InnerArr, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
+          : Arr;
   }[Depth extends -1 ? "done" : "recur"]' *)any
   val t_to_js: ('Arr -> Ojs.t) -> ('Depth -> Ojs.t) -> ('Arr, 'Depth) t -> Ojs.t
   val t_of_js: (Ojs.t -> 'Arr) -> (Ojs.t -> 'Depth) -> Ojs.t -> ('Arr, 'Depth) t
@@ -835,6 +887,48 @@ module ReadonlyArray : sig
     predicate. If it is not provided, undefined is used instead.
   *)
   val findLastIndex: ('tags, 'T) this -> predicate:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
+  
+  (** Copies the array and returns the copied array with all of its elements reversed. *)
+  val toReversed: ('tags, 'T) this -> 'T list [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+    ```ts
+    \[11, 2, 22, 1\].toSorted((a, b) => a - b) // \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: ('tags, 'T) this -> ?compareFn:(a:'T -> b:'T -> float) -> unit -> 'T list [@@js.call "toSorted"]
+  
+  (**
+    Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
+    @param start The zero-based location in the array from which to start removing elements.
+    @param deleteCount The number of elements to remove.
+    @param items Elements to insert into the copied array in place of the deleted elements.
+    @return A copy of the original array with the remaining elements.
+  *)
+  val toSpliced: ('tags, 'T) this -> start:float -> deleteCount:float -> items:('T list [@js.variadic]) -> 'T list [@@js.call "toSpliced"]
+  
+  (**
+    Copies an array and removes elements while returning the remaining elements.
+    @param start The zero-based location in the array from which to start removing elements.
+    @param deleteCount The number of elements to remove.
+    @return A copy of the original array with the remaining elements.
+  *)
+  val toSpliced': ('tags, 'T) this -> start:float -> ?deleteCount:float -> unit -> 'T list [@@js.call "toSpliced"]
+  
+  (**
+    Copies an array, then overwrites the value at the provided index with the
+    given value. If the index is negative, then it replaces from the end
+    of the array
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: ('tags, 'T) this -> index:float -> value:'T -> 'T list [@@js.call "with"]
   
   (**
     language version: ES2022
@@ -1139,6 +1233,21 @@ module[@js.scope "Symbol"] Symbol : sig
   (** Returns the primitive value of the specified object. *)
   val valueOf: 'tags this -> symbol [@@js.call "valueOf"]
   
+  (** language version: ESNext *)
+  val metadata: unit -> symbol [@@js.get "metadata"]
+  
+  (**
+    language version: ESNext
+    A method that is used to release resources held by an object. Called by the semantics of the `using` statement.
+  *)
+  val dispose: unit -> symbol [@@js.get "dispose"]
+  
+  (**
+    language version: ESNext
+    A method that is used to asynchronously release resources held by an object. Called by the semantics of the `await using` statement.
+  *)
+  val asyncDispose: unit -> symbol [@@js.get "asyncDispose"]
+  
   (**
     language version: ES2020
     A regular expression method that matches the regular expression against a string. Called
@@ -1244,6 +1353,29 @@ module[@js.scope "Symbol"] Symbol : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
+(** language version: ESNext *)
+module[@js.scope "SuppressedError"] SuppressedError : sig
+  type t = [`Error | `SuppressedError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`Error | `SuppressedError]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Error | `SuppressedError]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SuppressedError ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_error: 'tags this -> any [@@js.get "error"]
+  val set_error: 'tags this -> any -> unit [@@js.set "error"]
+  val get_suppressed: 'tags this -> any [@@js.get "suppressed"]
+  val set_suppressed: 'tags this -> any -> unit [@@js.set "suppressed"]
+  val create: error:any -> suppressed:any -> ?message:string -> unit -> t [@@js.create]
+  val invoke: error:any -> suppressed:any -> ?message:string -> unit -> t [@@js.invoke]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create': error:any -> suppressed:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
 
 module[@js.scope "Array"] Array : sig
   type 'T t = [`Array of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
@@ -1284,6 +1416,48 @@ module[@js.scope "Array"] Array : sig
     predicate. If it is not provided, undefined is used instead.
   *)
   val findLastIndex: ('tags, 'T) this -> predicate:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
+  
+  (** Returns a copy of an array with its elements reversed. *)
+  val toReversed: ('tags, 'T) this -> 'T list [@@js.call "toReversed"]
+  
+  (**
+    Returns a copy of an array with its elements sorted.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+    ```ts
+    \[11, 2, 22, 1\].toSorted((a, b) => a - b) // \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: ('tags, 'T) this -> ?compareFn:(a:'T -> b:'T -> float) -> unit -> 'T list [@@js.call "toSorted"]
+  
+  (**
+    Copies an array and removes elements and, if necessary, inserts new elements in their place. Returns the copied array.
+    @param start The zero-based location in the array from which to start removing elements.
+    @param deleteCount The number of elements to remove.
+    @param items Elements to insert into the copied array in place of the deleted elements.
+    @return The copied array.
+  *)
+  val toSpliced: ('tags, 'T) this -> start:float -> deleteCount:float -> items:('T list [@js.variadic]) -> 'T list [@@js.call "toSpliced"]
+  
+  (**
+    Copies an array and removes elements while returning the remaining elements.
+    @param start The zero-based location in the array from which to start removing elements.
+    @param deleteCount The number of elements to remove.
+    @return A copy of the original array with the remaining elements.
+  *)
+  val toSpliced': ('tags, 'T) this -> start:float -> ?deleteCount:float -> unit -> 'T list [@@js.call "toSpliced"]
+  
+  (**
+    Copies an array, then overwrites the value at the provided index with the
+    given value. If the index is negative, then it replaces from the end
+    of the array.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to write into the copied array.
+    @return The copied array with the updated value.
+  *)
+  val with_: ('tags, 'T) this -> index:float -> value:'T -> 'T list [@@js.call "with"]
   
   (**
     language version: ES2022
@@ -1393,10 +1567,10 @@ module[@js.scope "Array"] Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: ('tags, 'T) this -> target:float -> ?start:float -> ?end_:float -> unit -> ('tags, 'T) this [@@js.call "copyWithin"]
+  val copyWithin: ('tags, 'T) this -> target:float -> start:float -> ?end_:float -> unit -> ('tags, 'T) this [@@js.call "copyWithin"]
   
   (** Gets or sets the length of the array. This is a number one higher than the highest index in the array. *)
   val get_length: ('tags, 'T) this -> float [@@js.get "length"]
@@ -2221,6 +2395,19 @@ module[@js.scope "Date"] rec Date : sig
   (** Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization. *)
   val toJSON: 'tags this -> ?key:any -> unit -> string [@@js.call "toJSON"]
   
+  (**
+    language version: ES2017
+    Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
+    @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
+    @param monthIndex The month as a number between 0 and 11 (January to December).
+    @param date The date as a number between 1 and 31.
+    @param hours Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
+    @param minutes Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
+    @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
+    @param ms A number from 0 to 999 that specifies the milliseconds.
+  *)
+  val utc: year:float -> ?monthIndex:float -> ?date:float -> ?hours:float -> ?minutes:float -> ?seconds:float -> ?ms:float -> unit -> float [@@js.global "UTC"]
+  
   (** language version: ES2015 *)
   val create: ([`U1 of float | `U2 of string | `U3 of t] [@js.union]) -> t [@@js.create]
   val create': unit -> t [@@js.create]
@@ -2256,7 +2443,7 @@ module[@js.scope "Date"] rec Date : sig
     @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
     @param ms A number from 0 to 999 that specifies the milliseconds.
   *)
-  val utc: year:float -> monthIndex:float -> ?date:float -> ?hours:float -> ?minutes:float -> ?seconds:float -> ?ms:float -> unit -> float [@@js.global "UTC"]
+  val utc': year:float -> monthIndex:float -> ?date:float -> ?hours:float -> ?minutes:float -> ?seconds:float -> ?ms:float -> unit -> float [@@js.global "UTC"]
   
   (** Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC). *)
   val now: unit -> float [@@js.global "now"]
@@ -4558,6 +4745,7 @@ module[@js.scope "Function"] Function : sig
   type 'tags this = 'tags intf constraint 'tags = [> `Function ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  (* [Symbol.metadata]: unit -> DecoratorMetadata.t option *)
   (* [Symbol.hasInstance]: any -> bool *)
   
   (**
@@ -5063,7 +5251,7 @@ module[@js.scope "Object"] Object : sig
     Returns an object containing all own property descriptors of an object
     @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
   *)
-  val getOwnPropertyDescriptors: 'T -> ((* FIXME: unknown type '{[P in keyof T]: TypedPropertyDescriptor<T[P]>}' *)any, AnonymousInterface26.t) intersection2 [@@js.global "getOwnPropertyDescriptors"]
+  val getOwnPropertyDescriptors: 'T -> ((* FIXME: unknown type '{ [P in keyof T]: TypedPropertyDescriptor<T[P]>; }' *)any, AnonymousInterface26.t) intersection2 [@@js.global "getOwnPropertyDescriptors"]
   
   (**
     language version: ES2015
@@ -6081,6 +6269,23 @@ module ImportMeta : sig
 end
 
 
+module ImportAttributes : sig
+  type t = [`ImportAttributes] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`ImportAttributes]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ImportAttributes]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ImportAttributes ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get: 'tags this -> string -> string [@@js.index_get]
+  val set: 'tags this -> string -> string -> unit [@@js.index_set]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+
 module ImportAssertions : sig
   type t = [`ImportAssertions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   [@@@js.stop]
@@ -6109,9 +6314,15 @@ module ImportCallOptions : sig
   type 'tags this = 'tags intf constraint 'tags = [> `ImportCallOptions ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  
+  (** @deprecated  *)
   val get_assert: 'tags this -> ImportAssertions.t option [@@js.get "assert"]
+  
+  (** @deprecated  *)
   val set_assert: 'tags this -> ImportAssertions.t -> unit [@@js.set "assert"]
-  val create: ?assert_:(ImportAssertions.t[@js "assert"]) -> unit -> t [@@js.builder]
+  val get_with: 'tags this -> ImportAttributes.t option [@@js.get "with"]
+  val set_with: 'tags this -> ImportAttributes.t -> unit [@@js.set "with"]
+  val create: ?assert_:(ImportAssertions.t[@js "assert"]) -> ?with_:(ImportAttributes.t[@js "with"]) -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -6285,6 +6496,30 @@ module[@js.scope "Float64Array"] Float64Array : sig
   *)
   val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Float64Array.from(\[11.25, 2, -22.5, 1\]);
+    myNums.toSorted((a, b) => a - b) // Float64Array(4) \[-22.5, 1, 2, 11.5\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -6338,10 +6573,10 @@ module[@js.scope "Float64Array"] Float64Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (**
     Determines whether all the members of an array satisfy the specified test.
@@ -6643,6 +6878,30 @@ module[@js.scope "Float32Array"] Float32Array : sig
   *)
   val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Float32Array.from(\[11.25, 2, -22.5, 1\]);
+    myNums.toSorted((a, b) => a - b) // Float32Array(4) \[-22.5, 1, 2, 11.5\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -6696,10 +6955,10 @@ module[@js.scope "Float32Array"] Float32Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (**
     Determines whether all the members of an array satisfy the specified test.
@@ -6975,27 +7234,28 @@ module[@js.scope "FinalizationRegistry"] FinalizationRegistry : sig
   (* [Symbol.toStringTag]: unit -> ([`L_s5_FinalizationRegistry[@js "FinalizationRegistry"]] [@js.enum]) *)
   
   (**
-    Registers an object with the registry.
-    @param target The target object to register.
-    @param heldValue The value to pass to the finalizer for this object. This cannot be the
-    target object.
+    Registers a value with the registry.
+    In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
+    @param target The target value to register.
+    @param heldValue The value to pass to the finalizer for this value. This cannot be the
+    target value.
     @param unregisterToken The token to pass to the unregister method to unregister the target
-    object. If provided (and not undefined), this must be an object. If not provided, the target
-    cannot be unregistered.
+    value. If not provided, the target cannot be unregistered.
   *)
-  val register: ('tags, 'T) this -> target:untyped_object -> heldValue:'T -> ?unregisterToken:untyped_object -> unit -> unit [@@js.call "register"]
+  val register: ('tags, 'T) this -> target:WeakKey.t -> heldValue:'T -> ?unregisterToken:WeakKey.t -> unit -> unit [@@js.call "register"]
   
   (**
-    Unregisters an object from the registry.
+    Unregisters a value from the registry.
+    In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
     @param unregisterToken The token that was used as the unregisterToken argument when calling
-    register to register the target object.
+    register to register the target value.
   *)
-  val unregister: ('tags, 'T) this -> unregisterToken:untyped_object -> unit [@@js.call "unregister"]
+  val unregister: ('tags, 'T) this -> unregisterToken:WeakKey.t -> unit [@@js.call "unregister"]
   val prototype: unit -> any t [@@js.get "prototype"]
   
   (**
     Creates a finalization registry with an associated cleanup callback
-    @param cleanupCallback The callback to call after an object in the registry has been reclaimed.
+    @param cleanupCallback The callback to call after a value in the registry has been reclaimed.
   *)
   val create: ('T -> unit) -> 'T t [@@js.create]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
@@ -7028,6 +7288,97 @@ module[@js.scope "EvalError"] EvalError : sig
   val invoke: ?message:string -> ?options:ErrorOptions.t -> unit -> t [@@js.invoke]
   val create': ?message:string -> unit -> t [@@js.create]
   val invoke': ?message:string -> unit -> t [@@js.invoke]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(** language version: ESNext *)
+module Disposable : sig
+  type t = [`Disposable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`Disposable]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Disposable]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Disposable ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  (* [Symbol.dispose]: unit -> unit *)
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(** language version: ESNext *)
+module[@js.scope "DisposableStack"] DisposableStack : sig
+  type t = [`DisposableStack] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`DisposableStack]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`DisposableStack]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DisposableStack ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  
+  (** Returns a value indicating whether this stack has been disposed. *)
+  val get_disposed: 'tags this -> bool [@@js.get "disposed"]
+  
+  (** Disposes each resource in the stack in the reverse order that they were added. *)
+  val dispose: 'tags this -> unit [@@js.call "dispose"]
+  
+  (**
+    Adds a disposable resource to the stack, returning the resource.
+    @param value The resource to add. `null` and `undefined` will not be added, but will be returned.
+    @return The provided .
+  *)
+  val use: 'tags this -> value:'T -> 'T [@@js.call "use"]
+  
+  (**
+    Adds a value and associated disposal callback as a resource to the stack.
+    @param value The value to add.
+    @param onDispose The callback to use in place of a `\[Symbol.dispose\]()` method. Will be invoked with `value`
+    as the first parameter.
+    @return The provided .
+  *)
+  val adopt: 'tags this -> value:'T -> onDispose:('T -> unit) -> 'T [@@js.call "adopt"]
+  
+  (** Adds a callback to be invoked when the stack is disposed. *)
+  val defer: 'tags this -> onDispose:(unit -> unit) -> unit [@@js.call "defer"]
+  
+  (**
+    Move all resources out of this stack and into a new `DisposableStack`, and marks this stack as disposed.
+    example:
+    [```ts
+    class C \{
+      #res1: Disposable;
+      #res2: Disposable;
+      #disposables: DisposableStack;
+      constructor() \{
+        // stack will be disposed when exiting constructor for any reason
+        using stack = new DisposableStack();
+    
+        // get first resource
+        this.#res1 = stack.use(getResource1());
+    
+        // get second resource. If this fails, both `stack` and `#res1` will be disposed.
+        this.#res2 = stack.use(getResource2());
+    
+        // all operations succeeded, move resources out of `stack` so that they aren't disposed
+        // when constructor exits
+        this.#disposables = stack.move();
+      \}
+    
+      \[Symbol.dispose\]() \{
+        this.#disposables.dispose();
+      \}
+    \}
+    ```]
+  *)
+  val move: 'tags this -> t [@@js.call "move"]
+  (* [Symbol.dispose]: unit -> unit *)
+  (* [Symbol.toStringTag]: unit -> string *)
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
@@ -7549,364 +7900,6 @@ module[@js.scope "BigInt"] BigInt : sig
 end
 
 
-module[@js.scope "Uint8Array"] Uint8Array : sig
-  type t = [`Uint8Array] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  [@@@js.stop]
-  type tags = [`Uint8Array]
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Uint8Array]
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `Uint8Array ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  
-  (**
-    Returns the value of the last element in the array where predicate is true, and undefined
-    otherwise.
-    @param predicate findLast calls predicate once for each element of the array, in descending
-    order, until it finds one where predicate returns true. If such an element is found, findLast
-    immediately returns that element value. Otherwise, findLast returns undefined.
-    @param thisArg If provided, it will be used as the this value for each invocation of
-    predicate. If it is not provided, undefined is used instead.
-  *)
-  val findLast: 'tags this -> predicate:(value:float -> index:float -> array:t -> bool) -> ?thisArg:any -> unit -> 'S option [@@js.call "findLast"]
-  
-  (**
-    Returns the value of the last element in the array where predicate is true, and undefined
-    otherwise.
-  *)
-  val findLast': 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float option [@@js.call "findLast"]
-  
-  (**
-    Returns the index of the last element in the array where predicate is true, and -1
-    otherwise.
-    @param predicate findLastIndex calls predicate once for each element of the array, in descending
-    order, until it finds one where predicate returns true. If such an element is found,
-    findLastIndex immediately returns that element index. Otherwise, findLastIndex returns -1.
-    @param thisArg If provided, it will be used as the this value for each invocation of
-    predicate. If it is not provided, undefined is used instead.
-  *)
-  val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
-  
-  (**
-    language version: ES2016
-    Determines whether an array includes a certain element, returning true or false as appropriate.
-    @param searchElement The element to search for.
-    @param fromIndex The position in this array at which to begin searching for searchElement.
-  *)
-  val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
-  (* [Symbol.toStringTag]: unit -> ([`L_s18_Uint8Array[@js "Uint8Array"]] [@js.enum]) *)
-  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
-  
-  (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
-  
-  (** The size in bytes of each element in the array. *)
-  val get_BYTES_PER_ELEMENT: 'tags this -> float [@@js.get "BYTES_PER_ELEMENT"]
-  
-  (** The ArrayBuffer instance referenced by the array. *)
-  val get_buffer: 'tags this -> ArrayBufferLike.t [@@js.get "buffer"]
-  
-  (** The length in bytes of the array. *)
-  val get_byteLength: 'tags this -> float [@@js.get "byteLength"]
-  
-  (** The offset in bytes of the array. *)
-  val get_byteOffset: 'tags this -> float [@@js.get "byteOffset"]
-  
-  (**
-    Returns the this object after copying a section of the array identified by start and end
-    to the same array starting at position target
-    @param target If target is negative, it is treated as length+target where length is the
-    length of the array.
-    @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
-    @param end If not specified, length of the this object is used as its default value.
-  *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
-  
-  (**
-    Determines whether all the members of an array satisfy the specified test.
-    @param predicate A function that accepts up to three arguments. The every method calls
-    the predicate function for each element in the array until the predicate returns a value
-    which is coercible to the Boolean value false, or until the end of the array.
-    @param thisArg An object to which the this keyword can refer in the predicate function.
-    If thisArg is omitted, undefined is used as the this value.
-  *)
-  val every: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
-  
-  (**
-    Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
-    @param value value to fill array section with
-    @param start index to start filling the array at. If start is negative, it is treated as
-    length+start where length is the length of the array.
-    @param end index to stop filling the array at. If end is negative, it is treated as
-    length+end.
-  *)
-  val fill: 'tags this -> value:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "fill"]
-  
-  (**
-    Returns the elements of an array that meet the condition specified in a callback function.
-    @param predicate A function that accepts up to three arguments. The filter method calls
-    the predicate function one time for each element in the array.
-    @param thisArg An object to which the this keyword can refer in the predicate function.
-    If thisArg is omitted, undefined is used as the this value.
-  *)
-  val filter: 'tags this -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
-  
-  (**
-    Returns the value of the first element in the array where predicate is true, and undefined
-    otherwise.
-    @param predicate find calls predicate once for each element of the array, in ascending
-    order, until it finds one where predicate returns true. If such an element is found, find
-    immediately returns that element value. Otherwise, find returns undefined.
-    @param thisArg If provided, it will be used as the this value for each invocation of
-    predicate. If it is not provided, undefined is used instead.
-  *)
-  val find: 'tags this -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float option [@@js.call "find"]
-  
-  (**
-    Returns the index of the first element in the array where predicate is true, and -1
-    otherwise.
-    @param predicate find calls predicate once for each element of the array, in ascending
-    order, until it finds one where predicate returns true. If such an element is found,
-    findIndex immediately returns that element index. Otherwise, findIndex returns -1.
-    @param thisArg If provided, it will be used as the this value for each invocation of
-    predicate. If it is not provided, undefined is used instead.
-  *)
-  val findIndex: 'tags this -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
-  
-  (**
-    Performs the specified action for each element in an array.
-    @param callbackfn A function that accepts up to three arguments. forEach calls the
-    callbackfn function one time for each element in the array.
-    @param thisArg An object to which the this keyword can refer in the callbackfn function.
-    If thisArg is omitted, undefined is used as the this value.
-  *)
-  val forEach: 'tags this -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  
-  (**
-    Returns the index of the first occurrence of a value in an array.
-    @param searchElement The value to locate in the array.
-    @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-    search starts at index 0.
-  *)
-  val indexOf: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float [@@js.call "indexOf"]
-  
-  (**
-    Adds all the elements of an array separated by the specified separator string.
-    @param separator A string used to separate one element of an array from the next in the
-    resulting String. If omitted, the array elements are separated with a comma.
-  *)
-  val join: 'tags this -> ?separator:string -> unit -> string [@@js.call "join"]
-  
-  (**
-    Returns the index of the last occurrence of a value in an array.
-    @param searchElement The value to locate in the array.
-    @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-    search starts at index 0.
-  *)
-  val lastIndexOf: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float [@@js.call "lastIndexOf"]
-  
-  (** The length of the array. *)
-  val get_length: 'tags this -> float [@@js.get "length"]
-  
-  (**
-    Calls a defined callback function on each element of an array, and returns an array that
-    contains the results.
-    @param callbackfn A function that accepts up to three arguments. The map method calls the
-    callbackfn function one time for each element in the array.
-    @param thisArg An object to which the this keyword can refer in the callbackfn function.
-    If thisArg is omitted, undefined is used as the this value.
-  *)
-  val map: 'tags this -> callbackfn:(value:float -> index:float -> array:t -> float) -> ?thisArg:any -> unit -> t [@@js.call "map"]
-  
-  (**
-    Calls the specified callback function for all the elements in an array. The return value of
-    the callback function is the accumulated result, and is provided as an argument in the next
-    call to the callback function.
-    @param callbackfn A function that accepts up to four arguments. The reduce method calls the
-    callbackfn function one time for each element in the array.
-    @param initialValue If initialValue is specified, it is used as the initial value to start
-    the accumulation. The first call to the callbackfn function provides this value as an argument
-    instead of an array value.
-  *)
-  val reduce: 'tags this -> callbackfn:(previousValue:float -> currentValue:float -> currentIndex:float -> array:t -> float) -> float [@@js.call "reduce"]
-  
-  (**
-    Calls the specified callback function for all the elements in an array. The return value of
-    the callback function is the accumulated result, and is provided as an argument in the next
-    call to the callback function.
-  *)
-  val reduce': 'tags this -> callbackfn:(previousValue:float -> currentValue:float -> currentIndex:float -> array:t -> float) -> initialValue:float -> float [@@js.call "reduce"]
-  
-  (**
-    Calls the specified callback function for all the elements in an array. The return value of
-    the callback function is the accumulated result, and is provided as an argument in the next
-    call to the callback function.
-    @param callbackfn A function that accepts up to four arguments. The reduce method calls the
-    callbackfn function one time for each element in the array.
-    @param initialValue If initialValue is specified, it is used as the initial value to start
-    the accumulation. The first call to the callbackfn function provides this value as an argument
-    instead of an array value.
-  *)
-  val reduce'': 'tags this -> callbackfn:(previousValue:'U -> currentValue:float -> currentIndex:float -> array:t -> 'U) -> initialValue:'U -> 'U [@@js.call "reduce"]
-  
-  (**
-    Calls the specified callback function for all the elements in an array, in descending order.
-    The return value of the callback function is the accumulated result, and is provided as an
-    argument in the next call to the callback function.
-    @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
-    the callbackfn function one time for each element in the array.
-    @param initialValue If initialValue is specified, it is used as the initial value to start
-    the accumulation. The first call to the callbackfn function provides this value as an
-    argument instead of an array value.
-  *)
-  val reduceRight: 'tags this -> callbackfn:(previousValue:float -> currentValue:float -> currentIndex:float -> array:t -> float) -> float [@@js.call "reduceRight"]
-  
-  (**
-    Calls the specified callback function for all the elements in an array, in descending order.
-    The return value of the callback function is the accumulated result, and is provided as an
-    argument in the next call to the callback function.
-  *)
-  val reduceRight': 'tags this -> callbackfn:(previousValue:float -> currentValue:float -> currentIndex:float -> array:t -> float) -> initialValue:float -> float [@@js.call "reduceRight"]
-  
-  (**
-    Calls the specified callback function for all the elements in an array, in descending order.
-    The return value of the callback function is the accumulated result, and is provided as an
-    argument in the next call to the callback function.
-    @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
-    the callbackfn function one time for each element in the array.
-    @param initialValue If initialValue is specified, it is used as the initial value to start
-    the accumulation. The first call to the callbackfn function provides this value as an argument
-    instead of an array value.
-  *)
-  val reduceRight'': 'tags this -> callbackfn:(previousValue:'U -> currentValue:float -> currentIndex:float -> array:t -> 'U) -> initialValue:'U -> 'U [@@js.call "reduceRight"]
-  
-  (** Reverses the elements in an Array. *)
-  val reverse: 'tags this -> t [@@js.call "reverse"]
-  
-  (**
-    Sets a value or an array of values.
-    @param array A typed or untyped array of values to set.
-    @param offset The index in the current array at which the values are to be written.
-  *)
-  val set_: 'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit [@@js.call "set"]
-  
-  (**
-    Returns a section of an array.
-    @param start The beginning of the specified portion of the array.
-    @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
-  *)
-  val slice: 'tags this -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  
-  (**
-    Determines whether the specified callback function returns true for any element of an array.
-    @param predicate A function that accepts up to three arguments. The some method calls
-    the predicate function for each element in the array until the predicate returns a value
-    which is coercible to the Boolean value true, or until the end of the array.
-    @param thisArg An object to which the this keyword can refer in the predicate function.
-    If thisArg is omitted, undefined is used as the this value.
-  *)
-  val some: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
-  
-  (**
-    Sorts an array.
-    @param compareFn Function used to determine the order of the elements. It is expected to return
-    a negative value if first argument is less than second argument, zero if they're equal and a positive
-    value otherwise. If omitted, the elements are sorted in ascending order.
-    ```ts
-    \[11,2,22,1\].sort((a, b) => a - b)
-    ```
-  *)
-  val sort: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this [@@js.call "sort"]
-  
-  (**
-    Gets a new Uint8Array view of the ArrayBuffer store for this array, referencing the elements
-    at begin, inclusive, up to end, exclusive.
-    @param begin The index of the beginning of the array.
-    @param end The index of the end of the array.
-  *)
-  val subarray: 'tags this -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
-  
-  (** Converts a number to a string by using the current locale. *)
-  val toLocaleString: 'tags this -> string [@@js.call "toLocaleString"]
-  
-  (** Returns a string representation of an array. *)
-  val toString: 'tags this -> string [@@js.call "toString"]
-  
-  (** Returns the primitive value of the specified object. *)
-  val valueOf: 'tags this -> t [@@js.call "valueOf"]
-  val get: 'tags this -> float -> float [@@js.index_get]
-  val set: 'tags this -> float -> float -> unit [@@js.index_set]
-  
-  (** language version: ES2017 *)
-  val create: unit -> t [@@js.create]
-  
-  (** language version: ES2015 *)
-  val create': float Iterable.t -> t [@@js.create]
-  
-  (**
-    language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
-  *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': ([`U1 of float ArrayLike.t | `U2 of ArrayBufferLike.t] [@js.union]) -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
-  
-  (** The size in bytes of each element in the array. *)
-  val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
-  
-  (**
-    Returns a new array from a set of elements.
-    @param items A set of elements to include in the new array object.
-  *)
-  val of_: (float list [@js.variadic]) -> t [@@js.global "of"]
-  
-  (**
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-  *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
-  
-  (**
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
-  *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
-  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-end
-
-
 module[@js.scope "Uint32Array"] Uint32Array : sig
   type t = [`Uint32Array] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   [@@@js.stop]
@@ -7946,6 +7939,30 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
     predicate. If it is not provided, undefined is used instead.
   *)
   val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
+  
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Uint32Array.from(\[11, 2, 22, 1\]);
+    myNums.toSorted((a, b) => a - b) // Uint32Array(4) \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
   
   (**
     language version: ES2022
@@ -8000,10 +8017,10 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (**
     Determines whether all the members of an array satisfy the specified test.
@@ -8305,6 +8322,30 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
   *)
   val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Uint16Array.from(\[11, 2, 22, 1\]);
+    myNums.toSorted((a, b) => a - b) // Uint16Array(4) \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -8358,10 +8399,10 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (**
     Determines whether all the members of an array satisfy the specified test.
@@ -8623,6 +8664,388 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
 end
 
 
+module[@js.scope "Uint8Array"] Uint8Array : sig
+  type t = [`Uint8Array] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`Uint8Array]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Uint8Array]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Uint8Array ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  
+  (**
+    Returns the value of the last element in the array where predicate is true, and undefined
+    otherwise.
+    @param predicate findLast calls predicate once for each element of the array, in descending
+    order, until it finds one where predicate returns true. If such an element is found, findLast
+    immediately returns that element value. Otherwise, findLast returns undefined.
+    @param thisArg If provided, it will be used as the this value for each invocation of
+    predicate. If it is not provided, undefined is used instead.
+  *)
+  val findLast: 'tags this -> predicate:(value:float -> index:float -> array:t -> bool) -> ?thisArg:any -> unit -> 'S option [@@js.call "findLast"]
+  
+  (**
+    Returns the value of the last element in the array where predicate is true, and undefined
+    otherwise.
+  *)
+  val findLast': 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float option [@@js.call "findLast"]
+  
+  (**
+    Returns the index of the last element in the array where predicate is true, and -1
+    otherwise.
+    @param predicate findLastIndex calls predicate once for each element of the array, in descending
+    order, until it finds one where predicate returns true. If such an element is found,
+    findLastIndex immediately returns that element index. Otherwise, findLastIndex returns -1.
+    @param thisArg If provided, it will be used as the this value for each invocation of
+    predicate. If it is not provided, undefined is used instead.
+  *)
+  val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
+  
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Uint8Array.from(\[11, 2, 22, 1\]);
+    myNums.toSorted((a, b) => a - b) // Uint8Array(4) \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
+  
+  (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
+    language version: ES2016
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
+  val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s18_Uint8Array[@js "Uint8Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
+  
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
+  
+  (**
+    language version: ES2015
+    Returns an list of keys in the array
+  *)
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
+  
+  (** The size in bytes of each element in the array. *)
+  val get_BYTES_PER_ELEMENT: 'tags this -> float [@@js.get "BYTES_PER_ELEMENT"]
+  
+  (** The ArrayBuffer instance referenced by the array. *)
+  val get_buffer: 'tags this -> ArrayBufferLike.t [@@js.get "buffer"]
+  
+  (** The length in bytes of the array. *)
+  val get_byteLength: 'tags this -> float [@@js.get "byteLength"]
+  
+  (** The offset in bytes of the array. *)
+  val get_byteOffset: 'tags this -> float [@@js.get "byteOffset"]
+  
+  (**
+    Returns the this object after copying a section of the array identified by start and end
+    to the same array starting at position target
+    @param target If target is negative, it is treated as length+target where length is the
+    length of the array.
+    @param start If start is negative, it is treated as length+start. If end is negative, it
+    is treated as length+end.
+    @param end If not specified, length of the this object is used as its default value.
+  *)
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  
+  (**
+    Determines whether all the members of an array satisfy the specified test.
+    @param predicate A function that accepts up to three arguments. The every method calls
+    the predicate function for each element in the array until the predicate returns a value
+    which is coercible to the Boolean value false, or until the end of the array.
+    @param thisArg An object to which the this keyword can refer in the predicate function.
+    If thisArg is omitted, undefined is used as the this value.
+  *)
+  val every: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  
+  (**
+    Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
+    @param value value to fill array section with
+    @param start index to start filling the array at. If start is negative, it is treated as
+    length+start where length is the length of the array.
+    @param end index to stop filling the array at. If end is negative, it is treated as
+    length+end.
+  *)
+  val fill: 'tags this -> value:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "fill"]
+  
+  (**
+    Returns the elements of an array that meet the condition specified in a callback function.
+    @param predicate A function that accepts up to three arguments. The filter method calls
+    the predicate function one time for each element in the array.
+    @param thisArg An object to which the this keyword can refer in the predicate function.
+    If thisArg is omitted, undefined is used as the this value.
+  *)
+  val filter: 'tags this -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  
+  (**
+    Returns the value of the first element in the array where predicate is true, and undefined
+    otherwise.
+    @param predicate find calls predicate once for each element of the array, in ascending
+    order, until it finds one where predicate returns true. If such an element is found, find
+    immediately returns that element value. Otherwise, find returns undefined.
+    @param thisArg If provided, it will be used as the this value for each invocation of
+    predicate. If it is not provided, undefined is used instead.
+  *)
+  val find: 'tags this -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float option [@@js.call "find"]
+  
+  (**
+    Returns the index of the first element in the array where predicate is true, and -1
+    otherwise.
+    @param predicate find calls predicate once for each element of the array, in ascending
+    order, until it finds one where predicate returns true. If such an element is found,
+    findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+    @param thisArg If provided, it will be used as the this value for each invocation of
+    predicate. If it is not provided, undefined is used instead.
+  *)
+  val findIndex: 'tags this -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
+  
+  (**
+    Performs the specified action for each element in an array.
+    @param callbackfn A function that accepts up to three arguments. forEach calls the
+    callbackfn function one time for each element in the array.
+    @param thisArg An object to which the this keyword can refer in the callbackfn function.
+    If thisArg is omitted, undefined is used as the this value.
+  *)
+  val forEach: 'tags this -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  
+  (**
+    Returns the index of the first occurrence of a value in an array.
+    @param searchElement The value to locate in the array.
+    @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
+    search starts at index 0.
+  *)
+  val indexOf: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float [@@js.call "indexOf"]
+  
+  (**
+    Adds all the elements of an array separated by the specified separator string.
+    @param separator A string used to separate one element of an array from the next in the
+    resulting String. If omitted, the array elements are separated with a comma.
+  *)
+  val join: 'tags this -> ?separator:string -> unit -> string [@@js.call "join"]
+  
+  (**
+    Returns the index of the last occurrence of a value in an array.
+    @param searchElement The value to locate in the array.
+    @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
+    search starts at index 0.
+  *)
+  val lastIndexOf: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float [@@js.call "lastIndexOf"]
+  
+  (** The length of the array. *)
+  val get_length: 'tags this -> float [@@js.get "length"]
+  
+  (**
+    Calls a defined callback function on each element of an array, and returns an array that
+    contains the results.
+    @param callbackfn A function that accepts up to three arguments. The map method calls the
+    callbackfn function one time for each element in the array.
+    @param thisArg An object to which the this keyword can refer in the callbackfn function.
+    If thisArg is omitted, undefined is used as the this value.
+  *)
+  val map: 'tags this -> callbackfn:(value:float -> index:float -> array:t -> float) -> ?thisArg:any -> unit -> t [@@js.call "map"]
+  
+  (**
+    Calls the specified callback function for all the elements in an array. The return value of
+    the callback function is the accumulated result, and is provided as an argument in the next
+    call to the callback function.
+    @param callbackfn A function that accepts up to four arguments. The reduce method calls the
+    callbackfn function one time for each element in the array.
+    @param initialValue If initialValue is specified, it is used as the initial value to start
+    the accumulation. The first call to the callbackfn function provides this value as an argument
+    instead of an array value.
+  *)
+  val reduce: 'tags this -> callbackfn:(previousValue:float -> currentValue:float -> currentIndex:float -> array:t -> float) -> float [@@js.call "reduce"]
+  
+  (**
+    Calls the specified callback function for all the elements in an array. The return value of
+    the callback function is the accumulated result, and is provided as an argument in the next
+    call to the callback function.
+  *)
+  val reduce': 'tags this -> callbackfn:(previousValue:float -> currentValue:float -> currentIndex:float -> array:t -> float) -> initialValue:float -> float [@@js.call "reduce"]
+  
+  (**
+    Calls the specified callback function for all the elements in an array. The return value of
+    the callback function is the accumulated result, and is provided as an argument in the next
+    call to the callback function.
+    @param callbackfn A function that accepts up to four arguments. The reduce method calls the
+    callbackfn function one time for each element in the array.
+    @param initialValue If initialValue is specified, it is used as the initial value to start
+    the accumulation. The first call to the callbackfn function provides this value as an argument
+    instead of an array value.
+  *)
+  val reduce'': 'tags this -> callbackfn:(previousValue:'U -> currentValue:float -> currentIndex:float -> array:t -> 'U) -> initialValue:'U -> 'U [@@js.call "reduce"]
+  
+  (**
+    Calls the specified callback function for all the elements in an array, in descending order.
+    The return value of the callback function is the accumulated result, and is provided as an
+    argument in the next call to the callback function.
+    @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
+    the callbackfn function one time for each element in the array.
+    @param initialValue If initialValue is specified, it is used as the initial value to start
+    the accumulation. The first call to the callbackfn function provides this value as an
+    argument instead of an array value.
+  *)
+  val reduceRight: 'tags this -> callbackfn:(previousValue:float -> currentValue:float -> currentIndex:float -> array:t -> float) -> float [@@js.call "reduceRight"]
+  
+  (**
+    Calls the specified callback function for all the elements in an array, in descending order.
+    The return value of the callback function is the accumulated result, and is provided as an
+    argument in the next call to the callback function.
+  *)
+  val reduceRight': 'tags this -> callbackfn:(previousValue:float -> currentValue:float -> currentIndex:float -> array:t -> float) -> initialValue:float -> float [@@js.call "reduceRight"]
+  
+  (**
+    Calls the specified callback function for all the elements in an array, in descending order.
+    The return value of the callback function is the accumulated result, and is provided as an
+    argument in the next call to the callback function.
+    @param callbackfn A function that accepts up to four arguments. The reduceRight method calls
+    the callbackfn function one time for each element in the array.
+    @param initialValue If initialValue is specified, it is used as the initial value to start
+    the accumulation. The first call to the callbackfn function provides this value as an argument
+    instead of an array value.
+  *)
+  val reduceRight'': 'tags this -> callbackfn:(previousValue:'U -> currentValue:float -> currentIndex:float -> array:t -> 'U) -> initialValue:'U -> 'U [@@js.call "reduceRight"]
+  
+  (** Reverses the elements in an Array. *)
+  val reverse: 'tags this -> t [@@js.call "reverse"]
+  
+  (**
+    Sets a value or an array of values.
+    @param array A typed or untyped array of values to set.
+    @param offset The index in the current array at which the values are to be written.
+  *)
+  val set_: 'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit [@@js.call "set"]
+  
+  (**
+    Returns a section of an array.
+    @param start The beginning of the specified portion of the array.
+    @param end The end of the specified portion of the array. This is exclusive of the element at the index 'end'.
+  *)
+  val slice: 'tags this -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
+  
+  (**
+    Determines whether the specified callback function returns true for any element of an array.
+    @param predicate A function that accepts up to three arguments. The some method calls
+    the predicate function for each element in the array until the predicate returns a value
+    which is coercible to the Boolean value true, or until the end of the array.
+    @param thisArg An object to which the this keyword can refer in the predicate function.
+    If thisArg is omitted, undefined is used as the this value.
+  *)
+  val some: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  
+  (**
+    Sorts an array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if first argument is less than second argument, zero if they're equal and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    \[11,2,22,1\].sort((a, b) => a - b)
+    ```
+  *)
+  val sort: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this [@@js.call "sort"]
+  
+  (**
+    Gets a new Uint8Array view of the ArrayBuffer store for this array, referencing the elements
+    at begin, inclusive, up to end, exclusive.
+    @param begin The index of the beginning of the array.
+    @param end The index of the end of the array.
+  *)
+  val subarray: 'tags this -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
+  
+  (** Converts a number to a string by using the current locale. *)
+  val toLocaleString: 'tags this -> string [@@js.call "toLocaleString"]
+  
+  (** Returns a string representation of an array. *)
+  val toString: 'tags this -> string [@@js.call "toString"]
+  
+  (** Returns the primitive value of the specified object. *)
+  val valueOf: 'tags this -> t [@@js.call "valueOf"]
+  val get: 'tags this -> float -> float [@@js.index_get]
+  val set: 'tags this -> float -> float -> unit [@@js.index_set]
+  
+  (** language version: ES2017 *)
+  val create: unit -> t [@@js.create]
+  
+  (** language version: ES2015 *)
+  val create': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create'': float -> t [@@js.create]
+  val create''': ([`U1 of float ArrayLike.t | `U2 of ArrayBufferLike.t] [@js.union]) -> t [@@js.create]
+  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  
+  (** The size in bytes of each element in the array. *)
+  val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
+  
+  (**
+    Returns a new array from a set of elements.
+    @param items A set of elements to include in the new array object.
+  *)
+  val of_: (float list [@js.variadic]) -> t [@@js.global "of"]
+  
+  (**
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+  *)
+  val from': float ArrayLike.t -> t [@@js.global "from"]
+  
+  (**
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+
 module[@js.scope "Int8Array"] Int8Array : sig
   type t = [`Int8Array] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   [@@@js.stop]
@@ -8662,6 +9085,30 @@ module[@js.scope "Int8Array"] Int8Array : sig
     predicate. If it is not provided, undefined is used instead.
   *)
   val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
+  
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> Uint8Array.t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Uint8Array.from(\[11, 2, 22, 1\]);
+    myNums.toSorted((a, b) => a - b) // Uint8Array(4) \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> Uint8Array.t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> Uint8Array.t [@@js.call "with"]
   
   (**
     language version: ES2022
@@ -8716,10 +9163,10 @@ module[@js.scope "Int8Array"] Int8Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (**
     Determines whether all the members of an array satisfy the specified test.
@@ -9021,6 +9468,30 @@ module[@js.scope "Int32Array"] Int32Array : sig
   *)
   val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Int32Array.from(\[11, 2, -22, 1\]);
+    myNums.toSorted((a, b) => a - b) // Int32Array(4) \[-22, 1, 2, 11\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -9074,10 +9545,10 @@ module[@js.scope "Int32Array"] Int32Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (**
     Determines whether all the members of an array satisfy the specified test.
@@ -9379,6 +9850,30 @@ module[@js.scope "Int16Array"] Int16Array : sig
   *)
   val findLastIndex: 'tags this -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = Int16Array.from(\[11, 2, -22, 1\]);
+    myNums.toSorted((a, b) => a - b) // Int16Array(4) \[-22, 1, 2, 11\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given number at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -9432,10 +9927,10 @@ module[@js.scope "Int16Array"] Int16Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (**
     Determines whether all the members of an array satisfy the specified test.
@@ -9737,6 +10232,30 @@ module[@js.scope "BigUint64Array"] BigUint64Array : sig
   *)
   val findLastIndex: 'tags this -> predicate:(value:bigint -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = BigUint64Array.from(\[11n, 2n, 22n, 1n\]);
+    myNums.toSorted((a, b) => Number(a - b)) // BigUint64Array(4) \[1n, 2n, 11n, 22n\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:bigint -> b:bigint -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given bigint at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:bigint -> t [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -9762,10 +10281,10 @@ module[@js.scope "BigUint64Array"] BigUint64Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (** Yields index, value pairs for every entry in the array. *)
   val entries: 'tags this -> (float * bigint) IterableIterator.t [@@js.call "entries"]
@@ -10048,6 +10567,30 @@ module[@js.scope "BigInt64Array"] BigInt64Array : sig
   *)
   val findLastIndex: 'tags this -> predicate:(value:bigint -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Copies the array and returns the copy with the elements in reverse order. *)
+  val toReversed: 'tags this -> t [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending order.
+    ```ts
+    const myNums = BigInt64Array.from(\[11n, 2n, -22n, 1n\]);
+    myNums.toSorted((a, b) => Number(a - b)) // BigInt64Array(4) \[-22n, 1n, 2n, 11n\]
+    ```
+  *)
+  val toSorted: 'tags this -> ?compareFn:(a:bigint -> b:bigint -> float) -> unit -> t [@@js.call "toSorted"]
+  
+  (**
+    Copies the array and inserts the given bigint at the provided index.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: 'tags this -> index:float -> value:bigint -> t [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -10073,10 +10616,10 @@ module[@js.scope "BigInt64Array"] BigInt64Array : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: 'tags this -> target:float -> ?start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
+  val copyWithin: 'tags this -> target:float -> start:float -> ?end_:float -> unit -> 'tags this [@@js.call "copyWithin"]
   
   (** Yields index, value pairs for every entry in the array. *)
   val entries: 'tags this -> (float * bigint) IterableIterator.t [@@js.call "entries"]
@@ -10368,11 +10911,11 @@ end
 
 module Awaited : sig
   type 'T t = (* FIXME: unknown type 'T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
-          T extends object & { then(onfulfilled: infer F, ...args: infer _): any } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
-              F extends ((value: infer V, ...args: infer _) => any) ? // if the argument to `then` is callable, extracts the first argument
-                  Awaited<V> : // recursively unwrap the value
-                  never : // the argument to `then` was not callable
-          T' *)any
+      T extends object & { then(onfulfilled: infer F, ...args: infer _): any; } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
+          F extends ((value: infer V, ...args: infer _) => any) ? // if the argument to `then` is callable, extracts the first argument
+              Awaited<V> : // recursively unwrap the value
+          never : // the argument to `then` was not callable
+      T' *)any
   val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
 end
@@ -10438,7 +10981,7 @@ module[@js.scope "Promise"] Promise : sig
     @param values An array of Promises.
     @return A new Promise.
   *)
-  val allSettled: 'T -> (* FIXME: unknown type '{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }' *)any t [@@js.global "allSettled"]
+  val allSettled: 'T -> (* FIXME: unknown type '{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }' *)any t [@@js.global "allSettled"]
   
   (**
     language version: ES2020
@@ -10466,7 +11009,7 @@ module[@js.scope "Promise"] Promise : sig
     @param values An array of Promises.
     @return A new Promise.
   *)
-  val all: 'T -> (* FIXME: unknown type '{ -readonly [P in keyof T]: Awaited<T[P]> }' *)any t [@@js.global "all"]
+  val all: 'T -> (* FIXME: unknown type '{ -readonly [P in keyof T]: Awaited<T[P]>; }' *)any t [@@js.global "all"]
   
   (**
     Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
@@ -10905,6 +11448,97 @@ module AsyncGeneratorFunctionConstructor : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
+(** language version: ESNext *)
+module AsyncDisposable : sig
+  type t = [`AsyncDisposable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`AsyncDisposable]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AsyncDisposable]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AsyncDisposable ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  (* [Symbol.asyncDispose]: unit -> unit PromiseLike.t *)
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(** language version: ESNext *)
+module[@js.scope "AsyncDisposableStack"] AsyncDisposableStack : sig
+  type t = [`AsyncDisposableStack] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`AsyncDisposableStack]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AsyncDisposableStack]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AsyncDisposableStack ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  
+  (** Returns a value indicating whether this stack has been disposed. *)
+  val get_disposed: 'tags this -> bool [@@js.get "disposed"]
+  
+  (** Disposes each resource in the stack in the reverse order that they were added. *)
+  val disposeAsync: 'tags this -> unit Promise.t [@@js.call "disposeAsync"]
+  
+  (**
+    Adds a disposable resource to the stack, returning the resource.
+    @param value The resource to add. `null` and `undefined` will not be added, but will be returned.
+    @return The provided .
+  *)
+  val use: 'tags this -> value:'T -> 'T [@@js.call "use"]
+  
+  (**
+    Adds a value and associated disposal callback as a resource to the stack.
+    @param value The value to add.
+    @param onDisposeAsync The callback to use in place of a `\[Symbol.asyncDispose\]()` method. Will be invoked with `value`
+    as the first parameter.
+    @return The provided .
+  *)
+  val adopt: 'tags this -> value:'T -> onDisposeAsync:('T -> ([`U1 of unit PromiseLike.t | `U2 of unit] [@js.union])) -> 'T [@@js.call "adopt"]
+  
+  (** Adds a callback to be invoked when the stack is disposed. *)
+  val defer: 'tags this -> onDisposeAsync:(unit -> ([`U1 of unit PromiseLike.t | `U2 of unit] [@js.union])) -> unit [@@js.call "defer"]
+  
+  (**
+    Move all resources out of this stack and into a new `DisposableStack`, and marks this stack as disposed.
+    example:
+    [```ts
+    class C \{
+      #res1: Disposable;
+      #res2: Disposable;
+      #disposables: DisposableStack;
+      constructor() \{
+        // stack will be disposed when exiting constructor for any reason
+        using stack = new DisposableStack();
+    
+        // get first resource
+        this.#res1 = stack.use(getResource1());
+    
+        // get second resource. If this fails, both `stack` and `#res1` will be disposed.
+        this.#res2 = stack.use(getResource2());
+    
+        // all operations succeeded, move resources out of `stack` so that they aren't disposed
+        // when constructor exits
+        this.#disposables = stack.move();
+      \}
+    
+      \[Symbol.dispose\]() \{
+        this.#disposables.dispose();
+      \}
+    \}
+    ```]
+  *)
+  val move: 'tags this -> t [@@js.call "move"]
+  (* [Symbol.asyncDispose]: unit -> unit Promise.t *)
+  (* [Symbol.toStringTag]: unit -> string *)
+  val create: unit -> t [@@js.create]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
 
 module ArrayBufferView : sig
   type t = [`ArrayBufferView] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11023,6 +11657,48 @@ module ReadonlyArray_Make (T : Ojs.T) : sig
     predicate. If it is not provided, undefined is used instead.
   *)
   val findLastIndex: t -> predicate:(value:T.t -> index:float -> array:T.t list -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
+  
+  (** Copies the array and returns the copied array with all of its elements reversed. *)
+  val toReversed: t -> T.t list [@@js.call "toReversed"]
+  
+  (**
+    Copies and sorts the array.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+    ```ts
+    \[11, 2, 22, 1\].toSorted((a, b) => a - b) // \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: t -> ?compareFn:(a:T.t -> b:T.t -> float) -> unit -> T.t list [@@js.call "toSorted"]
+  
+  (**
+    Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
+    @param start The zero-based location in the array from which to start removing elements.
+    @param deleteCount The number of elements to remove.
+    @param items Elements to insert into the copied array in place of the deleted elements.
+    @return A copy of the original array with the remaining elements.
+  *)
+  val toSpliced: t -> start:float -> deleteCount:float -> items:(T.t list [@js.variadic]) -> T.t list [@@js.call "toSpliced"]
+  
+  (**
+    Copies an array and removes elements while returning the remaining elements.
+    @param start The zero-based location in the array from which to start removing elements.
+    @param deleteCount The number of elements to remove.
+    @return A copy of the original array with the remaining elements.
+  *)
+  val toSpliced: t -> start:float -> ?deleteCount:float -> unit -> T.t list [@@js.call "toSpliced"]
+  
+  (**
+    Copies an array, then overwrites the value at the provided index with the
+    given value. If the index is negative, then it replaces from the end
+    of the array
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to insert into the copied array.
+    @return A copy of the original array with the inserted value.
+  *)
+  val with_: t -> index:float -> value:T.t -> T.t list [@@js.call "with"]
   
   (**
     language version: ES2022
@@ -11301,6 +11977,48 @@ module[@js.scope "Array"] Array_Make (T : Ojs.T) : sig
   *)
   val findLastIndex: t -> predicate:(value:T.t -> index:float -> array:T.t list -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findLastIndex"]
   
+  (** Returns a copy of an array with its elements reversed. *)
+  val toReversed: t -> T.t list [@@js.call "toReversed"]
+  
+  (**
+    Returns a copy of an array with its elements sorted.
+    @param compareFn Function used to determine the order of the elements. It is expected to return
+    a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
+    value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+    ```ts
+    \[11, 2, 22, 1\].toSorted((a, b) => a - b) // \[1, 2, 11, 22\]
+    ```
+  *)
+  val toSorted: t -> ?compareFn:(a:T.t -> b:T.t -> float) -> unit -> T.t list [@@js.call "toSorted"]
+  
+  (**
+    Copies an array and removes elements and, if necessary, inserts new elements in their place. Returns the copied array.
+    @param start The zero-based location in the array from which to start removing elements.
+    @param deleteCount The number of elements to remove.
+    @param items Elements to insert into the copied array in place of the deleted elements.
+    @return The copied array.
+  *)
+  val toSpliced: t -> start:float -> deleteCount:float -> items:(T.t list [@js.variadic]) -> T.t list [@@js.call "toSpliced"]
+  
+  (**
+    Copies an array and removes elements while returning the remaining elements.
+    @param start The zero-based location in the array from which to start removing elements.
+    @param deleteCount The number of elements to remove.
+    @return A copy of the original array with the remaining elements.
+  *)
+  val toSpliced: t -> start:float -> ?deleteCount:float -> unit -> T.t list [@@js.call "toSpliced"]
+  
+  (**
+    Copies an array, then overwrites the value at the provided index with the
+    given value. If the index is negative, then it replaces from the end
+    of the array.
+    @param index The index of the value to overwrite. If the index is
+    negative, then it replaces from the end of the array.
+    @param value The value to write into the copied array.
+    @return The copied array with the updated value.
+  *)
+  val with_: t -> index:float -> value:T.t -> T.t list [@@js.call "with"]
+  
   (**
     language version: ES2022
     Returns the item located at the specified index.
@@ -11409,10 +12127,10 @@ module[@js.scope "Array"] Array_Make (T : Ojs.T) : sig
     @param target If target is negative, it is treated as length+target where length is the
     length of the array.
     @param start If start is negative, it is treated as length+start. If end is negative, it
-    is treated as length+end. If start is omitted, `0` is used.
+    is treated as length+end.
     @param end If not specified, length of the this object is used as its default value.
   *)
-  val copyWithin: t -> target:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
+  val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
   
   (** Gets or sets the length of the array. This is a number one higher than the highest index in the array. *)
   val get_length: t -> float [@@js.get "length"]
@@ -11802,12 +12520,12 @@ module[@js.scope "WeakMap"] WeakMap_Make (K : Ojs.T) (V : Ojs.T) : sig
   
   (**
     Adds a new element with a specified key and value.
-    @param key Must be an object.
+    @param key Must be an object or symbol.
   *)
   val set_: t -> key:K.t -> value:V.t -> t [@@js.call "set"]
   val create: (K.t * V.t) Iterable.t -> t [@@js.create]
   val create: ?entries:(K.t * V.t) list option -> unit -> t [@@js.create]
-  val prototype: unit -> (untyped_object, any) parent [@@js.get "prototype"]
+  val prototype: unit -> (WeakKey.t, any) parent [@@js.get "prototype"]
 end
 module[@js.scope "Set"] Set_Make (T : Ojs.T) : sig
   type 'T parent = 'T Set.t
@@ -11877,7 +12595,7 @@ module[@js.scope "WeakSet"] WeakSet_Make (T : Ojs.T) : sig
   
   (* [Symbol.toStringTag]: unit -> string *)
   
-  (** Appends a new object to the end of the WeakSet. *)
+  (** Appends a new value to the end of the WeakSet. *)
   val add: t -> value:T.t -> t [@@js.call "add"]
   
   (**
@@ -11886,11 +12604,11 @@ module[@js.scope "WeakSet"] WeakSet_Make (T : Ojs.T) : sig
   *)
   val delete: t -> value:T.t -> bool [@@js.call "delete"]
   
-  (** @return a boolean indicating whether an object exists in the WeakSet or not. *)
+  (** @return a boolean indicating whether a value exists in the WeakSet or not. *)
   val has: t -> value:T.t -> bool [@@js.call "has"]
   val create: T.t Iterable.t -> t [@@js.create]
   val create: ?values:T.t list option -> unit -> t [@@js.create]
-  val prototype: unit -> untyped_object parent [@@js.get "prototype"]
+  val prototype: unit -> WeakKey.t parent [@@js.get "prototype"]
 end
 module Generator_Make (T : Ojs.T) (TReturn : Ojs.T) (TNext : Ojs.T) : sig
   type ('T, 'TReturn, 'TNext) parent = ('T, 'TReturn, 'TNext) Generator.t
@@ -11990,7 +12708,7 @@ module[@js.scope "Promise"] Promise_Make (T : Ojs.T) : sig
     @param values An array of Promises.
     @return A new Promise.
   *)
-  val allSettled: T.t -> (* FIXME: unknown type '{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }' *)any parent [@@js.global "allSettled"]
+  val allSettled: T.t -> (* FIXME: unknown type '{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }' *)any parent [@@js.global "allSettled"]
   
   (**
     language version: ES2020
@@ -12018,7 +12736,7 @@ module[@js.scope "Promise"] Promise_Make (T : Ojs.T) : sig
     @param values An array of Promises.
     @return A new Promise.
   *)
-  val all: T.t -> (* FIXME: unknown type '{ -readonly [P in keyof T]: Awaited<T[P]> }' *)any parent [@@js.global "all"]
+  val all: T.t -> (* FIXME: unknown type '{ -readonly [P in keyof T]: Awaited<T[P]>; }' *)any parent [@@js.global "all"]
   
   (**
     Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
@@ -12209,15 +12927,17 @@ module[@js.scope "WeakRef"] WeakRef_Make (T : Ojs.T) : sig
   (* [Symbol.toStringTag]: unit -> ([`L_s20_WeakRef[@js "WeakRef"]] [@js.enum]) *)
   
   (**
-    Returns the WeakRef instance's target object, or undefined if the target object has been
+    Returns the WeakRef instance's target value, or undefined if the target value has been
     reclaimed.
+    In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
   *)
   val deref: t -> T.t option [@@js.call "deref"]
   val prototype: unit -> any parent [@@js.get "prototype"]
   
   (**
-    Creates a WeakRef instance for the given target object.
-    @param target The target object for the WeakRef instance.
+    Creates a WeakRef instance for the given target value.
+    In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
+    @param target The target value for the WeakRef instance.
   *)
   val create: T.t -> t [@@js.create]
 end
@@ -12230,27 +12950,28 @@ module[@js.scope "FinalizationRegistry"] FinalizationRegistry_Make (T : Ojs.T) :
   (* [Symbol.toStringTag]: unit -> ([`L_s5_FinalizationRegistry[@js "FinalizationRegistry"]] [@js.enum]) *)
   
   (**
-    Registers an object with the registry.
-    @param target The target object to register.
-    @param heldValue The value to pass to the finalizer for this object. This cannot be the
-    target object.
+    Registers a value with the registry.
+    In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
+    @param target The target value to register.
+    @param heldValue The value to pass to the finalizer for this value. This cannot be the
+    target value.
     @param unregisterToken The token to pass to the unregister method to unregister the target
-    object. If provided (and not undefined), this must be an object. If not provided, the target
-    cannot be unregistered.
+    value. If not provided, the target cannot be unregistered.
   *)
-  val register: t -> target:untyped_object -> heldValue:T.t -> ?unregisterToken:untyped_object -> unit -> unit [@@js.call "register"]
+  val register: t -> target:WeakKey.t -> heldValue:T.t -> ?unregisterToken:WeakKey.t -> unit -> unit [@@js.call "register"]
   
   (**
-    Unregisters an object from the registry.
+    Unregisters a value from the registry.
+    In es2023 the value can be either a symbol or an object, in previous versions only object is permissible.
     @param unregisterToken The token that was used as the unregisterToken argument when calling
-    register to register the target object.
+    register to register the target value.
   *)
-  val unregister: t -> unregisterToken:untyped_object -> unit [@@js.call "unregister"]
+  val unregister: t -> unregisterToken:WeakKey.t -> unit [@@js.call "unregister"]
   val prototype: unit -> any parent [@@js.get "prototype"]
   
   (**
     Creates a finalization registry with an associated cleanup callback
-    @param cleanupCallback The callback to call after an object in the registry has been reclaimed.
+    @param cleanupCallback The callback to call after a value in the registry has been reclaimed.
   *)
   val create: (T.t -> unit) -> t [@@js.create]
 end

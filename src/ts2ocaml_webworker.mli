@@ -275,10 +275,10 @@ module[@js.scope "AbortSignal"] rec AbortSignal : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/AbortSignal/abort) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/AbortSignal/abort_static) *)
   val abort: ?reason:any -> unit -> t [@@js.global "abort"]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/AbortSignal/timeout) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/AbortSignal/timeout_static) *)
   val timeout: float -> t [@@js.global "timeout"]
 end
 and AddEventListenerOptions : sig
@@ -742,7 +742,7 @@ module[@js.scope "performance"] PerformanceStatic : sig
   val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "removeEventListener"]
 end
 module PermissionState : sig
-  type t = ([`L_s101_denied[@js "denied"] | `L_s145_granted[@js "granted"] | `L_s251_prompt[@js "prompt"]] [@js.enum])
+  type t = ([`L_s102_denied[@js "denied"] | `L_s146_granted[@js "granted"] | `L_s253_prompt[@js "prompt"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -828,7 +828,7 @@ module[@js.scope "PermissionStatus"] PermissionStatus : sig
   val create: unit -> t [@@js.create]
 end
 module PermissionName : sig
-  type t = ([`L_s142_geolocation[@js "geolocation"] | `L_s217_notifications[@js "notifications"] | `L_s238_persistent_storage[@js "persistent-storage"] | `L_s253_push[@js "push"] | `L_s278_screen_wake_lock[@js "screen-wake-lock"] | `L_s345_xr_spatial_tracking[@js "xr-spatial-tracking"]] [@js.enum])
+  type t = ([`L_s143_geolocation[@js "geolocation"] | `L_s219_notifications[@js "notifications"] | `L_s240_persistent_storage[@js "persistent-storage"] | `L_s255_push[@js "push"] | `L_s280_screen_wake_lock[@js "screen-wake-lock"] | `L_s350_xr_spatial_tracking[@js "xr-spatial-tracking"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -935,7 +935,7 @@ module FileSystemGetDirectoryOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WriteCommandType : sig
-  type t = ([`L_s281_seek[@js "seek"] | `L_s319_truncate[@js "truncate"] | `L_s343_write[@js "write"]] [@js.enum])
+  type t = ([`L_s283_seek[@js "seek"] | `L_s324_truncate[@js "truncate"] | `L_s348_write[@js "write"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -1065,7 +1065,7 @@ module UnderlyingSourcePullCallback : sig
   val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
 end
 module ReadableStreamType : sig
-  type t = ([`L_s74_bytes[@js "bytes"]] [@js.enum])
+  type t = ([`L_s75_bytes[@js "bytes"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -1158,9 +1158,9 @@ module UnderlyingByteSource : sig
   val set_pull: 'tags this -> (ReadableByteStreamController.t -> ([`U1 of unit | `U2 of unit PromiseLike.t] [@js.union])) -> unit [@@js.set "pull"]
   val get_start: 'tags this -> (ReadableByteStreamController.t -> any) option [@@js.get "start"]
   val set_start: 'tags this -> (ReadableByteStreamController.t -> any) -> unit [@@js.set "start"]
-  val get_type: 'tags this -> ([`L_s74_bytes[@js "bytes"]] [@js.enum]) [@@js.get "type"]
-  val set_type: 'tags this -> ([`L_s74_bytes[@js "bytes"]] [@js.enum]) -> unit [@@js.set "type"]
-  val create: ?autoAllocateChunkSize:float -> ?cancel:UnderlyingSourceCancelCallback.t -> ?pull:(ReadableByteStreamController.t -> (unit, unit PromiseLike.t) union2) -> ?start:(ReadableByteStreamController.t -> any) -> type_:(([`L_s74_bytes[@js "bytes"]] [@js.enum])[@js "type"]) -> unit -> t [@@js.builder]
+  val get_type: 'tags this -> ([`L_s75_bytes[@js "bytes"]] [@js.enum]) [@@js.get "type"]
+  val set_type: 'tags this -> ([`L_s75_bytes[@js "bytes"]] [@js.enum]) -> unit [@@js.set "type"]
+  val create: ?autoAllocateChunkSize:float -> ?cancel:UnderlyingSourceCancelCallback.t -> ?pull:(ReadableByteStreamController.t -> (unit, unit PromiseLike.t) union2) -> ?start:(ReadableByteStreamController.t -> any) -> type_:(([`L_s75_bytes[@js "bytes"]] [@js.enum])[@js "type"]) -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module StreamPipeOptions : sig
@@ -1461,7 +1461,7 @@ and[@js.scope "WritableStreamDefaultWriter"] WritableStreamDefaultWriter : sig
   val create: 'W WritableStream.t -> 'W t [@@js.create]
 end
 module ReadableStreamReaderMode : sig
-  type t = ([`L_s73_byob[@js "byob"]] [@js.enum])
+  type t = ([`L_s74_byob[@js "byob"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -1564,9 +1564,9 @@ module[@js.scope "ReadableStream"] rec ReadableStream : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
-    val get_mode: t -> ([`L_s73_byob[@js "byob"]] [@js.enum]) [@@js.get "mode"]
-    val set_mode: t -> ([`L_s73_byob[@js "byob"]] [@js.enum]) -> unit [@@js.set "mode"]
-    val create: mode:([`L_s73_byob[@js "byob"]] [@js.enum]) -> unit -> t [@@js.builder]
+    val get_mode: t -> ([`L_s74_byob[@js "byob"]] [@js.enum]) [@@js.get "mode"]
+    val set_mode: t -> ([`L_s74_byob[@js "byob"]] [@js.enum]) -> unit [@@js.set "mode"]
+    val create: mode:([`L_s74_byob[@js "byob"]] [@js.enum]) -> unit -> t [@@js.builder]
   end
   module AnonymousInterface1 : sig
     type t = private Ojs.t
@@ -1718,7 +1718,7 @@ and ReadableWritablePair : sig
   val cast_from: ('tags, 'R, 'W) this -> ('R, 'W) t [@@js.custom let cast_from = Obj.magic]
 end
 module EndingType : sig
-  type t = ([`L_s200_native[@js "native"] | `L_s318_transparent[@js "transparent"]] [@js.enum])
+  type t = ([`L_s202_native[@js "native"] | `L_s323_transparent[@js "transparent"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -1862,6 +1862,11 @@ module FileSystemReadWriteOptions : sig
   val create: ?at:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
+module AllowSharedBufferSource : sig
+  type t = (ArrayBuffer.t, ArrayBufferView.t) union2
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+end
 
 (**
   Available only in secure contexts.
@@ -1890,19 +1895,19 @@ module[@js.scope "FileSystemSyncAccessHandle"] FileSystemSyncAccessHandle : sig
   val getSize: 'tags this -> float [@@js.call "getSize"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FileSystemSyncAccessHandle/read) *)
-  val read: 'tags this -> buffer:BufferSource.t -> ?options:FileSystemReadWriteOptions.t -> unit -> float [@@js.call "read"]
+  val read: 'tags this -> buffer:AllowSharedBufferSource.t -> ?options:FileSystemReadWriteOptions.t -> unit -> float [@@js.call "read"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FileSystemSyncAccessHandle/truncate) *)
   val truncate: 'tags this -> newSize:float -> unit [@@js.call "truncate"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FileSystemSyncAccessHandle/write) *)
-  val write: 'tags this -> buffer:BufferSource.t -> ?options:FileSystemReadWriteOptions.t -> unit -> float [@@js.call "write"]
+  val write: 'tags this -> buffer:AllowSharedBufferSource.t -> ?options:FileSystemReadWriteOptions.t -> unit -> float [@@js.call "write"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 module FileSystemHandleKind : sig
-  type t = ([`L_s110_directory[@js "directory"] | `L_s132_file[@js "file"]] [@js.enum])
+  type t = ([`L_s111_directory[@js "directory"] | `L_s133_file[@js "file"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -2018,7 +2023,7 @@ module[@js.scope "FileSystemFileHandle"] FileSystemFileHandle : sig
   val t_of_js: Ojs.t -> t
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FileSystemHandle/kind) *)
-  val get_kind: 'tags this -> ([`L_s132_file[@js "file"]] [@js.enum]) [@@js.get "kind"]
+  val get_kind: 'tags this -> ([`L_s133_file[@js "file"]] [@js.enum]) [@@js.get "kind"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FileSystemFileHandle/createSyncAccessHandle) *)
   val createSyncAccessHandle: 'tags this -> FileSystemSyncAccessHandle.t Promise.t [@@js.call "createSyncAccessHandle"]
@@ -2051,7 +2056,7 @@ module[@js.scope "FileSystemDirectoryHandle"] FileSystemDirectoryHandle : sig
   val t_of_js: Ojs.t -> t
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FileSystemHandle/kind) *)
-  val get_kind: 'tags this -> ([`L_s110_directory[@js "directory"]] [@js.enum]) [@@js.get "kind"]
+  val get_kind: 'tags this -> ([`L_s111_directory[@js "directory"]] [@js.enum]) [@@js.get "kind"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/FileSystemDirectoryHandle/getDirectoryHandle) *)
   val getDirectoryHandle: 'tags this -> name:string -> ?options:FileSystemGetDirectoryOptions.t -> unit -> t Promise.t [@@js.call "getDirectoryHandle"]
@@ -2135,7 +2140,7 @@ module NavigatorOnLine : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module LockMode : sig
-  type t = ([`L_s123_exclusive[@js "exclusive"] | `L_s284_shared[@js "shared"]] [@js.enum])
+  type t = ([`L_s124_exclusive[@js "exclusive"] | `L_s287_shared[@js "shared"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -2381,22 +2386,22 @@ module NavigatorBadge : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaEncodingType : sig
-  type t = ([`L_s263_record[@js "record"] | `L_s339_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s265_record[@js "record"] | `L_s344_webrtc[@js "webrtc"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module TransferFunction : sig
-  type t = ([`L_s152_hlg[@js "hlg"] | `L_s242_pq[@js "pq"] | `L_s300_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s153_hlg[@js "hlg"] | `L_s244_pq[@js "pq"] | `L_s303_srgb[@js "srgb"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module HdrMetadataType : sig
-  type t = ([`L_s290_smpteSt2086[@js "smpteSt2086"] | `L_s291_smpteSt2094_10[@js "smpteSt2094-10"] | `L_s292_smpteSt2094_40[@js "smpteSt2094-40"]] [@js.enum])
+  type t = ([`L_s293_smpteSt2086[@js "smpteSt2086"] | `L_s294_smpteSt2094_10[@js "smpteSt2094-10"] | `L_s295_smpteSt2094_40[@js "smpteSt2094-40"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module ColorGamut : sig
-  type t = ([`L_s233_p3[@js "p3"] | `L_s262_rec2020[@js "rec2020"] | `L_s300_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s235_p3[@js "p3"] | `L_s264_rec2020[@js "rec2020"] | `L_s303_srgb[@js "srgb"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -2527,7 +2532,7 @@ module MediaCapabilitiesEncodingInfo : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDecodingType : sig
-  type t = ([`L_s132_file[@js "file"] | `L_s190_media_source[@js "media-source"] | `L_s339_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s133_file[@js "file"] | `L_s192_media_source[@js "media-source"] | `L_s344_webrtc[@js "webrtc"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -2671,7 +2676,7 @@ module[@js.scope "IDBVersionChangeEvent"] IDBVersionChangeEvent : sig
   val create': type_:string -> ?eventInitDict:IDBVersionChangeEventInit.t -> unit -> t [@@js.create]
 end
 module IDBTransactionDurability : sig
-  type t = ([`L_s266_relaxed[@js "relaxed"] | `L_s303_strict[@js "strict"] | `L_s97_default[@js "default"]] [@js.enum])
+  type t = ([`L_s268_relaxed[@js "relaxed"] | `L_s307_strict[@js "strict"] | `L_s98_default[@js "default"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -2733,12 +2738,12 @@ module IDBValidKey : sig
   val t_of_js: Ojs.t -> t
 end
 module IDBTransactionMode : sig
-  type t = ([`L_s258_readonly[@js "readonly"] | `L_s259_readwrite[@js "readwrite"] | `L_s333_versionchange[@js "versionchange"]] [@js.enum])
+  type t = ([`L_s260_readonly[@js "readonly"] | `L_s261_readwrite[@js "readwrite"] | `L_s338_versionchange[@js "versionchange"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module IDBRequestReadyState : sig
-  type t = ([`L_s114_done[@js "done"] | `L_s236_pending[@js "pending"]] [@js.enum])
+  type t = ([`L_s115_done[@js "done"] | `L_s238_pending[@js "pending"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -2801,33 +2806,33 @@ module[@js.scope "IDBKeyRange"] IDBKeyRange : sig
   (**
     Returns a new IDBKeyRange spanning from lower to upper. If lowerOpen is true, lower is not included in the range. If upperOpen is true, upper is not included in the range.
     
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBKeyRange/bound)
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBKeyRange/bound_static)
   *)
   val bound: lower:any -> upper:any -> ?lowerOpen:bool -> ?upperOpen:bool -> unit -> t [@@js.global "bound"]
   
   (**
     Returns a new IDBKeyRange starting at key with no upper bound. If open is true, key is not included in the range.
     
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBKeyRange/lowerBound)
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBKeyRange/lowerBound_static)
   *)
   val lowerBound: lower:any -> ?open_:bool -> unit -> t [@@js.global "lowerBound"]
   
   (**
     Returns a new IDBKeyRange spanning only key.
     
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBKeyRange/only)
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBKeyRange/only_static)
   *)
   val only: any -> t [@@js.global "only"]
   
   (**
     Returns a new IDBKeyRange with no lower bound and ending at key. If open is true, key is not included in the range.
     
-    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBKeyRange/upperBound)
+    \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/IDBKeyRange/upperBound_static)
   *)
   val upperBound: upper:any -> ?open_:bool -> unit -> t [@@js.global "upperBound"]
 end
 module IDBCursorDirection : sig
-  type t = ([`L_s204_next[@js "next"] | `L_s205_nextunique[@js "nextunique"] | `L_s246_prev[@js "prev"] | `L_s247_prevunique[@js "prevunique"]] [@js.enum])
+  type t = ([`L_s206_next[@js "next"] | `L_s207_nextunique[@js "nextunique"] | `L_s248_prev[@js "prev"] | `L_s249_prevunique[@js "prevunique"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -3934,17 +3939,17 @@ module[@js.scope "indexedDB"] IndexedDBStatic : sig
   val open_: name:string -> ?version:float -> unit -> IDBOpenDBRequest.t [@@js.global "open"]
 end
 module FontFaceSetLoadStatus : sig
-  type t = ([`L_s177_loaded[@js "loaded"] | `L_s179_loading[@js "loading"]] [@js.enum])
+  type t = ([`L_s178_loaded[@js "loaded"] | `L_s180_loading[@js "loading"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module FontFaceLoadStatus : sig
-  type t = ([`L_s120_error[@js "error"] | `L_s177_loaded[@js "loaded"] | `L_s179_loading[@js "loading"] | `L_s325_unloaded[@js "unloaded"]] [@js.enum])
+  type t = ([`L_s121_error[@js "error"] | `L_s178_loaded[@js "loaded"] | `L_s180_loading[@js "loading"] | `L_s330_unloaded[@js "unloaded"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module FontDisplay : sig
-  type t = ([`L_s130_fallback[@js "fallback"] | `L_s228_optional[@js "optional"] | `L_s309_swap[@js "swap"] | `L_s60_auto[@js "auto"] | `L_s67_block[@js "block"]] [@js.enum])
+  type t = ([`L_s131_fallback[@js "fallback"] | `L_s230_optional[@js "optional"] | `L_s313_swap[@js "swap"] | `L_s61_auto[@js "auto"] | `L_s68_block[@js "block"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -4389,7 +4394,7 @@ module Pbkdf2Params : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KeyFormat : sig
-  type t = ([`L_s168_jwk[@js "jwk"] | `L_s241_pkcs8[@js "pkcs8"] | `L_s257_raw[@js "raw"] | `L_s298_spki[@js "spki"]] [@js.enum])
+  type t = ([`L_s169_jwk[@js "jwk"] | `L_s243_pkcs8[@js "pkcs8"] | `L_s259_raw[@js "raw"] | `L_s301_spki[@js "spki"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -4536,12 +4541,12 @@ module EcdsaParams : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KeyUsage : sig
-  type t = ([`L_s103_deriveBits[@js "deriveBits"] | `L_s104_deriveKey[@js "deriveKey"] | `L_s117_encrypt[@js "encrypt"] | `L_s287_sign[@js "sign"] | `L_s327_unwrapKey[@js "unwrapKey"] | `L_s332_verify[@js "verify"] | `L_s342_wrapKey[@js "wrapKey"] | `L_s96_decrypt[@js "decrypt"]] [@js.enum])
+  type t = ([`L_s104_deriveBits[@js "deriveBits"] | `L_s105_deriveKey[@js "deriveKey"] | `L_s118_encrypt[@js "encrypt"] | `L_s290_sign[@js "sign"] | `L_s332_unwrapKey[@js "unwrapKey"] | `L_s337_verify[@js "verify"] | `L_s347_wrapKey[@js "wrapKey"] | `L_s97_decrypt[@js "decrypt"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module KeyType : sig
-  type t = ([`L_s248_private[@js "private"] | `L_s252_public[@js "public"] | `L_s280_secret[@js "secret"]] [@js.enum])
+  type t = ([`L_s250_private[@js "private"] | `L_s254_public[@js "public"] | `L_s282_secret[@js "secret"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -4801,10 +4806,10 @@ module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t [@@js.call "generateKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
-  val importKey: 'tags this -> format:([`L_s168_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
+  val importKey: 'tags this -> format:([`L_s169_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
-  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s168_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "importKey"]
+  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s169_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "importKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/unwrapKey) *)
   val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t -> CryptoKey.t Promise.t [@@js.call "unwrapKey"]
@@ -4825,25 +4830,31 @@ module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val encrypt: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t Promise.t [@@js.call "encrypt"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/exportKey) *)
-  val exportKey: 'tags this -> format:([`L_s168_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t [@@js.call "exportKey"]
+  val exportKey: 'tags this -> format:([`L_s169_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t [@@js.call "exportKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/exportKey) *)
-  val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s168_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> key:CryptoKey.t -> ArrayBuffer.t Promise.t [@@js.call "exportKey"]
+  val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s169_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> key:CryptoKey.t -> ArrayBuffer.t Promise.t [@@js.call "exportKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/exportKey) *)
+  val exportKey'': 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> (ArrayBuffer.t, JsonWebKey.t) union2 Promise.t [@@js.call "exportKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
-  val generateKey''': 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t [@@js.call "generateKey"]
+  val generateKey''': 'tags this -> algorithm:([`L_s15_Ed25519[@js "Ed25519"]] [@js.enum]) -> extractable:bool -> keyUsages:([`U1 of ([`L_s290_sign[@js "sign"]] [@js.enum]) | `U2 of ([`L_s337_verify[@js "verify"]] [@js.enum])] [@js.union]) list -> CryptoKeyPair.t Promise.t [@@js.call "generateKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
-  val generateKey'''': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "generateKey"]
+  val generateKey'''': 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t [@@js.call "generateKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
-  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t [@@js.call "generateKey"]
+  val generateKey''''': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "generateKey"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) *)
+  val generateKey'''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t [@@js.call "generateKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
-  val importKey'': 'tags this -> format:([`L_s168_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
+  val importKey'': 'tags this -> format:([`L_s169_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/importKey) *)
-  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s168_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
+  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s169_jwk[@js "jwk"]] [@js.enum])) Exclude.t -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t [@@js.call "importKey"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/sign) *)
   val sign: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t Promise.t [@@js.call "sign"]
@@ -4981,7 +4992,7 @@ module MultiCacheQueryOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResponseType : sig
-  type t = ([`L_s120_error[@js "error"] | `L_s223_opaque[@js "opaque"] | `L_s224_opaqueredirect[@js "opaqueredirect"] | `L_s63_basic[@js "basic"] | `L_s94_cors[@js "cors"] | `L_s97_default[@js "default"]] [@js.enum])
+  type t = ([`L_s121_error[@js "error"] | `L_s225_opaque[@js "opaque"] | `L_s226_opaqueredirect[@js "opaqueredirect"] | `L_s64_basic[@js "basic"] | `L_s95_cors[@js "cors"] | `L_s98_default[@js "default"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -5021,6 +5032,9 @@ module[@js.scope "Headers"] rec Headers : sig
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Headers/get) *)
   val get_: 'tags this -> name:string -> string option [@@js.call "get"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Headers/getSetCookie) *)
+  val getSetCookie: 'tags this -> string list [@@js.call "getSetCookie"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Headers/has) *)
   val has: 'tags this -> name:string -> bool [@@js.call "has"]
@@ -5087,6 +5101,9 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   (** Returns a list of values in the search params. *)
   val values: 'tags this -> string IterableIterator.t [@@js.call "values"]
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/URLSearchParams/size) *)
+  val get_size: 'tags this -> float [@@js.get "size"]
+  
   (**
     Appends a specified key/value pair as a new search parameter.
     
@@ -5099,7 +5116,7 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/URLSearchParams/delete)
   *)
-  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
+  val delete: 'tags this -> name:string -> ?value:string -> unit -> unit [@@js.call "delete"]
   
   (**
     Returns the first value associated to the given search parameter.
@@ -5120,7 +5137,7 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/URLSearchParams/has)
   *)
-  val has: 'tags this -> name:string -> bool [@@js.call "has"]
+  val has: 'tags this -> name:string -> ?value:string -> unit -> bool [@@js.call "has"]
   
   (**
     Sets the value associated to a given search parameter to the given value. If there were several values, delete the others.
@@ -5234,10 +5251,13 @@ module[@js.scope "URL"] URL : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: url:([`U1 of string | `U2 of t] [@js.union]) -> ?base:([`U1 of string | `U2 of t] [@js.union]) -> unit -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/URL/createObjectURL) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/URL/canParse_static) *)
+  val canParse: url:([`U1 of string | `U2 of t] [@js.union]) -> ?base:string -> unit -> bool [@@js.global "canParse"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/URL/createObjectURL_static) *)
   val createObjectURL: Blob.t -> string [@@js.global "createObjectURL"]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/URL/revokeObjectURL) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/URL/revokeObjectURL_static) *)
   val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
 end
 module FormDataEntryValue : sig
@@ -5396,34 +5416,37 @@ module[@js.scope "Response"] Response : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?body:BodyInit.t option -> ?init:ResponseInit.t -> unit -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Response/error) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Response/error_static) *)
   val error: unit -> t [@@js.global "error"]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Response/redirect) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Response/json_static) *)
+  val json: data:any -> ?init:ResponseInit.t -> unit -> t [@@js.global "json"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Response/redirect_static) *)
   val redirect: url:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?status:float -> unit -> t [@@js.global "redirect"]
 end
 module RequestRedirect : sig
-  type t = ([`L_s120_error[@js "error"] | `L_s135_follow[@js "follow"] | `L_s188_manual[@js "manual"]] [@js.enum])
+  type t = ([`L_s121_error[@js "error"] | `L_s136_follow[@js "follow"] | `L_s190_manual[@js "manual"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module RequestMode : sig
-  type t = ([`L_s201_navigate[@js "navigate"] | `L_s207_no_cors[@js "no-cors"] | `L_s275_same_origin[@js "same-origin"] | `L_s94_cors[@js "cors"]] [@js.enum])
+  type t = ([`L_s203_navigate[@js "navigate"] | `L_s209_no_cors[@js "no-cors"] | `L_s277_same_origin[@js "same-origin"] | `L_s95_cors[@js "cors"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module RequestCredentials : sig
-  type t = ([`L_s161_include[@js "include"] | `L_s220_omit[@js "omit"] | `L_s275_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s162_include[@js "include"] | `L_s222_omit[@js "omit"] | `L_s277_same_origin[@js "same-origin"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module RequestCache : sig
-  type t = ([`L_s137_force_cache[@js "force-cache"] | `L_s206_no_cache[@js "no-cache"] | `L_s211_no_store[@js "no-store"] | `L_s222_only_if_cached[@js "only-if-cached"] | `L_s267_reload[@js "reload"] | `L_s97_default[@js "default"]] [@js.enum])
+  type t = ([`L_s138_force_cache[@js "force-cache"] | `L_s208_no_cache[@js "no-cache"] | `L_s213_no_store[@js "no-store"] | `L_s224_only_if_cached[@js "only-if-cached"] | `L_s269_reload[@js "reload"] | `L_s98_default[@js "default"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module ReferrerPolicy : sig
-  type t = ([`L_s0[@js ""] | `L_s209_no_referrer[@js "no-referrer"] | `L_s210_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s229_origin[@js "origin"] | `L_s230_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s275_same_origin[@js "same-origin"] | `L_s304_strict_origin[@js "strict-origin"] | `L_s305_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s326_unsafe_url[@js "unsafe-url"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s211_no_referrer[@js "no-referrer"] | `L_s212_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s231_origin[@js "origin"] | `L_s232_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s277_same_origin[@js "same-origin"] | `L_s308_strict_origin[@js "strict-origin"] | `L_s309_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s331_unsafe_url[@js "unsafe-url"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -5520,7 +5543,7 @@ module RequestInit : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RequestDestination : sig
-  type t = ([`L_s0[@js ""] | `L_s113_document[@js "document"] | `L_s115_embed[@js "embed"] | `L_s136_font[@js "font"] | `L_s138_frame[@js "frame"] | `L_s158_iframe[@js "iframe"] | `L_s159_image[@js "image"] | `L_s187_manifest[@js "manifest"] | `L_s218_object[@js "object"] | `L_s234_paintworklet[@js "paintworklet"] | `L_s268_report[@js "report"] | `L_s279_script[@js "script"] | `L_s285_sharedworker[@js "sharedworker"] | `L_s306_style[@js "style"] | `L_s317_track[@js "track"] | `L_s334_video[@js "video"] | `L_s341_worker[@js "worker"] | `L_s346_xslt[@js "xslt"] | `L_s57_audio[@js "audio"] | `L_s58_audioworklet[@js "audioworklet"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s114_document[@js "document"] | `L_s116_embed[@js "embed"] | `L_s137_font[@js "font"] | `L_s139_frame[@js "frame"] | `L_s159_iframe[@js "iframe"] | `L_s160_image[@js "image"] | `L_s189_manifest[@js "manifest"] | `L_s220_object[@js "object"] | `L_s236_paintworklet[@js "paintworklet"] | `L_s270_report[@js "report"] | `L_s281_script[@js "script"] | `L_s288_sharedworker[@js "sharedworker"] | `L_s310_style[@js "style"] | `L_s322_track[@js "track"] | `L_s339_video[@js "video"] | `L_s346_worker[@js "worker"] | `L_s351_xslt[@js "xslt"] | `L_s58_audio[@js "audio"] | `L_s59_audioworklet[@js "audioworklet"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -5708,7 +5731,7 @@ module[@js.scope "caches"] CachesStatic : sig
   val open_: string -> Cache.t Promise.t [@@js.global "open"]
 end
 module XMLHttpRequestResponseType : sig
-  type t = ([`L_s0[@js ""] | `L_s113_document[@js "document"] | `L_s167_json[@js "json"] | `L_s311_text[@js "text"] | `L_s56_arraybuffer[@js "arraybuffer"] | `L_s66_blob[@js "blob"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s114_document[@js "document"] | `L_s168_json[@js "json"] | `L_s315_text[@js "text"] | `L_s57_arraybuffer[@js "arraybuffer"] | `L_s67_blob[@js "blob"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -6234,7 +6257,7 @@ module XMLHttpRequestEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerState : sig
-  type t = ([`L_s164_installed[@js "installed"] | `L_s165_installing[@js "installing"] | `L_s235_parsed[@js "parsed"] | `L_s264_redundant[@js "redundant"] | `L_s47_activated[@js "activated"] | `L_s48_activating[@js "activating"]] [@js.enum])
+  type t = ([`L_s165_installed[@js "installed"] | `L_s166_installing[@js "installing"] | `L_s237_parsed[@js "parsed"] | `L_s266_redundant[@js "redundant"] | `L_s48_activated[@js "activated"] | `L_s49_activating[@js "activating"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -6383,7 +6406,7 @@ module[@js.scope "TransformStream"] TransformStream : sig
   val create': ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) t [@@js.create]
 end
 module OffscreenRenderingContextId : sig
-  type t = ([`L_s1_2d[@js "2d"] | `L_s336_webgl[@js "webgl"] | `L_s337_webgl2[@js "webgl2"] | `L_s338_webgpu[@js "webgpu"] | `L_s65_bitmaprenderer[@js "bitmaprenderer"]] [@js.enum])
+  type t = ([`L_s1_2d[@js "2d"] | `L_s341_webgl[@js "webgl"] | `L_s342_webgl2[@js "webgl2"] | `L_s343_webgpu[@js "webgpu"] | `L_s66_bitmaprenderer[@js "bitmaprenderer"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -6466,7 +6489,7 @@ module[@js.scope "WebGLFramebuffer"] WebGLFramebuffer : sig
   val create: unit -> t [@@js.create]
 end
 module WebGLPowerPreference : sig
-  type t = ([`L_s151_high_performance[@js "high-performance"] | `L_s184_low_power[@js "low-power"] | `L_s97_default[@js "default"]] [@js.enum])
+  type t = ([`L_s152_high_performance[@js "high-performance"] | `L_s186_low_power[@js "low-power"] | `L_s98_default[@js "default"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -7426,7 +7449,7 @@ module Float32List : sig
   val t_of_js: Ojs.t -> t
 end
 module PredefinedColorSpace : sig
-  type t = ([`L_s112_display_p3[@js "display-p3"] | `L_s300_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s113_display_p3[@js "display-p3"] | `L_s303_srgb[@js "srgb"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -7701,73 +7724,73 @@ module WebGLRenderingContextBase : sig
   val getExtension'''''''''': 'tags this -> extensionName:([`L_s14_EXT_texture_filter_anisotropic[@js "EXT_texture_filter_anisotropic"]] [@js.enum]) -> EXT_texture_filter_anisotropic.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''': 'tags this -> extensionName:([`L_s19_KHR_parallel_shader_compile[@js "KHR_parallel_shader_compile"]] [@js.enum]) -> KHR_parallel_shader_compile.t option [@@js.call "getExtension"]
+  val getExtension''''''''''': 'tags this -> extensionName:([`L_s20_KHR_parallel_shader_compile[@js "KHR_parallel_shader_compile"]] [@js.enum]) -> KHR_parallel_shader_compile.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''': 'tags this -> extensionName:([`L_s21_OES_element_index_uint[@js "OES_element_index_uint"]] [@js.enum]) -> OES_element_index_uint.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''': 'tags this -> extensionName:([`L_s22_OES_element_index_uint[@js "OES_element_index_uint"]] [@js.enum]) -> OES_element_index_uint.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''': 'tags this -> extensionName:([`L_s22_OES_fbo_render_mipmap[@js "OES_fbo_render_mipmap"]] [@js.enum]) -> OES_fbo_render_mipmap.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''': 'tags this -> extensionName:([`L_s23_OES_fbo_render_mipmap[@js "OES_fbo_render_mipmap"]] [@js.enum]) -> OES_fbo_render_mipmap.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''': 'tags this -> extensionName:([`L_s23_OES_standard_derivatives[@js "OES_standard_derivatives"]] [@js.enum]) -> OES_standard_derivatives.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''': 'tags this -> extensionName:([`L_s24_OES_standard_derivatives[@js "OES_standard_derivatives"]] [@js.enum]) -> OES_standard_derivatives.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''': 'tags this -> extensionName:([`L_s24_OES_texture_float[@js "OES_texture_float"]] [@js.enum]) -> OES_texture_float.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''': 'tags this -> extensionName:([`L_s25_OES_texture_float[@js "OES_texture_float"]] [@js.enum]) -> OES_texture_float.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''': 'tags this -> extensionName:([`L_s25_OES_texture_float_linear[@js "OES_texture_float_linear"]] [@js.enum]) -> OES_texture_float_linear.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''': 'tags this -> extensionName:([`L_s26_OES_texture_float_linear[@js "OES_texture_float_linear"]] [@js.enum]) -> OES_texture_float_linear.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''': 'tags this -> extensionName:([`L_s26_OES_texture_half_float[@js "OES_texture_half_float"]] [@js.enum]) -> OES_texture_half_float.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''': 'tags this -> extensionName:([`L_s27_OES_texture_half_float[@js "OES_texture_half_float"]] [@js.enum]) -> OES_texture_half_float.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''''': 'tags this -> extensionName:([`L_s27_OES_texture_half_float_linear[@js "OES_texture_half_float_linear"]] [@js.enum]) -> OES_texture_half_float_linear.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''': 'tags this -> extensionName:([`L_s28_OES_texture_half_float_linear[@js "OES_texture_half_float_linear"]] [@js.enum]) -> OES_texture_half_float_linear.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''''': 'tags this -> extensionName:([`L_s28_OES_vertex_array_object[@js "OES_vertex_array_object"]] [@js.enum]) -> OES_vertex_array_object.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''': 'tags this -> extensionName:([`L_s29_OES_vertex_array_object[@js "OES_vertex_array_object"]] [@js.enum]) -> OES_vertex_array_object.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''''''': 'tags this -> extensionName:([`L_s29_OVR_multiview2[@js "OVR_multiview2"]] [@js.enum]) -> OVR_multiview2.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''': 'tags this -> extensionName:([`L_s30_OVR_multiview2[@js "OVR_multiview2"]] [@js.enum]) -> OVR_multiview2.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''''''': 'tags this -> extensionName:([`L_s32_WEBGL_color_buffer_float[@js "WEBGL_color_buffer_float"]] [@js.enum]) -> WEBGL_color_buffer_float.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''': 'tags this -> extensionName:([`L_s33_WEBGL_color_buffer_float[@js "WEBGL_color_buffer_float"]] [@js.enum]) -> WEBGL_color_buffer_float.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''''''''': 'tags this -> extensionName:([`L_s33_WEBGL_compressed_texture_astc[@js "WEBGL_compressed_texture_astc"]] [@js.enum]) -> WEBGL_compressed_texture_astc.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''': 'tags this -> extensionName:([`L_s34_WEBGL_compressed_texture_astc[@js "WEBGL_compressed_texture_astc"]] [@js.enum]) -> WEBGL_compressed_texture_astc.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''''''''': 'tags this -> extensionName:([`L_s34_WEBGL_compressed_texture_etc[@js "WEBGL_compressed_texture_etc"]] [@js.enum]) -> WEBGL_compressed_texture_etc.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''': 'tags this -> extensionName:([`L_s35_WEBGL_compressed_texture_etc[@js "WEBGL_compressed_texture_etc"]] [@js.enum]) -> WEBGL_compressed_texture_etc.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''''''''''': 'tags this -> extensionName:([`L_s35_WEBGL_compressed_texture_etc1[@js "WEBGL_compressed_texture_etc1"]] [@js.enum]) -> WEBGL_compressed_texture_etc1.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''''': 'tags this -> extensionName:([`L_s36_WEBGL_compressed_texture_etc1[@js "WEBGL_compressed_texture_etc1"]] [@js.enum]) -> WEBGL_compressed_texture_etc1.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s36_WEBGL_compressed_texture_pvrtc[@js "WEBGL_compressed_texture_pvrtc"]] [@js.enum]) -> WEBGL_compressed_texture_pvrtc.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s37_WEBGL_compressed_texture_pvrtc[@js "WEBGL_compressed_texture_pvrtc"]] [@js.enum]) -> WEBGL_compressed_texture_pvrtc.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s37_WEBGL_compressed_texture_s3tc[@js "WEBGL_compressed_texture_s3tc"]] [@js.enum]) -> WEBGL_compressed_texture_s3tc.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s38_WEBGL_compressed_texture_s3tc[@js "WEBGL_compressed_texture_s3tc"]] [@js.enum]) -> WEBGL_compressed_texture_s3tc.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s38_WEBGL_compressed_texture_s3tc_srgb[@js "WEBGL_compressed_texture_s3tc_srgb"]] [@js.enum]) -> WEBGL_compressed_texture_s3tc_srgb.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s39_WEBGL_compressed_texture_s3tc_srgb[@js "WEBGL_compressed_texture_s3tc_srgb"]] [@js.enum]) -> WEBGL_compressed_texture_s3tc_srgb.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s39_WEBGL_debug_renderer_info[@js "WEBGL_debug_renderer_info"]] [@js.enum]) -> WEBGL_debug_renderer_info.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s40_WEBGL_debug_renderer_info[@js "WEBGL_debug_renderer_info"]] [@js.enum]) -> WEBGL_debug_renderer_info.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s40_WEBGL_debug_shaders[@js "WEBGL_debug_shaders"]] [@js.enum]) -> WEBGL_debug_shaders.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s41_WEBGL_debug_shaders[@js "WEBGL_debug_shaders"]] [@js.enum]) -> WEBGL_debug_shaders.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s41_WEBGL_depth_texture[@js "WEBGL_depth_texture"]] [@js.enum]) -> WEBGL_depth_texture.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s42_WEBGL_depth_texture[@js "WEBGL_depth_texture"]] [@js.enum]) -> WEBGL_depth_texture.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s42_WEBGL_draw_buffers[@js "WEBGL_draw_buffers"]] [@js.enum]) -> WEBGL_draw_buffers.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s43_WEBGL_draw_buffers[@js "WEBGL_draw_buffers"]] [@js.enum]) -> WEBGL_draw_buffers.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension'''''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s43_WEBGL_lose_context[@js "WEBGL_lose_context"]] [@js.enum]) -> WEBGL_lose_context.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s44_WEBGL_lose_context[@js "WEBGL_lose_context"]] [@js.enum]) -> WEBGL_lose_context.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
-  val getExtension''''''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s44_WEBGL_multi_draw[@js "WEBGL_multi_draw"]] [@js.enum]) -> WEBGL_multi_draw.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s45_WEBGL_multi_draw[@js "WEBGL_multi_draw"]] [@js.enum]) -> WEBGL_multi_draw.t option [@@js.call "getExtension"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/getExtension) *)
   val getExtension'''''''''''''''''''''''''''''''''': 'tags this -> name:string -> any [@@js.call "getExtension"]
@@ -8495,7 +8518,7 @@ module[@js.scope "DOMPoint"] rec DOMPoint : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create': ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/DOMPoint/fromPoint) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/DOMPoint/fromPoint_static) *)
   val fromPoint: ?other:DOMPointInit.t -> unit -> t [@@js.global "fromPoint"]
 end
 
@@ -8533,7 +8556,7 @@ and[@js.scope "DOMPointReadOnly"] DOMPointReadOnly : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/DOMPointReadOnly/fromPoint) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/DOMPointReadOnly/fromPoint_static) *)
   val fromPoint: ?other:DOMPointInit.t -> unit -> t [@@js.global "fromPoint"]
 end
 
@@ -8882,22 +8905,22 @@ module CanvasTransform : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasTextBaseline : sig
-  type t = ([`L_s147_hanging[@js "hanging"] | `L_s156_ideographic[@js "ideographic"] | `L_s195_middle[@js "middle"] | `L_s315_top[@js "top"] | `L_s52_alphabetic[@js "alphabetic"] | `L_s69_bottom[@js "bottom"]] [@js.enum])
+  type t = ([`L_s148_hanging[@js "hanging"] | `L_s157_ideographic[@js "ideographic"] | `L_s197_middle[@js "middle"] | `L_s320_top[@js "top"] | `L_s53_alphabetic[@js "alphabetic"] | `L_s70_bottom[@js "bottom"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module CanvasTextAlign : sig
-  type t = ([`L_s118_end[@js "end"] | `L_s172_left[@js "left"] | `L_s272_right[@js "right"] | `L_s301_start[@js "start"] | `L_s75_center[@js "center"]] [@js.enum])
+  type t = ([`L_s119_end[@js "end"] | `L_s173_left[@js "left"] | `L_s274_right[@js "right"] | `L_s304_start[@js "start"] | `L_s76_center[@js "center"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module CanvasFontKerning : sig
-  type t = ([`L_s212_none[@js "none"] | `L_s214_normal[@js "normal"] | `L_s60_auto[@js "auto"]] [@js.enum])
+  type t = ([`L_s214_none[@js "none"] | `L_s216_normal[@js "normal"] | `L_s61_auto[@js "auto"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module CanvasDirection : sig
-  type t = ([`L_s162_inherit[@js "inherit"] | `L_s185_ltr[@js "ltr"] | `L_s274_rtl[@js "rtl"]] [@js.enum])
+  type t = ([`L_s163_inherit[@js "inherit"] | `L_s187_ltr[@js "ltr"] | `L_s276_rtl[@js "rtl"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -9050,6 +9073,9 @@ module CanvasState : sig
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/reset) *)
+  val reset: 'tags this -> unit [@@js.call "reset"]
+  
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/restore) *)
   val restore: 'tags this -> unit [@@js.call "restore"]
   
@@ -9118,12 +9144,12 @@ module CanvasRect : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasLineJoin : sig
-  type t = ([`L_s197_miter[@js "miter"] | `L_s273_round[@js "round"] | `L_s64_bevel[@js "bevel"]] [@js.enum])
+  type t = ([`L_s199_miter[@js "miter"] | `L_s275_round[@js "round"] | `L_s65_bevel[@js "bevel"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module CanvasLineCap : sig
-  type t = ([`L_s273_round[@js "round"] | `L_s299_square[@js "square"] | `L_s72_butt[@js "butt"]] [@js.enum])
+  type t = ([`L_s275_round[@js "round"] | `L_s302_square[@js "square"] | `L_s73_butt[@js "butt"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -9180,7 +9206,7 @@ module CanvasPathDrawingStyles : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ImageSmoothingQuality : sig
-  type t = ([`L_s150_high[@js "high"] | `L_s183_low[@js "low"] | `L_s191_medium[@js "medium"]] [@js.enum])
+  type t = ([`L_s151_high[@js "high"] | `L_s184_low[@js "low"] | `L_s193_medium[@js "medium"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -9454,7 +9480,7 @@ module[@js.scope "Path2D"] Path2D : sig
   val create: ?path:([`U1 of t | `U2 of string] [@js.union]) -> unit -> t [@@js.create]
 end
 module CanvasFillRule : sig
-  type t = ([`L_s121_evenodd[@js "evenodd"] | `L_s213_nonzero[@js "nonzero"]] [@js.enum])
+  type t = ([`L_s122_evenodd[@js "evenodd"] | `L_s215_nonzero[@js "nonzero"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -9527,7 +9553,7 @@ module DOMRectInit : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AlphaOption : sig
-  type t = ([`L_s111_discard[@js "discard"] | `L_s169_keep[@js "keep"]] [@js.enum])
+  type t = ([`L_s112_discard[@js "discard"] | `L_s170_keep[@js "keep"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -9594,22 +9620,22 @@ module VideoFrameCopyToOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module VideoPixelFormat : sig
-  type t = ([`L_s15_I420[@js "I420"] | `L_s16_I420A[@js "I420A"] | `L_s17_I422[@js "I422"] | `L_s18_I444[@js "I444"] | `L_s20_NV12[@js "NV12"] | `L_s30_RGBA[@js "RGBA"] | `L_s31_RGBX[@js "RGBX"] | `L_s3_BGRA[@js "BGRA"] | `L_s4_BGRX[@js "BGRX"]] [@js.enum])
+  type t = ([`L_s16_I420[@js "I420"] | `L_s17_I420A[@js "I420A"] | `L_s18_I422[@js "I422"] | `L_s19_I444[@js "I444"] | `L_s21_NV12[@js "NV12"] | `L_s31_RGBA[@js "RGBA"] | `L_s32_RGBX[@js "RGBX"] | `L_s3_BGRA[@js "BGRA"] | `L_s4_BGRX[@js "BGRX"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module VideoTransferCharacteristics : sig
-  type t = ([`L_s157_iec61966_2_1[@js "iec61966-2-1"] | `L_s289_smpte170m[@js "smpte170m"] | `L_s71_bt709[@js "bt709"]] [@js.enum])
+  type t = ([`L_s158_iec61966_2_1[@js "iec61966-2-1"] | `L_s292_smpte170m[@js "smpte170m"] | `L_s72_bt709[@js "bt709"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module VideoMatrixCoefficients : sig
-  type t = ([`L_s271_rgb[@js "rgb"] | `L_s289_smpte170m[@js "smpte170m"] | `L_s70_bt470bg[@js "bt470bg"] | `L_s71_bt709[@js "bt709"]] [@js.enum])
+  type t = ([`L_s273_rgb[@js "rgb"] | `L_s292_smpte170m[@js "smpte170m"] | `L_s71_bt470bg[@js "bt470bg"] | `L_s72_bt709[@js "bt709"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module VideoColorPrimaries : sig
-  type t = ([`L_s289_smpte170m[@js "smpte170m"] | `L_s70_bt470bg[@js "bt470bg"] | `L_s71_bt709[@js "bt709"]] [@js.enum])
+  type t = ([`L_s292_smpte170m[@js "smpte170m"] | `L_s71_bt470bg[@js "bt470bg"] | `L_s72_bt709[@js "bt709"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -9743,11 +9769,11 @@ module[@js.scope "DOMRectReadOnly"] DOMRectReadOnly : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/DOMRectReadOnly/fromRect) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/DOMRectReadOnly/fromRect_static) *)
   val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
 end
 module GlobalCompositeOperation : sig
-  type t = ([`L_s105_destination_atop[@js "destination-atop"] | `L_s106_destination_in[@js "destination-in"] | `L_s107_destination_out[@js "destination-out"] | `L_s108_destination_over[@js "destination-over"] | `L_s109_difference[@js "difference"] | `L_s122_exclusion[@js "exclusion"] | `L_s148_hard_light[@js "hard-light"] | `L_s153_hue[@js "hue"] | `L_s174_lighten[@js "lighten"] | `L_s175_lighter[@js "lighter"] | `L_s186_luminosity[@js "luminosity"] | `L_s199_multiply[@js "multiply"] | `L_s231_overlay[@js "overlay"] | `L_s276_saturation[@js "saturation"] | `L_s277_screen[@js "screen"] | `L_s293_soft_light[@js "soft-light"] | `L_s294_source_atop[@js "source-atop"] | `L_s295_source_in[@js "source-in"] | `L_s296_source_out[@js "source-out"] | `L_s297_source_over[@js "source-over"] | `L_s344_xor[@js "xor"] | `L_s82_color[@js "color"] | `L_s83_color_burn[@js "color-burn"] | `L_s84_color_dodge[@js "color-dodge"] | `L_s93_copy[@js "copy"] | `L_s95_darken[@js "darken"]] [@js.enum])
+  type t = ([`L_s106_destination_atop[@js "destination-atop"] | `L_s107_destination_in[@js "destination-in"] | `L_s108_destination_out[@js "destination-out"] | `L_s109_destination_over[@js "destination-over"] | `L_s110_difference[@js "difference"] | `L_s123_exclusion[@js "exclusion"] | `L_s149_hard_light[@js "hard-light"] | `L_s154_hue[@js "hue"] | `L_s175_lighten[@js "lighten"] | `L_s176_lighter[@js "lighter"] | `L_s188_luminosity[@js "luminosity"] | `L_s201_multiply[@js "multiply"] | `L_s233_overlay[@js "overlay"] | `L_s278_saturation[@js "saturation"] | `L_s279_screen[@js "screen"] | `L_s296_soft_light[@js "soft-light"] | `L_s297_source_atop[@js "source-atop"] | `L_s298_source_in[@js "source-in"] | `L_s299_source_out[@js "source-out"] | `L_s300_source_over[@js "source-over"] | `L_s349_xor[@js "xor"] | `L_s83_color[@js "color"] | `L_s84_color_burn[@js "color-burn"] | `L_s85_color_dodge[@js "color-dodge"] | `L_s94_copy[@js "copy"] | `L_s96_darken[@js "darken"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -10004,7 +10030,7 @@ and[@js.scope "OffscreenCanvas"] OffscreenCanvas : sig
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/getContext)
   *)
-  val getContext': 'tags this -> contextId:([`L_s65_bitmaprenderer[@js "bitmaprenderer"]] [@js.enum]) -> ?options:any -> unit -> ImageBitmapRenderingContext.t option [@@js.call "getContext"]
+  val getContext': 'tags this -> contextId:([`L_s66_bitmaprenderer[@js "bitmaprenderer"]] [@js.enum]) -> ?options:any -> unit -> ImageBitmapRenderingContext.t option [@@js.call "getContext"]
   
   (**
     Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.
@@ -10015,7 +10041,7 @@ and[@js.scope "OffscreenCanvas"] OffscreenCanvas : sig
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/getContext)
   *)
-  val getContext'': 'tags this -> contextId:([`L_s336_webgl[@js "webgl"]] [@js.enum]) -> ?options:any -> unit -> WebGLRenderingContext.t option [@@js.call "getContext"]
+  val getContext'': 'tags this -> contextId:([`L_s341_webgl[@js "webgl"]] [@js.enum]) -> ?options:any -> unit -> WebGLRenderingContext.t option [@@js.call "getContext"]
   
   (**
     Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.
@@ -10026,7 +10052,7 @@ and[@js.scope "OffscreenCanvas"] OffscreenCanvas : sig
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/OffscreenCanvas/getContext)
   *)
-  val getContext''': 'tags this -> contextId:([`L_s337_webgl2[@js "webgl2"]] [@js.enum]) -> ?options:any -> unit -> WebGL2RenderingContext.t option [@@js.call "getContext"]
+  val getContext''': 'tags this -> contextId:([`L_s342_webgl2[@js "webgl2"]] [@js.enum]) -> ?options:any -> unit -> WebGL2RenderingContext.t option [@@js.call "getContext"]
   
   (**
     Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.
@@ -12411,7 +12437,7 @@ module WorkerEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WorkerType : sig
-  type t = ([`L_s198_module[@js "module"] | `L_s78_classic[@js "classic"]] [@js.enum])
+  type t = ([`L_s200_module[@js "module"] | `L_s79_classic[@js "classic"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -12541,6 +12567,264 @@ module[@js.scope "Worker"] Worker : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: scriptURL:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?options:WorkerOptions.t -> unit -> t [@@js.create]
 end
+module WebTransportErrorSource : sig
+  type t = ([`L_s286_session[@js "session"] | `L_s306_stream[@js "stream"]] [@js.enum])
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+end
+module WebTransportErrorOptions : sig
+  type t = [`WebTransportErrorOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WebTransportErrorOptions]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebTransportErrorOptions]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransportErrorOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_source: 'tags this -> WebTransportErrorSource.t option [@@js.get "source"]
+  val set_source: 'tags this -> WebTransportErrorSource.t -> unit [@@js.set "source"]
+  val get_streamErrorCode: 'tags this -> float option [@@js.get "streamErrorCode"]
+  val set_streamErrorCode: 'tags this -> float option -> unit [@@js.set "streamErrorCode"]
+  val create: ?source:WebTransportErrorSource.t -> ?streamErrorCode:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(**
+  Available only in secure contexts.
+  
+  \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportError)
+*)
+module[@js.scope "WebTransportError"] WebTransportError : sig
+  type t = [`DOMException | `WebTransportError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`DOMException | `WebTransportError]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`DOMException | `WebTransportError]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransportError ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportError/source) *)
+  val get_source: 'tags this -> WebTransportErrorSource.t [@@js.get "source"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportError/streamErrorCode) *)
+  val get_streamErrorCode: 'tags this -> float option [@@js.get "streamErrorCode"]
+  val create: source:WebTransportErrorSource.t -> ?streamErrorCode:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create': ?message:string -> ?options:WebTransportErrorOptions.t -> unit -> t [@@js.create]
+end
+module WebTransportSendStreamOptions : sig
+  type t = [`WebTransportSendStreamOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WebTransportSendStreamOptions]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebTransportSendStreamOptions]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransportSendStreamOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_sendOrder: 'tags this -> float option [@@js.get "sendOrder"]
+  val set_sendOrder: 'tags this -> float option -> unit [@@js.set "sendOrder"]
+  val create: ?sendOrder:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+module WebTransportHash : sig
+  type t = [`WebTransportHash] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WebTransportHash]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebTransportHash]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransportHash ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_algorithm: 'tags this -> string option [@@js.get "algorithm"]
+  val set_algorithm: 'tags this -> string -> unit [@@js.set "algorithm"]
+  val get_value: 'tags this -> BufferSource.t option [@@js.get "value"]
+  val set_value: 'tags this -> BufferSource.t -> unit [@@js.set "value"]
+  val create: ?algorithm:string -> ?value:BufferSource.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+module WebTransportCongestionControl : sig
+  type t = ([`L_s185_low_latency[@js "low-latency"] | `L_s316_throughput[@js "throughput"] | `L_s98_default[@js "default"]] [@js.enum])
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+end
+module WebTransportOptions : sig
+  type t = [`WebTransportOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WebTransportOptions]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebTransportOptions]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransportOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_allowPooling: 'tags this -> bool option [@@js.get "allowPooling"]
+  val set_allowPooling: 'tags this -> bool -> unit [@@js.set "allowPooling"]
+  val get_congestionControl: 'tags this -> WebTransportCongestionControl.t option [@@js.get "congestionControl"]
+  val set_congestionControl: 'tags this -> WebTransportCongestionControl.t -> unit [@@js.set "congestionControl"]
+  val get_requireUnreliable: 'tags this -> bool option [@@js.get "requireUnreliable"]
+  val set_requireUnreliable: 'tags this -> bool -> unit [@@js.set "requireUnreliable"]
+  val get_serverCertificateHashes: 'tags this -> WebTransportHash.t list option [@@js.get "serverCertificateHashes"]
+  val set_serverCertificateHashes: 'tags this -> WebTransportHash.t list -> unit [@@js.set "serverCertificateHashes"]
+  val create: ?allowPooling:bool -> ?congestionControl:WebTransportCongestionControl.t -> ?requireUnreliable:bool -> ?serverCertificateHashes:WebTransportHash.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(**
+  Available only in secure contexts.
+  
+  \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream)
+*)
+module[@js.scope "WebTransportDatagramDuplexStream"] WebTransportDatagramDuplexStream : sig
+  type t = [`WebTransportDatagramDuplexStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WebTransportDatagramDuplexStream]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebTransportDatagramDuplexStream]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransportDatagramDuplexStream ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/incomingHighWaterMark) *)
+  val get_incomingHighWaterMark: 'tags this -> float [@@js.get "incomingHighWaterMark"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/incomingHighWaterMark) *)
+  val set_incomingHighWaterMark: 'tags this -> float -> unit [@@js.set "incomingHighWaterMark"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/incomingMaxAge) *)
+  val get_incomingMaxAge: 'tags this -> float [@@js.get "incomingMaxAge"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/incomingMaxAge) *)
+  val set_incomingMaxAge: 'tags this -> float -> unit [@@js.set "incomingMaxAge"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/maxDatagramSize) *)
+  val get_maxDatagramSize: 'tags this -> float [@@js.get "maxDatagramSize"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/outgoingHighWaterMark) *)
+  val get_outgoingHighWaterMark: 'tags this -> float [@@js.get "outgoingHighWaterMark"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/outgoingHighWaterMark) *)
+  val set_outgoingHighWaterMark: 'tags this -> float -> unit [@@js.set "outgoingHighWaterMark"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/outgoingMaxAge) *)
+  val get_outgoingMaxAge: 'tags this -> float [@@js.get "outgoingMaxAge"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/outgoingMaxAge) *)
+  val set_outgoingMaxAge: 'tags this -> float -> unit [@@js.set "outgoingMaxAge"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/readable) *)
+  val get_readable: 'tags this -> ReadableStream.t_0 [@@js.get "readable"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportDatagramDuplexStream/writable) *)
+  val get_writable: 'tags this -> WritableStream.t_0 [@@js.get "writable"]
+  val create: incomingHighWaterMark:float -> incomingMaxAge:float -> maxDatagramSize:float -> outgoingHighWaterMark:float -> outgoingMaxAge:float -> readable:ReadableStream.t_0 -> writable:WritableStream.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create': unit -> t [@@js.create]
+end
+module WebTransportCloseInfo : sig
+  type t = [`WebTransportCloseInfo] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WebTransportCloseInfo]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebTransportCloseInfo]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransportCloseInfo ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_closeCode: 'tags this -> float option [@@js.get "closeCode"]
+  val set_closeCode: 'tags this -> float -> unit [@@js.set "closeCode"]
+  val get_reason: 'tags this -> string option [@@js.get "reason"]
+  val set_reason: 'tags this -> string -> unit [@@js.set "reason"]
+  val create: ?closeCode:float -> ?reason:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(**
+  Available only in secure contexts.
+  
+  \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportBidirectionalStream)
+*)
+module[@js.scope "WebTransportBidirectionalStream"] WebTransportBidirectionalStream : sig
+  type t = [`WebTransportBidirectionalStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WebTransportBidirectionalStream]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebTransportBidirectionalStream]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransportBidirectionalStream ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportBidirectionalStream/readable) *)
+  val get_readable: 'tags this -> ReadableStream.t_0 [@@js.get "readable"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransportBidirectionalStream/writable) *)
+  val get_writable: 'tags this -> WritableStream.t_0 [@@js.get "writable"]
+  val create: readable:ReadableStream.t_0 -> writable:WritableStream.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create': unit -> t [@@js.create]
+end
+
+(**
+  Available only in secure contexts.
+  
+  \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport)
+*)
+module[@js.scope "WebTransport"] WebTransport : sig
+  type t = [`WebTransport] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  [@@@js.stop]
+  type tags = [`WebTransport]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebTransport]
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebTransport ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport/closed) *)
+  val get_closed: 'tags this -> WebTransportCloseInfo.t Promise.t [@@js.get "closed"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport/datagrams) *)
+  val get_datagrams: 'tags this -> WebTransportDatagramDuplexStream.t [@@js.get "datagrams"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport/incomingBidirectionalStreams) *)
+  val get_incomingBidirectionalStreams: 'tags this -> ReadableStream.t_0 [@@js.get "incomingBidirectionalStreams"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport/incomingUnidirectionalStreams) *)
+  val get_incomingUnidirectionalStreams: 'tags this -> ReadableStream.t_0 [@@js.get "incomingUnidirectionalStreams"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport/ready) *)
+  val get_ready: 'tags this -> undefined Promise.t [@@js.get "ready"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport/close) *)
+  val close: 'tags this -> ?closeInfo:WebTransportCloseInfo.t -> unit -> unit [@@js.call "close"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport/createBidirectionalStream) *)
+  val createBidirectionalStream: 'tags this -> ?options:WebTransportSendStreamOptions.t -> unit -> WebTransportBidirectionalStream.t Promise.t [@@js.call "createBidirectionalStream"]
+  
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/WebTransport/createUnidirectionalStream) *)
+  val createUnidirectionalStream: 'tags this -> ?options:WebTransportSendStreamOptions.t -> unit -> WritableStream.t_0 Promise.t [@@js.call "createUnidirectionalStream"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: url:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?options:WebTransportOptions.t -> unit -> t [@@js.create]
+end
 module CloseEventInit : sig
   type t = [`CloseEventInit | `EventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   [@@@js.stop]
@@ -12627,7 +12911,7 @@ module WebSocketEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BinaryType : sig
-  type t = ([`L_s56_arraybuffer[@js "arraybuffer"] | `L_s66_blob[@js "blob"]] [@js.enum])
+  type t = ([`L_s57_arraybuffer[@js "arraybuffer"] | `L_s67_blob[@js "blob"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -12848,7 +13132,7 @@ module[@js.scope "WebGLContextEvent"] WebGLContextEvent : sig
 end
 module[@js.scope "WebAssembly"] WebAssembly : sig
   module ImportExportKind : sig
-    type t = ([`L_s141_function[@js "function"] | `L_s144_global[@js "global"] | `L_s192_memory[@js "memory"] | `L_s310_table[@js "table"]] [@js.enum])
+    type t = ([`L_s142_function[@js "function"] | `L_s145_global[@js "global"] | `L_s194_memory[@js "memory"] | `L_s314_table[@js "table"]] [@js.enum])
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
   end
@@ -12917,7 +13201,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val imports: t -> ModuleImportDescriptor.t list [@@js.global "imports"]
   end
   module TableKind : sig
-    type t = ([`L_s125_externref[@js "externref"] | `L_s55_anyfunc[@js "anyfunc"]] [@js.enum])
+    type t = ([`L_s126_externref[@js "externref"] | `L_s56_anyfunc[@js "anyfunc"]] [@js.enum])
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
   end
@@ -13014,56 +13298,66 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val create: MemoryDescriptor.t -> t [@@js.create]
   end
   module ValueType : sig
-    type t = ([`L_s125_externref[@js "externref"] | `L_s128_f32[@js "f32"] | `L_s129_f64[@js "f64"] | `L_s154_i32[@js "i32"] | `L_s155_i64[@js "i64"] | `L_s330_v128[@js "v128"] | `L_s55_anyfunc[@js "anyfunc"]] [@js.enum])
+    type t = ([`L_s126_externref[@js "externref"] | `L_s129_f32[@js "f32"] | `L_s130_f64[@js "f64"] | `L_s155_i32[@js "i32"] | `L_s156_i64[@js "i64"] | `L_s335_v128[@js "v128"] | `L_s56_anyfunc[@js "anyfunc"]] [@js.enum])
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
   end
   module GlobalDescriptor : sig
-    type t = [`WebAssembly_GlobalDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type 'T t = [`WebAssembly_GlobalDescriptor of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
+    type t_0 = ValueType.t t
     [@@@js.stop]
-    type tags = [`WebAssembly_GlobalDescriptor]
+    type 'T tags = [`WebAssembly_GlobalDescriptor of 'T]
+    type tags_0 = ValueType.t tags
     [@@@js.start]
     [@@@js.implem 
-      type tags = [`WebAssembly_GlobalDescriptor]
+      type 'T tags = [`WebAssembly_GlobalDescriptor of 'T]
+      type tags_0 = ValueType.t tags
     ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_GlobalDescriptor ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val get_mutable: 'tags this -> bool option [@@js.get "mutable"]
-    val set_mutable: 'tags this -> bool -> unit [@@js.set "mutable"]
-    val get_value: 'tags this -> ValueType.t [@@js.get "value"]
-    val set_value: 'tags this -> ValueType.t -> unit [@@js.set "value"]
-    val create: ?mutable_:(bool[@js "mutable"]) -> value:ValueType.t -> unit -> t [@@js.builder]
-    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+    type ('tags, 'T) this = 'tags intf constraint 'tags = [> `WebAssembly_GlobalDescriptor of 'T ]
+    val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+    val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_mutable: ('tags, 'T) this -> bool option [@@js.get "mutable"]
+    val set_mutable: ('tags, 'T) this -> bool -> unit [@@js.set "mutable"]
+    val get_value: ('tags, 'T) this -> 'T [@@js.get "value"]
+    val set_value: ('tags, 'T) this -> 'T -> unit [@@js.set "value"]
+    val create: ?mutable_:(bool[@js "mutable"]) -> value:'T -> unit -> 'T t [@@js.builder]
+    val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
   end
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Global) *)
   module[@js.scope "Global"] Global : sig
-    type t = [`WebAssembly_Global] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type 'T t = [`WebAssembly_Global of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
+    type t_0 = ValueType.t t
     [@@@js.stop]
-    type tags = [`WebAssembly_Global]
+    type 'T tags = [`WebAssembly_Global of 'T]
+    type tags_0 = ValueType.t tags
     [@@@js.start]
     [@@@js.implem 
-      type tags = [`WebAssembly_Global]
+      type 'T tags = [`WebAssembly_Global of 'T]
+      type tags_0 = ValueType.t tags
     ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Global ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
+    type ('tags, 'T) this = 'tags intf constraint 'tags = [> `WebAssembly_Global of 'T ]
+    val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+    val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
     
     (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Global/value) *)
-    val get_value: 'tags this -> any [@@js.get "value"]
+    val get_value: ('tags, 'T) this -> (* FIXME: unknown type 'ValueTypeMap[T]' *)any [@@js.get "value"]
     
     (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Global/value) *)
-    val set_value: 'tags this -> any -> unit [@@js.set "value"]
+    val set_value: ('tags, 'T) this -> (* FIXME: unknown type 'ValueTypeMap[T]' *)any -> unit [@@js.set "value"]
     
     (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Global/valueOf) *)
-    val valueOf: 'tags this -> any [@@js.call "valueOf"]
-    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: descriptor:GlobalDescriptor.t -> ?v:any -> unit -> t [@@js.create]
+    val valueOf: ('tags, 'T) this -> (* FIXME: unknown type 'ValueTypeMap[T]' *)any [@@js.call "valueOf"]
+    val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t_0 [@@js.get "prototype"]
+    val create: descriptor:'T GlobalDescriptor.t -> ?v:(* FIXME: unknown type 'ValueTypeMap[T]' *)any -> unit -> 'T t [@@js.create]
   end
   module ExportValue : sig
-    type t = (untyped_function, Global.t, Memory.t, Table.t) union4
+    type t = (untyped_function, Global.t_0, Memory.t, Table.t) union4
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
   end
@@ -13126,6 +13420,34 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val create: instance:Instance.t -> module_:(Module.t[@js "module"]) -> unit -> t [@@js.builder]
     val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
+  module ValueTypeMap : sig
+    type t = [`WebAssembly_ValueTypeMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    [@@@js.stop]
+    type tags = [`WebAssembly_ValueTypeMap]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_ValueTypeMap]
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_ValueTypeMap ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_anyfunc: 'tags this -> untyped_function [@@js.get "anyfunc"]
+    val set_anyfunc: 'tags this -> untyped_function -> unit [@@js.set "anyfunc"]
+    val get_externref: 'tags this -> any [@@js.get "externref"]
+    val set_externref: 'tags this -> any -> unit [@@js.set "externref"]
+    val get_f32: 'tags this -> float [@@js.get "f32"]
+    val set_f32: 'tags this -> float -> unit [@@js.set "f32"]
+    val get_f64: 'tags this -> float [@@js.get "f64"]
+    val set_f64: 'tags this -> float -> unit [@@js.set "f64"]
+    val get_i32: 'tags this -> float [@@js.get "i32"]
+    val set_i32: 'tags this -> float -> unit [@@js.set "i32"]
+    val get_i64: 'tags this -> bigint [@@js.get "i64"]
+    val set_i64: 'tags this -> bigint -> unit [@@js.set "i64"]
+    val get_v128: 'tags this -> never [@@js.get "v128"]
+    val set_v128: 'tags this -> never -> unit [@@js.set "v128"]
+    val create: anyfunc:untyped_function -> externref:any -> f32:float -> f64:float -> i32:float -> i64:bigint -> v128:never -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  end
   module[@js.scope "RuntimeError"] RuntimeError : sig
     type t = [`WebAssembly_RuntimeError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     [@@@js.stop]
@@ -13174,6 +13496,33 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val create: ?message:string -> unit -> t [@@js.create]
     val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
+  module Global_Make (T : Ojs.T) : sig
+    type 'T parent = 'T Global.t
+    type t = T.t parent
+    val t_of_js: Ojs.t -> t
+    val t_to_js: t -> Ojs.t
+    
+    
+    (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Global/value) *)
+    val get_value: t -> (* FIXME: unknown type 'ValueTypeMap[T]' *)any [@@js.get "value"]
+    
+    (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Global/value) *)
+    val set_value: t -> (* FIXME: unknown type 'ValueTypeMap[T]' *)any -> unit [@@js.set "value"]
+    
+    (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Global/valueOf) *)
+    val valueOf: t -> (* FIXME: unknown type 'ValueTypeMap[T]' *)any [@@js.call "valueOf"]
+  end
+  module GlobalDescriptor_Make (T : Ojs.T) : sig
+    type 'T parent = 'T GlobalDescriptor.t
+    type t = T.t parent
+    val t_of_js: Ojs.t -> t
+    val t_to_js: t -> Ojs.t
+    
+    val get_mutable: t -> bool option [@@js.get "mutable"]
+    val set_mutable: t -> bool -> unit [@@js.set "mutable"]
+    val get_value: t -> T.t [@@js.get "value"]
+    val set_value: t -> T.t -> unit [@@js.set "value"]
+  end
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/compile) *)
   val compile: BufferSource.t -> Module.t Promise.t [@@js.global "compile"]
@@ -13210,22 +13559,22 @@ module VideoEncoderEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module VideoEncoderBitrateMode : sig
-  type t = ([`L_s256_quantizer[@js "quantizer"] | `L_s331_variable[@js "variable"] | `L_s89_constant[@js "constant"]] [@js.enum])
+  type t = ([`L_s258_quantizer[@js "quantizer"] | `L_s336_variable[@js "variable"] | `L_s90_constant[@js "constant"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module LatencyMode : sig
-  type t = ([`L_s255_quality[@js "quality"] | `L_s261_realtime[@js "realtime"]] [@js.enum])
+  type t = ([`L_s257_quality[@js "quality"] | `L_s263_realtime[@js "realtime"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module HardwareAcceleration : sig
-  type t = ([`L_s208_no_preference[@js "no-preference"] | `L_s243_prefer_hardware[@js "prefer-hardware"] | `L_s244_prefer_software[@js "prefer-software"]] [@js.enum])
+  type t = ([`L_s210_no_preference[@js "no-preference"] | `L_s245_prefer_hardware[@js "prefer-hardware"] | `L_s246_prefer_software[@js "prefer-software"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module AvcBitstreamFormat : sig
-  type t = ([`L_s54_annexb[@js "annexb"] | `L_s62_avc[@js "avc"]] [@js.enum])
+  type t = ([`L_s55_annexb[@js "annexb"] | `L_s63_avc[@js "avc"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -13366,7 +13715,7 @@ module EncodedVideoChunkMetadata : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EncodedVideoChunkType : sig
-  type t = ([`L_s100_delta[@js "delta"] | `L_s170_key[@js "key"]] [@js.enum])
+  type t = ([`L_s101_delta[@js "delta"] | `L_s171_key[@js "key"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -13473,7 +13822,7 @@ module VideoEncoderEncodeOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CodecState : sig
-  type t = ([`L_s322_unconfigured[@js "unconfigured"] | `L_s81_closed[@js "closed"] | `L_s87_configured[@js "configured"]] [@js.enum])
+  type t = ([`L_s327_unconfigured[@js "unconfigured"] | `L_s82_closed[@js "closed"] | `L_s88_configured[@js "configured"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -13811,11 +14160,11 @@ module TextEncoderEncodeIntoResult : sig
   type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderEncodeIntoResult ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_read: 'tags this -> float option [@@js.get "read"]
+  val get_read: 'tags this -> float [@@js.get "read"]
   val set_read: 'tags this -> float -> unit [@@js.set "read"]
-  val get_written: 'tags this -> float option [@@js.get "written"]
+  val get_written: 'tags this -> float [@@js.get "written"]
   val set_written: 'tags this -> float -> unit [@@js.set "written"]
-  val create: ?read:float -> ?written:float -> unit -> t [@@js.builder]
+  val create: read:float -> written:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -13979,7 +14328,7 @@ module[@js.scope "TextDecoder"] TextDecoder : sig
     
     \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/TextDecoder/decode)
   *)
-  val decode: 'tags this -> ?input:BufferSource.t -> ?options:TextDecodeOptions.t -> unit -> string [@@js.call "decode"]
+  val decode: 'tags this -> ?input:AllowSharedBufferSource.t -> ?options:TextDecodeOptions.t -> unit -> string [@@js.call "decode"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
@@ -14222,22 +14571,22 @@ module ImageBitmapSource : sig
   val t_of_js: Ojs.t -> t
 end
 module ResizeQuality : sig
-  type t = ([`L_s150_high[@js "high"] | `L_s183_low[@js "low"] | `L_s191_medium[@js "medium"] | `L_s240_pixelated[@js "pixelated"]] [@js.enum])
+  type t = ([`L_s151_high[@js "high"] | `L_s184_low[@js "low"] | `L_s193_medium[@js "medium"] | `L_s242_pixelated[@js "pixelated"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module PremultiplyAlpha : sig
-  type t = ([`L_s212_none[@js "none"] | `L_s245_premultiply[@js "premultiply"] | `L_s97_default[@js "default"]] [@js.enum])
+  type t = ([`L_s214_none[@js "none"] | `L_s247_premultiply[@js "premultiply"] | `L_s98_default[@js "default"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module ImageOrientation : sig
-  type t = ([`L_s134_flipY[@js "flipY"] | `L_s140_from_image[@js "from-image"] | `L_s212_none[@js "none"]] [@js.enum])
+  type t = ([`L_s135_flipY[@js "flipY"] | `L_s141_from_image[@js "from-image"] | `L_s214_none[@js "none"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module ColorSpaceConversion : sig
-  type t = ([`L_s212_none[@js "none"] | `L_s97_default[@js "default"]] [@js.enum])
+  type t = ([`L_s214_none[@js "none"] | `L_s98_default[@js "default"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -14833,7 +15182,7 @@ module[@js.scope "PushEvent"] PushEvent : sig
   val create': type_:string -> ?eventInitDict:PushEventInit.t -> unit -> t [@@js.create]
 end
 module NotificationPermission : sig
-  type t = ([`L_s101_denied[@js "denied"] | `L_s145_granted[@js "granted"] | `L_s97_default[@js "default"]] [@js.enum])
+  type t = ([`L_s102_denied[@js "denied"] | `L_s146_granted[@js "granted"] | `L_s98_default[@js "default"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -14863,7 +15212,7 @@ module NotificationAction : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NotificationDirection : sig
-  type t = ([`L_s185_ltr[@js "ltr"] | `L_s274_rtl[@js "rtl"] | `L_s60_auto[@js "auto"]] [@js.enum])
+  type t = ([`L_s187_ltr[@js "ltr"] | `L_s276_rtl[@js "rtl"] | `L_s61_auto[@js "auto"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -14904,7 +15253,7 @@ module NotificationOptions : sig
   val get_requireInteraction: 'tags this -> bool option [@@js.get "requireInteraction"]
   val set_requireInteraction: 'tags this -> bool -> unit [@@js.set "requireInteraction"]
   val get_silent: 'tags this -> bool option [@@js.get "silent"]
-  val set_silent: 'tags this -> bool -> unit [@@js.set "silent"]
+  val set_silent: 'tags this -> bool option -> unit [@@js.set "silent"]
   val get_tag: 'tags this -> string option [@@js.get "tag"]
   val set_tag: 'tags this -> string -> unit [@@js.set "tag"]
   val get_timestamp: 'tags this -> EpochTimeStamp.t option [@@js.get "timestamp"]
@@ -14971,6 +15320,9 @@ module[@js.scope "Notification"] Notification : sig
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Notification/show_event) *)
   val set_onshow: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onshow"]
   
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Notification/silent) *)
+  val get_silent: 'tags this -> bool option [@@js.get "silent"]
+  
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Notification/tag) *)
   val get_tag: 'tags this -> string [@@js.get "tag"]
   
@@ -15035,7 +15387,7 @@ module[@js.scope "Notification"] Notification : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: title:string -> ?options:NotificationOptions.t -> unit -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Notification/permission) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/Notification/permission_static) *)
   val permission: unit -> NotificationPermission.t [@@js.get "permission"]
 end
 module NotificationEventInit : sig
@@ -15150,12 +15502,12 @@ module[@js.scope "FetchEvent"] FetchEvent : sig
   val create: type_:string -> eventInitDict:FetchEventInit.t -> t [@@js.create]
 end
 module FrameType : sig
-  type t = ([`L_s203_nested[@js "nested"] | `L_s212_none[@js "none"] | `L_s316_top_level[@js "top-level"] | `L_s61_auxiliary[@js "auxiliary"]] [@js.enum])
+  type t = ([`L_s205_nested[@js "nested"] | `L_s214_none[@js "none"] | `L_s321_top_level[@js "top-level"] | `L_s62_auxiliary[@js "auxiliary"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module ClientTypes : sig
-  type t = ([`L_s285_sharedworker[@js "sharedworker"] | `L_s340_window[@js "window"] | `L_s341_worker[@js "worker"] | `L_s49_all[@js "all"]] [@js.enum])
+  type t = ([`L_s288_sharedworker[@js "sharedworker"] | `L_s345_window[@js "window"] | `L_s346_worker[@js "worker"] | `L_s50_all[@js "all"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -15292,7 +15644,7 @@ module ServiceWorkerGlobalScopeEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerUpdateViaCache : sig
-  type t = ([`L_s160_imports[@js "imports"] | `L_s212_none[@js "none"] | `L_s49_all[@js "all"]] [@js.enum])
+  type t = ([`L_s161_imports[@js "imports"] | `L_s214_none[@js "none"] | `L_s50_all[@js "all"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -15363,7 +15715,7 @@ module PushSubscriptionJSON : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PushEncryptionKeyName : sig
-  type t = ([`L_s232_p256dh[@js "p256dh"] | `L_s59_auth[@js "auth"]] [@js.enum])
+  type t = ([`L_s234_p256dh[@js "p256dh"] | `L_s60_auth[@js "auth"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -15438,7 +15790,7 @@ module[@js.scope "PushManager"] PushManager : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/PushManager/supportedContentEncodings) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/PushManager/supportedContentEncodings_static) *)
   val supportedContentEncodings: unit -> string list [@@js.get "supportedContentEncodings"]
 end
 module NavigationPreloadState : sig
@@ -15622,7 +15974,7 @@ module[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   val create: unit -> t [@@js.create]
 end
 module DocumentVisibilityState : sig
-  type t = ([`L_s149_hidden[@js "hidden"] | `L_s335_visible[@js "visible"]] [@js.enum])
+  type t = ([`L_s150_hidden[@js "hidden"] | `L_s340_visible[@js "visible"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -15936,11 +16288,7 @@ module[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/message_event) *)
   val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessage"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/messageerror_event) *)
   val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessageerror"]
-  
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/messageerror_event) *)
   val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessageerror"]
   
   (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/ServiceWorkerContainer/ready) *)
@@ -16014,7 +16362,7 @@ module[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   val create: unit -> t [@@js.create]
 end
 module SecurityPolicyViolationEventDisposition : sig
-  type t = ([`L_s119_enforce[@js "enforce"] | `L_s268_report[@js "report"]] [@js.enum])
+  type t = ([`L_s120_enforce[@js "enforce"] | `L_s270_report[@js "report"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -16223,7 +16571,7 @@ and ReportingObserverCallback : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCEncodedVideoFrameType : sig
-  type t = ([`L_s100_delta[@js "delta"] | `L_s116_empty[@js "empty"] | `L_s170_key[@js "key"]] [@js.enum])
+  type t = ([`L_s101_delta[@js "delta"] | `L_s117_empty[@js "empty"] | `L_s171_key[@js "key"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -16238,8 +16586,6 @@ module RTCEncodedVideoFrameMetadata : sig
   type 'tags this = 'tags intf constraint 'tags = [> `RTCEncodedVideoFrameMetadata ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_contributingSources: 'tags this -> float list option [@@js.get "contributingSources"]
-  val set_contributingSources: 'tags this -> float list -> unit [@@js.set "contributingSources"]
   val get_dependencies: 'tags this -> float list option [@@js.get "dependencies"]
   val set_dependencies: 'tags this -> float list -> unit [@@js.set "dependencies"]
   val get_frameId: 'tags this -> float option [@@js.get "frameId"]
@@ -16254,7 +16600,7 @@ module RTCEncodedVideoFrameMetadata : sig
   val set_temporalIndex: 'tags this -> float -> unit [@@js.set "temporalIndex"]
   val get_width: 'tags this -> float option [@@js.get "width"]
   val set_width: 'tags this -> float -> unit [@@js.set "width"]
-  val create: ?contributingSources:float list -> ?dependencies:float list -> ?frameId:float -> ?height:float -> ?spatialIndex:float -> ?synchronizationSource:float -> ?temporalIndex:float -> ?width:float -> unit -> t [@@js.builder]
+  val create: ?dependencies:float list -> ?frameId:float -> ?height:float -> ?spatialIndex:float -> ?synchronizationSource:float -> ?temporalIndex:float -> ?width:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "RTCEncodedVideoFrame"] RTCEncodedVideoFrame : sig
@@ -16509,7 +16855,7 @@ module[@js.scope "PerformanceObserver"] rec PerformanceObserver : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: PerformanceObserverCallback.t -> t [@@js.create]
   
-  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/PerformanceObserver/supportedEntryTypes) *)
+  (** \[MDN Reference\](https://developer.mozilla.org/docs/Web/API/PerformanceObserver/supportedEntryTypes_static) *)
   val supportedEntryTypes: unit -> string list [@@js.get "supportedEntryTypes"]
 end
 and PerformanceObserverCallback : sig
@@ -17461,7 +17807,7 @@ module[@js.scope "DedicatedWorkerGlobalScope"] DedicatedWorkerGlobalScope : sig
   val create: unit -> t [@@js.create]
 end
 module CompressionFormat : sig
-  type t = ([`L_s146_gzip[@js "gzip"] | `L_s98_deflate[@js "deflate"] | `L_s99_deflate_raw[@js "deflate-raw"]] [@js.enum])
+  type t = ([`L_s100_deflate_raw[@js "deflate-raw"] | `L_s147_gzip[@js "gzip"] | `L_s99_deflate[@js "deflate"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -17787,17 +18133,17 @@ module[@js.scope "CompressionStream"] CompressionStream : sig
   val create: CompressionFormat.t -> t [@@js.create]
 end
 module CanvasTextRendering : sig
-  type t = ([`L_s143_geometricPrecision[@js "geometricPrecision"] | `L_s226_optimizeLegibility[@js "optimizeLegibility"] | `L_s227_optimizeSpeed[@js "optimizeSpeed"] | `L_s60_auto[@js "auto"]] [@js.enum])
+  type t = ([`L_s144_geometricPrecision[@js "geometricPrecision"] | `L_s228_optimizeLegibility[@js "optimizeLegibility"] | `L_s229_optimizeSpeed[@js "optimizeSpeed"] | `L_s61_auto[@js "auto"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module CanvasFontVariantCaps : sig
-  type t = ([`L_s214_normal[@js "normal"] | `L_s239_petite_caps[@js "petite-caps"] | `L_s288_small_caps[@js "small-caps"] | `L_s314_titling_caps[@js "titling-caps"] | `L_s324_unicase[@js "unicase"] | `L_s50_all_petite_caps[@js "all-petite-caps"] | `L_s51_all_small_caps[@js "all-small-caps"]] [@js.enum])
+  type t = ([`L_s216_normal[@js "normal"] | `L_s241_petite_caps[@js "petite-caps"] | `L_s291_small_caps[@js "small-caps"] | `L_s319_titling_caps[@js "titling-caps"] | `L_s329_unicase[@js "unicase"] | `L_s51_all_petite_caps[@js "all-petite-caps"] | `L_s52_all_small_caps[@js "all-small-caps"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
 module CanvasFontStretch : sig
-  type t = ([`L_s124_expanded[@js "expanded"] | `L_s126_extra_condensed[@js "extra-condensed"] | `L_s127_extra_expanded[@js "extra-expanded"] | `L_s214_normal[@js "normal"] | `L_s282_semi_condensed[@js "semi-condensed"] | `L_s283_semi_expanded[@js "semi-expanded"] | `L_s320_ultra_condensed[@js "ultra-condensed"] | `L_s321_ultra_expanded[@js "ultra-expanded"] | `L_s86_condensed[@js "condensed"]] [@js.enum])
+  type t = ([`L_s125_expanded[@js "expanded"] | `L_s127_extra_condensed[@js "extra-condensed"] | `L_s128_extra_expanded[@js "extra-expanded"] | `L_s216_normal[@js "normal"] | `L_s284_semi_condensed[@js "semi-condensed"] | `L_s285_semi_expanded[@js "semi-expanded"] | `L_s325_ultra_condensed[@js "ultra-condensed"] | `L_s326_ultra_expanded[@js "ultra-expanded"] | `L_s87_condensed[@js "condensed"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -17888,7 +18234,7 @@ module[@js.scope "CSSTransformComponent"] CSSTransformComponent : sig
   val create: unit -> t [@@js.create]
 end
 module CSSNumericBaseType : sig
-  type t = ([`L_s133_flex[@js "flex"] | `L_s139_frequency[@js "frequency"] | `L_s173_length[@js "length"] | `L_s237_percent[@js "percent"] | `L_s269_resolution[@js "resolution"] | `L_s312_time[@js "time"] | `L_s53_angle[@js "angle"]] [@js.enum])
+  type t = ([`L_s134_flex[@js "flex"] | `L_s140_frequency[@js "frequency"] | `L_s174_length[@js "length"] | `L_s239_percent[@js "percent"] | `L_s271_resolution[@js "resolution"] | `L_s317_time[@js "time"] | `L_s54_angle[@js "angle"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -17923,7 +18269,7 @@ module CSSNumericType : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CSSMathOperator : sig
-  type t = ([`L_s166_invert[@js "invert"] | `L_s189_max[@js "max"] | `L_s196_min[@js "min"] | `L_s202_negate[@js "negate"] | `L_s249_product[@js "product"] | `L_s308_sum[@js "sum"] | `L_s77_clamp[@js "clamp"]] [@js.enum])
+  type t = ([`L_s167_invert[@js "invert"] | `L_s191_max[@js "max"] | `L_s198_min[@js "min"] | `L_s204_negate[@js "negate"] | `L_s251_product[@js "product"] | `L_s312_sum[@js "sum"] | `L_s78_clamp[@js "clamp"]] [@js.enum])
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
 end
@@ -19092,9 +19438,9 @@ module ReadableStream_Make (R : Ojs.T) : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
-    val get_mode: t -> ([`L_s73_byob[@js "byob"]] [@js.enum]) [@@js.get "mode"]
-    val set_mode: t -> ([`L_s73_byob[@js "byob"]] [@js.enum]) -> unit [@@js.set "mode"]
-    val create: mode:([`L_s73_byob[@js "byob"]] [@js.enum]) -> unit -> t [@@js.builder]
+    val get_mode: t -> ([`L_s74_byob[@js "byob"]] [@js.enum]) [@@js.get "mode"]
+    val set_mode: t -> ([`L_s74_byob[@js "byob"]] [@js.enum]) -> unit [@@js.set "mode"]
+    val create: mode:([`L_s74_byob[@js "byob"]] [@js.enum]) -> unit -> t [@@js.builder]
   end
   type 'R parent = 'R ReadableStream.t
   type t = R.t parent

@@ -167,7 +167,7 @@ module Naming =
 
   let constructorName (name: string list) =
     let s = String.concat "_" name |> removeInvalidChars |> upperFirst
-    if s.StartsWith("_") then "C" + s
+    if Char.isAlphabet(s[0]) |> not then "Case" + s
     else if keywords |> Set.contains s then s + "_"
     else s
 

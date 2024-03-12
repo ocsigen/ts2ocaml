@@ -346,6 +346,13 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -396,13 +403,6 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -861,6 +861,13 @@ module ReadonlyArray : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: ('tags, 'T) this -> index:float -> 'T option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -929,13 +936,6 @@ module ReadonlyArray : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: ('tags, 'T) this -> index:float -> value:'T -> 'T list [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: ('tags, 'T) this -> index:float -> 'T option [@@js.call "at"]
   
   (**
     language version: ES2019
@@ -1390,6 +1390,13 @@ module[@js.scope "Array"] Array : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: ('tags, 'T) this -> index:float -> 'T option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -1458,13 +1465,6 @@ module[@js.scope "Array"] Array : sig
     @return The copied array with the updated value.
   *)
   val with_: ('tags, 'T) this -> index:float -> value:'T -> 'T list [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: ('tags, 'T) this -> index:float -> 'T option [@@js.call "at"]
   
   (**
     language version: ES2019
@@ -1835,7 +1835,7 @@ end
 
 (** language version: ES2022 *)
 module RegExpIndicesArray : sig
-  module AnonymousInterface25 : sig
+  module AnonymousInterface20 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -1852,15 +1852,15 @@ module RegExpIndicesArray : sig
   type 'tags this = 'tags intf constraint 'tags = [> `RegExpIndicesArray ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_groups: 'tags this -> AnonymousInterface25.t option [@@js.get "groups"]
-  val set_groups: 'tags this -> AnonymousInterface25.t -> unit [@@js.set "groups"]
-  val create: ?groups:AnonymousInterface25.t -> unit -> t [@@js.builder]
+  val get_groups: 'tags this -> AnonymousInterface20.t option [@@js.get "groups"]
+  val set_groups: 'tags this -> AnonymousInterface20.t -> unit [@@js.set "groups"]
+  val create: ?groups:AnonymousInterface20.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 
 module RegExpMatchArray : sig
-  module AnonymousInterface24 : sig
+  module AnonymousInterface19 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -1885,10 +1885,10 @@ module RegExpMatchArray : sig
   val set_indices: 'tags this -> RegExpIndicesArray.t -> unit [@@js.set "indices"]
   
   (** language version: ES2018 *)
-  val get_groups: 'tags this -> AnonymousInterface24.t option [@@js.get "groups"]
+  val get_groups: 'tags this -> AnonymousInterface19.t option [@@js.get "groups"]
   
   (** language version: ES2018 *)
-  val set_groups: 'tags this -> AnonymousInterface24.t -> unit [@@js.set "groups"]
+  val set_groups: 'tags this -> AnonymousInterface19.t -> unit [@@js.set "groups"]
   
   (** The index of the search at which the result was found. *)
   val get_index: 'tags this -> float option [@@js.get "index"]
@@ -1907,13 +1907,13 @@ module RegExpMatchArray : sig
   
   (** The first match. This will always be present because `null` will be returned if there are no matches. *)
   val set_0: 'tags this -> string -> unit [@@js.set "0"]
-  val create: ?indices:RegExpIndicesArray.t -> ?groups:AnonymousInterface24.t -> ?index:float -> ?input:string -> _0:(string[@js "0"]) -> unit -> t [@@js.builder]
+  val create: ?indices:RegExpIndicesArray.t -> ?groups:AnonymousInterface19.t -> ?index:float -> ?input:string -> _0:(string[@js "0"]) -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 
 module RegExpExecArray : sig
-  module AnonymousInterface24 : sig
+  module AnonymousInterface19 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -1938,10 +1938,10 @@ module RegExpExecArray : sig
   val set_indices: 'tags this -> RegExpIndicesArray.t -> unit [@@js.set "indices"]
   
   (** language version: ES2018 *)
-  val get_groups: 'tags this -> AnonymousInterface24.t option [@@js.get "groups"]
+  val get_groups: 'tags this -> AnonymousInterface19.t option [@@js.get "groups"]
   
   (** language version: ES2018 *)
-  val set_groups: 'tags this -> AnonymousInterface24.t -> unit [@@js.set "groups"]
+  val set_groups: 'tags this -> AnonymousInterface19.t -> unit [@@js.set "groups"]
   
   (** The index of the search at which the result was found. *)
   val get_index: 'tags this -> float [@@js.get "index"]
@@ -1960,7 +1960,7 @@ module RegExpExecArray : sig
   
   (** The first match. This will always be present because `null` will be returned if there are no matches. *)
   val set_0: 'tags this -> string -> unit [@@js.set "0"]
-  val create: ?indices:RegExpIndicesArray.t -> ?groups:AnonymousInterface24.t -> index:float -> input:string -> _0:(string[@js "0"]) -> unit -> t [@@js.builder]
+  val create: ?indices:RegExpIndicesArray.t -> ?groups:AnonymousInterface19.t -> index:float -> input:string -> _0:(string[@js "0"]) -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -2570,8 +2570,142 @@ and[@js.scope "Intl"] Intl : sig
   end
   
   (** language version: ES2020 *)
-  module BCP47LanguageTag : sig
+  module UnicodeBCP47LocaleIdentifier : sig
     type t = string
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+  end
+  
+  (** language version: ES2020 *)
+  module LocaleHourCycleKey : sig
+    type t = ([`L_s67_h11[@js "h11"] | `L_s68_h12[@js "h12"] | `L_s69_h23[@js "h23"] | `L_s70_h24[@js "h24"]] [@js.enum])
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+  end
+  
+  (** language version: ES2020 *)
+  module LocaleCollationCaseFirst : sig
+    type t = ([`L_s139_upper[@js "upper"] | `L_s58_false[@js "false"] | `L_s82_lower[@js "lower"]] [@js.enum])
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+  end
+  
+  (** language version: ES2020 *)
+  module LocaleOptions : sig
+    type t = [`Intl_LocaleOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    [@@@js.stop]
+    type tags = [`Intl_LocaleOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Intl_LocaleOptions]
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `Intl_LocaleOptions ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    
+    (** A string containing the language, and the script and region if available. *)
+    val get_baseName: 'tags this -> string option [@@js.get "baseName"]
+    
+    (** A string containing the language, and the script and region if available. *)
+    val set_baseName: 'tags this -> string -> unit [@@js.set "baseName"]
+    
+    (** The part of the Locale that indicates the locale's calendar era. *)
+    val get_calendar: 'tags this -> string option [@@js.get "calendar"]
+    
+    (** The part of the Locale that indicates the locale's calendar era. *)
+    val set_calendar: 'tags this -> string -> unit [@@js.set "calendar"]
+    
+    (** Flag that defines whether case is taken into account for the locale's collation rules. *)
+    val get_caseFirst: 'tags this -> LocaleCollationCaseFirst.t option [@@js.get "caseFirst"]
+    
+    (** Flag that defines whether case is taken into account for the locale's collation rules. *)
+    val set_caseFirst: 'tags this -> LocaleCollationCaseFirst.t -> unit [@@js.set "caseFirst"]
+    
+    (** The collation type used for sorting *)
+    val get_collation: 'tags this -> string option [@@js.get "collation"]
+    
+    (** The collation type used for sorting *)
+    val set_collation: 'tags this -> string -> unit [@@js.set "collation"]
+    
+    (** The time keeping format convention used by the locale. *)
+    val get_hourCycle: 'tags this -> LocaleHourCycleKey.t option [@@js.get "hourCycle"]
+    
+    (** The time keeping format convention used by the locale. *)
+    val set_hourCycle: 'tags this -> LocaleHourCycleKey.t -> unit [@@js.set "hourCycle"]
+    
+    (** The primary language subtag associated with the locale. *)
+    val get_language: 'tags this -> string option [@@js.get "language"]
+    
+    (** The primary language subtag associated with the locale. *)
+    val set_language: 'tags this -> string -> unit [@@js.set "language"]
+    
+    (** The numeral system used by the locale. *)
+    val get_numberingSystem: 'tags this -> string option [@@js.get "numberingSystem"]
+    
+    (** The numeral system used by the locale. *)
+    val set_numberingSystem: 'tags this -> string -> unit [@@js.set "numberingSystem"]
+    
+    (** Flag that defines whether the locale has special collation handling for numeric characters. *)
+    val get_numeric: 'tags this -> bool option [@@js.get "numeric"]
+    
+    (** Flag that defines whether the locale has special collation handling for numeric characters. *)
+    val set_numeric: 'tags this -> bool -> unit [@@js.set "numeric"]
+    
+    (** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. *)
+    val get_region: 'tags this -> string option [@@js.get "region"]
+    
+    (** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. *)
+    val set_region: 'tags this -> string -> unit [@@js.set "region"]
+    
+    (** The script used for writing the particular language used in the locale. Possible values are script codes as defined by ISO 15924. *)
+    val get_script: 'tags this -> string option [@@js.get "script"]
+    
+    (** The script used for writing the particular language used in the locale. Possible values are script codes as defined by ISO 15924. *)
+    val set_script: 'tags this -> string -> unit [@@js.set "script"]
+    val create: ?baseName:string -> ?calendar:string -> ?caseFirst:LocaleCollationCaseFirst.t -> ?collation:string -> ?hourCycle:LocaleHourCycleKey.t -> ?language:string -> ?numberingSystem:string -> ?numeric:bool -> ?region:string -> ?script:string -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  end
+  
+  (** language version: ES2020 *)
+  module[@js.scope "Locale"] Locale : sig
+    type t = [`Intl_Locale | `Intl_LocaleOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    [@@@js.stop]
+    type tags = [`Intl_Locale | `Intl_LocaleOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Intl_Locale | `Intl_LocaleOptions]
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `Intl_Locale ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    
+    (** A string containing the language, and the script and region if available. *)
+    val get_baseName: 'tags this -> string [@@js.get "baseName"]
+    
+    (** A string containing the language, and the script and region if available. *)
+    val set_baseName: 'tags this -> string -> unit [@@js.set "baseName"]
+    
+    (** The primary language subtag associated with the locale. *)
+    val get_language: 'tags this -> string [@@js.get "language"]
+    
+    (** The primary language subtag associated with the locale. *)
+    val set_language: 'tags this -> string -> unit [@@js.set "language"]
+    
+    (** Gets the most likely values for the language, script, and region of the locale based on existing values. *)
+    val maximize: 'tags this -> t [@@js.call "maximize"]
+    
+    (** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. *)
+    val minimize: 'tags this -> t [@@js.call "minimize"]
+    
+    (** Returns the locale's full locale identifier string. *)
+    val toString: 'tags this -> UnicodeBCP47LocaleIdentifier.t [@@js.call "toString"]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+    val create: tag:([`U1 of UnicodeBCP47LocaleIdentifier.t | `U2 of t] [@js.union]) -> ?options:LocaleOptions.t -> unit -> t [@@js.create]
+  end
+  
+  (** language version: ES2020 *)
+  module LocalesArgument : sig
+    type t = (Locale.t, UnicodeBCP47LocaleIdentifier.t, (Locale.t, UnicodeBCP47LocaleIdentifier.t) union2 list) union3 option
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
   end
@@ -2610,7 +2744,7 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter).
     *)
-    val create: ?locales:([`U1 of BCP47LanguageTag.t | `U2 of BCP47LanguageTag.t list] [@js.union]) -> ?options:SegmenterOptions.t -> unit -> t [@@js.create]
+    val create: ?locales:LocalesArgument.t -> ?options:SegmenterOptions.t -> unit -> t [@@js.create]
     
     (**
       Returns an array containing those of the provided locales that are supported without having to fall back to the runtime's default locale.
@@ -2622,19 +2756,12 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/supportedLocalesOf)
     *)
-    val supportedLocalesOf: locales:([`U1 of BCP47LanguageTag.t | `U2 of BCP47LanguageTag.t list] [@js.union]) -> ?options:(SegmenterOptions.t, ([`L_s77_localeMatcher[@js "localeMatcher"]] [@js.enum])) Pick.t -> unit -> BCP47LanguageTag.t list [@@js.global "supportedLocalesOf"]
+    val supportedLocalesOf: locales:LocalesArgument.t -> ?options:(SegmenterOptions.t, ([`L_s77_localeMatcher[@js "localeMatcher"]] [@js.enum])) Pick.t -> unit -> UnicodeBCP47LocaleIdentifier.t list [@@js.global "supportedLocalesOf"]
   end
   
   (** language version: ES2020 *)
   module RelativeTimeFormatNumeric : sig
     type t = ([`L_s22_always[@js "always"] | `L_s23_auto[@js "auto"]] [@js.enum])
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-  end
-  
-  (** language version: ES2020 *)
-  module UnicodeBCP47LocaleIdentifier : sig
-    type t = string
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
   end
@@ -2707,7 +2834,7 @@ and[@js.scope "Intl"] Intl : sig
   
   (** language version: ES2020 *)
   module RelativeTimeFormatPart : sig
-    module AnonymousInterface13 : sig
+    module AnonymousInterface12 : sig
       type t = private Ojs.t
       val t_to_js: t -> Ojs.t
       val t_of_js: Ojs.t -> t
@@ -2719,7 +2846,7 @@ and[@js.scope "Intl"] Intl : sig
       val set_unit: t -> RelativeTimeFormatUnitSingular.t -> unit [@@js.set "unit"]
       val create: type_:((NumberFormatPartTypes.t, ([`L_s76_literal[@js "literal"]] [@js.enum])) Exclude.t[@js "type"]) -> value:string -> unit:RelativeTimeFormatUnitSingular.t -> unit -> t [@@js.builder]
     end
-    module AnonymousInterface11 : sig
+    module AnonymousInterface10 : sig
       type t = private Ojs.t
       val t_to_js: t -> Ojs.t
       val t_of_js: Ojs.t -> t
@@ -2729,7 +2856,7 @@ and[@js.scope "Intl"] Intl : sig
       val set_value: t -> string -> unit [@@js.set "value"]
       val create: type_:(([`L_s76_literal[@js "literal"]] [@js.enum])[@js "type"]) -> value:string -> unit -> t [@@js.builder]
     end
-    type t = (AnonymousInterface11.t, AnonymousInterface13.t) union2
+    type t = (AnonymousInterface10.t, AnonymousInterface12.t) union2
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
   end
@@ -2839,7 +2966,7 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat).
     *)
-    val create: ?locales:([`U1 of UnicodeBCP47LocaleIdentifier.t | `U2 of UnicodeBCP47LocaleIdentifier.t list] [@js.union]) -> ?options:RelativeTimeFormatOptions.t -> unit -> t [@@js.create]
+    val create: ?locales:LocalesArgument.t -> ?options:RelativeTimeFormatOptions.t -> unit -> t [@@js.create]
     
     (**
       Returns an array containing those of the provided locales
@@ -2856,7 +2983,7 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/supportedLocalesOf).
     *)
-    val supportedLocalesOf: ?locales:([`U1 of UnicodeBCP47LocaleIdentifier.t | `U2 of UnicodeBCP47LocaleIdentifier.t list] [@js.union]) -> ?options:RelativeTimeFormatOptions.t -> unit -> UnicodeBCP47LocaleIdentifier.t list [@@js.global "supportedLocalesOf"]
+    val supportedLocalesOf: ?locales:LocalesArgument.t -> ?options:RelativeTimeFormatOptions.t -> unit -> UnicodeBCP47LocaleIdentifier.t list [@@js.global "supportedLocalesOf"]
   end
   
   (** language version: ES2018 *)
@@ -2937,7 +3064,7 @@ and[@js.scope "Intl"] Intl : sig
   
   (** language version: ES2018 *)
   module[@js.scope "PluralRules"] PluralRules : sig
-    module AnonymousInterface6 : sig
+    module AnonymousInterface5 : sig
       type t = private Ojs.t
       val t_to_js: t -> Ojs.t
       val t_of_js: Ojs.t -> t
@@ -2957,10 +3084,19 @@ and[@js.scope "Intl"] Intl : sig
     val t_of_js: Ojs.t -> t
     val resolvedOptions: 'tags this -> ResolvedPluralRulesOptions.t [@@js.call "resolvedOptions"]
     val select: 'tags this -> n:float -> LDMLPluralRule.t [@@js.call "select"]
+    
+    (** language version: ES2020 *)
+    val create: ?locales:LocalesArgument.t -> ?options:PluralRulesOptions.t -> unit -> t [@@js.create]
+    
+    (** language version: ES2020 *)
+    val invoke: ?locales:LocalesArgument.t -> ?options:PluralRulesOptions.t -> unit -> t [@@js.invoke]
+    
+    (** language version: ES2020 *)
+    val supportedLocalesOf: locales:LocalesArgument.t -> ?options:AnonymousInterface5.t -> unit -> string list [@@js.global "supportedLocalesOf"]
+    val create': ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:PluralRulesOptions.t -> unit -> t [@@js.create]
+    val invoke': ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:PluralRulesOptions.t -> unit -> t [@@js.invoke]
+    val supportedLocalesOf': locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:AnonymousInterface5.t -> unit -> string list [@@js.global "supportedLocalesOf"]
     val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-    val create: ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:PluralRulesOptions.t -> unit -> t [@@js.create]
-    val invoke: ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:PluralRulesOptions.t -> unit -> t [@@js.invoke]
-    val supportedLocalesOf: locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:AnonymousInterface6.t -> unit -> string list [@@js.global "supportedLocalesOf"]
   end
   
   
@@ -3186,11 +3322,20 @@ and[@js.scope "Intl"] Intl : sig
     val formatToParts: 'tags this -> ?number:([`U1 of float | `U2 of bigint] [@js.union]) -> unit -> NumberFormatPart.t list [@@js.call "formatToParts"]
     val format': 'tags this -> value:float -> string [@@js.call "format"]
     val resolvedOptions': 'tags this -> ResolvedNumberFormatOptions.t [@@js.call "resolvedOptions"]
-    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-    val create: ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:NumberFormatOptions.t -> unit -> t [@@js.create]
-    val invoke: ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:NumberFormatOptions.t -> unit -> t [@@js.invoke]
-    val supportedLocalesOf: locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:NumberFormatOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
+    
+    (** language version: ES2020 *)
+    val create: ?locales:LocalesArgument.t -> ?options:NumberFormatOptions.t -> unit -> t [@@js.create]
+    
+    (** language version: ES2020 *)
+    val invoke: ?locales:LocalesArgument.t -> ?options:NumberFormatOptions.t -> unit -> t [@@js.invoke]
+    
+    (** language version: ES2020 *)
+    val supportedLocalesOf: locales:LocalesArgument.t -> ?options:NumberFormatOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
+    val create': ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:NumberFormatOptions.t -> unit -> t [@@js.create]
+    val invoke': ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:NumberFormatOptions.t -> unit -> t [@@js.invoke]
+    val supportedLocalesOf': locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:NumberFormatOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
     val prototype: unit -> t [@@js.get "prototype"]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
   
   (** language version: ES2021 *)
@@ -3272,7 +3417,7 @@ and[@js.scope "Intl"] Intl : sig
   
   (** language version: ES2021 *)
   module[@js.scope "ListFormat"] ListFormat : sig
-    module AnonymousInterface12 : sig
+    module AnonymousInterface11 : sig
       type t = private Ojs.t
       val t_to_js: t -> Ojs.t
       val t_of_js: Ojs.t -> t
@@ -3311,7 +3456,7 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/formatToParts).
     *)
-    val formatToParts: 'tags this -> list:string Iterable.t -> AnonymousInterface12.t list [@@js.call "formatToParts"]
+    val formatToParts: 'tags this -> list:string Iterable.t -> AnonymousInterface11.t list [@@js.call "formatToParts"]
     
     (**
       Returns a new object with properties reflecting the locale and style
@@ -3336,7 +3481,7 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat).
     *)
-    val create: ?locales:([`U1 of BCP47LanguageTag.t | `U2 of BCP47LanguageTag.t list] [@js.union]) -> ?options:ListFormatOptions.t -> unit -> t [@@js.create]
+    val create: ?locales:LocalesArgument.t -> ?options:ListFormatOptions.t -> unit -> t [@@js.create]
     
     (**
       Returns an array containing those of the provided locales that are
@@ -3351,7 +3496,7 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat/supportedLocalesOf).
     *)
-    val supportedLocalesOf: locales:([`U1 of BCP47LanguageTag.t | `U2 of BCP47LanguageTag.t list] [@js.union]) -> ?options:(ListFormatOptions.t, ([`L_s77_localeMatcher[@js "localeMatcher"]] [@js.enum])) Pick.t -> unit -> BCP47LanguageTag.t list [@@js.global "supportedLocalesOf"]
+    val supportedLocalesOf: locales:LocalesArgument.t -> ?options:(ListFormatOptions.t, ([`L_s77_localeMatcher[@js "localeMatcher"]] [@js.enum])) Pick.t -> unit -> UnicodeBCP47LocaleIdentifier.t list [@@js.global "supportedLocalesOf"]
   end
   
   (** language version: ES2020 *)
@@ -3399,140 +3544,6 @@ and[@js.scope "Intl"] Intl : sig
     val set_languageDisplay: 'tags this -> DisplayNamesLanguageDisplay.t -> unit [@@js.set "languageDisplay"]
     val create: locale:UnicodeBCP47LocaleIdentifier.t -> style:RelativeTimeFormatStyle.t -> type_:(DisplayNamesType.t[@js "type"]) -> fallback:DisplayNamesFallback.t -> ?languageDisplay:DisplayNamesLanguageDisplay.t -> unit -> t [@@js.builder]
     val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-  end
-  
-  (** language version: ES2020 *)
-  module LocaleHourCycleKey : sig
-    type t = ([`L_s67_h11[@js "h11"] | `L_s68_h12[@js "h12"] | `L_s69_h23[@js "h23"] | `L_s70_h24[@js "h24"]] [@js.enum])
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-  end
-  
-  (** language version: ES2020 *)
-  module LocaleCollationCaseFirst : sig
-    type t = ([`L_s139_upper[@js "upper"] | `L_s58_false[@js "false"] | `L_s82_lower[@js "lower"]] [@js.enum])
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-  end
-  
-  (** language version: ES2020 *)
-  module LocaleOptions : sig
-    type t = [`Intl_LocaleOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    [@@@js.stop]
-    type tags = [`Intl_LocaleOptions]
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`Intl_LocaleOptions]
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `Intl_LocaleOptions ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    
-    (** A string containing the language, and the script and region if available. *)
-    val get_baseName: 'tags this -> string option [@@js.get "baseName"]
-    
-    (** A string containing the language, and the script and region if available. *)
-    val set_baseName: 'tags this -> string -> unit [@@js.set "baseName"]
-    
-    (** The part of the Locale that indicates the locale's calendar era. *)
-    val get_calendar: 'tags this -> string option [@@js.get "calendar"]
-    
-    (** The part of the Locale that indicates the locale's calendar era. *)
-    val set_calendar: 'tags this -> string -> unit [@@js.set "calendar"]
-    
-    (** Flag that defines whether case is taken into account for the locale's collation rules. *)
-    val get_caseFirst: 'tags this -> LocaleCollationCaseFirst.t option [@@js.get "caseFirst"]
-    
-    (** Flag that defines whether case is taken into account for the locale's collation rules. *)
-    val set_caseFirst: 'tags this -> LocaleCollationCaseFirst.t -> unit [@@js.set "caseFirst"]
-    
-    (** The collation type used for sorting *)
-    val get_collation: 'tags this -> string option [@@js.get "collation"]
-    
-    (** The collation type used for sorting *)
-    val set_collation: 'tags this -> string -> unit [@@js.set "collation"]
-    
-    (** The time keeping format convention used by the locale. *)
-    val get_hourCycle: 'tags this -> LocaleHourCycleKey.t option [@@js.get "hourCycle"]
-    
-    (** The time keeping format convention used by the locale. *)
-    val set_hourCycle: 'tags this -> LocaleHourCycleKey.t -> unit [@@js.set "hourCycle"]
-    
-    (** The primary language subtag associated with the locale. *)
-    val get_language: 'tags this -> string option [@@js.get "language"]
-    
-    (** The primary language subtag associated with the locale. *)
-    val set_language: 'tags this -> string -> unit [@@js.set "language"]
-    
-    (** The numeral system used by the locale. *)
-    val get_numberingSystem: 'tags this -> string option [@@js.get "numberingSystem"]
-    
-    (** The numeral system used by the locale. *)
-    val set_numberingSystem: 'tags this -> string -> unit [@@js.set "numberingSystem"]
-    
-    (** Flag that defines whether the locale has special collation handling for numeric characters. *)
-    val get_numeric: 'tags this -> bool option [@@js.get "numeric"]
-    
-    (** Flag that defines whether the locale has special collation handling for numeric characters. *)
-    val set_numeric: 'tags this -> bool -> unit [@@js.set "numeric"]
-    
-    (** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. *)
-    val get_region: 'tags this -> string option [@@js.get "region"]
-    
-    (** The region of the world (usually a country) associated with the locale. Possible values are region codes as defined by ISO 3166-1. *)
-    val set_region: 'tags this -> string -> unit [@@js.set "region"]
-    
-    (** The script used for writing the particular language used in the locale. Possible values are script codes as defined by ISO 15924. *)
-    val get_script: 'tags this -> string option [@@js.get "script"]
-    
-    (** The script used for writing the particular language used in the locale. Possible values are script codes as defined by ISO 15924. *)
-    val set_script: 'tags this -> string -> unit [@@js.set "script"]
-    val create: ?baseName:string -> ?calendar:string -> ?caseFirst:LocaleCollationCaseFirst.t -> ?collation:string -> ?hourCycle:LocaleHourCycleKey.t -> ?language:string -> ?numberingSystem:string -> ?numeric:bool -> ?region:string -> ?script:string -> unit -> t [@@js.builder]
-    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-  end
-  
-  (** language version: ES2020 *)
-  module[@js.scope "Locale"] Locale : sig
-    type t = [`Intl_Locale | `Intl_LocaleOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    [@@@js.stop]
-    type tags = [`Intl_Locale | `Intl_LocaleOptions]
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`Intl_Locale | `Intl_LocaleOptions]
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `Intl_Locale ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    
-    (** A string containing the language, and the script and region if available. *)
-    val get_baseName: 'tags this -> string [@@js.get "baseName"]
-    
-    (** A string containing the language, and the script and region if available. *)
-    val set_baseName: 'tags this -> string -> unit [@@js.set "baseName"]
-    
-    (** The primary language subtag associated with the locale. *)
-    val get_language: 'tags this -> string [@@js.get "language"]
-    
-    (** The primary language subtag associated with the locale. *)
-    val set_language: 'tags this -> string -> unit [@@js.set "language"]
-    
-    (** Gets the most likely values for the language, script, and region of the locale based on existing values. *)
-    val maximize: 'tags this -> t [@@js.call "maximize"]
-    
-    (** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. *)
-    val minimize: 'tags this -> t [@@js.call "minimize"]
-    
-    (** Returns the locale's full locale identifier string. *)
-    val toString: 'tags this -> BCP47LanguageTag.t [@@js.call "toString"]
-    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-    val create: tag:([`U1 of BCP47LanguageTag.t | `U2 of t] [@js.union]) -> ?options:LocaleOptions.t -> unit -> t [@@js.create]
-  end
-  
-  (** language version: ES2020 *)
-  module LocalesArgument : sig
-    type t = (Locale.t, UnicodeBCP47LocaleIdentifier.t, (Locale.t, UnicodeBCP47LocaleIdentifier.t) union2 list) union3 option
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
   end
   
   (** language version: ES2020 *)
@@ -3628,7 +3639,7 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/supportedLocalesOf).
     *)
-    val supportedLocalesOf: ?locales:LocalesArgument.t -> ?options:AnonymousInterface4.t -> unit -> BCP47LanguageTag.t list [@@js.global "supportedLocalesOf"]
+    val supportedLocalesOf: ?locales:LocalesArgument.t -> ?options:AnonymousInterface4.t -> unit -> UnicodeBCP47LocaleIdentifier.t list [@@js.global "supportedLocalesOf"]
   end
   
   (** language version: ES2017 *)
@@ -3937,11 +3948,20 @@ and[@js.scope "Intl"] Intl : sig
     val formatToParts: 'tags this -> ?date:([`U1 of Date.t | `U2 of float] [@js.union]) -> unit -> DateTimeFormatPart.t list [@@js.call "formatToParts"]
     val format: 'tags this -> ?date:([`U1 of Date.t | `U2 of float] [@js.union]) -> unit -> string [@@js.call "format"]
     val resolvedOptions: 'tags this -> ResolvedDateTimeFormatOptions.t [@@js.call "resolvedOptions"]
-    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-    val create: ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:DateTimeFormatOptions.t -> unit -> t [@@js.create]
-    val invoke: ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:DateTimeFormatOptions.t -> unit -> t [@@js.invoke]
-    val supportedLocalesOf: locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:DateTimeFormatOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
+    
+    (** language version: ES2020 *)
+    val create: ?locales:LocalesArgument.t -> ?options:DateTimeFormatOptions.t -> unit -> t [@@js.create]
+    
+    (** language version: ES2020 *)
+    val invoke: ?locales:LocalesArgument.t -> ?options:DateTimeFormatOptions.t -> unit -> t [@@js.invoke]
+    
+    (** language version: ES2020 *)
+    val supportedLocalesOf: locales:LocalesArgument.t -> ?options:DateTimeFormatOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
+    val create': ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:DateTimeFormatOptions.t -> unit -> t [@@js.create]
+    val invoke': ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:DateTimeFormatOptions.t -> unit -> t [@@js.invoke]
+    val supportedLocalesOf': locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:DateTimeFormatOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
     val prototype: unit -> t [@@js.get "prototype"]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
   
   
@@ -4018,11 +4038,32 @@ and[@js.scope "Intl"] Intl : sig
     val t_of_js: Ojs.t -> t
     val compare: 'tags this -> x:string -> y:string -> float [@@js.call "compare"]
     val resolvedOptions: 'tags this -> ResolvedCollatorOptions.t [@@js.call "resolvedOptions"]
+    
+    (** language version: ES2020 *)
+    val create: ?locales:LocalesArgument.t -> ?options:CollatorOptions.t -> unit -> t [@@js.create]
+    
+    (** language version: ES2020 *)
+    val invoke: ?locales:LocalesArgument.t -> ?options:CollatorOptions.t -> unit -> t [@@js.invoke]
+    
+    (** language version: ES2020 *)
+    val supportedLocalesOf: locales:LocalesArgument.t -> ?options:CollatorOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
+    val create': ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:CollatorOptions.t -> unit -> t [@@js.create]
+    val invoke': ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:CollatorOptions.t -> unit -> t [@@js.invoke]
+    val supportedLocalesOf': locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:CollatorOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
     val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-    val create: ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:CollatorOptions.t -> unit -> t [@@js.create]
-    val invoke: ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:CollatorOptions.t -> unit -> t [@@js.invoke]
-    val supportedLocalesOf: locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:CollatorOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
   end
+  
+  (**
+    language version: ES2016
+    The `Intl.getCanonicalLocales()` method returns an array containing
+    the canonical locale names. Duplicates will be omitted and elements
+    will be validated as structurally valid language tags.
+    
+    \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/getCanonicalLocales)
+    @param locale A list of String values for which to get the canonical locale names
+    @return An array containing the canonical and validated locale names.
+  *)
+  val getCanonicalLocales: ?locale:([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t -> unit -> string list [@@js.global "getCanonicalLocales"]
   
   (**
     language version: ES2022
@@ -4036,43 +4077,43 @@ end
 
 
 module[@js.scope "String"] String : sig
-  module AnonymousInterface31 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    (* [Symbol.split]: string:string -> ?limit:float -> unit -> string list *)
-  end
-  module AnonymousInterface30 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    (* [Symbol.search]: string -> float *)
-  end
-  module AnonymousInterface29 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    (* [Symbol.replace]: string:string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string *)
-  end
-  module AnonymousInterface28 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    (* [Symbol.replace]: string:string -> replaceValue:string -> string *)
-  end
-  module AnonymousInterface27 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    (* [Symbol.match]: string -> RegExpMatchArray.t option *)
-  end
-  module AnonymousInterface10 : sig
+  module AnonymousInterface9 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
     val get_raw: t -> (string ArrayLike.t, string list) union2 [@@js.get "raw"]
     val set_raw: t -> ([`U1 of string list | `U2 of string ArrayLike.t] [@js.union]) -> unit [@@js.set "raw"]
     val create: raw:(string ArrayLike.t, string list) union2 -> unit -> t [@@js.builder]
+  end
+  module AnonymousInterface26 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.split]: string:string -> ?limit:float -> unit -> string list *)
+  end
+  module AnonymousInterface25 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.search]: string -> float *)
+  end
+  module AnonymousInterface24 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.replace]: string:string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string *)
+  end
+  module AnonymousInterface23 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.replace]: string:string -> replaceValue:string -> string *)
+  end
+  module AnonymousInterface22 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.match]: string -> RegExpMatchArray.t option *)
   end
   type t = [`String] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   [@@@js.stop]
@@ -4084,6 +4125,32 @@ module[@js.scope "String"] String : sig
   type 'tags this = 'tags intf constraint 'tags = [> `String ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
+  
+  (**
+    language version: ES2019
+    Removes the trailing white space and line terminator characters from a string.
+  *)
+  val trimEnd: 'tags this -> string [@@js.call "trimEnd"]
+  
+  (**
+    language version: ES2019
+    Removes the leading white space and line terminator characters from a string.
+  *)
+  val trimStart: 'tags this -> string [@@js.call "trimStart"]
+  
+  (**
+    language version: ES2019
+    Removes the leading white space and line terminator characters from a string.
+    @deprecated A legacy feature for browser compatibility. Use `trimStart` instead
+  *)
+  val trimLeft: 'tags this -> string [@@js.call "trimLeft"]
+  
+  (**
+    language version: ES2019
+    Removes the trailing white space and line terminator characters from a string.
+    @deprecated A legacy feature for browser compatibility. Use `trimEnd` instead
+  *)
+  val trimRight: 'tags this -> string [@@js.call "trimRight"]
   
   (**
     language version: ES2022
@@ -4114,33 +4181,28 @@ module[@js.scope "String"] String : sig
     containing the results of that search.
     @param regexp A variable name or string literal containing the regular expression pattern and flags.
   *)
-  val matchAll: 'tags this -> regexp:RegExp.t -> RegExpMatchArray.t IterableIterator.t [@@js.call "matchAll"]
+  val matchAll: 'tags this -> regexp:RegExp.t -> RegExpExecArray.t IterableIterator.t [@@js.call "matchAll"]
   
   (**
-    language version: ES2019
-    Removes the trailing white space and line terminator characters from a string.
+    language version: ES2020
+    Converts all alphabetic characters to lowercase, taking into account the host environment's current locale.
   *)
-  val trimEnd: 'tags this -> string [@@js.call "trimEnd"]
+  val toLocaleLowerCase: 'tags this -> ?locales:Intl.LocalesArgument.t -> unit -> string [@@js.call "toLocaleLowerCase"]
   
   (**
-    language version: ES2019
-    Removes the leading white space and line terminator characters from a string.
+    language version: ES2020
+    Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale.
   *)
-  val trimStart: 'tags this -> string [@@js.call "trimStart"]
+  val toLocaleUpperCase: 'tags this -> ?locales:Intl.LocalesArgument.t -> unit -> string [@@js.call "toLocaleUpperCase"]
   
   (**
-    language version: ES2019
-    Removes the leading white space and line terminator characters from a string.
-    @deprecated A legacy feature for browser compatibility. Use `trimStart` instead
+    language version: ES2020
+    Determines whether two strings are equivalent in the current or specified locale.
+    @param that String to compare to target string
+    @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
+    @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
   *)
-  val trimLeft: 'tags this -> string [@@js.call "trimLeft"]
-  
-  (**
-    language version: ES2019
-    Removes the trailing white space and line terminator characters from a string.
-    @deprecated A legacy feature for browser compatibility. Use `trimEnd` instead
-  *)
-  val trimRight: 'tags this -> string [@@js.call "trimRight"]
+  val localeCompare: 'tags this -> that:string -> ?locales:Intl.LocalesArgument.t -> ?options:Intl.CollatorOptions.t -> unit -> float [@@js.call "localeCompare"]
   
   (**
     language version: ES2017
@@ -4172,7 +4234,7 @@ module[@js.scope "String"] String : sig
     containing the results of that search, or null if no matches are found.
     @param matcher An object that supports being matched against.
   *)
-  val match_: 'tags this -> matcher:AnonymousInterface27.t -> RegExpMatchArray.t option [@@js.call "match"]
+  val match_: 'tags this -> matcher:AnonymousInterface22.t -> RegExpMatchArray.t option [@@js.call "match"]
   
   (**
     language version: ES2015
@@ -4188,7 +4250,7 @@ module[@js.scope "String"] String : sig
     @param searchValue An object that supports searching for and replacing matches within a string.
     @param replaceValue The replacement text.
   *)
-  val replace: 'tags this -> searchValue:AnonymousInterface28.t -> replaceValue:string -> string [@@js.call "replace"]
+  val replace: 'tags this -> searchValue:AnonymousInterface23.t -> replaceValue:string -> string [@@js.call "replace"]
   
   (**
     language version: ES2015
@@ -4196,14 +4258,14 @@ module[@js.scope "String"] String : sig
     @param searchValue A object can search for and replace matches within a string.
     @param replacer A function that returns the replacement text.
   *)
-  val replace': 'tags this -> searchValue:AnonymousInterface29.t -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replace"]
+  val replace': 'tags this -> searchValue:AnonymousInterface24.t -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replace"]
   
   (**
     language version: ES2015
     Finds the first substring match in a regular expression search.
     @param searcher An object which supports searching within a string.
   *)
-  val search: 'tags this -> searcher:AnonymousInterface30.t -> float [@@js.call "search"]
+  val search: 'tags this -> searcher:AnonymousInterface25.t -> float [@@js.call "search"]
   
   (**
     language version: ES2015
@@ -4211,7 +4273,7 @@ module[@js.scope "String"] String : sig
     @param splitter An object that can split a string.
     @param limit A value used to limit the number of elements returned in the array.
   *)
-  val split: 'tags this -> splitter:AnonymousInterface31.t -> ?limit:float -> unit -> string list [@@js.call "split"]
+  val split: 'tags this -> splitter:AnonymousInterface26.t -> ?limit:float -> unit -> string list [@@js.call "split"]
   (* [Symbol.iterator]: unit -> string IterableIterator.t *)
   
   (**
@@ -4381,7 +4443,7 @@ module[@js.scope "String"] String : sig
     @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
     @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
   *)
-  val localeCompare: 'tags this -> that:string -> ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:Intl.CollatorOptions.t -> unit -> float [@@js.call "localeCompare"]
+  val localeCompare': 'tags this -> that:string -> ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:Intl.CollatorOptions.t -> unit -> float [@@js.call "localeCompare"]
   
   (** Returns a string representation of a string. *)
   val toString: 'tags this -> string [@@js.call "toString"]
@@ -4422,7 +4484,7 @@ module[@js.scope "String"] String : sig
     Determines whether two strings are equivalent in the current locale.
     @param that String to compare to target string
   *)
-  val localeCompare': 'tags this -> that:string -> float [@@js.call "localeCompare"]
+  val localeCompare'': 'tags this -> that:string -> float [@@js.call "localeCompare"]
   
   (**
     Matches a string with a regular expression, and returns an array containing the results of that search.
@@ -4477,13 +4539,13 @@ module[@js.scope "String"] String : sig
   val toLowerCase: 'tags this -> string [@@js.call "toLowerCase"]
   
   (** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. *)
-  val toLocaleLowerCase: 'tags this -> ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> unit -> string [@@js.call "toLocaleLowerCase"]
+  val toLocaleLowerCase': 'tags this -> ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> unit -> string [@@js.call "toLocaleLowerCase"]
   
   (** Converts all the alphabetic characters in a string to uppercase. *)
   val toUpperCase: 'tags this -> string [@@js.call "toUpperCase"]
   
   (** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. *)
-  val toLocaleUpperCase: 'tags this -> ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> unit -> string [@@js.call "toLocaleUpperCase"]
+  val toLocaleUpperCase': 'tags this -> ?locales:([`U1 of string | `U2 of string list] [@js.union]) -> unit -> string [@@js.call "toLocaleUpperCase"]
   
   (** Removes the leading and trailing white space and line terminator characters from a string. *)
   val trim: 'tags this -> string [@@js.call "trim"]
@@ -4520,7 +4582,7 @@ module[@js.scope "String"] String : sig
     @param template A well-formed template string call site representation.
     @param substitutions A set of substitution values.
   *)
-  val raw: template:AnonymousInterface10.t -> substitutions:(any list [@js.variadic]) -> string [@@js.global "raw"]
+  val raw: template:AnonymousInterface9.t -> substitutions:(any list [@js.variadic]) -> string [@@js.global "raw"]
   val create: ?value:any -> unit -> t [@@js.create]
   val invoke: ?value:any -> unit -> string [@@js.invoke]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -4616,15 +4678,6 @@ module[@js.scope "ReferenceError"] ReferenceError : sig
   val invoke': ?message:string -> unit -> t [@@js.invoke]
   val prototype: unit -> t [@@js.get "prototype"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-end
-
-
-module Record : sig
-  type ('K, 'T) t = (* FIXME: unknown type '{
-      [P in K]: T;
-  }' *)any
-  val t_to_js: ('K -> Ojs.t) -> ('T -> Ojs.t) -> ('K, 'T) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'T) -> Ojs.t -> ('K, 'T) t
 end
 
 (** language version: ES2015 *)
@@ -4901,7 +4954,7 @@ module ProxyHandler : sig
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "Proxy"] ProxyStatic : sig
-  module AnonymousInterface43 : sig
+  module AnonymousInterface38 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
@@ -4926,7 +4979,7 @@ module[@js.scope "Proxy"] ProxyStatic : sig
     @param target A target object to wrap with Proxy.
     @param handler An object whose properties define the behavior of Proxy when an operation is attempted on it.
   *)
-  val revocable: target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface43.t [@@js.global "revocable"]
+  val revocable: target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface38.t [@@js.global "revocable"]
   
   (**
     Creates a Proxy object. The Proxy object allows you to create an object that can be used in place of the
@@ -4940,7 +4993,7 @@ end
 
 (** language version: ES2015 *)
 module ProxyConstructor : sig
-  module AnonymousInterface43 : sig
+  module AnonymousInterface38 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
@@ -4975,7 +5028,7 @@ module ProxyConstructor : sig
     @param target A target object to wrap with Proxy.
     @param handler An object whose properties define the behavior of Proxy when an operation is attempted on it.
   *)
-  val revocable: 'tags this -> target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface43.t [@@js.call "revocable"]
+  val revocable: 'tags this -> target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface38.t [@@js.call "revocable"]
   
   (**
     Creates a Proxy object. The Proxy object allows you to create an object that can be used in place of the
@@ -5013,24 +5066,15 @@ end
 
 
 module PromiseConstructorLike : sig
-  module AnonymousInterface17 : sig
+  module AnonymousInterface16 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
     val create: t -> executor:(resolve:(([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T PromiseLike.t [@@js.apply_newable]
   end
-  type t = AnonymousInterface17.t
+  type t = AnonymousInterface16.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-end
-
-
-module Partial : sig
-  type 'T t = (* FIXME: unknown type '{
-      [P in keyof T]?: T[P];
-  }' *)any
-  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
 end
 
 
@@ -5045,6 +5089,15 @@ module Omit : sig
   type ('T, 'K) t = ('T, ((* FIXME: unknown type ''T' *)any, 'K) Exclude.t) Pick.t
   val t_to_js: ('T -> Ojs.t) -> ('K -> Ojs.t) -> ('T, 'K) t -> Ojs.t
   val t_of_js: (Ojs.t -> 'T) -> (Ojs.t -> 'K) -> Ojs.t -> ('T, 'K) t
+end
+
+
+module Record : sig
+  type ('K, 'T) t = (* FIXME: unknown type '{
+      [P in K]: T;
+  }' *)any
+  val t_to_js: ('K -> Ojs.t) -> ('T -> Ojs.t) -> ('K, 'T) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'T) -> Ojs.t -> ('K, 'T) t
 end
 
 
@@ -5069,6 +5122,15 @@ module PropertyDescriptorMap : sig
   val get: 'tags this -> PropertyKey.t -> PropertyDescriptor.t [@@js.index_get]
   val set: 'tags this -> PropertyKey.t -> PropertyDescriptor.t -> unit [@@js.index_set]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+
+module Partial : sig
+  type 'T t = (* FIXME: unknown type '{
+      [P in keyof T]?: T[P];
+  }' *)any
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
 end
 
 
@@ -5097,7 +5159,7 @@ end
 
 
 module[@js.scope "Object"] Object : sig
-  module AnonymousInterface52 : sig
+  module AnonymousInterface47 : sig
     type 'U t = private Ojs.t
     val t_to_js: ('U -> Ojs.t) -> 'U t -> Ojs.t
     val t_of_js: (Ojs.t -> 'U) -> Ojs.t -> 'U t
@@ -5113,7 +5175,7 @@ module[@js.scope "Object"] Object : sig
       val set: t -> string -> ([`Null | `Undefined of undefined | `U1 of U.t | `U2 of untyped_object] [@js.union]) -> unit [@@js.index_set]
     end
   end
-  module AnonymousInterface50 : sig
+  module AnonymousInterface45 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
@@ -5129,7 +5191,7 @@ module[@js.scope "Object"] Object : sig
       val set: t -> string -> T.t -> unit [@@js.index_set]
     end
   end
-  module AnonymousInterface47 : sig
+  module AnonymousInterface42 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
@@ -5145,7 +5207,7 @@ module[@js.scope "Object"] Object : sig
       val set: t -> string -> T.t -> unit [@@js.index_set]
     end
   end
-  module AnonymousInterface26 : sig
+  module AnonymousInterface21 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -5197,6 +5259,14 @@ module[@js.scope "Object"] Object : sig
   val propertyIsEnumerable: 'tags this -> v:PropertyKey.t -> bool [@@js.call "propertyIsEnumerable"]
   
   (**
+    language version: ESNext
+    Groups members of an iterable according to the return value of the passed callback.
+    @param items An iterable.
+    @param keySelector A callback which will be invoked for each item in items.
+  *)
+  val groupBy: items:'T Iterable.t -> keySelector:(item:'T -> index:float -> 'K) -> ('K, 'T list) Record.t Partial.t [@@js.global "groupBy"]
+  
+  (**
     language version: ES2022
     Determines whether an object has a property with the specified name.
     @param o An object.
@@ -5209,7 +5279,7 @@ module[@js.scope "Object"] Object : sig
     Returns an object created by key-value entries for properties and methods
     @param entries An iterable object that contains key-value entries for properties and methods.
   *)
-  val fromEntries: (PropertyKey.t * 'T) Iterable.t -> 'T AnonymousInterface47.t [@@js.global "fromEntries"]
+  val fromEntries: (PropertyKey.t * 'T) Iterable.t -> 'T AnonymousInterface42.t [@@js.global "fromEntries"]
   
   (**
     language version: ES2019
@@ -5223,7 +5293,7 @@ module[@js.scope "Object"] Object : sig
     Returns an array of values of the enumerable properties of an object
     @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
   *)
-  val values: ([`U1 of 'T AnonymousInterface50.t | `U2 of 'T ArrayLike.t] [@js.union]) -> 'T list [@@js.global "values"]
+  val values: ([`U1 of 'T AnonymousInterface45.t | `U2 of 'T ArrayLike.t] [@js.union]) -> 'T list [@@js.global "values"]
   
   (**
     language version: ES2017
@@ -5237,7 +5307,7 @@ module[@js.scope "Object"] Object : sig
     Returns an array of key/values of the enumerable properties of an object
     @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
   *)
-  val entries: ([`U1 of 'T AnonymousInterface50.t | `U2 of 'T ArrayLike.t] [@js.union]) -> (string * 'T) list [@@js.global "entries"]
+  val entries: ([`U1 of 'T AnonymousInterface45.t | `U2 of 'T ArrayLike.t] [@js.union]) -> (string * 'T) list [@@js.global "entries"]
   
   (**
     language version: ES2017
@@ -5251,7 +5321,7 @@ module[@js.scope "Object"] Object : sig
     Returns an object containing all own property descriptors of an object
     @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
   *)
-  val getOwnPropertyDescriptors: 'T -> ((* FIXME: unknown type '{ [P in keyof T]: TypedPropertyDescriptor<T[P]>; }' *)any, AnonymousInterface26.t) intersection2 [@@js.global "getOwnPropertyDescriptors"]
+  val getOwnPropertyDescriptors: 'T -> ((* FIXME: unknown type '{ [P in keyof T]: TypedPropertyDescriptor<T[P]>; }' *)any, AnonymousInterface21.t) intersection2 [@@js.global "getOwnPropertyDescriptors"]
   
   (**
     language version: ES2015
@@ -5600,8 +5670,15 @@ module NonNullable : sig
 end
 
 
+module NoInfer : sig
+  type 'T t = Ojs.t
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+end
+
+
 module NewableFunction : sig
-  module AnonymousInterface45 : sig
+  module AnonymousInterface40 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
@@ -5615,7 +5692,7 @@ module NewableFunction : sig
       val create: t -> T.t [@@js.apply_newable]
     end
   end
-  module AnonymousInterface41 : sig
+  module AnonymousInterface36 : sig
     type 'R t = private Ojs.t
     val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
     val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
@@ -5629,7 +5706,7 @@ module NewableFunction : sig
       val create: t -> args:((* FIXME: type '(?(...A), ?(...B))' cannot be used for variadic argument *)any list [@js.variadic]) -> R.t [@@js.apply_newable]
     end
   end
-  module AnonymousInterface39 : sig
+  module AnonymousInterface34 : sig
     type ('B, 'R) t = private Ojs.t
     val t_to_js: ('B -> Ojs.t) -> ('R -> Ojs.t) -> ('B, 'R) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'B) -> (Ojs.t -> 'R) -> Ojs.t -> ('B, 'R) t
@@ -5643,7 +5720,7 @@ module NewableFunction : sig
       val create: t -> args:((* FIXME: type ''B' cannot be used for variadic argument *)any list [@js.variadic]) -> R.t [@@js.apply_newable]
     end
   end
-  module AnonymousInterface37 : sig
+  module AnonymousInterface32 : sig
     type ('A, 'T) t = private Ojs.t
     val t_to_js: ('A -> Ojs.t) -> ('T -> Ojs.t) -> ('A, 'T) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'T) -> Ojs.t -> ('A, 'T) t
@@ -5672,21 +5749,21 @@ module NewableFunction : sig
     Calls the function with the specified object as the this value and the elements of specified array as the arguments.
     @param thisArg The object to be used as the this object.
   *)
-  val apply_: 'tags this -> this:'T AnonymousInterface45.t -> thisArg:'T -> unit [@@js.call "apply"]
+  val apply_: 'tags this -> this:'T AnonymousInterface40.t -> thisArg:'T -> unit [@@js.call "apply"]
   
   (**
     Calls the function with the specified object as the this value and the elements of specified array as the arguments.
     @param thisArg The object to be used as the this object.
     @param args An array of argument values to be passed to the function.
   *)
-  val apply_': 'tags this -> this:('A, 'T) AnonymousInterface37.t -> thisArg:'T -> args:'A -> unit [@@js.call "apply"]
+  val apply_': 'tags this -> this:('A, 'T) AnonymousInterface32.t -> thisArg:'T -> args:'A -> unit [@@js.call "apply"]
   
   (**
     Calls the function with the specified object as the this value and the specified rest arguments as the arguments.
     @param thisArg The object to be used as the this object.
     @param args Argument values to be passed to the function.
   *)
-  val call: 'tags this -> this:('A, 'T) AnonymousInterface37.t -> thisArg:'T -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> unit [@@js.call "call"]
+  val call: 'tags this -> this:('A, 'T) AnonymousInterface32.t -> thisArg:'T -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> unit [@@js.call "call"]
   
   (**
     For a given function, creates a bound function that has the same body as the original function.
@@ -5701,7 +5778,7 @@ module NewableFunction : sig
     @param thisArg The object to be used as the this object.
     @param args Arguments to bind to the parameters of the function.
   *)
-  val bind': 'tags this -> this:'R AnonymousInterface41.t -> thisArg:any -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> ('B, 'R) AnonymousInterface39.t [@@js.call "bind"]
+  val bind': 'tags this -> this:'R AnonymousInterface36.t -> thisArg:any -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> ('B, 'R) AnonymousInterface34.t [@@js.call "bind"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "Math"] Math : sig
@@ -6012,6 +6089,14 @@ module[@js.scope "Map"] Map : sig
   
   (** @return the number of elements in the Map. *)
   val get_size: ('tags, 'K, 'V) this -> float [@@js.get "size"]
+  
+  (**
+    language version: ESNext
+    Groups members of an iterable according to the return value of the passed callback.
+    @param items An iterable.
+    @param keySelector A callback which will be invoked for each item in items.
+  *)
+  val groupBy: items:'T Iterable.t -> keySelector:(item:'T -> index:float -> 'K) -> ('K, 'T list) t [@@js.global "groupBy"]
   val create: unit -> (any, any) t [@@js.create]
   val create': ?iterable:('K * 'V) Iterable.t option -> unit -> ('K, 'V) t [@@js.create]
   val create'': unit -> (any, any) t [@@js.create]
@@ -6083,7 +6168,7 @@ end
 
 (** language version: ES2015 *)
 module[@js.scope "Reflect"] Reflect : sig
-  module AnonymousInterface34 : sig
+  module AnonymousInterface29 : sig
     type ('A, 'R) t = private Ojs.t
     val t_to_js: ('A -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'R) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'R) t
@@ -6097,7 +6182,7 @@ module[@js.scope "Reflect"] Reflect : sig
       val create: t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> R.t [@@js.apply_newable]
     end
   end
-  module AnonymousInterface16 : sig
+  module AnonymousInterface15 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -6129,7 +6214,7 @@ module[@js.scope "Reflect"] Reflect : sig
     @param argumentsList An array of argument values to be passed to the constructor.
     @param newTarget The constructor to be used as the `new.target` object.
   *)
-  val construct: target:('A, 'R) AnonymousInterface34.t -> argumentsList:'A Readonly.t -> ?newTarget:AnonymousInterface16.t -> unit -> 'R [@@js.global "construct"]
+  val construct: target:('A, 'R) AnonymousInterface29.t -> argumentsList:'A Readonly.t -> ?newTarget:AnonymousInterface15.t -> unit -> 'R [@@js.global "construct"]
   
   (**
     language version: ES2015
@@ -6242,7 +6327,7 @@ end
 
 
 module InstanceType : sig
-  module AnonymousInterface16 : sig
+  module AnonymousInterface15 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -6469,6 +6554,13 @@ module[@js.scope "Float64Array"] Float64Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -6519,13 +6611,6 @@ module[@js.scope "Float64Array"] Float64Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -6851,6 +6936,13 @@ module[@js.scope "Float32Array"] Float32Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -6901,13 +6993,6 @@ module[@js.scope "Float32Array"] Float32Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -7574,7 +7659,7 @@ end
 
 
 module ConstructorParameters : sig
-  module AnonymousInterface16 : sig
+  module AnonymousInterface15 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -7913,6 +7998,13 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -7963,13 +8055,6 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -8295,6 +8380,13 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -8345,13 +8437,6 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -8677,6 +8762,13 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -8727,13 +8819,6 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -9059,6 +9144,13 @@ module[@js.scope "Int8Array"] Int8Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -9109,13 +9201,6 @@ module[@js.scope "Int8Array"] Int8Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> Uint8Array.t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -9441,6 +9526,13 @@ module[@js.scope "Int32Array"] Int32Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -9491,13 +9583,6 @@ module[@js.scope "Int32Array"] Int32Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -9823,6 +9908,13 @@ module[@js.scope "Int16Array"] Int16Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> float option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -9873,13 +9965,6 @@ module[@js.scope "Int16Array"] Int16Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:float -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> float option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -10205,6 +10290,13 @@ module[@js.scope "BigUint64Array"] BigUint64Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> bigint option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -10255,13 +10347,6 @@ module[@js.scope "BigUint64Array"] BigUint64Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:bigint -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> bigint option [@@js.call "at"]
   
   (** The size in bytes of each element in the array. *)
   val get_BYTES_PER_ELEMENT: 'tags this -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -10540,6 +10625,13 @@ module[@js.scope "BigInt64Array"] BigInt64Array : sig
   val t_of_js: Ojs.t -> t
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> bigint option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -10590,13 +10682,6 @@ module[@js.scope "BigInt64Array"] BigInt64Array : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: 'tags this -> index:float -> value:bigint -> t [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> bigint option [@@js.call "at"]
   
   (** The size in bytes of each element in the array. *)
   val get_BYTES_PER_ELEMENT: 'tags this -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -10921,7 +11006,7 @@ module Awaited : sig
 end
 
 
-module[@js.scope "Promise"] Promise : sig
+module[@js.scope "Promise"] rec Promise : sig
   type 'T t = [`Promise of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
   [@@@js.stop]
   type 'T tags = [`Promise of 'T]
@@ -10959,22 +11044,6 @@ module[@js.scope "Promise"] Promise : sig
   val catch: ('tags, 'T) this -> ?onrejected:([`Null | `Undefined of undefined | `U1 of (any -> ([`U1 of 'TResult | `U2 of 'TResult PromiseLike.t] [@js.union]))] [@js.union]) -> unit -> ('T, 'TResult) union2 t [@@js.call "catch"]
   
   (**
-    language version: ES2021
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any: 'T -> (* FIXME: unknown type 'T[number]' *)any Awaited.t t [@@js.global "any"]
-  
-  (**
-    language version: ES2021
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any': ([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) Iterable.t -> 'T Awaited.t t [@@js.global "any"]
-  
-  (**
     language version: ES2020
     Creates a Promise that is resolved with an array of results when all
     of the provided Promises resolve or reject.
@@ -10991,6 +11060,33 @@ module[@js.scope "Promise"] Promise : sig
     @return A new Promise.
   *)
   val allSettled': ([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) Iterable.t -> 'T Awaited.t PromiseSettledResult.t list t [@@js.global "allSettled"]
+  
+  (**
+    language version: ESNext
+    Creates a new Promise and returns it in an object, along with its resolve and reject functions.
+    @return An object with the properties `promise`, `resolve`, and `reject`.
+    
+    ```ts
+    const \{ promise, resolve, reject \} = Promise.withResolvers<T>();
+    ```
+  *)
+  val withResolvers: unit -> 'T PromiseWithResolvers.t [@@js.global "withResolvers"]
+  
+  (**
+    language version: ES2021
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any: 'T -> (* FIXME: unknown type 'T[number]' *)any Awaited.t t [@@js.global "any"]
+  
+  (**
+    language version: ES2021
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any': ([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) Iterable.t -> 'T Awaited.t t [@@js.global "any"]
   
   (** A reference to the prototype. *)
   val prototype: unit -> any t [@@js.get "prototype"]
@@ -11061,6 +11157,26 @@ module[@js.scope "Promise"] Promise : sig
     @return A new Promise.
   *)
   val race': ([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) Iterable.t -> 'T Awaited.t t [@@js.global "race"]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
+end
+
+(** language version: ESNext *)
+and PromiseWithResolvers : sig
+  type 'T t = [`PromiseWithResolvers of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
+  [@@@js.stop]
+  type 'T tags = [`PromiseWithResolvers of 'T]
+  [@@@js.start]
+  [@@@js.implem 
+    type 'T tags = [`PromiseWithResolvers of 'T]
+  ]
+  type ('tags, 'T) this = 'tags intf constraint 'tags = [> `PromiseWithResolvers of 'T ]
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+  val get_promise: ('tags, 'T) this -> 'T Promise.t [@@js.get "promise"]
+  val set_promise: ('tags, 'T) this -> 'T Promise.t -> unit [@@js.set "promise"]
+  val resolve: ('tags, 'T) this -> value:([`U1 of 'T | `U2 of 'T PromiseLike.t] [@js.union]) -> unit [@@js.call "resolve"]
+  val reject: ('tags, 'T) this -> ?reason:any -> unit -> unit [@@js.call "reject"]
+  val create: promise:'T Promise.t -> resolve:(('T, 'T PromiseLike.t) union2 -> unit) -> reject:(?reason:any -> unit -> unit) -> unit -> 'T t [@@js.builder]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "Atomics"] Atomics : sig
@@ -11631,6 +11747,13 @@ module ReadonlyArray_Make (T : Ojs.T) : sig
   
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: t -> index:float -> T.t option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -11699,13 +11822,6 @@ module ReadonlyArray_Make (T : Ojs.T) : sig
     @return A copy of the original array with the inserted value.
   *)
   val with_: t -> index:float -> value:T.t -> T.t list [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: t -> index:float -> T.t option [@@js.call "at"]
   
   (**
     language version: ES2019
@@ -11950,6 +12066,13 @@ module[@js.scope "Array"] Array_Make (T : Ojs.T) : sig
   
   
   (**
+    language version: ES2022
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: t -> index:float -> T.t option [@@js.call "at"]
+  
+  (**
     Returns the value of the last element in the array where predicate is true, and undefined
     otherwise.
     @param predicate findLast calls predicate once for each element of the array, in descending
@@ -12018,13 +12141,6 @@ module[@js.scope "Array"] Array_Make (T : Ojs.T) : sig
     @return The copied array with the updated value.
   *)
   val with_: t -> index:float -> value:T.t -> T.t list [@@js.call "with"]
-  
-  (**
-    language version: ES2022
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: t -> index:float -> T.t option [@@js.call "at"]
   
   (**
     language version: ES2019
@@ -12471,6 +12587,14 @@ module[@js.scope "Map"] Map_Make (K : Ojs.T) (V : Ojs.T) : sig
   
   (** @return the number of elements in the Map. *)
   val get_size: t -> float [@@js.get "size"]
+  
+  (**
+    language version: ESNext
+    Groups members of an iterable according to the return value of the passed callback.
+    @param items An iterable.
+    @param keySelector A callback which will be invoked for each item in items.
+  *)
+  val groupBy: items:'T Iterable.t -> keySelector:(item:'T -> index:float -> K.t) -> (K.t, 'T list) parent [@@js.global "groupBy"]
   val create: unit -> (any, any) parent [@@js.create]
   val create: ?iterable:(K.t * V.t) Iterable.t option -> unit -> t [@@js.create]
   val create: unit -> (any, any) parent [@@js.create]
@@ -12686,22 +12810,6 @@ module[@js.scope "Promise"] Promise_Make (T : Ojs.T) : sig
   val catch: t -> ?onrejected:([`Null | `Undefined of undefined | `U1 of (any -> ([`U1 of 'TResult | `U2 of 'TResult PromiseLike.t] [@js.union]))] [@js.union]) -> unit -> (T.t, 'TResult) union2 parent [@@js.call "catch"]
   
   (**
-    language version: ES2021
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any: T.t -> (* FIXME: unknown type 'T[number]' *)any Awaited.t parent [@@js.global "any"]
-  
-  (**
-    language version: ES2021
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any: ([`U1 of T.t | `U2 of T.t PromiseLike.t] [@js.union]) Iterable.t -> T.t Awaited.t Awaited.t parent [@@js.global "any"]
-  
-  (**
     language version: ES2020
     Creates a Promise that is resolved with an array of results when all
     of the provided Promises resolve or reject.
@@ -12718,6 +12826,33 @@ module[@js.scope "Promise"] Promise_Make (T : Ojs.T) : sig
     @return A new Promise.
   *)
   val allSettled: ([`U1 of T.t | `U2 of T.t PromiseLike.t] [@js.union]) Iterable.t -> T.t Awaited.t PromiseSettledResult.t list Awaited.t PromiseSettledResult.t list parent [@@js.global "allSettled"]
+  
+  (**
+    language version: ESNext
+    Creates a new Promise and returns it in an object, along with its resolve and reject functions.
+    @return An object with the properties `promise`, `resolve`, and `reject`.
+    
+    ```ts
+    const \{ promise, resolve, reject \} = Promise.withResolvers<T>();
+    ```
+  *)
+  val withResolvers: unit -> T.t PromiseWithResolvers.t [@@js.global "withResolvers"]
+  
+  (**
+    language version: ES2021
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any: T.t -> (* FIXME: unknown type 'T[number]' *)any Awaited.t parent [@@js.global "any"]
+  
+  (**
+    language version: ES2021
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any: ([`U1 of T.t | `U2 of T.t PromiseLike.t] [@js.union]) Iterable.t -> T.t Awaited.t Awaited.t parent [@@js.global "any"]
   
   (** A reference to the prototype. *)
   val prototype: unit -> any parent [@@js.get "prototype"]
@@ -12907,17 +13042,6 @@ module AsyncIterator_Make (T : Ojs.T) (TReturn : Ojs.T) (TNext : Ojs.T) : sig
   val return: t -> ?value:([`U1 of TReturn.t | `U2 of TReturn.t PromiseLike.t] [@js.union]) -> unit -> (T.t, TReturn.t) IteratorResult.t Promise.t [@@js.call "return"]
   val throw: t -> ?e:any -> unit -> (T.t, TReturn.t) IteratorResult.t Promise.t [@@js.call "throw"]
 end
-module PromiseFulfilledResult_Make (T : Ojs.T) : sig
-  type 'T parent = 'T PromiseFulfilledResult.t
-  type t = T.t parent
-  val t_of_js: Ojs.t -> t
-  val t_to_js: t -> Ojs.t
-  
-  val get_status: t -> ([`L_s62_fulfilled[@js "fulfilled"]] [@js.enum]) [@@js.get "status"]
-  val set_status: t -> ([`L_s62_fulfilled[@js "fulfilled"]] [@js.enum]) -> unit [@@js.set "status"]
-  val get_value: t -> T.t [@@js.get "value"]
-  val set_value: t -> T.t -> unit [@@js.set "value"]
-end
 module[@js.scope "WeakRef"] WeakRef_Make (T : Ojs.T) : sig
   type 'T parent = 'T WeakRef.t
   type t = T.t parent
@@ -12974,6 +13098,28 @@ module[@js.scope "FinalizationRegistry"] FinalizationRegistry_Make (T : Ojs.T) :
     @param cleanupCallback The callback to call after a value in the registry has been reclaimed.
   *)
   val create: (T.t -> unit) -> t [@@js.create]
+end
+module PromiseWithResolvers_Make (T : Ojs.T) : sig
+  type 'T parent = 'T PromiseWithResolvers.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_promise: t -> T.t Promise.t [@@js.get "promise"]
+  val set_promise: t -> T.t Promise.t -> unit [@@js.set "promise"]
+  val resolve: t -> value:([`U1 of T.t | `U2 of T.t PromiseLike.t] [@js.union]) -> unit [@@js.call "resolve"]
+  val reject: t -> ?reason:any -> unit -> unit [@@js.call "reject"]
+end
+module PromiseFulfilledResult_Make (T : Ojs.T) : sig
+  type 'T parent = 'T PromiseFulfilledResult.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_status: t -> ([`L_s62_fulfilled[@js "fulfilled"]] [@js.enum]) [@@js.get "status"]
+  val set_status: t -> ([`L_s62_fulfilled[@js "fulfilled"]] [@js.enum]) -> unit [@@js.set "status"]
+  val get_value: t -> T.t [@@js.get "value"]
+  val set_value: t -> T.t -> unit [@@js.set "value"]
 end
 
 

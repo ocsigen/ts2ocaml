@@ -1,6 +1,6 @@
 (lang dune 3.0)
 (name ts2ocaml-jsoo-stdlib)
-(version 2.0.0-beta.2)
+(version 2.0.0-beta.3)
 
 (maintainers "dev@ocsigen.org")
 (authors

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-beta.3]
+
 - ReScript: prefix invalid constructor names by `Case` (#392).
 
 ## [2.0.0-beta.2]

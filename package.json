@@ -45,7 +45,7 @@
     "react-player": "2.15.0",
     "rescript": "11.0.1",
     "ts2fable": "0.8.0-build.723",
-    "webpack": "5.90.0",
+    "webpack": "5.91.0",
     "webpack-cli": "5.1.0",
     "webpack-dev-server": "5.0.2"
   }

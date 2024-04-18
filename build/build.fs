@@ -184,8 +184,10 @@ module Test =
          // "safe" package which depends on another "safe" package
          "safe", !! "node_modules/@types/yargs-parser/index.d.ts", [];
          "safe", !! "node_modules/@types/yargs/index.d.ts", [];
-
          "minimal", !! "node_modules/@types/vscode/index.d.ts", ["--readable-names"];
+
+         // #404: complex package which could break topological sorting
+         "minimal", !! "node_modules/playwright-core/index.d.ts", [];
       ]
 
       for preset, package, additionalOptions in packages do

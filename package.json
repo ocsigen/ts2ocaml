@@ -42,6 +42,7 @@
     "cassandra-driver": "^4.6.3",
     "cdk8s": "^2.2.41",
     "monaco-editor": "0.47.0",
+    "playwright": "^1.43.1",
     "react-player": "2.16.0",
     "rescript": "11.1.0",
     "ts2fable": "0.8.0-build.723",

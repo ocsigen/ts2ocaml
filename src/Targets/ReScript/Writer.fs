@@ -525,9 +525,9 @@ and getLabelOfFullName flags overrideFunc (ctx: Context) (fullName: FullName) (t
   let inheritingType = InheritingType.KnownIdent {| fullName = fullName; tyargs = typeParams |> List.map (fun tp -> TypeVar tp.name) |}
   getLabelsFromInheritingTypes flags overrideFunc ctx (Set.singleton inheritingType) |> Choice1Of2
 
-type StructuredTextItemBase<'TypeDefText, 'Binding, 'EnumCaseText> =
+type StructuredTextItemBase<'ImportText, 'TypeDefText, 'Binding, 'EnumCaseText> =
   /// Will always be emitted at the top of the module.
-  | ImportText of text
+  | ImportText of 'ImportText
   /// Will always be emitted at the next top of the module.
   | TypeDefText of 'TypeDefText
   | TypeAliasText of text
@@ -538,6 +538,7 @@ type StructuredTextItemBase<'TypeDefText, 'Binding, 'EnumCaseText> =
   | EnumCaseText of 'EnumCaseText
 
 and StructuredTextItem = StructuredTextItemBase<
+  ImportItem,
   TypeDefText,
   (OverloadRenamer -> CurrentScope -> Binding),
   {| name: string; comments: Comment list |}
@@ -573,6 +574,8 @@ and [<RequireQualifiedAccess>] Scope =
   | Path of string
   | Global
   | Ignore
+
+and [<RequireQualifiedAccess>] ImportItem = Import.Statement
 
 and [<RequireQualifiedAccess>] ExportItem =
   | Export of {| comments: Comment list; clauses: (ExportClause * Set<Kind>) list; loc: Location; origText: string |}
@@ -1466,6 +1469,7 @@ let emitImport (ctx: Context) (i: Import) : StructuredTextItem list =
       else
         match JsHelper.tryGetActualFileNameFromRelativeImportPath ctx.currentSourceFile ctx.state.fileNames specifier with
         | Some _ -> None // if the imported file is included in the input files, skip emitting it
+        | _ when ctx.options.merge -> None // if --merge is specified, skip emitting it
         | None ->
           JsHelper.resolveRelativeImportPath (ctx.state.info |> Result.toOption) ctx.currentSourceFile ctx.state.fileNames specifier
           |> JsHelper.InferenceResult.tryUnwrap
@@ -1488,21 +1492,21 @@ let emitImport (ctx: Context) (i: Import) : StructuredTextItem list =
         | Some kind -> kind |> Kind.generatesReScriptModule
         | None -> x.target |> Ident.getKind ctx |> Kind.generatesReScriptModule
       if shouldEmit then
-        [Statement.moduleAlias (Naming.moduleName x.name) (x.target.name |> Naming.structured Naming.moduleName) |> ImportText]
+        [Import.alias (Naming.moduleName x.name) (x.target.name |> Naming.structured Naming.moduleName) |> ImportText]
       else []
     | NamespaceImport x when isModule x.name x.kind ->
       getModuleName x.specifier
       |> Option.map (fun moduleName ->
-        [Statement.moduleAlias (Naming.moduleName x.name) (sprintf "%s.Export" moduleName) |> ImportText])
+        [Import.alias (Naming.moduleName x.name) (sprintf "%s.Export" moduleName) |> ImportText])
       |> Option.defaultValue []
     | ES6WildcardImport s ->
       getModuleName s
-      |> Option.map (fun moduleName -> [Statement.open_ (sprintf "%s.Export" moduleName) |> ImportText])
+      |> Option.map (fun moduleName -> [Import.open_ (sprintf "%s.Export" moduleName) |> ImportText])
       |> Option.defaultValue []
     | ES6DefaultImport x when isModule x.name x.kind ->
       getModuleName x.specifier
       |> Option.map (fun moduleName ->
-        [Statement.moduleAlias (Naming.moduleName x.name) (sprintf "%s.Export.Default" moduleName) |> ImportText])
+        [Import.alias (Naming.moduleName x.name) (sprintf "%s.Export.Default" moduleName) |> ImportText])
       |> Option.defaultValue []
     | ES6Import x when isModule x.name x.kind ->
       let name =
@@ -1511,14 +1515,16 @@ let emitImport (ctx: Context) (i: Import) : StructuredTextItem list =
         | None -> Naming.moduleName x.name
       getModuleName x.specifier
       |> Option.map (fun moduleName ->
-        [Statement.moduleAlias name (sprintf "%s.Export.%s" moduleName (Naming.moduleName x.name)) |> ImportText])
+        [Import.alias name (sprintf "%s.Export.%s" moduleName (Naming.moduleName x.name)) |> ImportText])
       |> Option.defaultValue []
     | NamespaceImport _ | ES6DefaultImport _ | ES6Import _ -> []
 
-  [ yield! emitComments true i.comments |> List.map ImportText
-    yield commentStr i.origText |> ImportText
+  [ yield! emitComments true i.comments |> List.map (Import.comment >> ImportText)
+    yield commentStr i.origText |> Import.comment |> ImportText
     for c in i.clauses do
-      yield! emitImportClause c]
+      match Import.getDedicatedImportStatement ctx c with
+      | Some stmt -> yield ImportText stmt
+      | None -> yield! emitImportClause c ]
 
 let createStructuredText (rootCtx: Context) (stmts: Statement list) : StructuredText =
   let emitTypeFlags = EmitTypeFlags.defaultValue
@@ -1743,7 +1749,7 @@ type EmitModuleFlags = {|
 |}
 
 type EmitModuleResult = {|
-  imports: text list
+  imports: {| types: text; impl: text; intf: text |} list
   /// The `Types` module
   types: text list
   /// The content of the `.res` file
@@ -1833,8 +1839,34 @@ let rec emitModule (dt: DependencyTrie<string>) flags (ctx: Context) st =
           | Some b, true -> attrs + tmp +@ " = " + b
         {| types = actual; intf = actual; impl = alias |}
 
+      let emitImportStatement (i: ImportItem) =
+        match i with
+        | ImportItem.Alias (name, target) ->
+          let txt = Statement.moduleAlias name target
+          {| types = txt; intf = txt; impl = txt |}
+        | ImportItem.Open name ->
+          let txt = Statement.open_ name
+          {| types = txt; intf = txt; impl = txt |}
+        | ImportItem.Type (name, tyName, tyArgs) ->
+          let typeArgs = tyArgs |> List.map str
+          let alias =
+            Statement.typeAlias false "t" typeArgs (Some (Type.appOpt (str tyName) typeArgs))
+          let resi =
+            tprintf "module %s : { " name  + alias +@ " }"
+          let res =
+            tprintf "module %s = { " name + alias +@ " }"
+          {| types = resi; intf = resi; impl = res |}
+        | ImportItem.FunctorInstance (name, expr) ->
+          let resi =
+            tprintf "module %s : module type of %s" name expr
+          let res =
+            tprintf "module %s = %s" name expr
+          {| types = resi; intf = resi; impl = res |}
+        | ImportItem.Comment c ->
+          {| types = c; intf = c; impl = c |}
+
       let rec f = function
-        | ImportText t -> ImportText t
+        | ImportText t -> ImportText (emitImportStatement t)
         | TypeAliasText t -> TypeAliasText t
         | TypeDefText d -> TypeDefText (emitTypeDefText d)
         | Binding b -> Binding (b renamer currentScope)
@@ -1855,7 +1887,7 @@ let rec emitModule (dt: DependencyTrie<string>) flags (ctx: Context) st =
         let children =
           children
           |> List.filter (fun (_, _, c) -> c.types |> List.isEmpty |> not)
-          |> List.map (fun (k, _, c) -> {| k with content = c.imports @ c.types; comments = [] |})
+          |> List.map (fun (k, _, c) -> {| k with content = (c.imports |> List.map (fun i -> i.types)) @ c.types; comments = [] |})
           |> Statement.moduleSCC dt Statement.moduleSigRec Statement.moduleSigNonRec ctx
         children @ items
 
@@ -1869,7 +1901,7 @@ let rec emitModule (dt: DependencyTrie<string>) flags (ctx: Context) st =
         children
         |> List.filter (fun (_, _, c) -> c.intf |> List.isEmpty |> not)
         |> List.map (fun (k, _, c) ->
-          let content = c.imports @ c.intf
+          let content = (c.imports |> List.map (fun i -> i.intf)) @ c.intf
           {| k with content = content; comments = c.comments |})
         |> Statement.moduleSigRec
       let typeDefs =
@@ -1907,11 +1939,12 @@ let rec emitModule (dt: DependencyTrie<string>) flags (ctx: Context) st =
         children
         |> List.filter (fun (_, _, c) -> c.impl |> List.isEmpty |> not)
         |> List.map (fun (k, openTypesModule, c) ->
+          let imports = c.imports |> List.map (fun i -> i.impl)
           let content =
             if not isLinear && openTypesModule then
-              Statement.open_ k.name :: c.imports @ c.impl
+              Statement.open_ k.name :: imports @ c.impl
             else
-              c.imports @ c.impl
+              imports @ c.impl
           {| k with content = content; comments = c.comments |})
         |> Statement.moduleSCC dt fixmeRecursiveModules Statement.moduleValMany ctx
       let typeDefs =
@@ -2114,7 +2147,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
       yield! header
       yield! m.comments
       yield! opens
-      yield! m.imports
+      yield! m.imports |> List.map (fun i -> i.impl)
       yield! emitTypes m.types
       yield! m.impl
     ]
@@ -2124,7 +2157,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
         yield! header
         yield! m.comments
         yield! opens
-        yield! m.imports
+        yield! m.imports |> List.map (fun i -> i.intf)
         yield! m.intf
       ] |> Some
     else None

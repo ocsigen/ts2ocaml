@@ -152,7 +152,7 @@ module Naming =
 
   let reservedModuleNames =
     Set.ofList [
-      "Export"; "Default"; "Types"
+      "Export"; "Default"; "Types"; "NodeJs"
     ] |> Set.union keywords
 
   let moduleNameReserved (name: string) =
@@ -588,3 +588,165 @@ module Binding =
     | Binding.Ext x -> yield Statement.external x.attrs x.name x.ty x.target
     | Binding.Unknown x -> match x.msg with Some msg -> yield comment msg | None -> ()
   ]
+
+module Import =
+  open Fable.Core.JsInterop
+  open JsHelper
+  type Node = NodeBuiltin
+
+  let isModule (ctx: Typer.TyperContext<_, _>) (name: string) (kind: Set<Kind> option) =
+    kind |> Option.map Kind.generatesReScriptModule
+            |> Option.defaultValue false
+    || ctx |> Typer.TyperContext.tryCurrentSourceInfo (fun i -> i.unknownIdentTypes |> Trie.containsKey [name])
+            |> Option.defaultValue false
+    || name |> Naming.isCase Naming.PascalCase
+
+  [<RequireQualifiedAccess>]
+  type Statement =
+    /// `module Name = Target`
+    | Alias of name:string * target:string
+    /// `open Name`
+    | Open of name:string
+    /// `module Name = { type t = typeName }`
+    | Type of name:string * typeName:string * typeArgs:string list
+    /// `module Name = Y.Make()`
+    | FunctorInstance of name:string * expr:string
+    | Comment of text
+
+  let alias name target = Statement.Alias (name, target)
+  let open_ name = Statement.Open name
+  let type_ name typeName typeArgs = Statement.Type (name, typeName, typeArgs)
+  let instance name expr = Statement.FunctorInstance (name, expr)
+  let comment text = Statement.Comment text
+
+  let private getDedicatedImportStatementForNodeBuiltin (ctx: Typer.TyperContext<_, _>) (c: ImportClause) =
+    option {
+      let! specifier = c.moduleSpecifier
+      let! builtin = getNodeBuiltin specifier
+      let moduleName =
+        match builtin.name with
+        | Node.Vm -> "VM"
+        | _ -> Naming.toCase Naming.PascalCase !!builtin.name
+      let importedName = c.importedName |? "" // this becomes None only when ES6WildcardImport is used
+
+      match builtin.name, builtin.subpath, c with
+      // special cases
+      | Node.ChildProcess, None, ES6Import x ->
+        match x.name with
+        | "ChildProcess" ->
+          return alias (Naming.moduleName importedName) "NodeJs.ChildProcess"
+        | name when name.StartsWith("ExecOptions") ->
+          return type_ (Naming.moduleName importedName) "NodeJs.ChildProcess.execOptions" []
+        | name when name.StartsWith("ExecFileOptions") ->
+          return type_ (Naming.moduleName importedName) "NodeJs.ChildProcess.execFileOptions" []
+        | _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.ChildProcess.{x.name}"
+      | Node.Console, None, ES6Import x when x.name = "ConsoleConstructorOptions" ->
+        return type_ (Naming.moduleName importedName) "NodeJs.Console.consoleOptions" []
+      | Node.Dns, None, ES6Import x when x.name.StartsWith("Lookup") && x.name.EndsWith("Options") ->
+        return type_ (Naming.moduleName importedName) "NodeJs.Dns.options" []
+      | Node.Events, None, ES6Import x when x.name = "EventEmitter" ->
+        return instance (Naming.moduleName importedName) "NodeJs.EventEmitter.Make()"
+      | Node.Fs, _, ES6Import x ->
+        match builtin.subpath, x.name with
+        | None, "ReadStreamOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Fs.createReadStreamOptions" []
+        | None, "WriteStreamOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Fs.createWriteStreamOptions" ["'t"]
+        | None, "WriteFileOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Fs.writeFileOptions" []
+        | _, _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.Fs.{x.name}"
+      | Node.Http, None, ES6Import x ->
+        match x.name with
+        | "IncomingHttpHeaders" | "OutgoingHttpHeaders" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Http.headersObject" []
+        | "ServerOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Http.createServerOptions" []
+        | "RequestOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Http.requestOptions" []
+        | _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.Http.{x.name}"
+      | Node.Http2, None, ES6Import x when x.name = "Settings" ->
+        return type_ (Naming.moduleName importedName) "NodeJs.Http2.settingsObject" []
+      | Node.Https, None, ES6Import x ->
+        match x.name with
+        | "Server" ->
+          return alias (Naming.moduleName importedName) "NodeJs.Https.HttpsServer"
+        | "Agent" ->
+          return alias (Naming.moduleName importedName) "NodeJs.Https.Agent"
+        // rescript-nodejs doesn't have these, but it has fallback types
+        | "ServerOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Http.createServerOptions" []
+        | "RequestOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Http.requestOptions" []
+        | _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.Https.{x.name}"
+      | Node.Net, None, ES6Import x when x.name = "AddressInfo" ->
+        return type_ (Naming.moduleName importedName) "NodeJs.Net.address" []
+      | Node.Os, None, ES6Import x when x.name = "CpuInfo" ->
+        return type_ (Naming.moduleName importedName) "NodeJs.Os.cpu" []
+      | Node.Os, None, ES6Import x when x.name = "ParsedPath" || x.name = "FormatInputPathObject" ->
+        return type_ (Naming.moduleName importedName) "NodeJs.Path.t" []
+      | Node.Tls, None, ES6Import x ->
+        match x.name with
+        | "TLSSocket" ->
+          return alias (Naming.moduleName importedName) "NodeJs.Tls.TlsSocket"
+        | "Server" ->
+          return alias (Naming.moduleName importedName) "NodeJs.Tls.TlsServer"
+        | _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.Tls.{x.name}"
+      | Node.Url, None, ES6Import x ->
+        match x.name with
+        | "UrlObject" | "Url" | "UrlWithParsedQuery" | "UrlWithStringQuery" | "URL" ->
+          return alias (Naming.moduleName importedName) "NodeJs.Url"
+        | "URLSearchParams" ->
+          return alias (Naming.moduleName importedName) "NodeJs.Url.SearchParams"
+        | "URLFormatOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Url.urlFormatOptions" []
+        | _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.Url.{x.name}"
+      | Node.Util, None, ES6Import x ->
+        match x.name with
+        | "InspectOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.Util.inspectOptions" []
+        | _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.Util.{x.name}"
+      | Node.V8, None, ES6Import x ->
+        match x.name with
+        | "HeapSpaceInfo" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.V8.heapSpaceStats" []
+        | "HeapInfo" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.V8.heapStats" []
+        | "HeapCodeStatistics" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.V8.heapCodeStats" []
+        | _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.V8.{x.name}"
+      | Node.Vm, None, ES6Import x ->
+        match x.name with
+        | "CreateContextOptions" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.VM.createContextOptions" []
+        | "Context" ->
+          return type_ (Naming.moduleName importedName) "NodeJs.VM.contextifiedObject" ["'t"]
+        | _ ->
+          return alias (Naming.moduleName importedName) $"NodeJs.VM.{x.name}"
+
+      // general cases
+      // 1. the `t` type right under the module
+      | (Node.Buffer | Node.ChildProcess | Node.Console | Node.Module | Node.Stream | Node.StringDecoder), None, ES6Import x when x.name = moduleName ->
+        return alias (Naming.moduleName importedName) $"NodeJs.{moduleName}"
+      // 2. the module contains submodules with their `t` type
+      | _, _, _ ->
+        match c with
+        | (NamespaceImport _ | ES6DefaultImport _) ->
+          return alias (Naming.moduleName importedName) $"NodeJs.{moduleName}"
+        | ES6Import x when isModule ctx x.name x.kind ->
+          return alias (Naming.moduleName importedName) $"NodeJs.{moduleName}.{x.name}"
+        | ES6WildcardImport _ ->
+          return open_ $"NodeJs.{moduleName}"
+        | _ -> ()
+    }
+
+  let getDedicatedImportStatement (ctx: Typer.TyperContext<_, _>) (c: ImportClause) =
+    getDedicatedImportStatementForNodeBuiltin ctx c
+    // TODO: add more dedicated imports?

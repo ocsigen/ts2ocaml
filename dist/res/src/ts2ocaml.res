@@ -25,7 +25,9 @@ type true_ = bool
 type false_ = bool
 type intrinsic = private string
 type object = Type.Classify.object
+module Object = { type t = object }
 type function = Type.Classify.function
+module Function = { type t = function }
 
 module Union = {
   type container<+'cases>

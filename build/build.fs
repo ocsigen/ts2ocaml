@@ -186,8 +186,8 @@ module Test =
          "safe", !! "node_modules/@types/yargs/index.d.ts", [];
          "minimal", !! "node_modules/@types/vscode/index.d.ts", ["--readable-names"];
 
-         // #404: complex package which could break topological sorting
-         "minimal", !! "node_modules/playwright-core/index.d.ts", [];
+         // #404: package with mutually recursive files (requires --merge)
+         "minimal", !! "node_modules/playwright-core/index.d.ts" ++ "node_modules/playwright-core/types/*.d.ts", ["--merge"];
       ]
 
       for preset, package, additionalOptions in packages do
@@ -195,6 +195,15 @@ module Test =
           (["--verbose"; "--nowarn"; "--follow-relative-references";
             $"--preset {preset}"; $"-o {outputDir}"] @ additionalOptions)
           package
+
+      // patches for playwright-core
+      Shell.replaceInFiles [
+        "Readable.t", "Readable.t<'t>"
+        "URL.t", "NodeJs.Url.t"
+      ] [
+        outputDir </> "playwright_core.resi"
+        outputDir </> "playwright_core.res"
+      ]
 
     let build () =
       Shell.mkdir srcGeneratedDir

@@ -754,6 +754,13 @@ and ImportClause =
   /// import name = identifier
   /// ```
   | LocalImport of {| name: string; kind: Set<Kind> option; target: Ident |}
+  member this.importedName =
+    match this with
+    | NamespaceImport i -> Some i.name
+    | ES6WildcardImport _ -> None
+    | ES6Import i -> i.renameAs |> Option.orElse (Some i.name)
+    | ES6DefaultImport i -> Some i.name
+    | LocalImport i -> Some i.name
   member this.kind =
     match this with
     | NamespaceImport i -> i.kind

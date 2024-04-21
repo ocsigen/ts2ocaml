@@ -147,6 +147,26 @@ type StringBuilder (s: string) =
 type StringBuilder = System.Text.StringBuilder
 #endif
 
+type OptionBuilder() =
+  member inline _.Bind (v,f) = Option.bind f v
+  member inline _.Return v = Some v
+  member inline _.BindReturn (v, f) = Option.map f v
+  member inline _.Bind2Return (v1, v2, f) = Option.map2 f v1 v2
+  member inline _.Bind3Return (v1, v2, v3, f) = Option.map3 f v1 v2 v3
+  member _.MergeSources (v1, v2) =
+    match v1, v2 with
+    | Some x1, Some x2 -> Some (x1, x2)
+    | _, _ -> None
+  member _.MergeSources3 (v1, v2, v3) =
+    match v1, v2, v3 with
+    | Some x1, Some x2, Some x3 -> Some (x1, x2, x3)
+    | _, _, _ -> None
+  member inline _.For (xs, f) = Seq.tryPick f xs
+  member inline _.ReturnFrom o = o
+  member inline _.Zero () = None
+
+let option = new OptionBuilder()
+
 open Fable.Core
 open Fable.Core.JsInterop
 

@@ -247,3 +247,85 @@ let resolveRelativeImportPath (info: Syntax.PackageInfo option) (currentFile: Pa
     getJsModuleName info targetPath
   else
     Valid path
+
+[<StringEnum(CaseRules.SnakeCase); RequireQualifiedAccess>]
+type NodeBuiltin =
+  | Assert
+  | AsyncHooks
+  | Buffer
+  | ChildProcess
+  | Cluster
+  | Console
+  | Constants
+  | Crypto
+  | Dgram
+  | DiagnosticsChannel
+  | Dns
+  | Domain
+  | Events
+  | Fs
+  | Http
+  | [<CompiledName("http2")>] Http2
+  | Https
+  | Inspector
+  | Module
+  | Net
+  | Os
+  | Path
+  | PerfHooks
+  | Process
+  | Punycode
+  | Querystring
+  | Readline
+  | Repl
+  | Stream
+  | StringDecoder
+  | Timers
+  | Tls
+  | TraceEvents
+  | Tty
+  | Url
+  | Util
+  | [<CompiledName("v8")>] V8
+  | Vm
+  | Wasi
+  | WorkerThreads
+  | Zlib
+
+let nodeBuiltins : Set<NodeBuiltin> =
+  set [
+    NodeBuiltin.Assert; NodeBuiltin.AsyncHooks; NodeBuiltin.Buffer; NodeBuiltin.ChildProcess;
+    NodeBuiltin.Cluster; NodeBuiltin.Console; NodeBuiltin.Constants; NodeBuiltin.Crypto;
+    NodeBuiltin.Dgram; NodeBuiltin.DiagnosticsChannel; NodeBuiltin.Dns; NodeBuiltin.Domain;
+    NodeBuiltin.Events; NodeBuiltin.Fs; NodeBuiltin.Http; NodeBuiltin.Http2; NodeBuiltin.Https;
+    NodeBuiltin.Inspector; NodeBuiltin.Module; NodeBuiltin.Net; NodeBuiltin.Net; NodeBuiltin.Os;
+    NodeBuiltin.Path; NodeBuiltin.PerfHooks; NodeBuiltin.Process; NodeBuiltin.Punycode;
+    NodeBuiltin.Querystring; NodeBuiltin.Readline; NodeBuiltin.Repl; NodeBuiltin.Stream;
+    NodeBuiltin.StringDecoder; NodeBuiltin.Timers; NodeBuiltin.Tls; NodeBuiltin.TraceEvents;
+    NodeBuiltin.Tty; NodeBuiltin.Url; NodeBuiltin.Util; NodeBuiltin.V8; NodeBuiltin.Vm;
+    NodeBuiltin.Wasi; NodeBuiltin.WorkerThreads; NodeBuiltin.Zlib;
+  ]
+
+type NodeBuiltinResult = {
+  name: NodeBuiltin;
+  subpath: string option;
+}
+
+open System.Text.RegularExpressions
+
+let nodeBuiltinPattern = new Regex("^(?:node:)?(\\w+)(?:\\/(.+))?$")
+
+let getNodeBuiltin (specifier: string) : NodeBuiltinResult option =
+  let res = nodeBuiltinPattern.Match(specifier)
+  if isNull res || res.Groups.Count < 2 then None
+  else
+    let name : NodeBuiltin = !!res.Groups[1].Value
+    if nodeBuiltins |> Set.contains name |> not then None
+    else
+      let subpath =
+        if res.Groups.Count < 3 then None
+        else
+          let subpath = res.Groups[2].Value
+          if System.String.IsNullOrWhiteSpace subpath then None
+          else Some subpath
+      Some { name = name; subpath = subpath }

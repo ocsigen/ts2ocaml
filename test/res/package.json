@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@rescript/core": "^1.1.0",
-    "rescript": "11.0.1"
+    "rescript": "11.0.1",
+    "rescript-nodejs": "^16.1.0"
   }
 }

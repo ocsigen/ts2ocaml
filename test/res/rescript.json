@@ -11,7 +11,8 @@
   },
   "suffix": ".bs.js",
   "bs-dependencies": [
-    "@rescript/core"
+    "@rescript/core",
+    "rescript-nodejs"
   ],
   "uncurried": true
 }

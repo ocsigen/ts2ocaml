@@ -1855,7 +1855,7 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
 
-fsevents@~2.3.2:
+fsevents@2.3.2, fsevents@~2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
@@ -2813,6 +2813,20 @@ pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+playwright-core@1.43.1:
+  version "1.43.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.43.1.tgz#0eafef9994c69c02a1a3825a4343e56c99c03b02"
+  integrity sha512-EI36Mto2Vrx6VF7rm708qSnesVQKbxEWvPrfA1IPY6HgczBplDx7ENtx+K2n4kJ41sLLkuGfmb0ZLSSXlDhqPg==
+
+playwright@^1.43.1:
+  version "1.43.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.43.1.tgz#8ad08984ac66c9ef3d0db035be54dd7ec9f1c7d9"
+  integrity sha512-V7SoH0ai2kNt1Md9E3Gwas5B9m8KR2GVvwZnAI6Pg0m3sh7UvgiYhRrhsziCmqMJNouPckiOhk8T+9bSAK0VIA==
+  dependencies:
+    playwright-core "1.43.1"
+  optionalDependencies:
+    fsevents "2.3.2"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"

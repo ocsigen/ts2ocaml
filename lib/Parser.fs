@@ -1145,6 +1145,10 @@ let createDependencyGraph (sourceFiles: Ts.SourceFile[]) =
         let n = n :?> Ts.ImportDeclaration
         n.moduleSpecifier
         |> handleModuleSpecifier sourceFile
+      | Ts.SyntaxKind.ExportDeclaration ->
+        let n = n :?> Ts.ExportDeclaration
+        n.moduleSpecifier
+        |> Option.iter (handleModuleSpecifier sourceFile)
       | _ -> ()
     ns |> Array.collect (fun n -> n.getChildren(sourceFile))
 

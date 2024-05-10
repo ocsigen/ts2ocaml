@@ -2,9 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [main,v2]
+    branches:
+      - main
+      - v2
   pull_request:
-    branches: [main,v2]
+    branches:
+      - main
+      - v2
   workflow_dispatch:
 
 jobs:
@@ -12,40 +16,36 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-        dotnet:
-          - 6.0.x
-        node-version:
-          - 20.x
         ocaml-compiler:
-          - 4.08.x
-          - 4.12.x
-          - 4.14.x
-          - 5.0.x
+          - "4.08"
+          - "4.12"
+          - "4.14"
+          - "5.0"
+          - "5.1"
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use .NET ${{ matrix.dotnet }}
+      - name: Set-up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: 6.0.x
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Set-up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: yarn
 
-      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+      - name: Set-up OCaml
         uses: ocaml/setup-ocaml@v2
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
           dune-cache: true
+          allow-prerelease-opam: true
 
       - name: Install .NET Dependencies
         run: |
@@ -59,31 +59,21 @@ jobs:
         run: bash fake TestJsoo
 
   build-res:
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-        dotnet:
-          - 6.0.x
-        node-version:
-          - 20.x
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use .NET ${{ matrix.dotnet }}
+      - name: Set-up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: 6.0.x
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Set-up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: yarn
 
       - name: Install .NET Dependencies

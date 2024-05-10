@@ -294,6 +294,10 @@ __pycache__/
 .ionide
 .ignored
 
+# yarn
+.yarn/*
+!.yarn/releases
+
 # opam local switch
 _opam/
 

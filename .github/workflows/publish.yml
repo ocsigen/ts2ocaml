@@ -2,48 +2,39 @@ name: Publish
 
 on:
   release:
-    types: [published]
+    types:
+      - published
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-        dotnet:
-          - 6.0.x
-        node-version:
-          - 20.x
-        ocaml-compiler:
-          - 5.0.x
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Use .NET ${{ matrix.dotnet }}
+      - name: Set-up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: 6.0.x
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Set-up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: yarn
 
-      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+      - name: Set-up OCaml
         uses: ocaml/setup-ocaml@v2
         with:
-          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          ocaml-compiler: "5.1"
           dune-cache: true
+          allow-prerelease-opam: true
 
       - name: Install .NET Dependencies
-        run: dotnet restore ts2ocaml.sln
-           | dotnet tool restore
+        run: |
+          dotnet restore ts2ocaml.sln
+          dotnet tool restore
 
       - name: Install OCaml Dependencies
         run: opam install . --deps-only

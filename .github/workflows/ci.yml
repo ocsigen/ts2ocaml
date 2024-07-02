@@ -41,11 +41,10 @@ jobs:
           cache: yarn
 
       - name: Set-up OCaml
-        uses: ocaml/setup-ocaml@v2
+        uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
           dune-cache: true
-          allow-prerelease-opam: true
 
       - name: Install .NET Dependencies
         run: |

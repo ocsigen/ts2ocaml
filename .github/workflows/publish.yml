@@ -25,11 +25,10 @@ jobs:
           cache: yarn
 
       - name: Set-up OCaml
-        uses: ocaml/setup-ocaml@v2
+        uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: "5.1"
           dune-cache: true
-          allow-prerelease-opam: true
 
       - name: Install .NET Dependencies
         run: |

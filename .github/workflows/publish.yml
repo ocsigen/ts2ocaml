@@ -29,7 +29,6 @@ jobs:
         with:
           ocaml-compiler: "5.1"
           dune-cache: true
-          allow-prerelease-opam: true
 
       - name: Install .NET Dependencies
         run: |

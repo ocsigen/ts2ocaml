@@ -450,9 +450,9 @@
     "@types/node" "*"
 
 "@types/vscode@^1.63.1":
-  version "1.89.0"
-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.89.0.tgz#df0beb3f4ab9133ee8c5fcac8fc578e4623d8749"
-  integrity sha512-TMfGKLSVxfGfoO8JfIE/neZqv7QLwS4nwPwL/NwMvxtAY2230H2I4Z5xx6836pmJvMAzqooRQ4pmLm7RUicP3A==
+  version "1.100.0"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.100.0.tgz#35cd628a86b11587856df94be94054aab01f2f17"
+  integrity sha512-4uNyvzHoraXEeCamR3+fzcBlh7Afs4Ifjs4epINyUX/jvdk0uzLnwiDY35UKDKnkCHP5Nu3dljl2H8lR6s+rQw==
 
 "@types/ws@^8.5.10":
   version "8.5.10"

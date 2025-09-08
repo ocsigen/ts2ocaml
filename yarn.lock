@@ -10,10 +10,10 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@angular/common@^19.0.5":
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-19.2.0.tgz#2f830d18ee96f2e1b723ec6f19eedcfd0bc97970"
-  integrity sha512-dm8PR94QY3DucXxltdV5p2Yxyr5bfPlmjOElwLhiTvxWbwCZJTVhPc8dw0TCKzCEu+tKafT48u4BLIB34a0A/g==
+"@angular/common@^20.2.4":
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-20.2.4.tgz#3af6feb6d51b229314e2a6ae9c0a30d4cb7a11c7"
+  integrity sha512-mc6Sq1cYjaPJYThnvG6x0f/E27pWksqwaNJxT1RtwhAGc1i2jsc0su6b7e5NnXEgVbdPqu1MZHAEFdXZ5+/MwQ==
   dependencies:
     tslib "^2.3.0"
 

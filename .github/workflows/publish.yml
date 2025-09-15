@@ -54,14 +54,14 @@ jobs:
 
       - name: NPM Publish as "latest"
         if: success() && !github.event.release.prerelease
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         with:
           token: ${{ secrets.NPM_TOKEN }}
           check-version: true
 
       - name: NPM Publish as "beta"
         if: success() && github.event.release.prerelease
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         with:
           token: ${{ secrets.NPM_TOKEN }}
           check-version: true

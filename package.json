@@ -29,7 +29,7 @@
     "browser-or-node": "^3.0.0",
     "chalk": "^5.0.1",
     "typescript": "5.4.2",
-    "yargs": "^17.5.1"
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
     "@angular/common": "^20.2.4",
